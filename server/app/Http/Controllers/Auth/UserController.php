@@ -49,8 +49,8 @@ class UserController extends Controller
             }
             return response()->json($validator->errors(), 400);
         }
-        $user = User::where('account', $request->all()['account'])->first();
-        if (is_null($user)) {
+        $findUser = User::where('account', $request->all()['account'])->first();
+        if (is_null($findUser)) {
             if (!env('USE_MONKEYID')) {
                 return response()->json(['status' => 'U02', 'message' => '帳號不存在'], 200);
             }
@@ -69,15 +69,17 @@ class UserController extends Controller
                 unset($data['status']);
                 $data['first_name_ch'] = $data['name'];
                 unset($data['name']);
-                return response()->json($data, 200);
+                $monkeyUserId = $data['monkey_user_id'];
                 // User::insert($data);
             } else {
                 return response()->json($data, 200);
             }
+        } else {
+            $monkeyUserId = $findUser->monkeyUserId;
         }
-
+        return response()->json($monkeyUserId, 200);
         $loginTime = date("Y-m-d H:i:s");
-        if($token = auth('user')->attempt($validator->validated())){
+        if ($token = auth('user')->attempt($validator->validated()) && is_null($monkeyUserId)){
             $user = User::find(auth('user')->user()->id);
             $user->last_login = $loginTime;
             $user->last_ip = $request->ip();
