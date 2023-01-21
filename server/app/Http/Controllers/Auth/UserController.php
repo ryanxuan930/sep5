@@ -51,7 +51,7 @@ class UserController extends Controller
             }
             return response()->json($validator->errors(), 400);
         }
-        $user = User::where('account', $request->all()->account())->first();
+        $user = User::where('account', $request->all()->account)->first();
         if (is_null($user)) {
             $ch = curl_init('https://sports.nsysu.edu.tw/monkeyserver/api/app/login/d90e28c85ce6d205ca00515b82e45c81ea3258a859d80cfd377e69a937728c3f');
             curl_setopt($ch, CURLOPT_POST, 1);
