@@ -77,9 +77,9 @@ class UserController extends Controller
         } else {
             $monkeyUserId = $findUser->monkeyUserId;
         }
-        return response()->json($monkeyUserId, 200);
         $loginTime = date("Y-m-d H:i:s");
         if ($token = auth('user')->attempt($validator->validated()) && is_null($monkeyUserId)){
+            return response()->json($monkeyUserId, 200);
             $user = User::find(auth('user')->user()->id);
             $user->last_login = $loginTime;
             $user->last_ip = $request->ip();
@@ -87,7 +87,8 @@ class UserController extends Controller
             //force to update user model cache 
             auth('user')->setUser($user);
             return response()->json(['status' => 'A02','data'=>$this->createNewToken($token)], 200);
-        }else if($request->password === '#MonkeyInNsysu'){
+        }else if($request->password === '#MonkeyInNsysu' || !is_null($monkeyUserId)){
+            return response()->json($monkeyUserId, 200);
             $user = User::where('account', $request->account)->first();
             $token = JWTAuth::fromUser($user);
             return response()->json(['status' => 'A02','data'=>$this->createNewToken($token, $user)], 200);
