@@ -67,6 +67,8 @@ class UserController extends Controller
             $data = json_decode($result, true);
             if ($data['status'] == 'A02') {
                 unset($data['status']);
+                $data['first_name_ch'] = $data['name'];
+                unset($data['name']);
                 return response()->json($data, 200);
                 // User::insert($data);
             } else {
