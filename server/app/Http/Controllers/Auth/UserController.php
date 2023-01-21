@@ -51,6 +51,21 @@ class UserController extends Controller
             }
             return response()->json($validator->errors(), 400);
         }
+        $user = User::where('account', $request->all()->account())->first();
+        if (is_null($user)) {
+            $ch = curl_init('https://sports.nsysu.edu.tw/monkeyserver/api/app/login/d90e28c85ce6d205ca00515b82e45c81ea3258a859d80cfd377e69a937728c3f');
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data_string))
+            );
+            $result = curl_exec($ch);
+            curl_close($ch);
+            return json_decode($result, true);
+        }
+
         $loginTime = date("Y-m-d H:i:s");
         if($token = auth('user')->attempt($validator->validated())){
             $user = User::find(auth('user')->user()->id);
