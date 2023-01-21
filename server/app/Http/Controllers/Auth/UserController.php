@@ -37,7 +37,7 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'account' => 'required|exists:users,account',
+            'account' => 'required',
             'password' => 'required'
         ]);
         if ($validator->fails()) {
@@ -46,8 +46,6 @@ class UserController extends Controller
                 return response()->json(['status' => 'U03', 'message' => '請輸入帳號'], 200);
             } else if (isset($failedRules['password']['Required'])) {
                 return response()->json(['status' => 'U06', 'message' => '請輸入密碼'], 200);
-            } else if (isset($failedRules['account']['Exists'])) {
-                return response()->json(['status' => "U02", 'message' => '帳號尚未註冊'], 200);
             }
             return response()->json($validator->errors(), 400);
         }
