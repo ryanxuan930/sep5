@@ -51,6 +51,9 @@ class UserController extends Controller
         }
         $user = User::where('account', $request->all()['account'])->first();
         if (is_null($user)) {
+            if (!env('USE_MONKEYID')) {
+                return response()->json(['status' => 'U02', 'message' => '帳號不存在'], 200);
+            }
             $ch = curl_init('https://sports.nsysu.edu.tw/monkeyserver/api/app/login/d90e28c85ce6d205ca00515b82e45c81ea3258a859d80cfd377e69a937728c3f');
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request->all()));
@@ -61,7 +64,14 @@ class UserController extends Controller
             );
             $result = curl_exec($ch);
             curl_close($ch);
-            return json_decode($result, true);
+            $data = json_decode($result, true);
+            if ($data['status'] == 'A02') {
+                unset($data['status']);
+                return response()->json($data, 200);
+                // User::insert($data);
+            } else {
+                return response()->json($data, 200);
+            }
         }
 
         $loginTime = date("Y-m-d H:i:s");
