@@ -19,7 +19,7 @@ return new class extends Migration
             $table->char('prefix', 4);
             $table->char('pin_code', 6);
             $table->datetime('valid_until');
-            $talbe->boolean('used')->default(0);
+            $table->boolean('used')->default(0);
             $table->timestamps();
         });
     }
