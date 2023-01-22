@@ -8,7 +8,7 @@ use Validator;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
-use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Storage;
 use App\Mods\HttpsRequest;
 use App\Mods\TokenMaker;
