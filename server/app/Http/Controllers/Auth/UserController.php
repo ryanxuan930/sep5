@@ -45,39 +45,37 @@ class UserController extends Controller
 
         // find user in User table
         $findUser = User::where('account', $request->all()['account'])->first();
-        if (is_null($findUser)) { // user not found
-            if (env('USE_MONKEYID')) { // if using monkey id
-                $response = HttpsRequest::post('https://sports.nsysu.edu.tw/monkeyserver/api/app/login/'.env('MONKEYID_KEY'), $request->all());
-                if ($response['status'] == 'A02') { // check response
-                    if (is_null($findUser)) { // add to user table
-                        $temp = [
-                            'account' => $response['account'],
-                            'monkey_user_id' => $response['monkey_user_id'],
-                            'user_identity' => $response['user_identity'],
-                            'first_name_ch' => $response['name'],
-                            'org_id' => $response['org_id'],
-                            'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT),
-                            'created_at' => $loginTime,
-                            'updated_at' => $loginTime,
-                        ];
-                        User::insert($temp);
-                    } else { // update user table
-                        $temp = [
-                            'account' => $response['account'],
-                            'user_identity' => $response['user_identity'],
-                            'org_id' => $response['org_id'],
-                            'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT),
-                            'updated_at' => $loginTime,
-                        ];
-                        User::where('monkey_user_id', $response['monkey_user_id'])->update($temp);
-                    }
-                } else {
-                    $response['from'] = 'monkey_id';
-                    return response()->json($response, 200);
+        if (env('USE_MONKEYID')) { // if using monkey id
+            $response = HttpsRequest::post('https://sports.nsysu.edu.tw/monkeyserver/api/app/login/'.env('MONKEYID_KEY'), $request->all());
+            if ($response['status'] == 'A02') { // check response
+                if (is_null($findUser)) { // add to user table
+                    $temp = [
+                        'account' => $response['account'],
+                        'monkey_user_id' => $response['monkey_user_id'],
+                        'user_identity' => $response['user_identity'],
+                        'first_name_ch' => $response['name'],
+                        'org_id' => $response['org_id'],
+                        'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT),
+                        'created_at' => $loginTime,
+                        'updated_at' => $loginTime,
+                    ];
+                    User::insert($temp);
+                } else { // update user table
+                    $temp = [
+                        'account' => $response['account'],
+                        'user_identity' => $response['user_identity'],
+                        'org_id' => $response['org_id'],
+                        'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT),
+                        'updated_at' => $loginTime,
+                    ];
+                    User::where('monkey_user_id', $response['monkey_user_id'])->update($temp);
                 }
-            } else { // not using monkey id
-                return response()->json(['status' => 'U02', 'message' => '請先註冊帳號', 'from' => 'sep5'], 200);
+            } else {
+                $response['from'] = 'monkey_id';
+                return response()->json($response, 200);
             }
+        } else { // not using monkey id
+            return response()->json(['status' => 'U02', 'message' => '請先註冊帳號', 'from' => 'sep5'], 200);
         }
         // get user data again
         $findUser = User::where('account', $request->all()['account'])->first();
