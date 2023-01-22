@@ -62,7 +62,7 @@ class AdminController extends Controller
     public function info()
     {
         $user = auth('admin')->user();
-        $result = Admin::leftJoin('admin_organizations', 'admin_organizations.admin_org_id', '=', 'admins.admin_org_id')->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'admins.admin_dept_id')->select('admins.*', 'admin_organizations.*', 'admin_departments.*')->where('u_id',$user->admin_id)->first();
+        $result = Admin::leftJoin('admin_organizations', 'admin_organizations.admin_org_id', '=', 'admins.admin_org_id')->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'admins.admin_dept_id')->select('admins.*', 'admin_organizations.*', 'admin_departments.*')->where('admin_id',$user->admin_id)->first();
         return response()->json($result);
     }
     // logout
