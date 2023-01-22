@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Auth\AdminController;
+use App\Http\Controllers\Auth\GameController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +21,6 @@ Route::group([
     'prefix' => 'auth'
 ], function () {
     // admin
-    /*
     Route::group([
         'prefix' => '/admin'
     ], function () {
@@ -27,7 +28,6 @@ Route::group([
         Route::get('/info', [AdminController::class, 'info']);
         Route::post('/logout', [AdminController::class, 'logout']);
     });
-    */
     //user
     Route::group([
         'prefix' => '/user'
@@ -50,4 +50,10 @@ Route::group([
         Route::post('/upload', [UserController::class, 'upload']);
         */
     });
+});
+
+Route::group([
+    'prefix' => 'admin'
+], function () {
+    Route::apiResource('/game', GameController::class);
 });

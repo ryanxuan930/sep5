@@ -22,19 +22,16 @@ const router = createRouter({
       component: AdminView,
       children: [
         {
+          path: '/admin',
+          name: 'adminHome',
+          component: () => import('../views/admin/console/ConsoleLayout.vue'),
+        },
+        {
           path: 'login',
           name: 'adminLogin',
           component: () => import('../views/admin/login/LoginView.vue'),
         },
       ],
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
     },
   ],
 });

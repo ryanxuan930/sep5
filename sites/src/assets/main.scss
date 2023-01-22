@@ -36,3 +36,13 @@
     */
   }
 }
+
+.nav-link {
+  @apply px-2 text-center text-xl block hover:bg-blue-400 hover:text-white duration-300 cursor-pointer;
+  div {
+    @apply p-3 border-y-[0.5px];
+  }
+  &.router-link-exact-active {
+    @apply bg-blue-500 text-white;
+  }
+}
