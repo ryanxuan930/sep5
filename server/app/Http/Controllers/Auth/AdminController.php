@@ -26,7 +26,7 @@ class AdminController extends Controller
     {
         // validation
         $validator = Validator::make($request->all(),[
-            'account' => 'required|exists:admin,account',
+            'account' => 'required|exists:admins,account',
             'password' => 'required'
         ]);
         if ($validator->fails()) {
