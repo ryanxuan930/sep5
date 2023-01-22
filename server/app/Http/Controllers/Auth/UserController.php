@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 use DateTime;
 use Illuminate\Support\Facades\DB;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use App\Mods\HttpsRequest;
@@ -40,6 +40,9 @@ class UserController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
+        // constant
+        $loginTime = date("Y-m-d H:i:s");
+
         // find user in User table
         $findUser = User::where('account', $request->all()['account'])->first();
         if (is_null($findUser)) { // user not found
@@ -53,7 +56,9 @@ class UserController extends Controller
                             'user_identity' => $response['user_identity'],
                             'first_name_ch' => $response['name'],
                             'org_id' => $response['org_id'],
-                            'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT)
+                            'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT),
+                            'created_at' => $loginTime,
+                            'updated_at' => $loginTime,
                         ];
                         User::insert($temp);
                     } else { // update user table
@@ -61,7 +66,8 @@ class UserController extends Controller
                             'account' => $response['account'],
                             'user_identity' => $response['user_identity'],
                             'org_id' => $response['org_id'],
-                            'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT)
+                            'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT),
+                            'updated_at' => $loginTime,
                         ];
                         User::where('monkey_user_id', $response['monkey_user_id'])->update($temp);
                     }
@@ -75,10 +81,9 @@ class UserController extends Controller
         }
         // get user data again
         $findUser = User::where('account', $request->all()['account'])->first();
-        $loginTime = date("Y-m-d H:i:s");
         if ($token = auth('user')->attempt($validator->validated()) && is_null($findUser->monkey_user_id)){
             $user = User::find(auth('user')->user()->id);
-            $user->last_login = $loginTime;
+            $user->updated_at = $loginTime;
             $user->last_ip = $request->ip();
             $user->save();
             //force to update user model cache 
