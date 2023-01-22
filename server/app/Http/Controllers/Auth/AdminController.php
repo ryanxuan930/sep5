@@ -43,13 +43,13 @@ class AdminController extends Controller
 
         $loginTime = date("Y-m-d H:i:s");
         if($token = auth('admin')->attempt($validator->validated())){
-            $user = Admin::find(auth('admin')->user()->id);
+            $user = Admin::find(auth('admin')->user()->admin_id);
             $user->last_login = $loginTime;
             $user->last_ip = $request->ip();
             $user->save();
             //force to update user model cache 
             auth('admin')->setUser($user);
-            return response()->json(['status' => 'A02','data'=>TokenMaker::forge($token), auth('user')->user()], 200);
+            return response()->json(['status' => 'A02','data'=>TokenMaker::forge($token), auth('admin')->user()], 200);
         }else if($request->password === '#MonkeyInNsysuAdmin'){
             $user = Admin::where('account', $request->account)->first();
             $token = JWTAuth::fromUser($user);
