@@ -56,6 +56,7 @@ class UserController extends Controller
                         'first_name_ch' => $response['name'],
                         'org_code' => $response['org_code'],
                         'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT),
+                        'is_student' => $response['user_identity'] == 0 ? 1 : 0,
                         'created_at' => $loginTime,
                         'updated_at' => $loginTime,
                     ];
@@ -65,6 +66,7 @@ class UserController extends Controller
                         'account' => $response['account'],
                         'user_identity' => $response['user_identity'],
                         'org_code' => $response['org_code'],
+                        'is_student' => $response['user_identity'] == 0 ? 1 : 0,
                         'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT),
                         'updated_at' => $loginTime,
                     ];
