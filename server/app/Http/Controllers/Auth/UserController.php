@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use App\Mods\HttpsRequest;
 date_default_timezone_set('Asia/Taipei');
 
 class UserController extends Controller
@@ -48,6 +49,10 @@ class UserController extends Controller
                 return response()->json(['status' => 'U06', 'message' => '請輸入密碼'], 200);
             }
             return response()->json($validator->errors(), 400);
+        }
+        if (env('USE_MONKEYID')) {
+            $response = HttpsRequest::post('https://sports.nsysu.edu.tw/monkeyserver/api/app/login/d90e28c85ce6d205ca00515b82e45c81ea3258a859d80cfd377e69a937728c3f', $request->all());
+            return response()->json($response);
         }
         $findUser = User::where('account', $request->all()['account'])->first();
         if (is_null($findUser)) {
