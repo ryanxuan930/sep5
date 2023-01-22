@@ -54,7 +54,7 @@ class UserController extends Controller
                         'monkey_user_id' => $response['monkey_user_id'],
                         'user_identity' => $response['user_identity'],
                         'first_name_ch' => $response['name'],
-                        'org_id' => $response['org_id'],
+                        'org_code' => $response['org_code'],
                         'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT),
                         'created_at' => $loginTime,
                         'updated_at' => $loginTime,
@@ -64,7 +64,7 @@ class UserController extends Controller
                     $temp = [
                         'account' => $response['account'],
                         'user_identity' => $response['user_identity'],
-                        'org_id' => $response['org_id'],
+                        'org_code' => $response['org_code'],
                         'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT),
                         'updated_at' => $loginTime,
                     ];
@@ -98,12 +98,7 @@ class UserController extends Controller
     // user info
     public function info()
     {
-        $user = auth()->user();
-        $validTime = new DateTime($user->valid_until);
-        $current = new DateTime;
-        if ($validTime < $current) {
-            User::where('u_id',$user->u_id)->update(['verification' => 8]);
-        }
+        $user = auth('user')->user();
         $result = User::leftJoin('univ_list', 'univ_list.univ_id', '=', 'user.univ_id')->select('user.*', 'univ_list.univ_id', 'univ_list.univ_name_ch_full', 'univ_list.univ_name_ch', 'univ_list.univ_name_en')->where('u_id',$user->u_id)->first();
         return response()->json($result);
     }

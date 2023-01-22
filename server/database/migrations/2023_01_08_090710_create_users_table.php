@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('first_name_en', 128)->nullable();
             $table->string('last_name_en', 128)->nullable();
             // organization
-            $table->char('org_id', 5);
+            $table->char('org_code', 5);
             $table->boolean('is_student')->default(0);
             $table->string('student_id', 16)->nullable();
             $table->bigInteger('dept_id')->default(0);

@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->id('org_id');
+            $table->char('org_code', 5);
             // info
-            $table->tinyInteger('org_type')->default(0); // 0 general 1 univ 2 sr high school 3 jr high school 4 primary school 5 others
+            $table->tinyInteger('org_type')->default(0); // 0 general 1 univ 2 sr high school 3 jr high school 4 primary school 5 individual 6 others
             $table->string('org_name_full_ch', 32);
             $table->string('org_name_ch', 8);
             $table->string('org_name_full_en', 128)->nullable();
