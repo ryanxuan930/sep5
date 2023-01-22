@@ -33,9 +33,9 @@ return new class extends Migration
             $table->string('telephone', 16)->nullable();
             $table->string('telephone_ex', 8)->nullable();
             $table->string('fax', 16)->nullable();
-            $table->string('contact_name', 64);
-            $table->string('contact_email', 128);
-            $table->string('contact_phone', 16);
+            $table->string('contact_name', 64)->nullable();
+            $table->string('contact_email', 128)->nullable();
+            $table->string('contact_phone', 16)->nullable();
             $table->string('homepage', 256)->nullable();
             $table->json('links')->nullable();
             // head
