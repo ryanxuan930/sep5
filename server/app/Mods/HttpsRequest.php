@@ -3,7 +3,7 @@
 namespace App\Mods;
 
 class HttpsRequest {
-    public static function post($url, $payload) {
+    public static function post(string $url, mixed $payload) {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));

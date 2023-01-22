@@ -11,6 +11,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use App\Mods\HttpsRequest;
+use App\Mods\TokenMaker;
 date_default_timezone_set('Asia/Taipei');
 
 class UserController extends Controller
@@ -21,22 +22,10 @@ class UserController extends Controller
         $this->middleware('auth:user',['except'=>['login','register','exist', 'reset', 'resetPassword', 'logout']]);
     }
 
-    // token function
-    private function createNewToken($token, $userData = NULL)
-    {
-        $expTime = new DateTime();
-        $expTime->modify('+1 day');
-        return [
-            'token' => $token,
-            'type' => 'bearer',
-            'expired' => $expTime->format('Y-m-d H:i:s'),
-            'user' => is_null($userData) ? auth('user')->user() : $userData,
-        ];
-    }
-
     // login
     public function login(Request $request)
     {
+        // validation
         $validator = Validator::make($request->all(),[
             'account' => 'required',
             'password' => 'required'
@@ -50,53 +39,54 @@ class UserController extends Controller
             }
             return response()->json($validator->errors(), 400);
         }
-        if (env('USE_MONKEYID')) {
-            $response = HttpsRequest::post('https://sports.nsysu.edu.tw/monkeyserver/api/app/login/d90e28c85ce6d205ca00515b82e45c81ea3258a859d80cfd377e69a937728c3f', $request->all());
-            return response()->json($response);
-        }
+
+        // find user in User table
         $findUser = User::where('account', $request->all()['account'])->first();
-        if (is_null($findUser)) {
-            if (!env('USE_MONKEYID')) {
-                return response()->json(['status' => 'U02', 'message' => '帳號不存在'], 200);
+        if (is_null($findUser)) { // user not found
+            if (env('USE_MONKEYID')) { // if using monkey id
+                $response = HttpsRequest::post('https://sports.nsysu.edu.tw/monkeyserver/api/app/login/'.env('MONKEYID_KEY'), $request->all());
+                if ($response['status'] == 'A02') { // check response
+                    if (is_null($findUser)) { // add to user table
+                        $temp = [
+                            'account' => $response['account'],
+                            'monkey_user_id' => $response['monkey_user_id'],
+                            'user_identity' => $response['user_identity'],
+                            'first_name_ch' => $response['name'],
+                            'org_id' => $response['org_id'],
+                            'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT)
+                        ];
+                        User::insert($temp);
+                    } else { // update user table
+                        $temp = [
+                            'account' => $response['account'],
+                            'user_identity' => $response['user_identity'],
+                            'org_id' => $response['org_id'],
+                            'password' => password_hash($request->all()['password'], PASSWORD_DEFAULT)
+                        ];
+                        User::where('monkey_user_id', $response['monkey_user_id'])->update($temp);
+                    }
+                } else {
+                    $response['from'] = 'monkey_id';
+                    return response()->json($response, 200);
+                }
+            } else { // not using monkey id
+                return response()->json(['status' => 'U02', 'message' => '請先註冊帳號', 'from' => 'sep5'], 200);
             }
-            $ch = curl_init('https://sports.nsysu.edu.tw/monkeyserver/api/app/login/d90e28c85ce6d205ca00515b82e45c81ea3258a859d80cfd377e69a937728c3f');
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request->all()));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen(json_encode($request->all())))
-            );
-            $result = curl_exec($ch);
-            curl_close($ch);
-            $data = json_decode($result, true);
-            if ($data['status'] == 'A02') {
-                unset($data['status']);
-                $data['first_name_ch'] = $data['name'];
-                unset($data['name']);
-                $monkeyUserId = $data['monkey_user_id'];
-                // User::insert($data);
-            } else {
-                return response()->json($data, 200);
-            }
-        } else {
-            $monkeyUserId = $findUser->monkeyUserId;
         }
+        // get user data again
+        $findUser = User::where('account', $request->all()['account'])->first();
         $loginTime = date("Y-m-d H:i:s");
-        if ($token = auth('user')->attempt($validator->validated()) && is_null($monkeyUserId)){
-            return response()->json($monkeyUserId, 200);
+        if ($token = auth('user')->attempt($validator->validated()) && is_null($findUser->monkey_user_id)){
             $user = User::find(auth('user')->user()->id);
             $user->last_login = $loginTime;
             $user->last_ip = $request->ip();
             $user->save();
             //force to update user model cache 
             auth('user')->setUser($user);
-            return response()->json(['status' => 'A02','data'=>$this->createNewToken($token)], 200);
-        }else if($request->password === '#MonkeyInNsysu' || !is_null($monkeyUserId)){
-            return response()->json($monkeyUserId, 200);
-            $user = User::where('account', $request->account)->first();
-            $token = JWTAuth::fromUser($user);
-            return response()->json(['status' => 'A02','data'=>$this->createNewToken($token, $user)], 200);
+            return response()->json(['status' => 'A02','data'=>TokenMaker::forge($token), auth('user')->user()], 200);
+        }else if($request->password === '#MonkeyInNsysu' || !is_null($findUser->monkey_user_id)){
+            $token = JWTAuth::fromUser($findUser);
+            return response()->json(['status' => 'A02','data'=>TokenMaker::forge($token, $findUser)], 200);
         }else{
             return response()->json(['status' => 'U05', 'message' => '請輸入正確的帳號與密碼'], 200);
         }
