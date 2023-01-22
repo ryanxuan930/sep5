@@ -23,7 +23,7 @@ return new class extends Migration
             $table->bigInteger('admin_dept_id')->default(0);
             $table->json('options')->nullable();
             $table->ipAddress('last_ip')->default('0.0.0.0');
-            $table->timestamps();
+            $table->timestamps()->useCurrent();
         });
     }
 

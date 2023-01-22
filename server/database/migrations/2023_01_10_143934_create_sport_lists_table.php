@@ -20,7 +20,7 @@ return new class extends Migration
             $table->char('sport_code', 4);
             $table->smallInteger('event_id_count')->default(0);
             $table->char('module', 2);
-            $table->timestamps();
+            $table->timestamps()->useCurrent();
         });
     }
 

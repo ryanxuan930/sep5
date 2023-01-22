@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('post_date')->useCurrent();
             $table->tinyInteger('category')->default(0);
             $table->boolean('pinned')->default(0);
-            $table->timestamps();
+            $table->timestamps()->useCurrent();
             $table->integer('post_by')->default(0); // admin id
             $table->integer('clicks')->default(0); // click number
             $table->integer('related_game')->default(0); // game_id

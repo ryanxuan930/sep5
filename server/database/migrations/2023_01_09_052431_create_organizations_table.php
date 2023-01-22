@@ -44,7 +44,7 @@ return new class extends Migration
             $table->string('leader_ch', 64)->nullable();
             $table->string('leader_en', 128)->nullable();
             $table->text('leader_image')->nullable();
-            $table->timestamps();
+            $table->timestamps()->useCurrent();
         });
     }
 

@@ -59,7 +59,7 @@ return new class extends Migration
             $table->json('options')->nullable();
             $table->text('avatar')->nullable();
             $table->ipAddress('last_ip')->default('0.0.0.0');
-            $table->timestamps();
+            $table->timestamps()->useCurrent();
         });
     }
 

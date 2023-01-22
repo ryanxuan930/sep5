@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('sport_union_name_ch', 32);
             $table->string('sport_union_name_en', 64);
             $table->json('remarks')->nullable();
-            $table->timestamps();
+            $table->timestamps()->useCurrent();
         });
     }
 
