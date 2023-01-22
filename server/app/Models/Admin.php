@@ -12,6 +12,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 class Admin extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+    protected $table = "admins";
     protected $primaryKey = "admin_id";
     /**
      * The attributes that should be hidden for serialization.
