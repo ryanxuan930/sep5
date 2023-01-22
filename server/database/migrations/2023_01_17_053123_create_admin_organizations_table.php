@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('admin_org_name_ch', 32);
             $table->string('admin_org_name_en', 64);
             $table->json('admin_union_list')->nullable();
-            $table->timestamps()->useCurrent();
+            $table->timestamps();
         });
     }
 

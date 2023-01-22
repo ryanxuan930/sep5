@@ -31,7 +31,7 @@ return new class extends Migration
             $table->boolean('use_site')->default(1);
             $table->text('site_url')->nullable();
             $table->json('tags')->nullable(); // tags from game_tags
-            $table->timestamps()->useCurrent();
+            $table->timestamps();
         });
     }
 

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('game_name_ch', 32);
             $table->string('game_name_en', 128)->nullable();
             $table->string('game_name_jp', 64)->nullable();
-            $table->timestamps()->useCurrent();
+            $table->timestamps();
         });
     }
 

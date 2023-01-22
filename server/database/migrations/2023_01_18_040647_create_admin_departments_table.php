@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('admin_dept_name_en', 64);
             $table->json('sport_management_list')->nullable();
             $table->json('remarks')->nullable();
-            $table->timestamps()->useCurrent();
+            $table->timestamps();
         });
     }
 

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('admin_union_name_ch', 32);
             $table->string('admin_union_name_en', 64);
             $table->json('remarks')->nullable();
-            $table->timestamps()->useCurrent();
+            $table->timestamps();
         });
     }
 

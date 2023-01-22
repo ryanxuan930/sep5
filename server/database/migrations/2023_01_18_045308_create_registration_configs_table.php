@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('game_id');
             $table->boolean('reg_switch')->default(0);
             $table->json('deadline_list')->nullable(); // {start, end, title_ch, title_en, upload, options}
-            $table->timestamps()->useCurrent();
+            $table->timestamps();
         });
     }
 
