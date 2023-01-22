@@ -44,7 +44,6 @@ class AdminController extends Controller
         $loginTime = date("Y-m-d H:i:s");
         if($token = auth('admin')->attempt($validator->validated())){
             $user = Admin::find(auth('admin')->user()->admin_id);
-            $user->last_login = $loginTime;
             $user->last_ip = $request->ip();
             $user->save();
             //force to update user model cache 
