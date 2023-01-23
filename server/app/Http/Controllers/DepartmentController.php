@@ -12,8 +12,9 @@ class DepartmentController extends Controller
     // construct
     public function __construct()
     {
-        $user = auth()->user();
-        return $user;
+        if (is_null(auth('admin')->user()) && is_null(auth('user')->user())) {
+            return redirect('/login');
+        }
     }
     /**
      * Display a listing of the resource.
@@ -22,8 +23,6 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $user = auth('user')->user();
-        return response()->json(['status'=>$user]);
         //return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->orderBy('related_org_id', 'asc')->orderBy('sort_order', 'asc')->get());
     }
 
