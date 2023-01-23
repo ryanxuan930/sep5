@@ -77,7 +77,6 @@ class AdminDepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return response()->json(['status'=>$request->all()]);
         $validator = Validator::make($request->all(),[
             'admin_dept_name_ch' => 'required',
             'admin_dept_name_en' => 'required',
