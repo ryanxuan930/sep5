@@ -38,7 +38,7 @@ class AdminDepartmentController extends Controller
             'admin_dept_name_en' => 'required',
             'sport_management_list' => 'nullable',
             'remarks' => 'nullable',
-            'admin_org_id' => 'interger',
+            'admin_org_id' => 'integer',
         ]);
         if ($validator->fails()) {
             /*
