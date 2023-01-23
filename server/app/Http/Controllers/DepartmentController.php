@@ -16,6 +16,9 @@ class DepartmentController extends Controller
      */
     public function index()
     {
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
         return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->orderBy('related_org_id', 'asc')->orderBy('sort_order', 'asc')->get());
     }
 
@@ -27,6 +30,9 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
         $validator = Validator::make($request->all(),[
             'related_org_id' => 'required|integer|exist:organizations,org_id',
             'dept_name_ch' => 'required',
@@ -75,6 +81,9 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
         $validator = Validator::make($request->all(),[
             'related_org_id' => 'required|integer|exist:organizations,org_id',
             'dept_name_ch' => 'required',
@@ -100,6 +109,9 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
         Bulletin::where('dept_id', $id)->delete();
         return response()->json(['status'=>'A01']);
     }
