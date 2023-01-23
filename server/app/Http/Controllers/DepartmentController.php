@@ -6,16 +6,10 @@ use Illuminate\Http\Request;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Validator;
 use App\Models\Department;
+use App\Mods\AuthGuard;
 
 class DepartmentController extends Controller
 {
-    // construct
-    public function __construct()
-    {
-        if (is_null(auth('admin')->user()) && is_null(auth('user')->user())) {
-            return redirect('/login');
-        }
-    }
     /**
      * Display a listing of the resource.
      *
@@ -23,6 +17,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
+        AuthGuard::check();
         return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->orderBy('related_org_id', 'asc')->orderBy('sort_order', 'asc')->get());
     }
 
@@ -34,6 +29,7 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+        AuthGuard::check();
         $validator = Validator::make($request->all(),[
             'related_org_id' => 'required|integer|exist:organizations,org_id',
             'dept_name_ch' => 'required',
