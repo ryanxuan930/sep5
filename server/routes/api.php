@@ -62,5 +62,5 @@ Route::group([
 
 Route::apiResource('/bulletin', BulletinController::class);
 
-Route::apiResource('/department', UserDepartmentController::class);
-Route::get('/department/org/{id}', [UserDepartmentController::class, 'showByOrg']);
+Route::apiResource('/department', DepartmentController::class);
+Route::get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
