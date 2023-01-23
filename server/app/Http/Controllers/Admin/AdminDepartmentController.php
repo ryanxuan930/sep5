@@ -65,7 +65,7 @@ class AdminDepartmentController extends Controller
      */
     public function show($id)
     {
-        return response()->json(AD::where('admin_dept_id', $id)->first());
+        return response()->json(AD::leftJoin('admin_organizations', 'admin_departments.admin_org_id', '=', 'admin_organizations.admin_org_id')->where('admin_dept_id', $id)->first());
     }
 
     /**
