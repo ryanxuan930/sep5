@@ -51,6 +51,8 @@ class AdminDepartmentController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
+        $temp['created_at'] = date("Y-m-d H:i:s");
+        $temp['updated_at'] = date("Y-m-d H:i:s");
         AD::insert($temp);
         return response()->json(['status'=>'A01']);
     }
@@ -93,6 +95,7 @@ class AdminDepartmentController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
+        $temp['updated_at'] = date("Y-m-d H:i:s");
         AD::where('admin_dept_id', $id)->update($temp);
         return response()->json(['status'=>'A01']);
     }
