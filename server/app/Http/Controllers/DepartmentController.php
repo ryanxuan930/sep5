@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Validator;
 use App\Models\Department;
 
@@ -11,7 +12,7 @@ class DepartmentController extends Controller
     // construct
     public function __construct()
     {
-        $this->middleware('auth');
+        $user = auth()->user();
     }
     /**
      * Display a listing of the resource.
