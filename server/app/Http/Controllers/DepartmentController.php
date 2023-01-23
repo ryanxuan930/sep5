@@ -22,7 +22,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $user = auth('admin')->user();
+        $user = auth('user')->user();
         return response()->json(['status'=>$user]);
         //return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->orderBy('related_org_id', 'asc')->orderBy('sort_order', 'asc')->get());
     }
