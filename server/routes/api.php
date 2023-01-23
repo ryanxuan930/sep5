@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\BulletinController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DepartmentController as UserDepartmentController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
 
@@ -58,9 +59,11 @@ Route::group([
     Route::apiResource('/admin-dept', AdminDepartmentController::class);
 
     Route::apiResource('/admin-org', AdminOrganizationController::class);
+    Route::apiResource('/department', DepartmentController::class);
+    Route::get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
 });
 
 Route::apiResource('/bulletin', BulletinController::class);
 
-Route::apiResource('/department', DepartmentController::class);
-Route::get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
+Route::apiResource('/user/department', UserDepartmentController::class);
+Route::get('/user/department/org/{id}', [UserDepartmentController::class, 'showByOrg']);
