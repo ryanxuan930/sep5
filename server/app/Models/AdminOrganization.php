@@ -8,6 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class AdminOrganization extends Model
 {
     use HasFactory;
-    protected $table = "admin_departments";
-    protected $primaryKey = "admin_dept_id";
+    protected $primaryKey = "admin_org_id";
 }
