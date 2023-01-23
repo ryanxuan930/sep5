@@ -51,5 +51,5 @@ Route::group([
     'prefix' => 'admin'
 ], function () {
     Route::apiResource('/game', GameController::class);
-    Route::apiResource('/admin-dept', InterfaceController::class);
+    Route::apiResource('/admin-dept', AdminDepartmentController::class);
 });
