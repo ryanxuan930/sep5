@@ -51,13 +51,6 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'user'
-], function () {
-    Route::middleware('auth:user')->apiResource('/department', DepartmentController::class);
-    Route::middleware('auth:user')->get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
-});
-
-Route::group([
     'prefix' => 'admin'
 ], function () {
     Route::apiResource('/game', GameController::class);
@@ -65,9 +58,9 @@ Route::group([
     Route::apiResource('/admin-dept', AdminDepartmentController::class);
 
     Route::apiResource('/admin-org', AdminOrganizationController::class);
-
-    Route::middleware('auth:admin')->apiResource('/department', DepartmentController::class);
-    Route::middleware('auth:admin')->get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
 });
 
 Route::apiResource('/bulletin', BulletinController::class);
+
+Route::apiResource('/department', DepartmentController::class);
+Route::get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
