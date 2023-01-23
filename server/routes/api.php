@@ -33,18 +33,12 @@ Route::group([
         'prefix' => '/user'
     ], function () {
         Route::post('/login', [UserController::class, 'login']);
-        /*
         Route::get('/info', [UserController::class, 'info']);
         Route::patch('/edit/{u_id}', [UserController::class, 'edit']); // invalid
         Route::post('/logout', [UserController::class, 'logout']);
         Route::post('/register', [UserController::class, 'register']);
         Route::get('/exist/{account}', [UserController::class, 'exist']);
-        Route::group([
-            'prefix' => '/verify'
-        ], function () {
-            Route::post('/email', [UserController::class, 'sendVerifyMail']);
-            Route::post('/email/code', [UserController::class, 'codeVerify']);
-        });
+        /*
         Route::post('/reset', [UserController::class, 'reset']);
         Route::post('/reset/password/{account}/{token}', [UserController::class, 'resetPassword']);
         Route::post('/upload', [UserController::class, 'upload']);

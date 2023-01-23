@@ -51,7 +51,7 @@ return new class extends Migration
             // contact info
             $table->string('cellphone', 16)->nullable();
             $table->string('telephone', 16)->nullable();
-            $table->char('household_cty_code', 2)->nullable();
+            $table->char('household_city_code', 2)->nullable();
             $table->string('address', 128)->nullable();
             $table->string('emergercy_contact', 64)->nullable();
             $table->string('emergercy_phone', 16)->nullable();
