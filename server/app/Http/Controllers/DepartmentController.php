@@ -11,8 +11,7 @@ class DepartmentController extends Controller
     // construct
     public function __construct()
     {
-        $this->middleware('auth:admin');
-        $this->middleware('auth:user');
+        $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
