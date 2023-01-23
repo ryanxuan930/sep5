@@ -69,5 +69,5 @@ Route::group([
     'prefix' => 'user'
 ], function () {
     Route::middleware('auth:user')->apiResource('/department', DepartmentController::class);
-    Route::middleware('auth:user')->get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
+    // Route::middleware('auth:user')->get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
 });
