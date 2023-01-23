@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\GameController;
+use App\Http\Controllers\Auth\AdminDepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,4 +51,5 @@ Route::group([
     'prefix' => 'admin'
 ], function () {
     Route::apiResource('/game', GameController::class);
+    Route::apiResource('/admin-dept', InterfaceController::class);
 });
