@@ -4,8 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\AdminController;
-use App\Http\Controllers\Auth\GameController;
-use App\Http\Controllers\Auth\AdminDepartmentController;
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\Admin\AdminDepartmentController;
 
 /*
 |--------------------------------------------------------------------------
