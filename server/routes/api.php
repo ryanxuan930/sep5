@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\BulletinController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
 
@@ -52,6 +54,16 @@ Route::group([
     'prefix' => 'admin'
 ], function () {
     Route::apiResource('/game', GameController::class);
+
     Route::apiResource('/admin-dept', AdminDepartmentController::class);
+
     Route::apiResource('/admin-org', AdminOrganizationController::class);
+
+    Route::middleware('auth:admin')->apiResource('/department', DepartmentController::class);
+    Route::middleware('auth:admin')->get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
 });
+
+Route::apiResource('/bulletin', BulletinController::class);
+
+Route::middleware('auth:user')->apiResource('user/department', DepartmentController::class);
+Route::middleware('auth:user')->get('/user/department/org/{id}', [DepartmentController::class, 'showByOrg']);
