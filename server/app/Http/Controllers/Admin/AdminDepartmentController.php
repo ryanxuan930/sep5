@@ -22,7 +22,7 @@ class AdminDepartmentController extends Controller
      */
     public function index()
     {
-        return response()->json(AD::all());
+        return response()->json(AD::leftJoin('admin_organizations', 'admin_departments.admin_org_id', '=', 'admin_organizations.admin_org_id')->get());
     }
 
     /**
