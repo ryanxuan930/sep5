@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
+use App\Http\Controllers\Admin\AdminOrganizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,4 +53,5 @@ Route::group([
 ], function () {
     Route::apiResource('/game', GameController::class);
     Route::apiResource('/admin-dept', AdminDepartmentController::class);
+    Route::apiResource('/admin-org', AdminOrganizationController::class);
 });
