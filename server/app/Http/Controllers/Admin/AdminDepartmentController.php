@@ -77,6 +77,7 @@ class AdminDepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        return response()->json(['status'=>$request->all()]);
         $validator = Validator::make($request->all(),[
             'admin_dept_name_ch' => 'required',
             'admin_dept_name_en' => 'required',
@@ -85,13 +86,6 @@ class AdminDepartmentController extends Controller
             'admin_org_id' => 'interger',
         ]);
         if ($validator->fails()) {
-            /*
-            $failedRules = $validator->failed();
-            if (isset($failedRules['account']['Required'])) {
-                return response()->json(['status' => 'U07', 'message' => '請輸入App名稱'], 200);
-            } else if (isset($failedRules['password']['Required'])) {
-                return response()->json(['status' => 'U07', 'message' => '請輸入網域'], 200);
-            }*/
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
