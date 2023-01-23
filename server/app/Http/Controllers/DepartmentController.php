@@ -13,6 +13,7 @@ class DepartmentController extends Controller
     public function __construct()
     {
         $user = auth()->user();
+        return $user;
     }
     /**
      * Display a listing of the resource.
