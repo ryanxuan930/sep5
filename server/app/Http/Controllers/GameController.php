@@ -60,7 +60,6 @@ class GameController extends Controller
         $temp['updated_at'] = date("Y-m-d H:i:s");
         Game::insert($temp);
         $game = Game::leftJoin('sport_lists', 'games.sport_code', '=', 'sport_lists.sport_code')->select('games.*', 'sport_lists.sport_code', 'sport_lists.module')->latest()->first();
-        return response()->json(['status'=>$game]);
         GameMaker::make($game->game_id, $game->sport_code, $game->module);
         return response()->json(['status'=>'A01']);
     }
