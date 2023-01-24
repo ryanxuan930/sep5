@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('game_tags', function (Blueprint $table) {
             $table->id('game_tag_id');
-            $table->string('game_name_ch', 32);
-            $table->string('game_name_en', 128)->nullable();
-            $table->string('game_name_jp', 64)->nullable();
+            $table->string('game_tag_ch', 32);
+            $table->string('game_tag_en', 128)->nullable();
+            $table->string('game_tag_jp', 64)->nullable();
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\GameTagController;
 use App\Http\Controllers\BulletinController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
@@ -61,6 +62,8 @@ Route::group([
 Route::apiResource('/bulletin', BulletinController::class);
 
 Route::apiResource('/game', GameController::class);
+
+Route::apiResource('/game-tag', GameTagController::class);
 
 Route::apiResource('/department', DepartmentController::class);
 Route::get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
