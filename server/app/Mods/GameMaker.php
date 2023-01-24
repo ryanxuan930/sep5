@@ -54,24 +54,24 @@ class GameMaker {
             $table->char('event_code', 8);
             $table->smallInteger('ini_group')->default(1);
             $table->smallInteger('ini_position')->default(1);
-            $table->text('options')->default('{}');
+            $table->json('options')->nullable();
         });
         Schema::create($header.'groups', function(Blueprint $table){
             $table->id('grp_id');
-            $table->bigInteger('team_id');
-            $table->integer('division_id');
+            $table->integer('team_id')->default(0);
+            $table->integer('division_id')->default(0);
             $table->char('event_code', 8);
             $table->smallInteger('ini_group')->default(1);
             $table->smallInteger('ini_position')->default(1);
-            $table->text('options')->default('{}');
+            $table->json('options')->nullable();
         });
         Schema::create($header.'params', function(Blueprint $table){
             $table->id('param_id');
             $table->integer('division_id');
             $table->char('event_code', 8);
-            $table->string('locked_ip', 15)->nullable();
+            $table->string('locked_ip', 15)->nullable();// 鎖定一台ip與帳號進行輸入資料
             $table->bigInteger('locked_admin')->default(0);
-            $table->json('data')->nullable(); // 鎖定一台ip與帳號進行輸入資料
+            $table->json('data')->nullable(); 
         });
         Schema::create($header.'schedules', function(Blueprint $table){
             $table->id('schedule_id');
@@ -104,11 +104,11 @@ class GameMaker {
                 $table->smallInteger('r'.$i.'_ranking')->default(0);
                 $table->text('r'.$i.'_options')->default('{}');
             }
-            $table->text('options')->default('{}');
+            $table->json('options')->nullable();
         });
         Schema::create($header.'groups', function(Blueprint $table){
             $table->id('grp_id');
-            $table->bigInteger('team_id');
+            $table->integer('team_id');
             $table->integer('division_id');
             $table->char('event_code', 8);
             $table->string('ref_result',12)->default(0);
@@ -120,7 +120,7 @@ class GameMaker {
                 $table->smallInteger('r'.$i.'_ranking')->default(0);
                 $table->text('r'.$i.'_options')->default('{}');
             }
-            $table->text('options')->default('{}');
+            $table->json('options')->nullable();
         });
         Schema::create($header.'params', function(Blueprint $table){
             $table->id('param_id');
@@ -172,32 +172,25 @@ class GameMaker {
             $table->string('ref_result',12)->default(0);
             $table->string('result',12)->default(0);
             $table->smallInteger('ranking')->default(0);
-            $table->text('options')->default('{}');
+            $table->json('options')->nullable();
         });
         Schema::create($header.'params', function(Blueprint $table){
             $table->id('param_id');
             $table->integer('division_id');
             $table->char('event_code', 8);
-            // [ [Preliminary, Round 1], [Round 1, Repechage], Semi-final, Final]
-            for($i=1; $i<=4; $i++){
-                // qualifiying method
-                $table->boolean('r'.$i)->default(0); // 
-                $table->tinyInteger('r'.$i.'_aq')->default(0);
-                $table->tinyInteger('r'.$i.'_sq')->default(0);
-                $table->boolean('r'.$i.'_split')->default(0);
-            }
+            $table->tinyInteger('qualified')->default(0); // 各組取數
+            $table->json('options')->nullable();
         });
         Schema::create($header.'schedules', function(Blueprint $table){
             $table->id('schedule_id');
             $table->datetime('timestamp');
             $table->integer('division_id');
             $table->char('event_code', 8);
-            $table->tinyInteger('round')->default(1);
             $table->tinyInteger('status')->default(0);
-            $table->text('options')->nullable();
+            $table->json('options')->nullable();
         });
-        Schema::create($header.'points', function(Blueprint $table){
-            $table->increments(' point_id');
+        Schema::create($header.'rates', function(Blueprint $table){
+            $table->id('rate_id');
             $table->char('org_id',5);
             $table->bigInteger('dept_id')->default(0);
             $table->integer('registered')->default(0);
@@ -233,6 +226,14 @@ class GameMaker {
         Schema::dropIfExists($header.'divisions');
         Schema::dropIfExists($header.'selected_events');
         Schema::dropIfExists($header.'teams');
+        Schema::dropIfExists($header.'temps');
+        Schema::dropIfExists($header.'individuals');
+        Schema::dropIfExists($header.'groups');
+        Schema::dropIfExists($header.'params');
+        Schema::dropIfExists($header.'schedules');
+        Schema::dropIfExists($header.'lanes');
+        Schema::dropIfExists($header.'points');
+        Schema::dropIfExists($header.'rates');
     }
 }
 
