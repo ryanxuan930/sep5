@@ -55,7 +55,7 @@ class GameController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
-        $temp['created_dept_id'] = $user->admin_dept_id;
+        $temp['create_dept_id'] = $user->admin_dept_id;
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
         Game::insert($temp);
