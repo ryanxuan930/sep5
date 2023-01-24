@@ -51,7 +51,7 @@ class BulletinController extends Controller
         }
         $temp = $request->all();
         $temp['post_by'] = $user->admin_id;
-        $temp['admin_dept_id'] = $user->admin_dept;
+        $temp['admin_dept_id'] = $user->admin_dept_id;
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
         Bulltein::insert($temp);
