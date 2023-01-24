@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 
 class GameMaker {
 
-    private function commonSchema(string $header) {
+    private static function commonSchema(string $header) {
         // game fundamental configs
         Schema::create($header.'dates', function (Blueprint $table) {
             $table->id('date_id');
