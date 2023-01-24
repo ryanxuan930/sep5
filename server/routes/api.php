@@ -53,14 +53,14 @@ Route::group([
 Route::group([
     'prefix' => 'admin'
 ], function () {
-    Route::apiResource('/game', GameController::class);
-
     Route::apiResource('/admin-dept', AdminDepartmentController::class);
 
     Route::apiResource('/admin-org', AdminOrganizationController::class);
 });
 
 Route::apiResource('/bulletin', BulletinController::class);
+
+Route::apiResource('/game', GameController::class);
 
 Route::apiResource('/department', DepartmentController::class);
 Route::get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
