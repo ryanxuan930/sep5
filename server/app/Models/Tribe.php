@@ -8,6 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Tribe extends Model
 {
     use HasFactory;
-    protected $table = "tribes";
     protected $primaryKey = "tribe_id";
 }

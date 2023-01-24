@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class SportUnion extends Model
 {
     use HasFactory;
+    protected $primaryKey = "sport_union_id";
 }

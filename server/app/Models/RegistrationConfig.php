@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class RegistrationConfig extends Model
 {
     use HasFactory;
+    protected $primaryKey = "reg_config_id";
 }

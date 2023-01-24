@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class GameTags extends Model
 {
     use HasFactory;
+    protected $primaryKey = "game_tag_id";
 }
