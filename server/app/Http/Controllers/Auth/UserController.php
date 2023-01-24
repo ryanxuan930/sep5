@@ -62,7 +62,7 @@ class UserController extends Controller
                         'created_at' => $loginTime,
                         'updated_at' => $loginTime,
                         'updated_at' => $loginTime,
-                        'athlete_id' => str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT),
+                        'athlete_id' => strtoupper(str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT)),
                     ];
                     User::insert($temp);
                 } else { // update user table
@@ -152,7 +152,7 @@ class UserController extends Controller
         }
         $temp = $request->all();
         $temp['password'] = password_hash($request->all()['password'], PASSWORD_DEFAULT);
-        $temp['athlete_id'] = str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT);
+        $temp['athlete_id'] = strtoupper(str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT));
         User::insert($temp);
         // mail
         $status = Mail::to($temp['account'])->send(new SendMail('SportEvent Pro 5', '國立中山大學體育賽事管理系統註冊通知信', 'SignupEmail', ['account' => $temp['account'], 'name' => $temp['last_name_ch'].$temp['first_name_ch'], 'timestamp' => date('Y-m-d H:i:s')]));
