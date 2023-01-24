@@ -36,7 +36,7 @@ class GameMaker {
             $table->json('member_list')->nullable();
             $table->boolean('verified')->default(1);
         });
-        Schema::create($header.'temp', function (Blueprint $table) {
+        Schema::create($header.'temps', function (Blueprint $table) {
             $table->id('temp_id');
             $table->string('temp_key', 128);
             $table->json('temp_data');
@@ -47,7 +47,7 @@ class GameMaker {
     For Tournament
     */
     public static function generalSchema(string $header) {
-        Schema::create($header.'individual', function(Blueprint $table){
+        Schema::create($header.'individuals', function(Blueprint $table){
             $table->id('ind_id');
             $table->bigInteger('u_id');
             $table->integer('division_id');
@@ -56,7 +56,7 @@ class GameMaker {
             $table->smallInteger('ini_position')->default(1);
             $table->text('options')->default('{}');
         });
-        Schema::create($header.'group', function(Blueprint $table){
+        Schema::create($header.'groups', function(Blueprint $table){
             $table->id('grp_id');
             $table->bigInteger('team_id');
             $table->integer('division_id');
@@ -73,7 +73,7 @@ class GameMaker {
             $table->bigInteger('locked_admin')->default(0);
             $table->json('data')->nullable(); // 鎖定一台ip與帳號進行輸入資料
         });
-        Schema::create($header.'schedule', function(Blueprint $table){
+        Schema::create($header.'schedules', function(Blueprint $table){
             $table->id('schedule_id');
             $table->datetime('timestamp');
             $table->integer('division_id');
@@ -90,7 +90,7 @@ class GameMaker {
     */
     public static function laneSchema(string $header) {
         // athletics or swimming
-        Schema::create($header.'individual', function(Blueprint $table){
+        Schema::create($header.'individuals', function(Blueprint $table){
             $table->id('ind_id');
             $table->bigInteger('u_id');
             $table->integer('division_id');
@@ -106,7 +106,7 @@ class GameMaker {
             }
             $table->text('options')->default('{}');
         });
-        Schema::create($header.'group', function(Blueprint $table){
+        Schema::create($header.'groups', function(Blueprint $table){
             $table->id('grp_id');
             $table->bigInteger('team_id');
             $table->integer('division_id');
@@ -135,7 +135,7 @@ class GameMaker {
                 $table->boolean('r'.$i.'_split')->default(0);
             }
         });
-        Schema::create($header.'schedule', function(Blueprint $table){
+        Schema::create($header.'schedules', function(Blueprint $table){
             $table->id('schedule_id');
             $table->datetime('timestamp');
             $table->integer('division_id');
@@ -150,8 +150,8 @@ class GameMaker {
             $table->tinyInteger('straight')->default(0);
             $table->tinyInteger('round')->default(0);
         });
-        Schema::create($header.'_total', function(Blueprint $table){
-            $table->increments(' total_id');
+        Schema::create($header.'points', function(Blueprint $table){
+            $table->increments(' point_id');
             $table->char('org_id',5);
             $table->bigInteger('dept_id')->default(0);
             $table->integer('points')->default(0);
@@ -163,7 +163,7 @@ class GameMaker {
     For Road Race
     */
     public static function roadSchema(string $header){
-        Schema::create($header.'individual', function(Blueprint $table){
+        Schema::create($header.'individuals', function(Blueprint $table){
             $table->id('ind_id');
             $table->bigInteger('u_id');
             $table->integer('division_id');
@@ -187,7 +187,7 @@ class GameMaker {
                 $table->boolean('r'.$i.'_split')->default(0);
             }
         });
-        Schema::create($header.'schedule', function(Blueprint $table){
+        Schema::create($header.'schedules', function(Blueprint $table){
             $table->id('schedule_id');
             $table->datetime('timestamp');
             $table->integer('division_id');
@@ -196,8 +196,8 @@ class GameMaker {
             $table->tinyInteger('status')->default(0);
             $table->text('options')->nullable();
         });
-        Schema::create($header.'_total', function(Blueprint $table){
-            $table->increments(' total_id');
+        Schema::create($header.'points', function(Blueprint $table){
+            $table->increments(' point_id');
             $table->char('org_id',5);
             $table->bigInteger('dept_id')->default(0);
             $table->integer('registered')->default(0);
@@ -224,7 +224,7 @@ class GameMaker {
         if ($module == 'rd') {
             GameMaker::roadSchema($header);
         }
-        GameMaker::costumSchema($header, $sportsCode);
+        GameMaker::custumSchema($header, $sportsCode);
     }
 
     public static function reverse(int $gameId, GameModule $module, string $sportCode) {
