@@ -61,6 +61,8 @@ class UserController extends Controller
                         'is_student' => $response['user_identity'] == 0 ? 1 : 0,
                         'created_at' => $loginTime,
                         'updated_at' => $loginTime,
+                        'updated_at' => $loginTime,
+                        'athlete_id' => str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT),
                     ];
                     User::insert($temp);
                 } else { // update user table
