@@ -224,7 +224,7 @@ class GameMaker {
         if ($module == 'rd') {
             GameMaker::roadSchema($header);
         }
-        GameMaker::customSchema($header, $sportsCode);
+        GameMaker::customSchema($header, $sportCode);
     }
 
     public static function reverse(int $gameId, GameModule $module, string $sportCode) {
