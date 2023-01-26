@@ -21,7 +21,7 @@ class BulletinController extends Controller
      */
     public function index()
     {
-        return response()->json(Bulltein::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->get());
+        return response()->json(Bulltein::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->paginate(10));
     }
 
     /**
