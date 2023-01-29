@@ -63,7 +63,7 @@ Route::group([
 Route::apiResource('/bulletin', BulletinController::class);
 
 Route::apiResource('/game', GameController::class);
-Route::get('/game/all', [GameController::class, 'indexAll']);
+Route::get('/game-all', [GameController::class, 'indexAll']);
 
 Route::apiResource('/game-tag', GameTagController::class);
 
