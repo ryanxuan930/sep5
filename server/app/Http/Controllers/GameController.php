@@ -23,6 +23,15 @@ class GameController extends Controller
     {
         return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->paginate(10));
     }
+    /**
+     * Display a listing of the resource. (No filtering)
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function indexAll()
+    {
+        return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->paginate(10));
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,7 +58,8 @@ class GameController extends Controller
             'use_site' => 'required|boolean',
             'site_url' => 'nullable',
             'tags' => 'nullable',
-            'sport_code' => 'required|size:4'
+            'sport_code' => 'required|size:4',
+            'archived' => 'required|boolean'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -100,6 +110,7 @@ class GameController extends Controller
             'use_site' => 'required|boolean',
             'site_url' => 'nullable',
             'tags' => 'nullable',
+            'archived' => 'required|boolean'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
