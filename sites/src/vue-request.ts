@@ -8,8 +8,8 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 export default class VueRequest {
-  private headerPrefix = 'https://sports.nsysu.edu.tw/monkeyserver/api/';
-  private authToken = `Bearer ${localStorage.monkeyIdToken}`;
+  private headerPrefix = 'https://sports.nsysu.edu.tw/sepserver/api/';
+  private authToken = '';
   private acceptHeader = 'application/json';
   private contentType = 'application/json; charset=utf-8';
   constructor(token: string|undefined = undefined) {

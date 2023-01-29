@@ -2,9 +2,16 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import type { Ref } from 'vue';
 
-export const useCounterStore = defineStore('user', () => {
-  const expired: Ref<Date|null> = ref(null);
-  const token: Ref<string|null> = ref(null);
-  const userInfo: Ref<any> = ref(null);
-  return { expired, token, userInfo };
+export const useUserStore = defineStore('user', () => {
+  const expired: Ref<string> = ref('');
+  const token: Ref<string> = ref('');
+  const userInfo: Ref<any> = ref('');
+  const loginType: Ref<string> = ref('');
+  function reset() {
+    expired.value = '';
+    token.value = '';
+    userInfo.value = '';
+    loginType.value = '';
+  }
+  return { expired, token, userInfo, loginType, reset };
 });

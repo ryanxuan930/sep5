@@ -25,6 +25,18 @@ const router = createRouter({
           path: '/admin',
           name: 'adminHome',
           component: () => import('../views/admin/console/ConsoleLayout.vue'),
+          children: [
+            {
+              path: '/admin',
+              name: 'adminMainPage',
+              component: () => import('../views/admin/console/pages/MainPage.vue'),
+            },
+            {
+              path: 'games',
+              name: 'adminGamePage',
+              component: () => import('../views/admin/console/pages/GamePage.vue'),
+            },
+          ],
         },
         {
           path: 'login',
