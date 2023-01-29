@@ -21,7 +21,7 @@ class GameController extends Controller
      */
     public function index()
     {
-        return response()->json(Game::paginate(10));
+        return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->paginate(10));
     }
 
     /**
@@ -72,7 +72,7 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Game::where('game_id', $id)->first());
+        return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('game_id', $id)->first());
     }
 
     /**
