@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('event_en', 128);
             $table->string('event_jp', 64)->nullable();
             $table->string('event_abbr', 16);
-            $table->char('unit', 1)->default('0'); // 0 NA T time D distance
+            $table->char('unit', 1)->default('0'); // 0 NA T time D distance P points
             $table->boolean('display')->default(0);
             $table->boolean('built_in')->default(0);
             $table->boolean('multiple')->default(0); // multiple players
