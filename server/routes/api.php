@@ -60,14 +60,17 @@ Route::group([
     Route::apiResource('/admin-org', AdminOrganizationController::class);
 });
 
-Route::apiResource('/bulletin', BulletinController::class);
+Route::group([
+    'prefix' => '{org_id}'
+], function () {
+    Route::apiResource('/bulletin', BulletinController::class);
 
-Route::apiResource('/game', GameController::class);
-Route::get('/game-all', [GameController::class, 'indexAll']);
+    Route::apiResource('/game', GameController::class);
+    Route::get('/game-all', [GameController::class, 'indexAll']);
 
-Route::apiResource('/game-tag', GameTagController::class);
+    Route::apiResource('/game-tag', GameTagController::class);
 
-Route::apiResource('/event', EventController::class);
+    Route::apiResource('/event', EventController::class);
 
-Route::apiResource('/department', DepartmentController::class);
-Route::get('/department/org/{id}', [DepartmentController::class, 'showByOrg']);
+    Route::apiResource('/department', DepartmentController::class);
+});
