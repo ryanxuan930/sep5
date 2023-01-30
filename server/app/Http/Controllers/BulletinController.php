@@ -19,9 +19,13 @@ class BulletinController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($org_id)
     {
-        return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->paginate(10));
+        if ($org_id == 1) {
+            return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->paginate(10));
+        } else {
+            return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'bulletins.related_admin_dept')->paginate(10));
+        }
     }
 
     /**
@@ -30,7 +34,7 @@ class BulletinController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $org_id)
     {
         $user = auth('admin')->user();
         $validator = Validator::make($request->all(),[
@@ -64,7 +68,7 @@ class BulletinController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($org_id, $id)
     {
         return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->where('bulletin_id', $id)->first());
     }
@@ -76,7 +80,7 @@ class BulletinController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $org_id, $id)
     {
         $validator = Validator::make($request->all(),[
             'post_date' => 'required|date',
@@ -106,7 +110,7 @@ class BulletinController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($org_id, $id)
     {
         Bulletin::where('bulletin_id', $id)->delete();
         return response()->json(['status'=>'A01']);
