@@ -19,16 +19,16 @@ class GameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($org_id)
     {
-        return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->paginate(10));
+        return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->where('host_list->1', $org_id)->paginate(10));
     }
     /**
      * Display a listing of the resource. (No filtering)
      * 
      * @return \Illuminate\Http\Response
      */
-    public function indexAll()
+    public function indexAll($org_id)
     {
         return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->paginate(10));
     }
@@ -39,7 +39,7 @@ class GameController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $org_id)
     {
         $user = auth('admin')->user();
         $validator = Validator::make($request->all(),[
@@ -80,7 +80,7 @@ class GameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($org_id, $id)
     {
         return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('game_id', $id)->first());
     }
@@ -92,7 +92,7 @@ class GameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $org_id, $id)
     {
         $validator = Validator::make($request->all(),[
             'game_name_ch' => 'required',
@@ -127,7 +127,7 @@ class GameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($org_id, $id)
     {
         $game = Game::leftJoin('sport_lists', 'games.sport_code', '=', 'sport_lists.sport_code')->select('games.*', 'sport_lists.sport_code', 'sport_lists.module')->where('game_id', $id)->first();
         GameMaker::make($game->game_id, $game->sport_code, $game->module);
