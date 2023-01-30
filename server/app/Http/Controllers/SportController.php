@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Event;
+use Validator;
 use App\Models\SportList;
-use Illuminate\Support\Facades\DB;
 
-class EventController extends Controller
+class SportController extends Controller
 {
     // construct
     public function __construct()
@@ -21,7 +20,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return response()->json(Event::all());
+        return response()->json(SportList::all());
     }
 
     /**
@@ -33,29 +32,19 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'sport_id' => 'required',
-            'event_code' => 'required|size:8',
-            'event_ch' => 'required',
-            'event_en' => 'required',
-            'event_jp' => 'nullable',
-            'event_abbr' => 'required',
-            'unit' => 'required|size:1',
-            'display' => 'required|boolean',
-            'built_in' => 'required|boolean',
-            'multiple' => 'required|boolean',
-            'combined' => 'required|boolean',
-            'combined_list' => 'nullable',
-            'player_num' => 'required|integer',
-            'created_by_dept' => 'required|integer',
+            'sport_name_ch' => 'required',
+            'sport_name_en' => 'nullable',
+            'sport_code' => 'required',
+            'module' => 'required|size:2'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
+        $temp['event_id_count'] = 0;
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
-        Event::insert($temp);
-        SportList::where('sport_id', $temp['sport_id'])->update(['event_id_count' => DB::raw('event_id_count + 1')]);
+        SportList::insert($temp);
         return response()->json(['status'=>'A01']);
     }
 
@@ -67,7 +56,7 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Event::where('event_id', $id)->first());
+        return response()->json(SportList::where('sport_id', $id)->first);
     }
 
     /**
@@ -80,27 +69,17 @@ class EventController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'sport_id' => 'required',
-            'event_code' => 'required|size:8',
-            'event_ch' => 'required',
-            'event_en' => 'required',
-            'event_jp' => 'nullable',
-            'event_abbr' => 'required',
-            'unit' => 'required|size:1',
-            'display' => 'required|boolean',
-            'built_in' => 'required|boolean',
-            'multiple' => 'required|boolean',
-            'combined' => 'required|boolean',
-            'combined_list' => 'nullable',
-            'player_num' => 'required|integer',
-            'created_by_dept' => 'required|integer',
+            'sport_name_ch' => 'required',
+            'sport_name_en' => 'nullable',
+            'sport_code' => 'required',
+            'module' => 'required|size:2'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
         $temp['updated_at'] = date("Y-m-d H:i:s");
-        Event::where('event_id', $id)->update($temp);
+        SportList::where('sport_id', $id)->update($temp);
         return response()->json(['status'=>'A01']);
     }
 
@@ -112,7 +91,7 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        Event::where('event_id', $id)->delete();
+        SportList::where('sport_id', $id)->delete();
         return response()->json(['status'=>'A01']);
     }
 }
