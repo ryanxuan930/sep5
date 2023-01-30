@@ -69,8 +69,9 @@ Route::group([
     Route::get('/game-all', [GameController::class, 'indexAll']);
 
     Route::apiResource('/game-tag', GameTagController::class);
-
-    Route::apiResource('/event', EventController::class);
-
-    Route::apiResource('/department', DepartmentController::class);
 });
+
+Route::apiResource('/department', DepartmentController::class);
+Route::get('/department/org/{org_id}', [DepartmentController::class, 'indexByOrg']);
+
+Route::apiResource('/event', EventController::class);
