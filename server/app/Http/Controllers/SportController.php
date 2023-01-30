@@ -56,7 +56,7 @@ class SportController extends Controller
      */
     public function show($id)
     {
-        return response()->json(SportList::where('sport_id', $id)->first);
+        return response()->json(SportList::where('sport_id', $id)->first());
     }
 
     /**
