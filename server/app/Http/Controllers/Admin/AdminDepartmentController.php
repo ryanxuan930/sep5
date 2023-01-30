@@ -26,7 +26,7 @@ class AdminDepartmentController extends Controller
         if ($user->admin_org_id==1) {
             return response()->json(AD::leftJoin('admin_organizations', 'admin_departments.admin_org_id', '=', 'admin_organizations.admin_org_id')->get());
         } else {
-            return response()->json(AD::leftJoin('admin_organizations', 'admin_departments.admin_org_id', '=', 'admin_organizations.admin_org_id')->where('admin_org_id', $user->admin_org_id)->get());
+            return response()->json(AD::leftJoin('admin_organizations', 'admin_departments.admin_org_id', '=', 'admin_organizations.admin_org_id')->where('admin_departments.admin_org_id', $user->admin_org_id)->get());
         }
         
     }
