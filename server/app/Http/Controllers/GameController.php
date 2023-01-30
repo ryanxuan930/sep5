@@ -21,6 +21,7 @@ class GameController extends Controller
      */
     public function index($org_id)
     {
+        return $org_id;
         return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->where('host_list->1', $org_id)->paginate(10));
     }
     /**
