@@ -9,4 +9,7 @@ class Game extends Model
 {
     use HasFactory;
     protected $primaryKey = "game_id";
+    protected $casts = [
+        'host_list' => 'array',
+    ];
 }
