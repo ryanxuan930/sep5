@@ -58,7 +58,7 @@ class BulletinController extends Controller
         $temp['admin_dept_id'] = $user->admin_dept_id;
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
-        Bulltein::insert($temp);
+        Bulletin::insert($temp);
         return response()->json(['status'=>'A01']);
     }
 
