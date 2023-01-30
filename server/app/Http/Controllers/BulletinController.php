@@ -100,7 +100,7 @@ class BulletinController extends Controller
         }
         $temp = $request->all();
         $temp['updated_at'] = date("Y-m-d H:i:s");
-        Bulltein::where('bulletin_id', $id)->update($temp);
+        Bulletin::where('bulletin_id', $id)->update($temp);
         return response()->json(['status'=>'A01']);
     }
 
