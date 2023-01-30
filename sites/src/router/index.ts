@@ -36,6 +36,11 @@ const router = createRouter({
               name: 'adminGamePage',
               component: () => import('../views/admin/console/pages/GamePage.vue'),
             },
+            {
+              path: 'bulletin',
+              name: 'adminBulletinPage',
+              component: () => import('../views/admin/console/pages/BulletinPage.vue'),
+            },
           ],
         },
         {

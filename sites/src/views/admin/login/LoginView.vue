@@ -2,13 +2,13 @@
   import { reactive, ref } from 'vue';
   import { useRouter } from 'vue-router';
   import VueRequest from '@/vue-request';
-  import { useUserStore } from '@/stores/user';
+  import { useAdminStore } from '@/stores/admin';
   import type { Ref } from 'vue';
   const accountInput: any = ref(null);
   const passwordInput: any = ref(null);
   const message: Ref<string|null> = ref(null);
   const router = useRouter();
-  const store = useUserStore()
+  const store = useAdminStore()
   const vr = new VueRequest();
   const data = reactive({
     account: '',
@@ -66,5 +66,7 @@
 </template>
 
 <style scoped lang="scss">
-    
+.round-input-label {
+  @apply my-3;
+}
 </style>

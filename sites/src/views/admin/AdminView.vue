@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { useUserStore } from '@/stores/user';
+  import { useAdminStore } from '@/stores/admin';
   import { useRouter } from 'vue-router';
 
   const router = useRouter();
-  const store = useUserStore();
+  const store = useAdminStore();
   try {
     if (localStorage.getItem('sep5AdminTemp')) {
       const temp = JSON.parse(localStorage.sep5AdminTemp);

@@ -2,10 +2,10 @@
   import { reactive, ref } from 'vue';
   import { useRouter } from 'vue-router';
   import VueRequest from '@/vue-request';
-  import { useUserStore } from '@/stores/user';
+  import { useAdminStore } from '@/stores/admin.js';
   import type { Ref } from 'vue';
   const router = useRouter();
-  const store = useUserStore()
+  const store = useAdminStore()
   const vr = new VueRequest(store.token);
   function logout() {
     store.reset();
