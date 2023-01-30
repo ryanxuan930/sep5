@@ -22,6 +22,14 @@ class DepartmentController extends Controller
         return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->orderBy('related_org_id', 'asc')->orderBy('sort_order', 'asc')->get());
     }
 
+    public function indexByOrg($org_id)
+    {
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->where('related_org_id', $org_id)->orderBy('related_org_id', 'asc')->orderBy('sort_order', 'asc')->get());
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -59,17 +67,6 @@ class DepartmentController extends Controller
     public function show($id)
     {
         return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->where('dept_id', $id)->first());
-    }
-
-    /**
-     * Display the specified organization resource.
-     *
-     * @param  int  $id -> org_id
-     * @return \Illuminate\Http\Response
-     */
-    public function showByOrg($id)
-    {
-        return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->where('related_org_id', $id)->orderBy('sort_order', 'asc')->get());
     }
 
     /**
