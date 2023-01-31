@@ -109,7 +109,7 @@ class DepartmentController extends Controller
         if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         }
-        Bulletin::where('dept_id', $id)->delete();
+        Department::where('dept_id', $id)->delete();
         return response()->json(['status'=>'A01']);
     }
 }

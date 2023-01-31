@@ -9,6 +9,7 @@ use App\Http\Controllers\GameTagController;
 use App\Http\Controllers\BulletinController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\SportController;
+use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
@@ -78,3 +79,5 @@ Route::get('/department/org/{org_id}', [DepartmentController::class, 'indexByOrg
 Route::apiResource('/event', EventController::class);
 
 Route::apiResource('/sport', SportController::class);
+
+Route::apiResource('/organization', OrganizationController::class);
