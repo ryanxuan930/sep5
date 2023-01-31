@@ -18,9 +18,13 @@ class GameTagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($org_id)
     {
-        return response()->json(GameTag::all());
+        if ($org_id == 1) {
+            return response()->json(GameTag::where('admin_org_id', $org_id)->get());
+        } else {
+            return response()->json(GameTag::all());
+        }
     }
 
     /**
@@ -29,7 +33,7 @@ class GameTagController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $org_id)
     {
         $validator = Validator::make($request->all(),[
             'game_tag_ch' => 'required',
@@ -52,7 +56,7 @@ class GameTagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($org_id, $id)
     {
         return response()->json(GameTag::where('game_tag_id', $id)->first());
     }
@@ -64,7 +68,7 @@ class GameTagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $org_id, $id)
     {
         $validator = Validator::make($request->all(),[
             'game_tag_ch' => 'required',
@@ -86,7 +90,7 @@ class GameTagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($org_id, $id)
     {
         GameTag::where('game_tag_id', $id)->delete();
         return response()->json(['status'=>'A01']);
