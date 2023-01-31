@@ -27,7 +27,7 @@ class DepartmentController extends Controller
         if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         }
-        return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->where('related_org_id', $org_id)->orderBy('related_org_id', 'asc')->orderBy('sort_order', 'asc')->get());
+        return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->where('related_org_id', $org_id)->orderBy('sort_order', 'asc')->get());
     }
 
     /**
