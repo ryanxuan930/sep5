@@ -21,9 +21,9 @@ class GameTagController extends Controller
     public function index($org_id)
     {
         if ($org_id == 1) {
-            return response()->json(GameTag::where('admin_org_id', $org_id)->get());
-        } else {
             return response()->json(GameTag::all());
+        } else {
+            return response()->json(GameTag::where('admin_org_id', $org_id)->get());
         }
     }
 
