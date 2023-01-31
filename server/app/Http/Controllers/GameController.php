@@ -21,7 +21,11 @@ class GameController extends Controller
      */
     public function index($org_id)
     {
-        return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->whereJsonContains('host_list', $org_id)->paginate(10));
+        if ($org_id == 1) {
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->paginate(10));
+        } else {
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->whereJsonContains('host_list', $org_id)->paginate(10));
+        }
     }
     /**
      * Display a listing of the resource. (No filtering)
@@ -30,7 +34,11 @@ class GameController extends Controller
      */
     public function indexAll($org_id)
     {
-        return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereJsonContains('host_list', $org_id)->paginate(10));
+        if ($org_id == 1) {
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->paginate(10));
+        } else {
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereJsonContains('host_list', $org_id)->paginate(10));
+        }
     }
 
     /**
