@@ -19,7 +19,7 @@ class TribeController extends Controller
      */
     public function index()
     {
-        return response()->json(TriveList::all());
+        return response()->json(TribeList::all());
     }
 
     /**
