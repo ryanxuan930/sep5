@@ -14,6 +14,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
 
@@ -90,3 +91,9 @@ Route::apiResource('/user', UserController::class);
 Route::apiResource('/country', CountryController::class);
 
 Route::apiResource('/city', CityController::class);
+
+Route::group([
+    'prefix' => '/file'
+], function () {
+    Route::post('/upload', [FileController::class, 'upload']);
+});
