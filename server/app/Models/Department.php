@@ -10,4 +10,7 @@ class Department extends Model
     use HasFactory;
     public $timestamps = false;
     protected $primaryKey = "dept_id";
+    protected $casts = [
+        'options' => 'array',
+    ];
 }
