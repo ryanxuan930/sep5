@@ -13,6 +13,7 @@ use App\Http\Controllers\SportController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
 
@@ -87,3 +88,5 @@ Route::apiResource('/organization', OrganizationController::class);
 Route::apiResource('/user', UserController::class);
 
 Route::apiResource('/country', CountryController::class);
+
+Route::apiResource('/city', CityController::class);
