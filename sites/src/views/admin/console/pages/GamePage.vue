@@ -2,7 +2,7 @@
   import { ref, watch } from 'vue';
   import { useRouter } from 'vue-router';
   import VueRequest from '@/vue-request';
-  import { useAdminStore } from '@/stores/admin';
+  import { useUserStore } from '@/stores/user';
   import type { Ref } from 'vue';
   import { getUrlParams, paginationText } from '@/components/library/functions';
   import Toggle from '@vueform/toggle';
@@ -11,7 +11,7 @@
 
   const message: Ref<string|null> = ref(null);
   const router = useRouter();
-  const store = useAdminStore();
+  const store = useUserStore();
   const vr = new VueRequest(store.token);
   const displayModal = ref(false);
 

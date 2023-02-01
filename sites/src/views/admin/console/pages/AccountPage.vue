@@ -2,12 +2,12 @@
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
   import VueRequest from '@/vue-request';
-  import { useAdminStore } from '@/stores/admin';
+  import { useUserStore } from '@/stores/user';
   import UserTable from '@/components/admin/account/UserTable.vue';
   import OrgTable from '@/components/admin/account/OrgTable.vue';
   import DeptTable from '@/components/admin/account/DeptTable.vue';
 
-  const store = useAdminStore();
+  const store = useUserStore();
   const router = useRouter();
   if (store.userInfo.permission == 0) {
     router.push('/admin');

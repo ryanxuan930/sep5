@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, reactive } from 'vue';
   import VueRequest from '@/vue-request';
-  import { useAdminStore } from '@/stores/admin';
+  import { useUserStore } from '@/stores/user';
   import type { Ref } from 'vue';
   import Toggle from '@vueform/toggle';
   import { QuillEditor } from '@vueup/vue-quill'
@@ -11,7 +11,7 @@
   import GameTagSelector from '@/components/admin/module/GameTagSelector.vue';
   import OrgSelector from '@/components/admin/module/OrgSelector.vue';
 
-  const store = useAdminStore()
+  const store = useUserStore()
   const vr = new VueRequest(store.token);
   const props: any = defineProps(['gameData']);
   const displayModal = ref(0);
@@ -42,6 +42,12 @@
     columnList.forEach((index: string) => {
       data[index] = props.gameData[index];
     });
+    if (data.tags === null) {
+      data.tags = [];
+    }
+    if (data.selected_list === null) {
+      data.selected_list = [];
+    }
   }
 
   const sportList = ref();
@@ -65,9 +71,17 @@
       return;
     }
     const temp = JSON.parse(JSON.stringify(data));
+    temp.host_list = [];
+    data.host_list.forEach((host: number) => {
+      temp.host_list.push(host.toString());
+    })
     temp.host_list = JSON.stringify(temp.host_list);
     temp.selected = temp.selected_list.length > 0 ? 1 : 0;
     temp.selected_list = JSON.stringify(temp.selected_list);
+    temp.tags = [];
+    data.tags.forEach((tag: number) => {
+      temp.tags.push(tag.toString());
+    })
     temp.tags = JSON.stringify(temp.tags);
     if (props.gameData === null) {
       vr.Post(`${store.userInfo.admin_org_id}/game`, temp, null, true, true).then( (res: any) => {

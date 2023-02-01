@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import { useAdminStore } from '@/stores/admin';
+import { useUserStore } from '@/stores/user';
 
-const store = useAdminStore();
+const store = useUserStore();
 
 const navList = reactive([
   {title: '系統首頁', link: '/admin', permission: 0},

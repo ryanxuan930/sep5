@@ -79,12 +79,12 @@ export default class VueRequest {
       .catch((err) => { this.ErrHdl(err); });
   }
 
-  public Patch(url: string, dataset: any, refReturn: any = null, sameOrgin = true, haveAuth = false) {
+  public Patch(url: string, dataset: any, refReturn: any = null, sameOrgin = true, haveAuth = false, fileUpload = false) {
     return axios.patch(sameOrgin ? this.headerPrefix + url : url, dataset, {
       headers: {
         Authorization: haveAuth ? this.authToken : false,
         Accept: this.acceptHeader,
-        'Content-Type': this.contentType,
+        'Content-Type': fileUpload ? 'multipart/form-data' : this.contentType,
       },
     })
       .then((res) => {
@@ -102,25 +102,6 @@ export default class VueRequest {
         Authorization: haveAuth ? this.authToken : false,
         Accept: this.acceptHeader,
         'Content-Type': this.contentType,
-      },
-    })
-      .then((res) => {
-        if (refReturn !== null) {
-          refReturn.value = res.data;
-        }
-        return res.data;
-      })
-      .catch((err) => { this.ErrHdl(err); });
-  }
-
-  public File(url: string, fileHtmlEntity: any, refReturn: any = null, sameOrgin = true, haveAuth = false) {
-    return axios.postForm(sameOrgin ? this.headerPrefix + url : url, {
-      'files[]': fileHtmlEntity.files,
-    }, {
-      headers: {
-        Authorization: haveAuth ? this.authToken : false,
-        Accept: this.acceptHeader,
-        'Content-Type': 'multipart/form-data',
       },
     })
       .then((res) => {

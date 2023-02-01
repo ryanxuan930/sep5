@@ -2,7 +2,7 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import type { Ref } from 'vue';
 
-export const useAdminStore = defineStore('admin', () => {
+export const useUserStore = defineStore('user', () => {
   const expired: Ref<string> = ref('');
   const token: Ref<string> = ref('');
   const userInfo: Ref<any> = ref('');

@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import VueRequest from '@/vue-request';
-  import { useAdminStore } from '@/stores/admin';
+  import { useUserStore } from '@/stores/user';
   import type { Ref } from 'vue';
   import { getUrlParams, paginationText } from '@/components/library/functions';
 
-  const store = useAdminStore();
+  const store = useUserStore();
   const vr = new VueRequest(store.token);
 
   interface IObjList {

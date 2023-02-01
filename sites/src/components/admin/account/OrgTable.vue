@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import VueRequest from '@/vue-request';
-  import { useAdminStore } from '@/stores/admin';
+  import { useUserStore } from '@/stores/user';
   import { useElementSize } from '@vueuse/core'
   import FullModal from '@/components/FullModal.vue';
   import EditOrg from '@/components/admin/account/EditOrg.vue';
 
-  const store = useAdminStore()
+  const store = useUserStore()
   const vr = new VueRequest(store.token);
   const displayModal = ref(false);
   const boxRef: any = ref(null);

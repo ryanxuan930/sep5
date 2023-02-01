@@ -1,21 +1,24 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
   import VueRequest from '@/vue-request';
-  import { useAdminStore } from '@/stores/admin';
+  import { useUserStore } from '@/stores/user';
   import type { Ref } from 'vue';
 
-  const store = useAdminStore();
+  const store = useUserStore();
   const vr = new VueRequest(store.token);
   const props = defineProps(['selectedData']);
   const selectedData: any = ref(props.selectedData);
+  const selectAll = ref(false);
 
   const deptList: any = ref(null);
-  function getDeptList() {
-    vr.Get(`department/org/${props.selectedData.org_id}`, deptList, true, true);
+  async function getDeptList() {
+    await vr.Get(`department/org/${props.selectedData.org_id}`, deptList, true, true);
+    if (props.selectedData.dept_list.length == deptList.value.length) {
+      selectAll.value = true;
+    }
   }
   getDeptList();
   
-  const selectAll = ref(false);
   watch(selectAll, () => {
     if (selectAll.value) {
       const temp: number[] = [];

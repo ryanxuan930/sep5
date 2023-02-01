@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { ref, reactive } from 'vue';
   import VueRequest from '@/vue-request';
-  import { useAdminStore } from '@/stores/admin';
+  import { useUserStore } from '@/stores/user';
   import SmallModal from '@/components/SmallModal.vue';
   import DeptSelector from '@/components/admin/module/DeptSelector.vue';
   import type { Ref } from 'vue';
 
-  const store = useAdminStore();
+  const store = useUserStore();
   const vr = new VueRequest(store.token);
   const props = defineProps(['selectedData']);
   const displayModal = ref(false);
@@ -19,7 +19,13 @@
           org_id: orgList.value[i].org_id,
           dept_list: [],
         }
+        for (let j = 0; j < props.selectedData.length; j++) {
+          if (props.selectedData[j].org_id === orgList.value[i].org_id) {
+            orgList.value[i].temp.dept_list = props.selectedData[j].dept_list;
+          }
+        }
       }
+
     })
   }
   getOrgList();

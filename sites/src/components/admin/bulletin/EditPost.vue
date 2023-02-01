@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import VueRequest from '@/vue-request';
-  import { useAdminStore } from '@/stores/admin';
+  import { useUserStore } from '@/stores/user';
   import type { Ref } from 'vue';
   import type { IPostData } from '@/components/library/interfaces';
   import Toggle from '@vueform/toggle';
@@ -11,7 +11,7 @@
   import SmallModal from '@/components/SmallModal.vue';
   import GameSelector from '@/components/admin/module/GameSelector.vue';
 
-  const store = useAdminStore()
+  const store = useUserStore()
   const vr = new VueRequest(store.token);
   const props: any = defineProps(['postData']);
   const displayModal = ref(false);

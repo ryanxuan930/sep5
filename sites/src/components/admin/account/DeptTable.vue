@@ -1,11 +1,12 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import VueRequest from '@/vue-request';
-  import { useAdminStore } from '@/stores/admin';
+  import { useUserStore } from '@/stores/user';
   import { useElementSize } from '@vueuse/core'
   import FullModal from '@/components/FullModal.vue';
+  import EditDept from '@/components/admin/account/EditDept.vue';
 
-  const store = useAdminStore()
+  const store = useUserStore()
   const vr = new VueRequest(store.token);
   const displayModal = ref(false);
   const boxRef: any = ref(null);
@@ -67,7 +68,7 @@
         </div>
       </template>
       <template v-slot:content>
-        <EditUser v-if="displayModal" :input-data="selectedData" @refreshPage="getDataList()" @closeModal="displayModal = false"></EditUser>
+        <EditDept v-if="displayModal" :input-data="selectedData" @refreshPage="getDataList()" @closeModal="displayModal = false"></EditDept>
       </template>
     </FullModal>
   </div>
