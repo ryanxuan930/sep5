@@ -13,6 +13,5 @@ class Game extends Model
     protected $casts = [
         'host_list' => 'array',
         'tags' => 'array',
-        'selected_list' => AsCollection::class,
     ];
 }
