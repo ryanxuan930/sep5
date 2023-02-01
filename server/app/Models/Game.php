@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\AsCollection;
 
 class Game extends Model
 {
@@ -13,5 +12,6 @@ class Game extends Model
     protected $casts = [
         'host_list' => 'array',
         'tags' => 'array',
+        'selected_list' => 'array',
     ];
 }
