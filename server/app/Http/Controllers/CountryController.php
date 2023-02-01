@@ -19,7 +19,7 @@ class CountryController extends Controller
      */
     public function index()
     {
-        return response()->json(Counrty::all());
+        return response()->json(Country::all());
     }
 
     /**
@@ -41,7 +41,7 @@ class CountryController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Counrty::where('country_code', $id)->first());
+        return response()->json(Country::where('country_code', $id)->first());
     }
 
     /**
