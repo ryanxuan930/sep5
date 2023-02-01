@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\TribeList;
+use App\Models\Tribe;
 
 class TribeController extends Controller
 {
@@ -19,7 +19,7 @@ class TribeController extends Controller
      */
     public function index()
     {
-        return response()->json(TribeList::all());
+        return response()->json(Tribe::all());
     }
 
     /**
@@ -41,7 +41,7 @@ class TribeController extends Controller
      */
     public function show($id)
     {
-        return response()->json(TribeList::where('tribe_id', $id));
+        return response()->json(Tribe::where('tribe_id', $id));
     }
 
     /**
