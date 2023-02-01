@@ -68,13 +68,13 @@
         <button :class="{'general-button': true, 'blue': !item.active, 'active': item.active }" :disabled="item.url===null" @click="getGameList(item.url)">{{ paginationText(item.label) }}</button>
       </template>
     </div>
-    <button class="round-full-button blue" @click="submit">確定</button>
+    <button class="round-full-button blue mt-3" @click="submit">確定</button>
   </div>
 </template>
 
 <style scoped lang="scss">
 table {
-  @apply w-[768px] md:w-full text-left;
+  @apply w-full text-left;
   td, th {
     @apply border-b-[1px] p-2 border-gray-300 font-medium;
   }

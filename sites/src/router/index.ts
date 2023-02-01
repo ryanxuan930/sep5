@@ -41,14 +41,19 @@ const router = createRouter({
               name: 'adminBulletinPage',
               component: () => import('../views/admin/console/pages/BulletinPage.vue'),
             },
+            {
+              path: 'account',
+              name: 'adminAccountPage',
+              component: () => import('../views/admin/console/pages/AccountPage.vue'),
+            },
           ],
         },
-        {
-          path: 'login',
-          name: 'adminLogin',
-          component: () => import('../views/admin/login/LoginView.vue'),
-        },
       ],
+    },
+    {
+      path: '/admin/login',
+      name: 'adminLogin',
+      component: () => import('../views/admin/login/LoginView.vue'),
     },
   ],
 });

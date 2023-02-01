@@ -59,7 +59,7 @@
         <div class="title">密碼</div>
         <input type="password" class="input" ref="passwordInput" placeholder="・・・・・・・・" v-model="data.password" @keyup.enter="submitAll">
       </label>
-      <button class="round-full-button blue" @click="submitAll">登入</button>
+      <button class="round-full-button blue mt-6 mb-3" @click="submitAll">登入</button>
     </div>
     <div class="flex-grow"></div>
   </div>

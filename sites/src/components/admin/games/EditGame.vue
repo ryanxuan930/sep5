@@ -7,20 +7,23 @@
   import { QuillEditor } from '@vueup/vue-quill'
   import '@vueup/vue-quill/dist/vue-quill.snow.css';
   import SmallModal from '@/components/SmallModal.vue';
+  import AdminDeptSelector from '@/components/admin/module/AdminDeptSelector.vue';
+  import GameTagSelector from '@/components/admin/module/GameTagSelector.vue';
+  import OrgSelector from '@/components/admin/module/OrgSelector.vue';
 
   const store = useAdminStore()
   const vr = new VueRequest(store.token);
   const props: any = defineProps(['gameData']);
-  const displayModal = ref(false);
+  const displayModal = ref(0);
 
+  const currentTime = new Date();
   const data: any = reactive({
     game_name_ch: '',
     game_name_en: '',
     game_name_jp: '',
     game_info: '',
     host_list: [],
-    created_dept_id: 0,
-    event_start: '',
+    event_start: `${currentTime.getFullYear()}-${(currentTime.getMonth()+1).toString().padStart(2,'0')}-${currentTime.getDate()}`,
     selected: 0,
     selected_list: [],
     use_reg: 1,
@@ -30,16 +33,58 @@
     use_site: 1,
     site_url: '',
     tags: [],
-    sport_code: '',
+    sport_code: 'athl',
     archived: 0,
   });
 
-  console.log(props.gameData);
   if (props.gameData !== null) {
-    const columnList = ['game_name_ch', 'game_name_en', 'game_name_jp', 'game_info', 'host_list', 'created_dept_id', 'event_start', 'selected', 'selected_list', 'use_reg', 'reg_url', 'use_manage', 'manage_url', 'use_site', 'site_url', 'tags', 'sport_code', 'archived'];
+    const columnList = ['game_name_ch', 'game_name_en', 'game_name_jp', 'game_info', 'host_list', 'event_start', 'selected', 'selected_list', 'use_reg', 'reg_url', 'use_manage', 'manage_url', 'use_site', 'site_url', 'tags', 'sport_code', 'archived'];
     columnList.forEach((index: string) => {
-      data.value[index] = props.gameData[index];
+      data[index] = props.gameData[index];
     });
+  }
+
+  const sportList = ref();
+  function getSportList() {
+    vr.Get('sport', sportList);
+  }
+  getSportList();
+
+  const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
+  const close = () => {
+    emit('refreshPage');
+    emit('closeModal');
+  }
+  function submitAll() {
+    if (data.game_name_ch.length === 0) {
+      alert('請輸入中文標題');
+      return;
+    }
+    if (data.host_list.length === 0) {
+      alert('請至少選擇一個主辦單位');
+      return;
+    }
+    const temp = JSON.parse(JSON.stringify(data));
+    temp.host_list = JSON.stringify(temp.host_list);
+    temp.selected = temp.selected_list.length > 0 ? 1 : 0;
+    temp.selected_list = JSON.stringify(temp.selected_list);
+    temp.tags = JSON.stringify(temp.tags);
+    if (props.gameData === null) {
+      vr.Post(`${store.userInfo.admin_org_id}/game`, temp, null, true, true).then( (res: any) => {
+        if (res.status !== 'A01') {
+          alert('無法儲存');
+          return;
+        }
+      });
+    } else {
+      vr.Patch(`${store.userInfo.admin_org_id}/game/${props.gameData.game_id}`, temp, null, true, true).then( (res: any) => {
+        if (res.status !== 'A01') {
+          alert('無法儲存');
+          return;
+        }
+      });
+    }
+    close();
   }
 </script>
 
@@ -57,29 +102,89 @@
       <div class="title">日文賽事名稱</div>
       <input class="input" type="text" v-model="data.game_name_jp">
     </label>
-    <label class="round-input-label">
-      <div class="title">運動項目</div>
-      <select class="select">
-        <template>
-        </template>
-      </select>
-    </label>
-    <label class="round-input-label">
+    <label class="round-input-label md:col-span-2">
       <div class="title">開始日期</div>
       <input class="input" type="date" v-model="data.event_start">
     </label>
-    <label class="round-input-label md:col-span-2">
+    <label class="round-input-label">
+      <div class="title">運動項目</div>
+      <select class="select" v-model="data.sport_code">
+        <template v-for="(item, index) in sportList" :key="index">
+          <option :value="item.sport_code">{{ item.sport_name_ch }}</option>
+        </template>
+      </select>
+    </label>
+    <span class="round-input-label">
       <div class="title">主辦單位</div>
-      
-    </label>
-    <label class="round-input-label md:col-span-2">
+      <button class="round-full-button blue" @click="displayModal = 1">選取</button>
+    </span>
+    <span class="round-input-label">
       <div class="title">賽事標籤</div>
-      
+      <button class="round-full-button blue" @click="displayModal = 2">選取</button>
+    </span>
+    <span class="round-input-label">
+      <div class="title">報名限制</div>
+      <button class="round-full-button blue" @click="displayModal = 3">選取</button>
+    </span>
+    <label class="round-input-label md:col-span-4">
+      <div class="title">賽事簡介</div>
+      <div class="title">
+        <QuillEditor theme="snow" toolbar="full" v-model:content="data.game_info" :contentType="'html'"></QuillEditor>
+      </div>
     </label>
+    <div class="round-input-label md:col-span-4">
+      <div class="title">使用報名系統</div>
+      <div class="toggle-box">
+        <div>
+          <Toggle class="general-toggle" trueValue="1" falseValue="0" offLabel="否" onLabel="是" v-model="data.use_reg"></Toggle>
+        </div>
+        <input :disabled="data.use_reg == 1" type="text" placeholder="自有報名系統網址" v-model="data.reg_url">
+      </div>
+    </div>
+    <div class="round-input-label md:col-span-4">
+      <div class="title">使用管理系統</div>
+      <div class="toggle-box">
+        <div>
+          <Toggle class="general-toggle" trueValue="1" falseValue="0" offLabel="否" onLabel="是" v-model="data.use_manage"></Toggle>
+        </div>
+        <input :disabled="data.use_manage == 1" type="text" placeholder="自有管理系統網址" v-model="data.manage_url">
+      </div>
+    </div>
+    <div class="round-input-label md:col-span-4">
+      <div class="title">使用網站系統</div>
+      <div class="toggle-box">
+        <div>
+          <Toggle class="general-toggle" trueValue="1" falseValue="0" offLabel="否" onLabel="是" v-model="data.use_site"></Toggle>
+        </div>
+        <input :disabled="data.use_site == 1" type="text" placeholder="自有報名系統網址" v-model="data.site_url">
+      </div>
+    </div>
+    <div class="md:col-span-4">
+      <button class="round-full-button blue" @click="submitAll">儲存</button>
+    </div>
+    <SmallModal v-show="displayModal > 0" @closeModal="displayModal = 0">
+      <template v-slot:title>
+        <div class="text-2xl">
+          <div v-if="displayModal == 1">單位列表</div>
+          <div v-if="displayModal == 2">標籤列表</div>
+          <div v-if="displayModal == 3">組織列表</div>
+        </div>
+      </template>
+      <template v-slot:content>
+        <AdminDeptSelector v-if="displayModal == 1" :selected-data="data.host_list" @closeModal="displayModal = 0" @returnData="(input: number[]) => { data.host_list = input;}"></AdminDeptSelector>
+        <GameTagSelector  v-if="displayModal == 2" :selected-data="data.tags" @closeModal="displayModal = 0" @returnData="(input: number[]) => { data.tags = input;}"></GameTagSelector>
+        <OrgSelector  v-if="displayModal == 3" :selected-data="data.selected_list" @closeModal="displayModal = 0" @returnData="(input: any) => { data.selected_list = input;}"></OrgSelector>
+      </template>
+    </SmallModal>
   </div>
 </template>
 
 <style scoped lang="scss">
-    
+.toggle-box {
+  @apply flex p-2 items-center gap-5;
+  input {
+    @apply py-1 px-4 rounded-full border-2 flex-grow;
+  }
+}
 </style>
 <style src="@vueform/toggle/themes/default.css"></style>

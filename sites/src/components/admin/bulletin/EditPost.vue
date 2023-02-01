@@ -77,7 +77,6 @@
         }
       });
     } else {
-      console.log(1);
       vr.Patch(`${store.userInfo.admin_org_id}/bulletin/${props.postData.bulletin_id}`, temp, null, true, true).then( (res: any) => {
         if (res.status !== 'A01') {
           alert('無法儲存');
@@ -94,19 +93,19 @@
     <label class="round-input-label">
       <div class="title">置頂</div>
       <div class="toggle-box">
-        <Toggle falseValue="0" trueValue="1" v-model="data.pinned"></Toggle>
+        <Toggle class="general-toggle" offLabel="否" onLabel="是" falseValue="0" trueValue="1" v-model="data.pinned"></Toggle>
       </div>
     </label>
     <label class="round-input-label">
       <div class="title">顯示</div>
       <div class="toggle-box">
-        <Toggle falseValue="0" trueValue="1" v-model="data.release"></Toggle>
+        <Toggle class="general-toggle" offLabel="否" onLabel="是" falseValue="0" trueValue="1" v-model="data.release"></Toggle>
       </div>
     </label>
     <label class="round-input-label">
       <div class="title">多語言</div>
       <div class="toggle-box">
-        <Toggle falseValue="0" trueValue="1" v-model="data.multilingual"></Toggle>
+        <Toggle class="general-toggle" offLabel="否" onLabel="是" falseValue="0" trueValue="1" v-model="data.multilingual"></Toggle>
       </div>
     </label>
     <label class="round-input-label">
