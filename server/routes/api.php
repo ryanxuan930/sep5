@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\UserController;
-use App\Http\Controllers\Auth\AdminController;
+use App\Http\Controllers\Auth\UserController as AuthUserController;
+use App\Http\Controllers\Auth\AdminController as AuthAdminController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GameTagController;
 use App\Http\Controllers\BulletinController;
@@ -32,20 +33,20 @@ Route::group([
     Route::group([
         'prefix' => '/admin'
     ], function () {
-        Route::post('/login', [AdminController::class, 'login']);
-        Route::get('/info', [AdminController::class, 'info']);
-        Route::post('/logout', [AdminController::class, 'logout']);
+        Route::post('/login', [AuthAdminController::class, 'login']);
+        Route::get('/info', [AuthAdminController::class, 'info']);
+        Route::post('/logout', [AuthAdminController::class, 'logout']);
     });
     //user
     Route::group([
         'prefix' => '/user'
     ], function () {
-        Route::post('/login', [UserController::class, 'login']);
-        Route::get('/info', [UserController::class, 'info']);
-        Route::patch('/edit/{u_id}', [UserController::class, 'edit']); // invalid
-        Route::post('/logout', [UserController::class, 'logout']);
-        Route::post('/register', [UserController::class, 'register']);
-        Route::get('/exist/{account}', [UserController::class, 'exist']);
+        Route::post('/login', [AuthUserController::class, 'login']);
+        Route::get('/info', [AuthUserController::class, 'info']);
+        Route::patch('/edit/{u_id}', [AuthUserController::class, 'edit']); // invalid
+        Route::post('/logout', [AuthUserController::class, 'logout']);
+        Route::post('/register', [AuthUserController::class, 'register']);
+        Route::get('/exist/{account}', [AuthUserController::class, 'exist']);
         /*
         Route::post('/reset', [UserController::class, 'reset']);
         Route::post('/reset/password/{account}/{token}', [UserController::class, 'resetPassword']);
@@ -81,3 +82,5 @@ Route::apiResource('/event', EventController::class);
 Route::apiResource('/sport', SportController::class);
 
 Route::apiResource('/organization', OrganizationController::class);
+
+Route::apiResource('/user', UserController::class);

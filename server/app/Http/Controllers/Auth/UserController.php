@@ -145,12 +145,12 @@ class UserController extends Controller
             'emergency_phone' => 'string|nullable',
             'options' => 'nullable',
             'avatar' => 'string|nullable',
-            'last_ip' => 'ipv4',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
+        $temp['last_ip'] = $request->ip();
         $temp['password'] = password_hash($request->all()['password'], PASSWORD_DEFAULT);
         $temp['athlete_id'] = strtoupper(str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT));
         User::insert($temp);
