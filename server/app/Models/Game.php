@@ -11,5 +11,7 @@ class Game extends Model
     protected $primaryKey = "game_id";
     protected $casts = [
         'host_list' => 'array',
+        'tags' => 'array',
+        'selected_list' => 'array',
     ];
 }
