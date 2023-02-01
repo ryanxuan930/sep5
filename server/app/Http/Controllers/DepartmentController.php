@@ -82,7 +82,7 @@ class DepartmentController extends Controller
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         }
         $validator = Validator::make($request->all(),[
-            'related_org_id' => 'required|integer|exist:organizations,org_id',
+            'related_org_id' => 'required|integer|exists:organizations,org_id',
             'dept_name_ch' => 'required',
             'dept_name_en' => 'nullable',
             'sort_order' => 'integer',
