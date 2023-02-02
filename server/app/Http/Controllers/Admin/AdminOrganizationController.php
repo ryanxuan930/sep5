@@ -22,7 +22,7 @@ class AdminOrganizationController extends Controller
      */
     public function index()
     {
-        return response()->json(AO::all());
+        return response()->json(AO::leftJoin('organizations', 'organizations.org_id', '=', 'admin_organizations.related_user_org_id')->select('admin_organizations.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en')->get());
     }
 
     /**
@@ -56,7 +56,7 @@ class AdminOrganizationController extends Controller
      */
     public function show($id)
     {
-        return response()->json(AO::where('admin_org_id', $id)->first());
+        return response()->json(AO::leftJoin('organizations', 'organizations.org_id', '=', 'admin_organizations.related_user_org_id')->select('admin_organizations.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en')->where('admin_org_id', $id)->first());
     }
 
     /**
