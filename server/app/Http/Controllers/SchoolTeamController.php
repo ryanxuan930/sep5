@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SchoolTeam;
 use Illuminate\Http\Request;
 use App\Models\AdminOrganization;
+use Validator;
 
 class SchoolTeamController extends Controller
 {
