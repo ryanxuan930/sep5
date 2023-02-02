@@ -52,6 +52,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array<string, string>
      */
     protected $casts = [
+        'school_team_id_list' => 'array',
+        'options' => 'array',
     ];
     public function getJWTIdentifier()
     {
