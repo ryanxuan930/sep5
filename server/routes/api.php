@@ -83,6 +83,7 @@ Route::group([
 
 Route::apiResource('/department', DepartmentController::class);
 Route::get('/department/org/{org_id}', [DepartmentController::class, 'indexByOrg']);
+Route::get('/department/org/code/{org_code}', [DepartmentController::class, 'indexByOrgCode']);
 
 Route::apiResource('/event', EventController::class);
 

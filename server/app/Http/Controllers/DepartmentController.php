@@ -30,6 +30,14 @@ class DepartmentController extends Controller
         return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->where('related_org_id', $org_id)->orderBy('sort_order', 'asc')->get());
     }
 
+    public function indexByOrgCode($org_code)
+    {
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        return response()->json(Department::leftJoin('organizations', 'departments.related_org_id', '=', 'organizations.org_id')->where('organizations.org_code', $org_code)->orderBy('sort_order', 'asc')->get());
+    }
+
     /**
      * Store a newly created resource in storage.
      *
