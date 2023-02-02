@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class AdminDepartment extends Model
 {
     use HasFactory;
+    protected $primaryKey = "admin_dept_id";
+    protected $casts = [
+        'sport_management_list' => 'array',
+    ];
 }
