@@ -45,7 +45,7 @@ class SchoolTeamController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
-        $orgData = AdminOrganization::where('admin_org_id', $admin->admin_org_id)->first();
+        $orgData = AdminOrganization::where('admin_org_id', auth('admin')->user()->admin_org_id)->first();
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
         $temp['org_id'] = $orgData->related_user_org_id;
