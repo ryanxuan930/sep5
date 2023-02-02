@@ -41,6 +41,7 @@ class SchoolTeamController extends Controller
             'team_name_ch' => 'required',
             'team_name_en' => 'required',
             'sport_id' => 'required',
+            'org_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -49,7 +50,9 @@ class SchoolTeamController extends Controller
         $orgData = AdminOrganization::where('admin_org_id', auth('admin')->user()->admin_org_id)->first();
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
-        $temp['org_id'] = $orgData->related_user_org_id;
+        if (auth('admin')->user()->admin_org_id > 1) {
+            $temp['org_id'] = $orgData->related_user_org_id;
+        }
         SchoolTeam::insert($temp);
         return response()->json(['status'=>'A01']);
     }
@@ -81,6 +84,7 @@ class SchoolTeamController extends Controller
             'team_name_ch' => 'required',
             'team_name_en' => 'required',
             'sport_id' => 'required',
+            'org_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
