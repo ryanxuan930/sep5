@@ -21,11 +21,11 @@ class SchoolTeamController extends Controller
      */
     public function index($org_id)
     {
-        $query = SchoolTeam::leftJoin('organizations', 'organizations.org_id', '=', 'school_teams.org_id')->select('school_teams.*', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en');
+        $query = SchoolTeam::leftJoin('organizations', 'organizations.org_id', '=', 'school_teams.org_id')->select('school_teams.*', 'organizations.org_id', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en');
         if ($org_id == 1) {
             return response()->json($query->get());
         } else {
-            return response()->json($query->where('org_id', $org_id)->get());
+            return response()->json($query->where('school_teams.org_id', $org_id)->get());
         }
     }
 
@@ -63,8 +63,8 @@ class SchoolTeamController extends Controller
      */
     public function show($org_id, $id)
     {
-        $query = SchoolTeam::leftJoin('organizations', 'organizations.org_id', '=', 'school_teams.org_id')->select('school_teams.*', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en');
-        return response()->json($query->get());
+        $query = SchoolTeam::leftJoin('organizations', 'organizations.org_id', '=', 'school_teams.org_id')->select('school_teams.*', 'organizations.org_id', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en');
+        return response()->json($query->where('school_team_id', $id)->get());
     }
 
     /**
