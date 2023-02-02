@@ -6,6 +6,9 @@
   import UserTable from '@/components/admin/account/UserTable.vue';
   import OrgTable from '@/components/admin/account/OrgTable.vue';
   import DeptTable from '@/components/admin/account/DeptTable.vue';
+  import AdminOrgTable from '@/components/admin/account/AdminOrgTable.vue';
+  import AdminDeptTable from '@/components/admin/account/AdminDeptTable.vue';
+  import TeamTable from '@/components/admin/account/TeamTable.vue';
 
   const store = useUserStore();
   const router = useRouter();
@@ -26,11 +29,15 @@
       <div :class="{'active': currentPage == 3}" @click="currentPage = 3" v-if="store.userInfo.permission >= 1">管理員帳號</div>
       <div :class="{'active': currentPage == 4}" @click="currentPage = 4" v-if="store.userInfo.permission >= 8">管理員組織列表</div>
       <div :class="{'active': currentPage == 5}" @click="currentPage = 5" v-if="store.userInfo.permission >= 2">管理員分部列表</div>
+      <div :class="{'active': currentPage == 6}" @click="currentPage = 6" v-if="store.userInfo.permission >= 2">校隊列表</div>
     </div>
     <div class="flex-grow overflow-auto">
       <UserTable v-if="currentPage == 0"></UserTable>
       <OrgTable v-if="currentPage == 1"></OrgTable>
       <DeptTable v-if="currentPage == 2"></DeptTable>
+      <AdminOrgTable v-if="currentPage == 4"></AdminOrgTable>
+      <AdminDeptTable v-if="currentPage == 5"></AdminDeptTable>
+      <TeamTable v-if="currentPage == 6"></TeamTable>
     </div>
   </div>
 </template>

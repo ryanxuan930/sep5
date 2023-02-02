@@ -5,6 +5,7 @@
   import { getUrlParams, paginationText } from '@/components/library/functions';
   import { useElementSize } from '@vueuse/core'
   import FullModal from '@/components/FullModal.vue';
+  import EditUser from '@/components/admin/account/EditUser.vue';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
@@ -22,6 +23,7 @@
       url = `/user?page=${page}`;
     }
     const temp = await vr.Get(url, null, true, true);
+    currentUrl.value = url;
     dataList.value = temp.data;
     linkUrl.value = temp.links;
   }
@@ -81,8 +83,7 @@
         </div>
       </template>
       <template v-slot:content>
-        <!--
-        <EditUser v-if="displayModal" :input-data="selectedData" @refreshPage="getDataList(currentUrl)" @closeModal="displayModal = false"></EditUser>-->
+        <EditUser v-if="displayModal" :input-data="selectedData" @refreshPage="getDataList(currentUrl)" @closeModal="displayModal = false"></EditUser>
       </template>
     </FullModal>
   </div>
