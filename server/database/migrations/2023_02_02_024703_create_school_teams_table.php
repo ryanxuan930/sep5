@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('school_teams', function (Blueprint $table) {
-            $table->id('school_team');
+            $table->id('school_team_id');
             $table->bigInteger('org_id');
             $table->string('team_name_ch', 16);
             $table->string('team_name_en', 128);

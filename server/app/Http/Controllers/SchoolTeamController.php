@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SchoolTeam;
 use Illuminate\Http\Request;
+use App\Models\AdminOrganization;
 
 class SchoolTeamController extends Controller
 {
@@ -22,7 +23,7 @@ class SchoolTeamController extends Controller
         if ($org_id == 1) {
             return response()->json(SchoolTeam::all());
         } else {
-            return response()->json(SchoolTeam::where('admin_org_id', $org_id)->get());
+            return response()->json(SchoolTeam::where('org_id', $org_id)->get());
         }
     }
 
@@ -43,8 +44,10 @@ class SchoolTeamController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
+        $orgData = AdminOrganization::where('admin_org_id', $admin->admin_org_id)->first();
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
+        $temp['org_id'] = $orgData->related_user_org_id;
         SchoolTeam::insert($temp);
         return response()->json(['status'=>'A01']);
     }
@@ -52,34 +55,48 @@ class SchoolTeamController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\SchoolTeam  $schoolTeam
+     * @param  $org_id
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(SchoolTeam $schoolTeam)
+    public function show($org_id, $id)
     {
-        //
+        return response()->json(SchoolTeam::where('school_team_id', $id)->get());
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SchoolTeam  $schoolTeam
+     * @param  $org_id
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SchoolTeam $schoolTeam)
+    public function update(Request $request, $org_id, $id)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'team_name_ch' => 'required',
+            'team_name_en' => 'required',
+            'sport_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $temp = $request->all();
+        $temp['updated_at'] = date("Y-m-d H:i:s");
+        SchoolTeam::where('school_team_id', $id)->update($temp);
+        return response()->json(['status'=>'A01']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\SchoolTeam  $schoolTeam
+     * @param  $org_id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SchoolTeam $schoolTeam)
+    public function destroy($org_id, $id)
     {
-        //
+        SchoolTeam::where('school_team_id', $id)->delete();
+        return response()->json(['status'=>'A01']);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\User;
+use App\Models\AdminOrganization;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -17,13 +18,19 @@ class UserController extends Controller
      */
     public function index()
     {
+        $query = User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->leftJoin('countries', 'users.nationality', '=', 'countries.country_code')->leftJoin('tribes', 'users.indigenous_tribe_id', '=', 'tribes.tribe_id')->leftJoin('sport_lists', 'users.gifited_sport_id', '=', 'sport_lists.sport_id')->leftJoin('cities', 'users.household_city_code', '=', 'cities.city_code')->select('users.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_id', 'departments.dept_name_ch', 'departments.dept_name_en', 'countries.*', 'tribes.*', 'sport_lists.*', 'cities.*');
         if (is_null($user = auth('user')->user()) && is_null($admin = auth('admin')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         } else if (is_null($admin)) {
             $org_code = $user->org_code;
-            return response()->json(User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->leftJoin('countries', 'users.nationality', '=', 'countries.country_code')->leftJoin('tribes', 'users.indigenous_tribe_id', '=', 'tribes.tribe_id')->leftJoin('sport_lists', 'users.gifited_sport_id', '=', 'sport_lists.sport_id')->leftJoin('cities', 'users.household_city_code', '=', 'cities.city_code')->select('users.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_id', 'departments.dept_name_ch', 'departments.dept_name_en', 'countries.*', 'tribes.*', 'sport_lists.*', 'cities.*')->where('org_code', $org_code)->paginate(25));
+            return response()->json($query->where('org_code', $org_code)->paginate(25));
         } else {
-            return response()->json(User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->leftJoin('countries', 'users.nationality', '=', 'countries.country_code')->leftJoin('tribes', 'users.indigenous_tribe_id', '=', 'tribes.tribe_id')->leftJoin('sport_lists', 'users.gifited_sport_id', '=', 'sport_lists.sport_id')->leftJoin('cities', 'users.household_city_code', '=', 'cities.city_code')->select('users.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_id', 'departments.dept_name_ch', 'departments.dept_name_en', 'countries.*', 'tribes.*', 'sport_lists.*', 'cities.*')->paginate(25));
+            if ($admin->admin_org_id == 1) {
+                return response()->json($query->paginate(25));
+            } else {
+                $orgData = AdminOrganization::leftJoin('organizations', 'organizations.org_id', '=', 'admin_organizations.related_user_org_id')->where('admin_org_id', $admin->admin_org_id)->first();
+                return response()->json($query->where('org_code', $orgData->org_code)->paginate(25));
+            }
         }
     }
 

@@ -16,6 +16,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\TribeController;
+use App\Http\Controllers\SchoolTeamController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
 
@@ -76,6 +77,8 @@ Route::group([
     Route::get('/game-all', [GameController::class, 'indexAll']);
 
     Route::apiResource('/game-tag', GameTagController::class);
+
+    Route::apiResource('/school-team', SchoolTeamController::class);
 });
 
 Route::apiResource('/department', DepartmentController::class);
