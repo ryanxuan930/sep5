@@ -114,7 +114,7 @@ class UserController extends Controller
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         }
         $validator = Validator::make($request->all(),[
-            'account' => 'required|unique:users,account',
+            'account' => 'required',
             'name' => 'required',
             'first_name_ch' => 'string|required',
             'last_name_ch' => 'string|required',
