@@ -22,7 +22,7 @@ class DateController extends Controller
      */
     public function getters($sportCode, $gameId)
     {
-        return response()->json(DB::table($sportCode.'_'.$orgId.'_dates')->all());
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_dates')->all());
     }
     /**
      * Set a series of resource in storage.
@@ -44,8 +44,8 @@ class DateController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
-        DB::table($sportCode.'_'.$orgId.'_dates')->truncate();
-        DB::table($sportCode.'_'.$orgId.'_dates')->insert;
+        DB::table($sportCode.'_'.$gameId.'_dates')->truncate();
+        DB::table($sportCode.'_'.$gameId.'_dates')->insert;
         return response()->json(['status'=>'A01']);
     }
 }
