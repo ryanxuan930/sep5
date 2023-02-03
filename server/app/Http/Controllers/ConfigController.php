@@ -42,8 +42,6 @@ class ConfigController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
-        $temp['created_at'] = date("Y-m-d H:i:s");
-        $temp['updated_at'] = date("Y-m-d H:i:s");
         Config::insert($temp);
         return response()->json(['status'=>'A01']);
     }
@@ -79,7 +77,6 @@ class ConfigController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
-        $temp['updated_at'] = date("Y-m-d H:i:s");
         Config::where('config_id', $id)->update($temp);
         return response()->json(['status'=>'A01']);
     }
