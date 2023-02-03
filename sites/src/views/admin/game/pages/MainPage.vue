@@ -7,6 +7,7 @@
   import EditGame from '@/components/admin/game/EditGame.vue';
   import DateSetter from '@/components/admin/game/main/DateSetter.vue';
   import DivisionSetter from '@/components/admin/game/main/DivisionSetter.vue';
+  import EventSetter from '@/components/admin/game/main/EventSetter.vue';
   import LaneSetter from '@/components/admin/game/main/LaneSetter.vue';
 
   const store = useUserStore();
@@ -30,11 +31,12 @@
       <button class="round-full-button blue" @click="displayModal = 1">競賽資訊管理</button>
       <button class="round-full-button blue" @click="displayModal = 2">競賽日程管理</button>
       <button class="round-full-button blue" @click="displayModal = 3">競賽分組管理</button>
-      <button class="round-full-button blue">競賽項目管理</button>
-      <button class="round-full-button blue">分組項目設定</button>
+      <button class="round-full-button blue" @click="displayModal = 4">競賽項目管理</button>
+      <button class="round-full-button blue" @click="displayModal = 5">分組項目設定</button>
       <button class="round-full-button blue">大會紀錄管理</button>
       <button class="round-full-button blue">錦標積分設定</button>
       <button class="round-full-button blue" @click="displayModal = 8" v-if="gameData.module == 'ln'">賽道編排設定</button>
+      <button class="round-full-button blue" @click="displayModal = 9" v-if="gameData.sport_code == 'athl'">全能項目設定</button>
     </div>
   </div>
   <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
@@ -43,14 +45,18 @@
           <div v-if="displayModal == 1">競賽資訊管理</div>
           <div v-if="displayModal == 2">競賽日程管理</div>
           <div v-if="displayModal == 3">競賽分組管理</div>
+          <div v-if="displayModal == 4">競賽項目管理</div>
           <div v-if="displayModal == 8">賽道編排設定</div>
         </div>
       </template>
       <template v-slot:content>
-        <EditGame v-if="displayModal == 1" :game-data="gameData" @closeModal="displayModal = 0"></EditGame>
-        <DateSetter v-if="displayModal == 2" :input-data="gameData" @closeModal="displayModal = 0"></DateSetter>
-        <DivisionSetter v-if="displayModal == 3" :input-data="gameData" @closeModal="displayModal = 0"></DivisionSetter>
-        <LaneSetter v-if="displayModal == 8" :input-data="gameData" @closeModal="displayModal = 0"></LaneSetter>
+        <div class="overflow-auto h-full">
+          <EditGame v-if="displayModal == 1" :game-data="gameData" @closeModal="displayModal = 0"></EditGame>
+          <DateSetter v-if="displayModal == 2" :input-data="gameData" @closeModal="displayModal = 0"></DateSetter>
+          <DivisionSetter v-if="displayModal == 3" :input-data="gameData" @closeModal="displayModal = 0"></DivisionSetter>
+          <EventSetter v-if="displayModal == 4" :input-data="gameData" @closeModal="displayModal = 0"></EventSetter>
+          <LaneSetter v-if="displayModal == 8" :input-data="gameData" @closeModal="displayModal = 0"></LaneSetter>
+        </div>
       </template>
     </FullModal>
 </template>

@@ -1,6 +1,6 @@
 [
-    {"zh-TW": "一般公告", "en-US": "General", "ja-JP": "お知らせ"},
-    {"zh-TW": "檔案下載", "en-US": "Download", "ja-JP": "ダウンロード"},
-    {"zh-TW": "賽事資訊", "en-US": "Game Info", "ja-JP": "大会情報"},
-    {"zh-TW": "重要消息", "en-US": "Important", "ja-JP": "重要情報"}
+    {"zh-TW": "一般公告", "en-US": "General", "ja-JP": "お知らせ", "css": "bg-blue-500 text-white"},
+    {"zh-TW": "檔案下載", "en-US": "Download", "ja-JP": "ダウンロード", "css": "bg-orange-600 text-white"},
+    {"zh-TW": "賽事資訊", "en-US": "Game Info", "ja-JP": "大会情報", "css": "bg-green-600 text-white"},
+    {"zh-TW": "重要消息", "en-US": "Important", "ja-JP": "重要情報", "css": "bg-red-600 text-white"}
 ]

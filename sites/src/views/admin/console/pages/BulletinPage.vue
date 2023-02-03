@@ -19,7 +19,7 @@
   }
 
   const linkUrl:Ref<IObjList[]|null> = ref(null);
-  const bulletinList:Ref<IPostData[]> = ref([]);
+  const bulletinList:Ref<IPostData[]|IObjList> = ref([]);
   const currentUrl = ref('');
   function getBulletinList(url = `${store.userInfo.admin_org_id}/bulletin`) {
     currentUrl.value = url;
@@ -94,8 +94,8 @@
               <div v-if="item.release" class="text-green-600">顯示</div>
               <div  v-else class="text-red-600">隱藏</div>
             </td>
-            <td colspan="2" class="td-border text-gray-400">{{ item.content_ch === null ? '本公告無內文' : item.content_ch }}</td>
-            <td class="td-border"></td>
+            <td colspan="2" class="td-border text-gray-400">{{ item.content_ch === null ? '本公告無內文' : '本公告有內文' }}</td>
+            <td class="td-border">{{ item.admin_dept_name_ch }}</td>
           </tr>
         </template>
       </template>

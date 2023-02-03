@@ -50,7 +50,7 @@
       data.value[index] = props.postData[index];
     });
     data.value.post_date = props.postData.post_date;
-    data.value.links = JSON.parse(props.postData.links);
+    data.value.links = props.postData.links;
     getGameData(data.value.related_game);
   }
 

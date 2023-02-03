@@ -7,7 +7,7 @@
   const store = useUserStore();
   const vr = new VueRequest(store.token);
   const props = defineProps(['inputData']);
-  const url = `game/${props.inputData.sport_code}/${props.inputData.game_id}/main/lane`;
+  const url = `game/${props.inputData.sport_code}/${props.inputData.game_id}/main/params`;
   interface IData {
     lane_id?: number;
     straight: number;

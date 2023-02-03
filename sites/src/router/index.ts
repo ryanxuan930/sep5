@@ -8,13 +8,37 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'mainRoot',
+      name: 'mainSelection',
       component: MainView,
     },
     {
-      path: '/registration',
-      name: 'registrationRoot',
-      component: RegistrationView,
+      path: '/:adminOrgId',
+      name: 'mainRoot',
+      component: MainView,
+      children: [
+        {
+          path: '/:adminOrgId',
+          name: 'mainHomePage',
+          component: () => import('../views/main/homepage/HomePage.vue'),
+          children: [
+            {
+              path: '/:adminOrgId',
+              name: 'mainMainPage',
+              component: () => import('../views/main/homepage/pages/MainPage.vue'),
+            },
+            {
+              path: '/:adminOrgId/news',
+              name: 'mainNewsPage',
+              component: () => import('../views/main/homepage/pages/NewsPage.vue'),
+            },
+            {
+              path: '/:adminOrgId/news/:postId',
+              name: 'mainPostPage',
+              component: () => import('../views/main/homepage/pages/NewsPage.vue'),
+            }
+          ]
+        },
+      ]
     },
     {
       path: '/admin',
@@ -71,6 +95,11 @@ const router = createRouter({
       path: '/admin/login',
       name: 'adminLogin',
       component: () => import('../views/admin/login/LoginView.vue'),
+    },
+    {
+      path: '/registration',
+      name: 'registrationRoot',
+      component: RegistrationView,
     },
   ],
 });
