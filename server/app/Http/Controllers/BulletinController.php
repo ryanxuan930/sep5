@@ -23,9 +23,9 @@ class BulletinController extends Controller
     {
         if ($org_id == 1) {
             return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')
-            ->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'bulletins.related_admin_dept')->paginate(10));
+            ->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'bulletins.related_admin_dept')->orderBy('pinned', 'desc')->orderBy('category', 'desc')->orderBy('post_date','desc')->paginate(10));
         } else {
-            return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'bulletins.related_admin_dept')->where('admin_departments.admin_org_id', $org_id)->paginate(10));
+            return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'bulletins.related_admin_dept')->where('admin_departments.admin_org_id', $org_id)->orderBy('pinned', 'desc')->orderBy('category', 'desc')->orderBy('post_date','desc')->paginate(10));
         }
     }
 
