@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Validator;
 use App\Models\AdminOrganization as AO;
+use App\Models\Config;
 
 class AdminOrganizationController extends Controller
 {
@@ -45,6 +46,12 @@ class AdminOrganizationController extends Controller
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
         AO::insert($temp);
+        Config::insert([
+            'reg_switch' => 0,
+            'reg_content' => '目前無內容',
+            'root_page' => 1,
+            'multilingual' => 0,
+        ]);
         return response()->json(['status'=>'A01']);
     }
 
