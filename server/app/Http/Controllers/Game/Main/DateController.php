@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Game\Main;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Validator;
 use Illuminate\Support\Facades\DB;
 
 class DateController extends Controller
