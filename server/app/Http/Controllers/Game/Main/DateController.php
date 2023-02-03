@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class DateController extends Controller
 {
+    private $tableName = 'dates';
     // construct
     public function __construct()
     {
@@ -23,7 +24,7 @@ class DateController extends Controller
      */
     public function getters($sportCode, $gameId)
     {
-        return response()->json(DB::table($sportCode.'_'.$gameId.'_dates')->get());
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->get());
     }
     /**
      * Set a series of resource in storage.
@@ -45,8 +46,8 @@ class DateController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
-        DB::table($sportCode.'_'.$gameId.'_dates')->truncate();
-        DB::table($sportCode.'_'.$gameId.'_dates')->insert($temp);
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->truncate();
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->insert($temp);
         return response()->json(['status'=>'A01']);
     }
 }
