@@ -46,7 +46,7 @@ class DateController extends Controller
         }
         $temp = $request->all();
         DB::table($sportCode.'_'.$gameId.'_dates')->truncate();
-        DB::table($sportCode.'_'.$gameId.'_dates')->insert;
+        DB::table($sportCode.'_'.$gameId.'_dates')->insert($temp);
         return response()->json(['status'=>'A01']);
     }
 }
