@@ -23,6 +23,7 @@ use App\Http\Controllers\Game\Main\DateController as GameDateController;
 use App\Http\Controllers\Game\Main\DivisionController as GameDivisionController;
 use App\Http\Controllers\Game\Main\LaneController as GameLaneController;
 use App\Http\Controllers\Game\Main\ParamsController as GameParamsController;
+use App\Http\Controllers\Game\Main\EventController as GameEventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,6 +134,13 @@ Route::group([
             'prefix' => 'lane'
         ], function () {
             $ControllerClass = GameLaneController::class;
+            Route::get('', [$ControllerClass, 'getters']);
+            Route::post('', [$ControllerClass, 'setters']);
+        });
+        Route::group([
+            'prefix' => 'event'
+        ], function () {
+            $ControllerClass = GameEventController::class;
             Route::get('', [$ControllerClass, 'getters']);
             Route::post('', [$ControllerClass, 'setters']);
         });

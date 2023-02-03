@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\DB;
 
-class ParamsController extends Controller
+class EventController extends Controller
 {
-    private $tableName = 'params';
+    private $tableName = 'selected_events';
     // construct
     public function __construct()
     {
@@ -38,24 +38,8 @@ class ParamsController extends Controller
     {
         // validation
         $validator = Validator::make($request->all(),[
-            '*.division_id' => 'required|integer',
-            '*.event_code' => 'required|string',
-            '*.r1' => 'required|boolean',
-            '*.r1_aq' => 'required|integer',
-            '*.r1_sq' => 'required|integer',
-            '*.r1_split' => 'required|boolean',
-            '*.r2' => 'required|boolean',
-            '*.r2_aq' => 'required|integer',
-            '*.r2_sq' => 'required|integer',
-            '*.r2_split' => 'required|boolean',
-            '*.r3' => 'required|boolean',
-            '*.r3_aq' => 'required|integer',
-            '*.r3_sq' => 'required|integer',
-            '*.r3_split' => 'required|boolean',
-            '*.r4' => 'required|boolean',
-            '*.r4_aq' => 'required|integer',
-            '*.r4_sq' => 'required|integer',
-            '*.r4_split' => 'required|boolean',
+            '*.event_id' => 'required|integer',
+            '*.event_code' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
