@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class LaneController extends Controller
 {
-    private $tableName = 'divisions';
+    private $tableName = 'lane';
     // construct
     public function __construct()
     {
