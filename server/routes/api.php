@@ -19,6 +19,7 @@ use App\Http\Controllers\TribeController;
 use App\Http\Controllers\SchoolTeamController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
+use App\Http\Controllers\Game\Main\DateController as GameDateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,4 +104,16 @@ Route::group([
     'prefix' => '/file'
 ], function () {
     Route::post('/upload', [FileController::class, 'upload']);
+});
+
+Route::group([
+    'prefix' => 'game/{sportCode}/{gameId}'
+], function () {
+    Route::group([
+        'prefix' => 'main'
+    ], function () {
+        $ControllerClass = GameDateController::class;
+        Route::get('/date', [$ControllerClass, 'getters']);
+        Route::post('/date', [$ControllerClass, 'setters']);
+    });
 });
