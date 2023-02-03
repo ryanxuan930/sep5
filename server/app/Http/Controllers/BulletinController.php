@@ -22,9 +22,10 @@ class BulletinController extends Controller
     public function index($org_id)
     {
         if ($org_id == 1) {
-            return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->paginate(10));
+            return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')
+            ->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'bulletins.related_admin_dept')->paginate(10));
         } else {
-            return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'bulletins.related_admin_dept')->paginate(10));
+            return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'bulletins.related_admin_dept')->where('admin_departments.admin_org_id', $org_id)->paginate(10));
         }
     }
 
