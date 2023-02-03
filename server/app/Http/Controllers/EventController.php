@@ -25,7 +25,7 @@ class EventController extends Controller
     }
     public function indexBySport($sportId)
     {
-        return response()->json(Event::where('sport_id', $sportId));
+        return response()->json(Event::where('sport_id', $sportId)->get());
     }
 
     /**
