@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use Validator;
 use App\Models\SportList;
 use Illuminate\Support\Facades\DB;
 
