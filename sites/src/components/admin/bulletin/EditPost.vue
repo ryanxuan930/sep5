@@ -110,7 +110,7 @@
     </label>
     <label class="round-input-label">
       <div class="title">類別</div>
-      <select class="select">
+      <select class="select" v-model="data.category">
         <template v-for="(item, index) in BulletinCategory" :key="index">
           <option :value="index">{{ item['zh-TW'] }}</option>
         </template>

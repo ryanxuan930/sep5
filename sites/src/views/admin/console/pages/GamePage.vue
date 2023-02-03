@@ -7,7 +7,7 @@
   import { getUrlParams, paginationText } from '@/components/library/functions';
   import Toggle from '@vueform/toggle';
   import FullModal from '@/components/FullModal.vue';
-  import EditGame from '@/components/admin/games/EditGame.vue';
+  import EditGame from '@/components/admin/game/EditGame.vue';
 
   const message: Ref<string|null> = ref(null);
   const router = useRouter();
@@ -96,7 +96,7 @@
             </td>
             <td>{{ item.event_start }}</td>
             <td>
-              <router-link class="hyperlink blue" to="">開啟</router-link>
+              <router-link class="hyperlink blue" :to="`/admin/game/${item.sport_code}/${item.game_id}`">開啟</router-link>
             </td>
           </tr>
         </template>

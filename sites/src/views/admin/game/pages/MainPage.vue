@@ -1,0 +1,60 @@
+<script setup lang="ts">
+  import { ref } from 'vue';
+  import VueRequest from '@/vue-request';
+  import { useUserStore } from '@/stores/user';
+  import { useRoute } from 'vue-router';
+  import FullModal from '@/components/FullModal.vue';
+  import EditGame from '@/components/admin/game/EditGame.vue';
+  import DateSetter from '@/components/admin/game/main/DateSetter.vue';
+  import DivisionSetter from '@/components/admin/game/main/DivisionSetter.vue';
+  import LaneSetter from '@/components/admin/game/main/LaneSetter.vue';
+
+  const store = useUserStore();
+  const vr = new VueRequest(store.token);
+  const displayModal = ref(0);
+  const gameData: any = ref(null);
+  const route = useRoute();
+  const sportCode = route.params.sportCode;
+  const gameId = route.params.gameId;
+
+  (async () => {
+    vr.Get(`${store.userInfo.org_id}/game/${gameId}`, gameData, true, true);
+  })()
+</script>
+
+<template>
+  <div v-if="gameData != null">
+    <div class="section-box grid grid-cols-1 md:grid-cols-4 gap-x-3 gap-y-4">
+      <div class="col-span-4 text-2xl">競賽基本設定</div>
+      <hr class="col-span-4">
+      <button class="round-full-button blue" @click="displayModal = 1">競賽資訊管理</button>
+      <button class="round-full-button blue" @click="displayModal = 2">競賽日程管理</button>
+      <button class="round-full-button blue" @click="displayModal = 3">競賽分組管理</button>
+      <button class="round-full-button blue">競賽項目管理</button>
+      <button class="round-full-button blue">分組項目設定</button>
+      <button class="round-full-button blue">大會紀錄管理</button>
+      <button class="round-full-button blue">錦標積分設定</button>
+      <button class="round-full-button blue" @click="displayModal = 8" v-if="gameData.module == 'ln'">賽道編排設定</button>
+    </div>
+  </div>
+  <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
+      <template v-slot:title>
+        <div class="text-2xl">
+          <div v-if="displayModal == 1">競賽資訊管理</div>
+          <div v-if="displayModal == 2">競賽日程管理</div>
+          <div v-if="displayModal == 3">競賽分組管理</div>
+          <div v-if="displayModal == 8">賽道編排設定</div>
+        </div>
+      </template>
+      <template v-slot:content>
+        <EditGame v-if="displayModal == 1" :game-data="gameData" @closeModal="displayModal = 0"></EditGame>
+        <DateSetter v-if="displayModal == 2" :input-data="gameData" @closeModal="displayModal = 0"></DateSetter>
+        <DivisionSetter v-if="displayModal == 3" :input-data="gameData" @closeModal="displayModal = 0"></DivisionSetter>
+        <LaneSetter v-if="displayModal == 8" :input-data="gameData" @closeModal="displayModal = 0"></LaneSetter>
+      </template>
+    </FullModal>
+</template>
+
+<style scoped lang="scss">
+    
+</style>

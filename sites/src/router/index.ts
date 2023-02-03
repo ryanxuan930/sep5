@@ -48,6 +48,23 @@ const router = createRouter({
             },
           ],
         },
+        {
+          path: 'game/:sportCode/:gameId',
+          name: 'adminGameLayout',
+          component: () => import('../views/admin/game/GameLayout.vue'),
+          children: [
+            {
+              path: '',
+              name: 'adminGameHomePage',
+              component: () => import('../views/admin/game/pages/MainPage.vue'),
+            },
+            {
+              path: 'registration',
+              name: 'adminGameRegistrationPage',
+              component: () => import('../views/admin/game/pages/RegistrationPage.vue'),
+            },
+          ]
+        },
       ],
     },
     {
