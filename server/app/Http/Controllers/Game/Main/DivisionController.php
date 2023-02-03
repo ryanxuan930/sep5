@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class DivisionController extends Controller
 {
+    private $tableName = 'divisions';
     // construct
     public function __construct()
     {
@@ -23,7 +24,7 @@ class DivisionController extends Controller
      */
     public function getters($sportCode, $gameId)
     {
-        return response()->json(DB::table($sportCode.'_'.$gameId.'_division')->get());
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->get());
     }
     /**
      * Set a series of resource in storage.
@@ -45,8 +46,8 @@ class DivisionController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
-        DB::table($sportCode.'_'.$gameId.'_division')->truncate();
-        DB::table($sportCode.'_'.$gameId.'_division')->insert($temp);
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->truncate();
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->insert($temp);
         return response()->json(['status'=>'A01']);
     }
 }
