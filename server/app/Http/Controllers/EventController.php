@@ -23,6 +23,10 @@ class EventController extends Controller
     {
         return response()->json(Event::all());
     }
+    public function indexBySport($sportId)
+    {
+        return response()->json(Event::where('sport_id', $sportId));
+    }
 
     /**
      * Store a newly created resource in storage.

@@ -91,6 +91,7 @@ Route::get('/department/org/{org_id}', [DepartmentController::class, 'indexByOrg
 Route::get('/department/org/code/{org_code}', [DepartmentController::class, 'indexByOrgCode']);
 
 Route::apiResource('/event', EventController::class);
+Route::get('/event/sport/{sportId}', [EventController::class, 'indexBySport']);
 
 Route::apiResource('/sport', SportController::class);
 
