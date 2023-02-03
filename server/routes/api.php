@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController as AuthUserController;
 use App\Http\Controllers\Auth\AdminController as AuthAdminController;
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GameTagController;
@@ -35,6 +36,8 @@ use App\Http\Controllers\Game\Main\EventController as GameEventController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::apiResource('/config', ConfigController::class);
 
 Route::group([
     'prefix' => 'auth'
