@@ -9,4 +9,7 @@ class Bulletin extends Model
 {
     use HasFactory;
     protected $primaryKey = "bulletin_id";
+    protected $casts = [
+        'links' => 'array',
+    ];
 }
