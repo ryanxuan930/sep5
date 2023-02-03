@@ -21,6 +21,8 @@ use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
 use App\Http\Controllers\Game\Main\DateController as GameDateController;
 use App\Http\Controllers\Game\Main\DivisionController as GameDivisionController;
+use App\Http\Controllers\Game\Main\LaneController as GameLaneController;
+use App\Http\Controllers\Game\Main\ParamsController as GameParamsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +119,27 @@ Route::group([
             'prefix' => 'date'
         ], function () {
             $ControllerClass = GameDateController::class;
+            Route::get('', [$ControllerClass, 'getters']);
+            Route::post('', [$ControllerClass, 'setters']);
+        });
+        Route::group([
+            'prefix' => 'division'
+        ], function () {
+            $ControllerClass = GameDivisionController::class;
+            Route::get('', [$ControllerClass, 'getters']);
+            Route::post('', [$ControllerClass, 'setters']);
+        });
+        Route::group([
+            'prefix' => 'lane'
+        ], function () {
+            $ControllerClass = GameLaneController::class;
+            Route::get('', [$ControllerClass, 'getters']);
+            Route::post('', [$ControllerClass, 'setters']);
+        });
+        Route::group([
+            'prefix' => 'params'
+        ], function () {
+            $ControllerClass = GameParamsController::class;
             Route::get('', [$ControllerClass, 'getters']);
             Route::post('', [$ControllerClass, 'setters']);
         });
