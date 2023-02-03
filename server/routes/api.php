@@ -20,6 +20,7 @@ use App\Http\Controllers\SchoolTeamController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
 use App\Http\Controllers\Game\Main\DateController as GameDateController;
+use App\Http\Controllers\Game\Main\DivisionController as GameDivisionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -112,8 +113,12 @@ Route::group([
     Route::group([
         'prefix' => 'main'
     ], function () {
-        $ControllerClass = GameDateController::class;
-        Route::get('/date', [$ControllerClass, 'getters']);
-        Route::post('/date', [$ControllerClass, 'setters']);
+        Route::group([
+            'prefix' => 'date'
+        ], function () {
+            $ControllerClass = GameDateController::class;
+            Route::get('', [$ControllerClass, 'getters']);
+            Route::post('', [$ControllerClass, 'setters']);
+        });
     });
 });
