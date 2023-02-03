@@ -22,7 +22,7 @@ class DateController extends Controller
      */
     public function getters($sportCode, $gameId)
     {
-        return response()->json(DB::table($sportCode.'_'.$gameId.'_dates')->all());
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_dates')->get());
     }
     /**
      * Set a series of resource in storage.
