@@ -13,5 +13,6 @@ class Game extends Model
         'host_list' => 'array',
         'tags' => 'array',
         'selected_list' => 'array',
+        'options' => 'array',
     ];
 }
