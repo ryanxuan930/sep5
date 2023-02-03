@@ -20,7 +20,7 @@ class DateController extends Controller
      * @param  string $orgId
      * @return \Illuminate\Http\Response
      */
-    public function getters()
+    public function getters($sportCode, $gameId)
     {
         return response()->json(DB::table($sportCode.'_'.$orgId.'_dates')->all());
     }
@@ -32,7 +32,7 @@ class DateController extends Controller
      * @param  string $orgId
      * @return \Illuminate\Http\Response
      */
-    public function setters(Request $request)
+    public function setters(Request $request, $sportCode, $gameId)
     {
         // validation
         $validator = Validator::make($request->all(),[
