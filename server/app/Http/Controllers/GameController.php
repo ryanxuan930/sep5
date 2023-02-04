@@ -40,6 +40,19 @@ class GameController extends Controller
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereJsonContains('host_list', $org_id)->paginate(10));
         }
     }
+    /**
+     * Display a listing of the resource. (No filtering)
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function indexByTag($org_id, $gameTag)
+    {
+        if ($org_id == 1) {
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereJsonContains('tags', $gameTag)->paginate(10));
+        } else {
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereJsonContains('host_list', $org_id)->whereJsonContains('tags', $gameTag)->paginate(10));
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
