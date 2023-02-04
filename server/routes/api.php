@@ -147,6 +147,7 @@ Route::group([
         ], function () {
             $ControllerClass = GameEventController::class;
             Route::get('', [$ControllerClass, 'getters']);
+            Route::get('/full', [$ControllerClass, 'gettersFull']);
             Route::post('', [$ControllerClass, 'setters']);
         });
         Route::group([

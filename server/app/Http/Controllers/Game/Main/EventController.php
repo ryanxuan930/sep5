@@ -13,7 +13,7 @@ class EventController extends Controller
     // construct
     public function __construct()
     {
-        $this->middleware('auth:admin', ['except' => ['getters']]);
+        $this->middleware('auth:admin', ['except' => ['getters', 'gettersFull']]);
     }
     /**
      * Display a listing of the resource.
@@ -25,6 +25,10 @@ class EventController extends Controller
     public function getters($sportCode, $gameId)
     {
         return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->get());
+    }
+    public function gettersFull($sportCode, $gameId)
+    {
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('events', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_id', '=', 'events.event_id')->get());
     }
     /**
      * Set a series of resource in storage.
