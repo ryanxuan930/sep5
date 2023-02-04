@@ -80,7 +80,11 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+        // constant
+        $loginTime = date("Y-m-d H:i:s");
         $temp = $request->all();
+        $temp['created_at'] = $loginTime;
+        $temp['updated_at'] = $loginTime;
         $temp['last_ip'] = $request->ip();
         $temp['password'] = password_hash($request->all()['password'], PASSWORD_DEFAULT);
         $temp['athlete_id'] = strtoupper(str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT));
@@ -151,7 +155,10 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+        // constant
+        $loginTime = date("Y-m-d H:i:s");
         $temp = $request->all();
+        $temp['updated_at'] = $loginTime;
         $temp['last_ip'] = $request->ip();
         User::where('u_id', $id)->update($temp);
         return response()->json(['status'=>'A01']);
