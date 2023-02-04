@@ -5,6 +5,7 @@ import VueRequest from '@/vue-request';
 import type { Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import NewsSection from '@/components/main/homepage/NewsSection.vue';
+import GameSection from '@/components/main/homepage/GameSection.vue';
 import type { IPageData } from '@/components/library/interfaces';
 
 const vr = new VueRequest();
@@ -16,12 +17,13 @@ const pageData: IPageData = inject('pageData');
 
 <template>
   <div>
-    <CountDown :countdown-time="pageData.countdownTime">
+    <CountDown v-if="pageData.showCountdown" :countdown-time="pageData.countdownTime">
       <template #title>
         <div v-html="pageData.countdownTitle"></div>
       </template>
     </CountDown>
-    <NewsSection :display-mode="'home'"></NewsSection>
+    <NewsSection class="mt-5" :display-mode="'home'"></NewsSection>
+    <GameSection class="mt-5" :display-mode="'home'"></GameSection>
   </div>
 </template>
 

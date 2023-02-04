@@ -28,6 +28,7 @@ export interface IReturnData {
 export interface IPageData {
   footerContent: string;
   homepageSlideshow: string[]|string;
+  showCountdown: boolean;
   countdownTime: string;
   countdownTitle: string;
   registrationUrl: string;

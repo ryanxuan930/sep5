@@ -54,8 +54,8 @@
     <table class="config-table">
       <tr>
         <th>選取</th>
-        <th>項目名稱</th>
         <th>項目代碼</th>
+        <th>項目名稱</th>
         <th>項目類別</th>
         <th>所需人數</th>
       </tr>

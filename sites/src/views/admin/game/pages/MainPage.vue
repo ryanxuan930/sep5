@@ -8,6 +8,7 @@
   import DateSetter from '@/components/admin/game/main/DateSetter.vue';
   import DivisionSetter from '@/components/admin/game/main/DivisionSetter.vue';
   import EventSetter from '@/components/admin/game/main/EventSetter.vue';
+  import ParamsSetter from '@/components/admin/game/main/ParamsSetter.vue';
   import LaneSetter from '@/components/admin/game/main/LaneSetter.vue';
 
   const store = useUserStore();
@@ -20,7 +21,7 @@
 
   (async () => {
     vr.Get(`${store.userInfo.org_id}/game/${gameId}`, gameData, true, true);
-  })()
+  })();
 </script>
 
 <template>
@@ -46,6 +47,7 @@
           <div v-if="displayModal == 2">競賽日程管理</div>
           <div v-if="displayModal == 3">競賽分組管理</div>
           <div v-if="displayModal == 4">競賽項目管理</div>
+          <div v-if="displayModal == 5">分組項目設定</div>
           <div v-if="displayModal == 8">賽道編排設定</div>
         </div>
       </template>
@@ -55,6 +57,7 @@
           <DateSetter v-if="displayModal == 2" :input-data="gameData" @closeModal="displayModal = 0"></DateSetter>
           <DivisionSetter v-if="displayModal == 3" :input-data="gameData" @closeModal="displayModal = 0"></DivisionSetter>
           <EventSetter v-if="displayModal == 4" :input-data="gameData" @closeModal="displayModal = 0"></EventSetter>
+          <ParamsSetter v-if="displayModal == 5" :input-data="gameData" @closeModal="displayModal = 0"></ParamsSetter>
           <LaneSetter v-if="displayModal == 8" :input-data="gameData" @closeModal="displayModal = 0"></LaneSetter>
         </div>
       </template>

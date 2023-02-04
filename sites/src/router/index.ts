@@ -36,6 +36,11 @@ const router = createRouter({
               name: 'mainGamePage',
               component: () => import('../views/main/homepage/pages/GamePage.vue'),
             },
+            {
+              path: 'gallery',
+              name: 'mainGalleryPage',
+              component: () => import('../views/main/homepage/pages/GalleryPage.vue'),
+            },
           ]
         },
       ]
@@ -100,6 +105,25 @@ const router = createRouter({
       path: '/registration',
       name: 'registrationRoot',
       component: RegistrationView,
+      children: [
+        {
+          path: '/registration',
+          name: 'registrationHome',
+          component: () => import('../views/registration/ConsoleLayout.vue'),
+          children: [
+            {
+              path: '/registration',
+              name: 'registrationMainPage',
+              component: () => import('../views/registration/pages/MainPage.vue'),
+            },
+          ],
+        },
+      ]
+    },
+    {
+      path: '/registration/login',
+      name: 'registrationLogin',
+      component: () => import('../views/registration/login/LoginView.vue'),
     },
   ],
 });

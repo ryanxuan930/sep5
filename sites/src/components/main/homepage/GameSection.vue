@@ -56,10 +56,9 @@ const { t, locale } = useI18n({
       <template v-for="(item, index) in dataList" :key="index">
         <tbody @click="$router.push(`/${$route.params.adminOrgId}/games/${item.game_id}`)" v-if="((props.displayMode == 'home' && index < 5)|| props.displayMode == 'game')">
           <tr>
-            <td class="w-[3%]"><span v-if="item.pinned==1" class="material-icons text-3xl text-blue-500">label_important</span></td>
-            <td class="text-left w-[40%] md:w-[20%] lg:w-[15%] xl:w-[12%]">
-              <span class="text-blue-500 font-medium" v-if="locale == 'zh-TW' || (item.multilingual == 0)">{{ item.sport_name_ch }}</span>
-              <span class="text-blue-500 font-medium" v-else>{{ item.sport_name_en }}</span>
+            <td class="text-left w-[40%] md:w-[20%] lg:w-[15%] xl:w-[15%]">
+              <span class="bg-blue-500 text-white rounded py-1 px-2 font-medium" v-if="locale == 'zh-TW' || (item.multilingual == 0)">{{ item.sport_name_ch }}</span>
+              <span class="bg-blue-500 text-white rounded py-1 px-2 font-medium" v-else>{{ item.sport_name_en }}</span>
             </td>
             <td class="text-left hidden md:table-cell truncate max-w-0">
               <span v-if="locale == 'zh-TW' || (item.multilingual == 0)">{{ item.game_name_ch }}</span>
@@ -69,15 +68,15 @@ const { t, locale } = useI18n({
           </tr>
           <tr class="md:hidden">
             <td colspan="3" class="text-left border-b-2 w-full truncate max-w-0">
-              <span v-if="locale == 'zh-TW'">{{ item.title_ch }}</span>
-              <span v-else>{{ item.title_en }}</span>
+              <span v-if="locale == 'zh-TW'">{{ item.game_name_ch }}</span>
+              <span v-else>{{ item.game_name_en }}</span>
             </td>
           </tr>
         </tbody>
       </template>
     </table>
     <div v-if="props.displayMode == 'home'" class="bg-gray-100 p-3 tezt-center mb-3 text-center">
-      <button class="bg-gray-500 text-white py-2 px-5" @click="$router.push(`/${$route.params.adminOrgId}/games`)">更多 More...</button>
+      <button class="bg-gray-500 text-white py-2 px-5" @click="$router.push(`/${$route.params.adminOrgId}/games`)">{{ t('more') }}...</button>
     </div>
     <div v-if="props.displayMode == 'game'" class="page-btn">
       <template v-for="(item, index) in linkUrl" :key="index">
@@ -109,11 +108,14 @@ const { t, locale } = useI18n({
     @apply inline-block text-white px-2 py-1 rounded m-1 bg-orange-400 hover:bg-orange-300 duration-200;
   }
 }
+.general-button.active {
+  @apply bg-blue-400;
+}
 .page-btn {
   @apply flex my-5 gap-3;
 }
-.general-button.active {
-  @apply bg-blue-400;
+.general-button{
+  @apply rounded-none;
 }
 </style>
 
@@ -121,7 +123,9 @@ const { t, locale } = useI18n({
 en-US:
   game-title: 'Game List'
   all-game: 'All Games'
+  more: 'More'
 zh-TW:
   game-title: '賽事列表'
   all-game: '全部賽事'
+  more: '更多'
 </i18n>

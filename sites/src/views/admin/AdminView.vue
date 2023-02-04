@@ -6,7 +6,7 @@
   const store = useUserStore();
   try {
     if (localStorage.getItem('sep5AdminTemp')) {
-      const temp = JSON.parse(localStorage.sep5AdminTemp);
+      const temp = JSON.parse(decodeURI(window.atob(localStorage.sep5AdminTemp)));
       store.expired = temp.expired;
       store.token = temp.token;
       store.userInfo = temp.userInfo;

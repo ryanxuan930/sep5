@@ -25,20 +25,20 @@
     message?: string;
   }
   function submitAll() {
-    vr.Post('auth/admin/login', data).then((res: ILoginResponse) => {
+    vr.Post('auth/user/login', data).then((res: ILoginResponse) => {
       if (res.status === 'A02') {
         store.expired = res.data.expired;
         store.token = res.data.token;
         store.userInfo = res.data.user;
-        store.loginType = 'admin';
+        store.loginType = 'user';
         const temp = {
           expired: res.data.expired,
           token: res.data.token,
           userInfo: res.data.user,
-          loginType: 'admin',
+          loginType: 'user',
         };
-        localStorage.setItem('sep5AdminTemp', window.btoa(encodeURI(JSON.stringify(temp))));
-        router.push('/admin');
+        localStorage.setItem('sep5UserTemp', window.btoa(encodeURI(JSON.stringify(temp))));
+        router.push('/registration');
       } else if (res.message !== undefined) {
         message.value = res.message;
       }
@@ -50,7 +50,7 @@
   <div class="h-screen flex flex-col overflow-auto">
     <div class="flex-grow"></div>
     <div class="bg-white sm:shadow p-5 w-full h-screen sm:w-2/3 md:w-96 sm:h-fit mx-auto">
-      <div class="text-2xl text-gray-500">管理員登入</div>
+      <div class="text-2xl text-gray-500">使用者登入</div>
       <label class="round-input-label">
         <div class="title">帳號</div>
         <input type="email" class="input" ref="accountInput" placeholder="abc@xyz.com" v-model="data.account" @keyup.enter="passwordInput.focus()">

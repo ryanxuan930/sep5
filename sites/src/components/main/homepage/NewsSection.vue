@@ -70,7 +70,7 @@ const { t, locale } = useI18n({
       </template>
     </table>
     <div v-if="props.displayMode == 'home'" class="bg-gray-100 p-3 tezt-center mb-3 text-center">
-      <button class="bg-gray-500 text-white py-2 px-5" @click="$router.push(`/${$route.params.adminOrgId}/news`)">更多 More...</button>
+      <button class="bg-gray-500 text-white py-2 px-5" @click="$router.push(`/${$route.params.adminOrgId}/news`)">{{ t('more') }}...</button>
     </div>
     <div v-if="props.displayMode == 'news'" class="page-btn">
       <template v-for="(item, index) in linkUrl" :key="index">
@@ -82,7 +82,7 @@ const { t, locale } = useI18n({
 
 <style scoped lang="scss">
 .filter-button {
-  @apply flex;
+  @apply sm:flex;
   button {
     @apply text-xl font-medium p-2 w-full hover:bg-opacity-80 text-white duration-100 ;
   }
@@ -108,13 +108,18 @@ const { t, locale } = useI18n({
 .general-button.active {
   @apply bg-blue-400;
 }
+.general-button{
+  @apply rounded-none;
+}
 </style>
 
 <i18n lang="yaml">
 en-US:
   news-title: 'Latest News'
   all-post: 'All Posts'
+  more: 'More'
 zh-TW:
   news-title: '最新消息'
   all-post: '全部公告'
+  more: '更多'
 </i18n>
