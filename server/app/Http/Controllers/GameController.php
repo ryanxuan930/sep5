@@ -47,11 +47,12 @@ class GameController extends Controller
      */
     public function indexByTag($org_id, $gameTag)
     {
-        if ($org_id == 1) {
-            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereJsonContains('tags', $gameTag)->paginate(10));
+        $query = Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code');
+        if ($gameTag == 0) {
+            return response()->json($query->whereJsonContains('host_list', $org_id)->paginate(10));
         } else {
-            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereJsonContains('host_list', $org_id)->whereJsonContains('tags', $gameTag)->paginate(10));
-        }
+            return response()->json($query->whereJsonContains('host_list', $org_id)->whereJsonContains('tags', $gameTag)->paginate(10));
+        } 
     }
 
     /**
