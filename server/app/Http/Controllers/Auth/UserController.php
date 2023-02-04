@@ -61,7 +61,6 @@ class UserController extends Controller
                         'is_student' => $response['user_identity'] == 0 ? 1 : 0,
                         'created_at' => $loginTime,
                         'updated_at' => $loginTime,
-                        'updated_at' => $loginTime,
                         'athlete_id' => strtoupper(str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT)),
                     ];
                     User::insert($temp);
@@ -150,8 +149,12 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+        // constant
+        $loginTime = date("Y-m-d H:i:s");
         $temp = $request->all();
         $temp['last_ip'] = $request->ip();
+        $temp['created_at'] = $loginTime;
+        $temp['updated_at'] = $loginTime;
         $temp['password'] = password_hash($request->all()['password'], PASSWORD_DEFAULT);
         $temp['athlete_id'] = strtoupper(str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT));
         User::insert($temp);
