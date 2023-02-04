@@ -12,7 +12,7 @@ class GameController extends Controller
     // construct
     public function __construct()
     {
-        $this->middleware('auth:admin', ['except' => ['index', 'show', 'indexAll']]);
+        $this->middleware('auth:admin', ['except' => ['index', 'show', 'indexAll', 'indexByTag']]);
     }
     /**
      * Display a listing of the resource.
