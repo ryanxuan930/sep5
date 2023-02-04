@@ -41,7 +41,7 @@ class ParamsController extends Controller
         // get sport module
         $sportData = SportList::where('sport_code', $sportCode)->first();
         // validation
-        $validator = Validator::make($request->all(),GameFunctions::gameParamsValidation($sportData->sport_code));
+        $validator = Validator::make($request->all(),GameFunctions::gameParamsValidation($sportData->module));
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
