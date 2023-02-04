@@ -88,6 +88,7 @@ Route::group([
     Route::apiResource('/game-tag', GameTagController::class);
 
     Route::apiResource('/school-team', SchoolTeamController::class);
+    Route::get('/school-team/code/{orgCode}', [SchoolTeamController::class, 'indexByCode']);
 });
 
 Route::apiResource('/department', DepartmentController::class);
