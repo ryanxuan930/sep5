@@ -67,7 +67,6 @@ class UserController extends Controller
                 } else { // update user table
                     $temp = [
                         'account' => $response['account'],
-                        'monkey_user_id' => $response['monkey_user_id'],
                         'user_identity' => $response['user_identity'],
                         'org_code' => $response['org_code'],
                         'is_student' => $response['user_identity'] == 0 ? 1 : 0,
