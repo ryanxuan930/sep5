@@ -27,15 +27,15 @@ const router = createRouter({
               component: () => import('../views/main/homepage/pages/MainPage.vue'),
             },
             {
-              path: '/:adminOrgId/news',
+              path: 'news/:postId?',
               name: 'mainNewsPage',
               component: () => import('../views/main/homepage/pages/NewsPage.vue'),
             },
             {
-              path: '/:adminOrgId/news/:postId',
-              name: 'mainPostPage',
-              component: () => import('../views/main/homepage/pages/NewsPage.vue'),
-            }
+              path: 'games/:gameId?',
+              name: 'mainGamePage',
+              component: () => import('../views/main/homepage/pages/GamePage.vue'),
+            },
           ]
         },
       ]

@@ -24,3 +24,19 @@ export interface IReturnData {
   message?: string|number;
   from?: string|number;
 }
+
+export interface IPageData {
+  footerContent: string;
+  homepageSlideshow: string[]|string;
+  countdownTime: string;
+  countdownTitle: string;
+  registrationUrl: string;
+  orgUrlTitle: {
+    'zh-TW': string,
+    'en-US': string,
+  };
+  orgUrl: string;
+  firstNavbarBackgroundColor: string;
+  secondNavbarBackgroundColor: string;
+  logoImageUrl: string;
+}

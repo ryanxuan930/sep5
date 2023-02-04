@@ -70,7 +70,12 @@ const { t, locale } = useI18n({
       </template>
     </table>
     <div v-if="props.displayMode == 'home'" class="bg-gray-100 p-3 tezt-center mb-3 text-center">
-      <button class="bg-gray-500 text-white py-2 px-5" @click="$router.push(`${$route.params.adminOrgId}/news`)">更多 More...</button>
+      <button class="bg-gray-500 text-white py-2 px-5" @click="$router.push(`/${$route.params.adminOrgId}/news`)">更多 More...</button>
+    </div>
+    <div v-if="props.displayMode == 'news'" class="page-btn">
+      <template v-for="(item, index) in linkUrl" :key="index">
+        <button :class="{'general-button': true, 'blue': !item.active, 'active': item.active }" :disabled="item.url===null" @click="getBulletinList(item.url)">{{ paginationText(item.label) }}</button>
+      </template>
     </div>
   </div>
 </template>
@@ -96,6 +101,12 @@ const { t, locale } = useI18n({
   button {
     @apply inline-block text-white px-2 py-1 rounded m-1 bg-orange-400 hover:bg-orange-300 duration-200;
   }
+}
+.page-btn {
+  @apply flex my-5 gap-3;
+}
+.general-button.active {
+  @apply bg-blue-400;
 }
 </style>
 

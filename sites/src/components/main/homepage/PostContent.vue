@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import VueRequest from '@/vue-request';
 import BulletinCategory from '@/assets/BulletinCategory.json';
+import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n'
 
-const props = defineProps(['postContent']);
-const data = ref(props.postContent);
+const vr = new VueRequest();
+const data: any = ref(null);
+vr.Get(`${useRoute().params.adminOrgId}/bulletin/${useRoute().params.postId}`, data);
 const { t, locale } = useI18n({
   inheritLocale: true,
   useScope: 'local'
@@ -12,8 +15,8 @@ const { t, locale } = useI18n({
 </script>
 
 <template>
-  <div>
-    <div @click="$router.push('/news')" class="py-5 text-left text-gray-500 hover:text-gray-400 duration-200 cursor-pointer text-xl inline-block">{{ t('back') }}</div>
+  <div v-if="data != null">
+    <div @click="$router.push(`/${$route.params.adminOrgId}/news`)" class="py-5 text-left text-gray-500 hover:text-gray-400 duration-200 cursor-pointer text-xl inline-block">{{ t('back') }}</div>
     <hr class="border-black">
     <div class="py-4">
         <div class="flex">
@@ -28,14 +31,13 @@ const { t, locale } = useI18n({
         </div>
     </div>
     <hr>
-    <div class="py-4 text-left">
-        <template v-if="data.content_ch || data.content_en">
-          <div v-if="locale == 'zh-TW' || (data.multilingual == 0)" v-html="data.content_ch"></div>
-          <div v-else v-html="data.content_en"></div>
-        </template>
-        <span v-else>本公告無內文 No Content</span>
-    </div>
-    <hr>
+    <template v-if="data.content_ch || data.content_en">
+      <div class="py-4 text-left">
+        <div v-if="locale == 'zh-TW' || (data.multilingual == 0)" v-html="data.content_ch"></div>
+        <div v-else v-html="data.content_en"></div>
+      </div>
+      <hr>
+    </template>
     <div class="py-4" v-if="data.links.length>0">
         <div class="mb-3 text-xl">檔案連結</div>
         <template v-for="(item, index) in data.links" :key="index">
@@ -48,11 +50,14 @@ const { t, locale } = useI18n({
 </template>
 
 <style scoped lang="scss">
-    
+.category {
+  @apply text-white px-2 py-1 inline-block text-center;
+}
 </style>
 
 <i18n lang="yaml">
   en-US:
     back: 'Back'
   zh-TW:
-  </i18n>
+    back: '回上一頁'
+</i18n>
