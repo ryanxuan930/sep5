@@ -12,7 +12,7 @@ class SchoolTeamController extends Controller
     // construct
     public function __construct()
     {
-        $this->middleware('auth:admin', ['except' => ['index', 'show']]);
+        $this->middleware('auth:admin', ['except' => ['index', 'show', 'indexByCode']]);
     }
     /**
      * Display a listing of the resource.
@@ -27,6 +27,11 @@ class SchoolTeamController extends Controller
         } else {
             return response()->json($query->where('school_teams.org_id', $org_id)->get());
         }
+    }
+    public function indexByCode($orgCode)
+    {
+        $query = SchoolTeam::leftJoin('organizations', 'organizations.org_id', '=', 'school_teams.org_id')->leftJoin('sport_lists', 'sport_lists.sport_id', '=', 'school_teams.sport_id')->select('school_teams.*', 'organizations.org_id', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'sport_lists.sport_id', 'sport_lists.sport_name_ch', 'sport_lists.sport_name_en', 'sport_lists.sport_code');
+        return response()->json($query->where('organizations.org_code', $orgCode)->get());
     }
 
     /**
