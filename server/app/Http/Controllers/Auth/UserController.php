@@ -86,7 +86,7 @@ class UserController extends Controller
         $findUser = User::where('account', $request->all()['account'])->first();
         if ($token = auth('user')->attempt($validator->validated()) && is_null($findUser->monkey_user_id)){
             $user = User::find(auth('user')->user()->id);
-            $user->updated_at = $loginTime;
+            $user->updated_at = date("Y-m-d H:i:s");
             $user->last_ip = $request->ip();
             $user->save();
             //force to update user model cache 
