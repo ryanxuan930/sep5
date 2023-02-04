@@ -75,6 +75,7 @@ class UserController extends Controller
             'emergency_phone' => 'string|nullable',
             'options' => 'nullable',
             'avatar' => 'nullable',
+            'permission' => 'integer',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -145,6 +146,7 @@ class UserController extends Controller
             'emergency_phone' => 'string|nullable',
             'options' => 'nullable',
             'avatar' => 'nullable',
+            'permission' => 'integer',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
