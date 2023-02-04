@@ -114,7 +114,6 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'account' => 'required|unique:users,account',
-            'name' => 'required',
             'password' => 'required',
             'first_name_ch' => 'string|required',
             'last_name_ch' => 'string|required',
@@ -132,19 +131,21 @@ class UserController extends Controller
             'indigenous_tribe_id' => 'integer',
             'is_sport_gifited' => 'boolean',
             'gifited_sport_id' => 'integer',
-            'is_school_team' => 'school_team_id_list',
+            'is_school_team' => 'boolean',
+            'school_team_id_list' => 'nullable',
             'sex' => 'integer',
             'height' => 'integer',
             'weight' => 'integer',
             'blood_type' => 'string|nullable',
             'cellphone' => 'string|nullable',
             'telephone' => 'string|nullable',
-            'household_city_code' => 'string|size:2',
+            'household_city_code' => 'string|nullable',
             'address' => 'string|nullable',
             'emergency_contact' => 'string|nullable',
             'emergency_phone' => 'string|nullable',
             'options' => 'nullable',
-            'avatar' => 'string|nullable',
+            'avatar' => 'nullable',
+            'permission' => 'integer',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
