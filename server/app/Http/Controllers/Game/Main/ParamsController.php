@@ -41,7 +41,10 @@ class ParamsController extends Controller
         // get sport module
         $sportData = SportList::where('sport_code', $sportCode)->first();
         // validation
-        $validator = Validator::make($request->all(),GameFunctions::gameParamsValidation($sportData->module));
+        $validator = Validator::make($request->all(),[
+            '*.division_id' => 'required|integer',
+            '*.event_code' => 'required',
+        ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
@@ -49,5 +52,17 @@ class ParamsController extends Controller
         DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->truncate();
         DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->insert($temp);
         return response()->json(['status'=>'A01']);
+    }
+    /**
+     * update a series of resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string $sportCode
+     * @param  string $orgId
+     * @return \Illuminate\Http\Response
+     */
+    public function patcher(Request $request, $sportCode, $gameId)
+    {
+
     }
 }
