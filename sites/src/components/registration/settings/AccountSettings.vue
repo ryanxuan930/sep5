@@ -3,7 +3,7 @@
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import SmallModal from '@/components/SmallModal.vue';
-  import SchoolTeamSelector from '@/components/admin/module/SchoolTeamSelector.vue';
+  import SchoolTeamSelector from '@/components/registration/module/SchoolTeamSelector.vue';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
@@ -45,24 +45,22 @@
     avatar: '',
     permission: 0,
   });
-  if (props.inputData !== null) {
-    Object.keys(data).forEach((index: string) => {
-      data[index] = props.inputData[index];
-    });
-    if (data.dept_id === null) {
-      data.dept_id = 0;
-    }
-    if (data.grade === null) {
-      data.grade = 0;
-    }
-    if (data.school_team_id_list === null){
-      data.school_team_id_list = [];
-    }
-    data.height /= 100;
-    data.weight /= 100;
-    if (data.options === null) {
-      data.options = optionsPrototype;
-    }
+  Object.keys(data).forEach((index: string) => {
+    data[index] = props.inputData[index];
+  });
+  if (data.dept_id === null) {
+    data.dept_id = 0;
+  }
+  if (data.grade === null) {
+    data.grade = 0;
+  }
+  if (data.school_team_id_list === null){
+    data.school_team_id_list = [];
+  }
+  data.height /= 100;
+  data.weight /= 100;
+  if (data.options === null) {
+    data.options = optionsPrototype;
   }
 
   const countryList: any = ref(null);
@@ -72,21 +70,13 @@
   const orgList: any = ref([]);
   vr.Get('organization', orgList);
   const deptList: any = ref([]);
-  function getDeptList(orgCode: string) {
-    vr.Get(`department/org/code/${orgCode}`, deptList, true, true);
-  }
-  if (props.inputData !== null) {
-    getDeptList(props.inputData.org_code);
-  }
+  vr.Get(`department/org/code/${store.userInfo.org_code}`, deptList, true, true);
   const sportList: any = ref(null);
   vr.Get('sport', sportList);
   const tribeList: any = ref(null);
   vr.Get('tribe', tribeList);
   const teamList: any = ref(null);
-  (async () => {
-    const userData = await vr.Get('auth/admin/info', null, true, true);
-    vr.Get(`${userData.related_user_org_id}/school-team`, teamList, true, true);
-  })();
+  vr.Get(`${props.inputData.org_id}/school-team`, teamList, true, true);
 
   const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
   const close = () => {
@@ -107,21 +97,12 @@
     const temp = JSON.parse(JSON.stringify(data));
     temp.school_team_id_list = JSON.stringify(temp.school_team_id_list);
     temp.options = JSON.stringify(temp.options);
-    if (props.inputData === null) {
-      vr.Post('user', temp, null, true, true).then( (res: any) => {
-        if (res.status !== 'A01') {
-          alert('無法儲存');
-          return;
-        }
-      });
-    } else {
-      vr.Patch(`user/${props.inputData.u_id}`, temp, null, true, true).then( (res: any) => {
-        if (res.status !== 'A01') {
-          alert('無法儲存');
-          return;
-        }
-      });
-    }
+    vr.Patch(`user/${store.userInfo.u_id}`, temp, null, true, true).then( (res: any) => {
+      if (res.status !== 'A01') {
+        alert('無法儲存');
+        return;
+      }
+    });
     alert('已儲存');
     close();
   }
@@ -380,7 +361,7 @@
         </div>
       </template>
       <template v-slot:content>
-        <SchoolTeamSelector v-if="displayModal" :input-data="data.school_team_id_list" @returnData="(input: number[]) => { data.school_team_id_list = input;}" @closeModal="displayModal = false"></SchoolTeamSelector>
+        <SchoolTeamSelector v-if="displayModal" :input-data="data.school_team_id_list" :org-id="props.inputData.org_id" @returnData="(input: number[]) => { data.school_team_id_list = input;}" @closeModal="displayModal = false"></SchoolTeamSelector>
       </template>
     </SmallModal>
   </div>

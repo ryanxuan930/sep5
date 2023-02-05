@@ -116,6 +116,11 @@ const router = createRouter({
               name: 'registrationMainPage',
               component: () => import('../views/registration/pages/MainPage.vue'),
             },
+            {
+              path: 'settings',
+              name: 'registrationSettingsPage',
+              component: () => import('../views/registration/pages/SettingsPage.vue'),
+            },
           ],
         },
       ]
@@ -124,6 +129,23 @@ const router = createRouter({
       path: '/registration/login',
       name: 'registrationLogin',
       component: () => import('../views/registration/login/LoginView.vue'),
+      children: [
+        {
+          path: '/registration/login',
+          name: 'registrationLoginPage',
+          component: () => import('../views/registration/login/pages/LoginPage.vue'),
+        },
+        {
+          path: 'signup-identity',
+          name: 'registrationIdentityPage',
+          component: () => import('../views/registration/login/pages/IdentityPage.vue'),
+        },
+        {
+          path: 'signup',
+          name: 'registrationSignupPage',
+          component: () => import('../views/registration/login/pages/SignupPage.vue'),
+        },
+      ]
     },
   ],
 });
