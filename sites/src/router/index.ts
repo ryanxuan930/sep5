@@ -102,17 +102,17 @@ const router = createRouter({
       component: () => import('../views/admin/login/LoginView.vue'),
     },
     {
-      path: '/registration',
+      path: '/:adminOrgId/registration',
       name: 'registrationRoot',
       component: RegistrationView,
       children: [
         {
-          path: '/registration',
+          path: '/:adminOrgId/registration',
           name: 'registrationHome',
           component: () => import('../views/registration/ConsoleLayout.vue'),
           children: [
             {
-              path: '/registration',
+              path: '',
               name: 'registrationMainPage',
               component: () => import('../views/registration/pages/MainPage.vue'),
             },
@@ -126,12 +126,12 @@ const router = createRouter({
       ]
     },
     {
-      path: '/registration/login',
+      path: '/:adminOrgId/registration/login',
       name: 'registrationLogin',
       component: () => import('../views/registration/login/LoginView.vue'),
       children: [
         {
-          path: '/registration/login',
+          path: '',
           name: 'registrationLoginPage',
           component: () => import('../views/registration/login/pages/LoginPage.vue'),
         },

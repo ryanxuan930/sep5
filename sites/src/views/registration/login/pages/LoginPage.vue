@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { reactive, ref } from 'vue';
-  import { useRouter } from 'vue-router';
+  import { useRouter, useRoute } from 'vue-router';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import type { Ref } from 'vue';
@@ -9,6 +9,7 @@
   const passwordInput: any = ref(null);
   const status: Ref<string|null> = ref(null);
   const router = useRouter();
+  const route = useRoute();
   const store = useUserStore();
   const vr = new VueRequest();
   const data = reactive({
@@ -39,7 +40,7 @@
           loginType: 'user',
         };
         localStorage.setItem('sep5UserTemp', window.btoa(encodeURI(JSON.stringify(temp))));
-        router.push('/registration');
+        router.push(`/${route.params.adminOrgId}/registration`);
       } else if (res.status !== undefined) {
         status.value = res.status;
       }
@@ -79,7 +80,7 @@
       <button class="round-full-button blue mt-5" @click="submitAll">{{ t('login') }}</button>
       <hr class="my-5">
       <div class="mb-5 text-center">{{ t('no-account') }}</div>
-      <button class="round-full-button blue" @click="$router.push(useMonkeyId ? '/registration/login/signup-identity' : '/registration/login/signup')">{{ t('signup') }}</button>
+      <button class="round-full-button blue" @click="$router.push(useMonkeyId ? `/${$route.params.adminOrgId}/registration/login/signup-identity` : `/${$route.params.adminOrgId}/registration/login/signup`)">{{ t('signup') }}</button>
     </div>
     <div class="flex-grow"></div>
   </div>

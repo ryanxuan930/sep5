@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { reactive, ref } from 'vue';
-  import { useRouter } from 'vue-router';
+  import { useRouter, useRoute } from 'vue-router';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
-  import type { Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
   const router = useRouter();
   const store = useUserStore()
+  const route = useRoute();
   const vr = new VueRequest(store.token);
   function logout() {
     store.reset();
@@ -17,7 +16,7 @@ import { useI18n } from 'vue-i18n';
     } catch (e) {
       console.log(e);
     }
-    router.push('/registration/login');
+    router.push(`/${route.params.adminOrgId}/registration/login`);
   }
   const { t, locale } = useI18n({
     inheritLocale: true,
@@ -26,7 +25,7 @@ import { useI18n } from 'vue-i18n';
 </script>
 
 <template>
-  <router-link class="nav-link" to="/registration/settings">
+  <router-link class="nav-link" :to="`/${route.params.adminOrgId}/registration/settings`">
     <div>{{ t('settings') }}</div>
   </router-link>
   <div class="nav-link" @click="logout">

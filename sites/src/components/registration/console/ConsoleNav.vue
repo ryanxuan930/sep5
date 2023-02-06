@@ -2,13 +2,14 @@
 import { reactive, ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 
 const store = useUserStore();
 
 const navList = reactive([
-  {title: {'zh-TW': '系統首頁', 'en-US': 'Home'}, link: '/registration', permission: 0},
-  {title: {'zh-TW': '分部管理', 'en-US': 'Department'}, permission: 1},
-  {title: {'zh-TW': '組織管理', 'en-US': 'Organization'}, link: '/registration/settings', permission: 2},
+  {title: {'zh-TW': '系統首頁', 'en-US': 'Home'}, link: `/${useRoute().params.adminOrgId}/registration`, permission: 0},
+  {title: {'zh-TW': '分部管理', 'en-US': 'Department'}, link: `/${useRoute().params.adminOrgId}/registration/department`, permission: 1},
+  {title: {'zh-TW': '組織管理', 'en-US': 'Organization'}, link: `/${useRoute().params.adminOrgId}/registration/organization`, permission: 2},
 ]);
 
 const { t, locale } = useI18n({

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { useUserStore } from '@/stores/user';
-  import { useRouter } from 'vue-router';
+  import { useRouter, useRoute } from 'vue-router';
 
   const router = useRouter();
   const store = useUserStore();
@@ -25,7 +25,7 @@
     } catch (e) {
       console.log(e);
     }
-    router.push('/registration/login');
+    router.push(`/${useRoute().params.adminOrgId}/registration/login`);
   }
   function checkLogin() {
     if (store.expired !== '') {

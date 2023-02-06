@@ -3,9 +3,11 @@ import { ref, reactive, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Ref } from 'vue';
 import VueRequest from '@/vue-request';
-import router from '@/router';
+import { useRouter, useRoute } from 'vue-router';
 
 const vr = new VueRequest();
+const router = useRouter();
+const route = useRoute();
 const data = reactive({
   account: '',
   password: '',
@@ -102,7 +104,7 @@ function submitAll() {
     if (res.status == 'A01') {
       alert('已成功註冊');
       isProcessing.value = false;
-      router.push('/registration/login');
+      router.push(`/${route.params.adminOrgId}/registration/login`);
       return;
     }
   });
@@ -114,7 +116,7 @@ function submitAll() {
     <div class="flex-grow p-5"></div>
     <div class="bg-white sm:shadow p-5 w-full h-screen sm:w-2/3 sm:h-fit mx-auto flex flex-col gap-5">
       <div>
-        <router-link to="/registration/login" class="hyperlink blue">{{ t('back') }}</router-link>
+        <router-link :to="`/${$route.params.adminOrgId}/registration/login`" class="hyperlink blue">{{ t('back') }}</router-link>
       </div>
       <hr>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">

@@ -11,7 +11,10 @@ const vr = new VueRequest(store.token);
 const displayModal = ref(false);
 
 const userData: any = ref(null);
-vr.Get('auth/user/info', userData, true, true);
+function getUserData() {
+  vr.Get('auth/user/info', userData, true, true);
+}
+getUserData();
 
 const { t, locale } = useI18n({
   inheritLocale: true,
@@ -24,7 +27,7 @@ const { t, locale } = useI18n({
     <div class="section-box">
       <div class="text-2xl font-medium">{{ t('setting') }}</div>
       <hr class="my-2 border-[1px]">
-      <label class="round-input-label">
+      <label class="round-input-label mb-5">
         <div class="title">{{ t('language') }}</div>
         <select class="select" v-model="$i18n.locale">
           <option value="zh-TW">正體中文</option>
@@ -35,7 +38,7 @@ const { t, locale } = useI18n({
     <div class="section-box">
       <div class="text-2xl font-medium">{{ t('account-setting') }}</div>
       <hr class="my-2 border-[1px]">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-center ">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-center overflow-auto">
         <div class="md:row-span-6 lg:grid-cols-4"></div>
         <div class="break-words">{{ t('account') }} : {{ userData.account }}</div>
         <div>{{ t('athlete-id') }} : {{ userData.athlete_id }}</div>
@@ -72,11 +75,11 @@ const { t, locale } = useI18n({
     <FullModal v-show="displayModal" @closeModal="displayModal = false">
       <template v-slot:title>
         <div class="text-2xl">
-          <div>{{ t('account-settins') }}</div>
+          <div>{{ t('account-setting') }}</div>
         </div>
       </template>
       <template v-slot:content>
-        <AccountSettings :input-data="userData" @closeModal="displayModal = false"></AccountSettings>
+        <AccountSettings :input-data="userData" @refreshPage="getUserData" @closeModal="displayModal = false"></AccountSettings>
       </template>
     </FullModal>
   </div>
@@ -93,46 +96,92 @@ const { t, locale } = useI18n({
     account-setting: 'Account Settings'
     chinese-name: 'Chinese Name'
     english-name: 'Name'
+    edit: 'Edit'
+    avatar: 'Avatar'
+    first-name-ch: 'Chinese First Name'
+    last-name-ch: 'Chinese Last Name'
+    first-name-en: 'First Name'
+    last-name-en: 'Last Name'
+    account: 'Account'
+    athlete-id: 'Athlete ID'
     organization: 'Organization'
     department: 'Department'
     nationality: 'Nationality'
+    unified-id: 'National ID / ARC ID'
+    is-student: 'Student'
+    yes: 'Yes'
+    no: 'No'
+    school-id: 'Student / Faculty ID'
+    grade: 'Grade'
+    birthday: 'Birthday'
+    city: 'City of Domicile (TW Citizen Only)'
+    address: 'Address (Current living place)'
+    cellphone: 'Cellphone'
+    telephone: 'Telephone'
+    emergency-contact: 'Emergency Contact'
+    emergency-phone: 'Contact Phone'
     sex: 'Sex'
-    account: 'Account'
     height: 'Height'
     weight: 'Weight'
-    athlete-id: 'Athlete ID'
-    cellphone: 'Phone Number'
-    avatar: 'Avatar'
     male: 'Male'
     female: 'Female'
     others: 'Others'
+    blood: 'Blood Type'
+    sport-gifited: 'Sport Gifited (TW Student Only)'
+    sport-gifited-item: 'Sports'
+    indigenous: 'Indigenous (TW Citizen Only)'
+    tribe: 'Indigenous Tribe'
     permission: 'Permission'
     l0: 'General'
     l1: 'Departmental'
     l2: 'Organizational'
-    edit: 'Edit'
+    school-team: 'School Team Member'
+    teams: 'Teams'
   zh-TW:
-    setting: '系統設定'
+    setting: '設定'
     language: '語言'
     account-setting: '帳號設定'
     chinese-name: '中文姓名'
-    english-name: '英文姓名'
-    organization: '組織單位'
+    english-name: '姓名英文拼音'
+    edit: '編輯'
+    avatar: '大頭照'
+    first-name-ch: '中文名字'
+    last-name-ch: '中文姓氏'
+    first-name-en: '英文名字'
+    last-name-en: '英文姓氏'
+    account: '帳號'
+    athlete-id: '選手代碼'
+    organization: '所數組織單位'
     department: '分部/系所'
     nationality: '國籍'
+    unified-id: '身分證/居留證號'
+    is-student: '學生身份'
+    yes: '是'
+    no: '否'
+    school-id: '學號/教職員編號'
+    grade: '年級'
+    birthday: '生日'
+    city: '戶籍城市 (限本國籍)'
+    address: '居住地址'
+    cellphone: '手機號碼'
+    telephone: '電話號碼'
+    emergency-contact: '緊急聯絡人'
+    emergency-phone: '聯絡人電話'
     sex: '生理性別'
-    account: '帳號'
     height: '身高'
     weight: '體重'
-    athlete-id: '選手代碼'
-    cellphone: '手機號碼'
-    avatar: '照片'
-    male: '生理男'
-    female: '生理女'
+    male: '男'
+    female: '女'
     others: '其他'
+    blood: '血型'
+    sport-gifited: '體優身份 (限本國學生)'
+    sport-gifited-item: '體優項目'
+    indigenous: '原住民身份 (限本國籍)'
+    tribe: '所數族群部落'
     permission: '權限'
     l0: '一般使用者'
     l1: '分部管理員'
     l2: '組織管理員'
-    edit: '編輯'
+    school-team: '校隊身份'
+    teams: '所數校隊'
 </i18n>

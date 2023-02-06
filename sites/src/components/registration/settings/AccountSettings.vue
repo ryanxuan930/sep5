@@ -4,6 +4,7 @@
   import { useUserStore } from '@/stores/user';
   import SmallModal from '@/components/SmallModal.vue';
   import SchoolTeamSelector from '@/components/registration/module/SchoolTeamSelector.vue';
+import { useI18n } from 'vue-i18n';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
@@ -70,6 +71,9 @@
   const orgList: any = ref([]);
   vr.Get('organization', orgList);
   const deptList: any = ref([]);
+  function getDeptList(orgCode: string) {
+    vr.Get(`department/org/code/${orgCode}`, deptList, true, true);
+  }
   vr.Get(`department/org/code/${store.userInfo.org_code}`, deptList, true, true);
   const sportList: any = ref(null);
   vr.Get('sport', sportList);
@@ -83,7 +87,7 @@
     emit('refreshPage');
     emit('closeModal');
   }
-  function submitAll() {
+  async function submitAll() {
     if (data.last_name_ch.length === 0) {
       alert('請輸入中文姓氏');
       return;
@@ -92,127 +96,166 @@
       alert('請輸入中文名字');
       return;
     }
-    data.height *= 100;
-    data.weight *= 100;
     const temp = JSON.parse(JSON.stringify(data));
     temp.school_team_id_list = JSON.stringify(temp.school_team_id_list);
     temp.options = JSON.stringify(temp.options);
-    vr.Patch(`user/${store.userInfo.u_id}`, temp, null, true, true).then( (res: any) => {
+    temp.height *= 100;
+    temp.weight *= 100;
+    await vr.Patch(`user/${store.userInfo.u_id}`, temp, null, true, true).then( (res: any) => {
       if (res.status !== 'A01') {
-        alert('無法儲存');
+        alert('無法儲存 Error');
         return;
       }
     });
-    alert('已儲存');
+    const info = await vr.Get('auth/user/info/pure', null, true, true);
+    store.userInfo = info;
+    alert('已儲存 Done');
     close();
   }
+  const { t, locale } = useI18n({
+    inheritLocale: true,
+    useScope: 'local'
+  });
 </script>
 
 <template>
   <div class="h-full overflow-auto grid grid-cols-1 md:grid-cols-4 gap-3 shadow-inner p-2">
     <div class="round-input-label flex flex-col md:row-span-4">
-      <div class="title">大頭照</div>
+      <div class="title">{{ t('avatar') }}</div>
       <div v-if="data.avatar == null" class="p-5 text-center text-gray-300">目前無照片</div>
     </div>
     <label class="round-input-label md:col-span-3">
-      <div class="title">中文姓氏*</div>
+      <div class="title">{{ t('last-name-ch') }}*</div>
       <input class="input" type="text" v-model="data.last_name_ch">
     </label>
     <label class="round-input-label md:col-span-3">
-      <div class="title">中文名字*</div>
+      <div class="title">{{ t('first-name-ch') }}*</div>
       <input class="input" type="text" v-model="data.first_name_ch">
     </label>
     <label class="round-input-label md:col-span-3">
-      <div class="title">英文姓氏拼音</div>
+      <div class="title">{{ t('last-name-en') }}</div>
       <input class="input" type="text" v-model="data.last_name_en">
     </label>
     <label class="round-input-label md:col-span-3">
-      <div class="title">英文名字拼音</div>
+      <div class="title">{{ t('first-name-en') }}</div>
       <input class="input" type="text" v-model="data.first_name_en">
     </label>
-    <label v-if="props.inputData==null" class="round-input-label md:col-span-2">
-      <div class="title">帳號*</div>
-      <input class="input" type="text" v-model="data.account">
-    </label>
-    <label v-if="props.inputData==null" class="round-input-label md:col-span-2">
-      <div class="title">密碼*</div>
-      <input class="input" type="password" v-model="data.password">
+    <label class="round-input-label md:col-span-2">
+      <div class="title">{{ t('account') }}</div>
+      <div class="input disabled">{{ data.account }}</div>
     </label>
     <label class="round-input-label">
-      <div class="title">所屬組織*</div>
-      <select class="select" v-model="data.org_code" :disabled="store.userInfo.permission < 3" @change="getDeptList(data.org_code)">
+      <div class="title">{{ t('athlete-id') }}</div>
+      <div class="input disabled">{{ store.userInfo.athlete_id }}</div>
+    </label>
+    <label class="round-input-label">
+      <div class="title">{{ t('permission') }}</div>
+      <select class="select" v-model="data.permission">
+        <option value="0">{{ t('general')}}</option>
+        <option value="1">{{ t('departmental') }}</option>
+        <option value="2">{{ t('organizational') }}</option>
+      </select>
+    </label>
+    <label class="round-input-label md:col-span-2">
+      <div class="title">{{ t('organization') }}</div>
+      <select class="select" v-model="data.org_code" v-if="store.userInfo.permission >= 2" @change="getDeptList(data.org_code)">
         <template v-for="(item, index) in orgList" :key="index">
-          <option :value="item.org_code">{{ item.org_name_full_ch }}</option>
+          <option :value="item.org_code">
+            <template v-if="locale == 'zh-TW'">{{ item.org_name_full_ch }}</template>
+            <template v-else>{{ item.org_name_full_en }}</template>
+          </option>
         </template>
       </select>
+      <div class="input disabled" v-else>
+        <template v-for="(item, index) in orgList" :key="index">
+          <span v-if="item.org_code == data.org_code">
+            <template v-if="locale == 'zh-TW'">{{ item.org_name_full_ch }}</template>
+            <template v-else>{{ item.org_name_full_en }}</template>
+          </span>
+        </template>
+      </div>
     </label>
-    <label class="round-input-label">
-      <div class="title">所屬分部</div>
-      <select class="select" v-model="data.dept_id" :disabled="store.userInfo.permission < 2">
-        <option value="0">未選取</option>
+    <label class="round-input-label md:col-span-2">
+      <div class="title">{{ t('department') }}</div>
+      <select class="select" v-model="data.dept_id" v-if="store.userInfo.permission >= 1">
+        <option value="0">---</option>
         <template v-for="(item, index) in deptList" :key="index">
-          <option :value="item.dept_id">{{ item.dept_name_ch }}</option>
+          <option :value="item.dept_id">
+            <template v-if="locale == 'zh-TW'">{{ item.dept_name_ch }}</template>
+            <template v-else>{{ item.dept_name_en }}</template>
+          </option>
         </template>
       </select>
+      <div class="input disabled">
+        <template v-for="(item, index) in deptList" :key="index">
+          <span v-if="item.dept_id == data.dept_id">
+            <template v-if="locale == 'zh-TW'">{{ item.dept_name_ch }}</template>
+            <template v-else>{{ item.dept_name_en }}</template>
+          </span>
+        </template>
+      </div>
     </label>
     <label class="round-input-label">
-      <div class="title">國籍*</div>
+      <div class="title">{{ t('nationalidy') }}</div>
       <select class="select" v-model="data.nationality">
         <template v-for="(item, index) in countryList" :key="index">
-          <option :value="item.country_code">{{ item.country_name_ch }}</option>
+          <option :value="item.country_code">
+            <template v-if="locale == 'zh-TW'">{{ item.country_name_ch }}</template>
+            <template v-else>{{ item.country_name_en }}</template>
+          </option>
         </template>
       </select>
     </label>
     <label class="round-input-label">
-      <div class="title">身分證/居留證編號</div>
+      <div class="title">{{ t('unified-id') }}</div>
       <input class="input" type="text" placeholder="A123456789" v-model="data.unified_id">
     </label>
     <label class="round-input-label">
-      <div class="title">是否為學生</div>
+      <div class="title">{{ t('is-student') }}</div>
       <select class="select" v-model="data.is_student">
-        <option value="0">否</option>
-        <option value="1">是</option>
+        <option value="0">{{ t('no') }}</option>
+        <option value="1">{{ t('yes') }}</option>
       </select>
     </label>
     <label class="round-input-label">
-      <div class="title">學號/職員編號</div>
+      <div class="title">{{ t('school-id') }}</div>
       <input class="input" type="text" v-model="data.student_id">
     </label>
     <label class="round-input-label">
-      <div class="title">年級</div>
+      <div class="title">{{ t('grade') }}</div>
       <select class="select" v-model="data.grade" :disabled="data.grade == 0">
-        <option value="0">無</option>
-        <option value="1">小一</option>
-        <option value="2">小二</option>
-        <option value="3">小三</option>
-        <option value="4">小四</option>
-        <option value="5">小五</option>
-        <option value="6">小六</option>
-        <option value="7">國一</option>
-        <option value="8">國二</option>
-        <option value="9">國三</option>
-        <option value="10">高一</option>
-        <option value="11">高二</option>
-        <option value="12">高三</option>
-        <option value="21">大一</option>
-        <option value="22">大二</option>
-        <option value="23">大三</option>
-        <option value="24">大四</option>
-        <option value="25">大五</option>
-        <option value="26">大六</option>
-        <option value="27">大七</option>
-        <option value="28">大八</option>
-        <option value="31">碩一</option>
-        <option value="32">碩二</option>
-        <option value="33">碩三</option>
-        <option value="34">碩四</option>
-        <option value="41">博一</option>
-        <option value="42">博二</option>
-        <option value="43">博三</option>
-        <option value="44">博四</option>
-        <option value="45">博五</option>
-        <option value="46">博六</option>
-        <option value="47">博七</option>
+        <option value="0">無 N/A</option>
+        <option value="1">小一 Grade 1</option>
+        <option value="2">小二 Grade 2</option>
+        <option value="3">小三 Grade 3</option>
+        <option value="4">小四 Grade 4 </option>
+        <option value="5">小五 Grade 5</option>
+        <option value="6">小六 Grade 6</option>
+        <option value="7">國一 Grade 7</option>
+        <option value="8">國二 Grade 8</option>
+        <option value="9">國三 Grade 9</option>
+        <option value="10">高一 Grade 10</option>
+        <option value="11">高二 Grade 11</option>
+        <option value="12">高三 Grade 12</option>
+        <option value="21">大一 B.D. 1</option>
+        <option value="22">大二 B.D. 2</option>
+        <option value="23">大三 B.D. 3</option>
+        <option value="24">大四 B.D. 4</option>
+        <option value="25">大五 B.D. 5</option>
+        <option value="26">大六 B.D. 6</option>
+        <option value="27">大七 B.D. 7</option>
+        <option value="28">大八 B.D. 8</option>
+        <option value="31">碩一 M.D. 1</option>
+        <option value="32">碩二 M.D. 2</option>
+        <option value="33">碩三 M.D. 3</option>
+        <option value="34">碩四 M.D. 4</option>
+        <option value="41">博一 Ph.D. 1</option>
+        <option value="42">博二 Ph.D. 2</option>
+        <option value="43">博三 Ph.D. 3</option>
+        <option value="44">博四 Ph.D. 4</option>
+        <option value="45">博五 Ph.D. 5</option>
+        <option value="46">博六 Ph.D. 6</option>
+        <option value="47">博七 Ph.D. 7</option>
         <option value="35">二專一</option>
         <option value="36">二專二</option>
         <option value="37">二技一</option>
@@ -233,131 +276,136 @@
         <option value="75">七技五</option>
         <option value="76">七技六</option>
         <option value="77">七技七</option>
-        <option value="98">延畢</option>
-        <option value="99">畢業</option>
+        <option value="98">延畢 Delay graduation</option>
+        <option value="99">畢業 Graduate</option>
       </select>
     </label>
     <label class="round-input-label">
-      <div class="title">生日</div>
-      <input class="input" type="date" v-model="data.birthday">
-    </label>
-    <label class="round-input-label">
-      <div class="title">戶籍城市</div>
+      <div class="title">{{ t('city') }}</div>
       <select class="select" v-model="data.household_city_code">
-        <option value="null">無</option>
+        <option value="null">---</option>
         <template v-for="(item, index) in cityList" :key="index">
-          <option :value="item.city_code">{{ item.city_name_ch }}</option>
+          <option :value="item.city_code">
+            <template v-if="locale == 'zh-TW'">{{ item.city_name_ch }}</template>
+            <template v-else>{{ item.city_name_en }}</template>
+          </option>
         </template>
       </select>
+      <div class="text-sm mx-4 text-gray-500">{{ t('tw-only') }}</div> 
     </label>
-    <label class="round-input-label md:col-span-3">
-      <div class="title">地址</div>
+    <label class="round-input-label md:col-span-2">
+      <div class="title">{{ t('address') }}</div>
       <input class="input" type="text" v-model="data.address">
     </label>
     <label class="round-input-label basis-3/4">
-      <div class="title">手機</div>
+      <div class="title">{{ t('cellphone') }}</div>
       <input class="input" type="text" placeholder="0987654321" v-model="data.cellphone">
     </label>
     <label class="round-input-label basis-3/4">
-      <div class="title">家用電話(含區碼)</div>
+      <div class="title">{{ t('telephone') }}</div>
       <input class="input" type="text" placeholder="(02) 12345678" v-model="data.telephone">
     </label>
     <label class="round-input-label">
-      <div class="title">緊急聯絡人姓名</div>
+      <div class="title">{{ t('emergency-contact') }}</div>
       <input class="input" type="text" v-model="data.emergency_contact">
     </label>
     <label class="round-input-label">
-      <div class="title">緊急聯絡人電話</div>
+      <div class="title">{{ t('emergency-phone') }}</div>
       <input class="input" type="text" placeholder="0987654321" v-model="data.emergency_phone">
     </label>
     <label class="round-input-label">
-      <div class="title">生理性別</div>
+      <div class="title">{{ t('sex') }}</div>
       <select class="select" v-model="data.sex">
-        <option value="0">其他</option>
-        <option value="1">生理男</option>
-        <option value="2">生理女</option>
+        <option value="0">{{ t('others') }}</option>
+        <option value="1">{{ t('male') }}</option>
+        <option value="2">{{ t('female') }}</option>
       </select>
     </label>
     <label class="round-input-label">
-      <div class="title">身高(h.hh)</div>
+      <div class="title">{{ t('height') }} (hhh.hh) cm</div>
       <input class="input" type="number" v-model.number="data.height">
     </label>
     <label class="round-input-label">
-      <div class="title">體重(w.ww)</div>
+      <div class="title">{{ t('weight') }} (w.ww) kg</div>
       <input class="input" type="number" v-model.number="data.weight">
     </label>
     <label class="round-input-label">
-      <div class="title">血型</div>
-      <input class="input" type="text" v-model="data.blood_type">
+      <div class="title">{{ t('birthday') }}</div>
+      <input class="input" type="date" v-model="data.birthday">
     </label>
     <label class="round-input-label">
-      <div class="title">是否為體育績優生</div>
+      <div class="title">{{ t('sport-gifited') }}</div>
       <select class="select" v-model="data.is_sport_gifited">
-        <option value="0">否</option>
-        <option value="1">是</option>
+        <option value="0">{{ t('no') }}</option>
+        <option value="1">{{ t('yes') }}</option>
       </select>
     </label>
     <label class="round-input-label">
-      <div class="title">績優運動項目</div>
+      <div class="title">{{ t('sport-gifited-item') }}</div>
       <select class="select" v-model="data.gifited_sport_id" :disabled="data.is_sport_gifited == 0">
-        <option value="0">無</option>
+        <option value="0">---</option>
         <template v-for="(item, index) in sportList" :key="index">
-          <option :value="item.sport_id">{{ item.sport_name_ch }}</option>
+          <option :value="item.sport_id">
+            <template v-if="locale == 'zh-TW'">{{ item.sport_name_ch }}</template>
+            <template v-else>{{ item.sport_name_en }}</template>
+          </option>
         </template>
       </select>
     </label>
     <label class="round-input-label">
-      <div class="title">是否為原住民</div>
+      <div class="title">{{ t('indigenous') }}</div>
       <select class="select" v-model="data.is_indigenous">
-        <option value="0">否</option>
-        <option value="1">是</option>
+        <option value="0">{{ t('no') }}</option>
+        <option value="1">{{ t('yes') }}</option>
       </select>
     </label>
     <label class="round-input-label">
-      <div class="title">所屬部族</div>
+      <div class="title">{{ t('tribe') }}</div>
       <select :disabled="data.is_indigenous == 0" class="select" v-model="data.indigenous_tribe_id">
-        <option value="0">無</option>
+        <option value="0">---</option>
         <template v-for="(item, index) in tribeList" :key="index">
-          <option :value="item.tribe_id">{{ item.tribe_name_ch }}</option>
+          <option :value="item.tribe_id">
+            <template v-if="locale == 'zh-TW'">{{ item.tribe_name_ch }}</template>
+            <template v-else>{{ item.tribe_name }}</template>
+          </option>
         </template>
       </select>
     </label>
     <label class="round-input-label">
-      <div class="title">權限</div>
-      <select class="select" v-model="data.permission">
-        <option value="0">一般使用者</option>
-        <option value="1">分部管理員</option>
-        <option value="2">單位管理員</option>
-      </select>
-    </label>
-    <label class="round-input-label">
-      <div class="title">是否為校隊</div>
+      <div class="title">{{ t('school-team') }}</div>
       <select class="select" v-model="data.is_school_team">
-        <option value="0">否</option>
-        <option value="1">是</option>
+        <option value="0">{{ t('no') }}</option>
+        <option value="1">{{ t('yes') }}</option>
       </select>
     </label>
     <div class="md:col-span-2 flex gap-3">
       <div class="round-input-label">
-        <div class="title">所屬校隊</div>
-        <button class="round-full-button blue" @click="displayModal = true" :disabled="data.is_school_team == 0">選擇</button>
+        <div class="title">{{ t('team') }}</div>
+        <button class="round-full-button blue" @click="displayModal = true" :disabled="data.is_school_team == 0">{{ t('select') }}</button>
       </div>
       <div class="round-input-label">
-        <div class="title">校隊列表</div>
+        <div class="title">　</div>
         <div class="team-list">
           <template v-for="(item, index) in teamList" :key="index">
-            <div v-if="data.school_team_id_list.includes(item.school_team_id)">{{ item.team_name_ch }}</div>
+            <div v-if="data.school_team_id_list.includes(item.school_team_id)">
+              <template v-if="locale == 'zh-TW'">{{ item.team_name_ch }}</template>
+              <template v-else>{{ item.team_name_en }}</template>
+            </div>
           </template>
         </div>
       </div>
     </div>
+    <label class="round-input-label">
+      <div class="title">{{ t('blood') }}</div>
+      <input class="input" type="text" v-model="data.blood_type">
+    </label>
     <div class="md:col-span-4">
-      <button class="round-full-button blue" @click="submitAll">儲存</button>
+      <button class="round-full-button blue" @click="submitAll">{{ t('save') }}</button>
     </div>
     <SmallModal v-show="displayModal" @closeModal="displayModal = false">
       <template v-slot:title>
         <div class="text-2xl">
-          <div>校隊列表</div>
+          <div>{{ t('team') }}</div>
         </div>
       </template>
       <template v-slot:content>
@@ -371,7 +419,114 @@
 .team-list {
   @apply flex gap-3;
   div {
-    @apply border-2 rounded p-1;
+    @apply border-2 rounded-full py-1 px-3;
   }
 }
+.input.disabled {
+  @apply text-gray-600 bg-gray-100;
+}
 </style>
+<i18n lang="yaml">
+  en-US:
+    setting: 'Settings'
+    language: 'Language'
+    account-setting: 'Account Settings'
+    chinese-name: 'Chinese Name'
+    english-name: 'Name'
+    edit: 'Edit'
+    avatar: 'Avatar'
+    first-name-ch: 'Chinese First Name'
+    last-name-ch: 'Chinese Last Name'
+    first-name-en: 'First Name'
+    last-name-en: 'Last Name'
+    account: 'Account'
+    athlete-id: 'Athlete ID'
+    organization: 'Organization'
+    department: 'Department'
+    nationality: 'Nationality'
+    unified-id: 'National ID / ARC ID'
+    is-student: 'Student'
+    yes: 'Yes'
+    no: 'No'
+    school-id: 'Student / Faculty ID'
+    grade: 'Grade'
+    birthday: 'Birthday'
+    city: 'City of Domicile'
+    address: 'Address (Current living place)'
+    cellphone: 'Cellphone'
+    telephone: 'Telephone'
+    emergency-contact: 'Emergency Contact'
+    emergency-phone: 'Contact Phone'
+    sex: 'Sex'
+    height: 'Height'
+    weight: 'Weight'
+    male: 'Male'
+    female: 'Female'
+    others: 'Others'
+    blood: 'Blood Type'
+    sport-gifited: 'Sport Gifited'
+    sport-gifited-item: 'Sports'
+    indigenous: 'Indigenous'
+    tribe: 'Indigenous Tribe'
+    permission: 'Permission'
+    l0: 'General'
+    l1: 'Departmental'
+    l2: 'Organizational'
+    school-team: 'School Team Member'
+    team: 'Teams'
+    tw-only: Taiwan Citizens Only
+    tw-student-only: Taiwan Students Only
+    save: 'Save'
+    select: 'Select'
+  zh-TW:
+    setting: '設定'
+    language: '語言'
+    account-setting: '帳號設定'
+    chinese-name: '中文姓名'
+    english-name: '姓名英文拼音'
+    edit: '編輯'
+    avatar: '大頭照'
+    first-name-ch: '中文名字'
+    last-name-ch: '中文姓氏'
+    first-name-en: '英文名字'
+    last-name-en: '英文姓氏'
+    account: '帳號'
+    athlete-id: '選手代碼'
+    organization: '所屬組織單位'
+    department: '所屬分部/系所'
+    nationality: '國籍'
+    unified-id: '身分證/居留證號'
+    is-student: '學生身份'
+    yes: '是'
+    no: '否'
+    school-id: '學號/教職員編號'
+    grade: '年級'
+    birthday: '生日'
+    city: '戶籍所在城市'
+    address: '居住地址'
+    cellphone: '手機號碼'
+    telephone: '電話號碼'
+    emergency-contact: '緊急聯絡人'
+    emergency-phone: '聯絡人電話'
+    sex: '生理性別'
+    height: '身高'
+    weight: '體重'
+    male: '男'
+    female: '女'
+    others: '其他'
+    blood: '血型'
+    sport-gifited: '體育績優身份'
+    sport-gifited-item: '體育績優項目'
+    indigenous: '原住民身份'
+    tribe: '所屬族群部落'
+    permission: '權限'
+    l0: '一般使用者'
+    l1: '分部管理員'
+    l2: '組織管理員'
+    school-team: '校隊身份'
+    team: '所屬校隊'
+    tw-only: 限本國籍
+    tw-student-only: 限本國學生
+    save: '儲存'
+    select: '選擇'
+</i18n>

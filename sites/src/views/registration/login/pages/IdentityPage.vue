@@ -11,7 +11,7 @@ const { t, locale } = useI18n({
     <div class="flex-grow"></div>
     <div class="bg-white sm:shadow p-5 w-full h-screen sm:w-2/3 md:w-96 sm:h-fit mx-auto flex flex-col gap-5">
       <div>
-        <router-link to="/registration/login" class="hyperlink blue">{{ t('back') }}</router-link>
+        <router-link :to="`/${$route.params.adminOrgId}/registration/login`" class="hyperlink blue">{{ t('back') }}</router-link>
       </div>
       <hr>
       <div>
@@ -25,7 +25,7 @@ const { t, locale } = useI18n({
       <div>
         <div class="text-center text-2xl font-medium mb-2">{{ t('line3') }}</div>
         <div class="mb-3 text-xl text-center">{{ t('line4') }}</div>
-        <button class="round-full-button blue" @click="$router.push('/registration/login/signup')">{{ t('signup') }}</button>
+        <button class="round-full-button blue" @click="$router.push(`/${$route.params.adminOrgId}/registration/login/signup`)">{{ t('signup') }}</button>
       </div>
     </div>
     <div class="flex-grow"></div>

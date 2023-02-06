@@ -261,7 +261,7 @@
       <input class="input" type="date" v-model="data.birthday">
     </label>
     <label class="round-input-label">
-      <div class="title">戶籍城市</div>
+      <div class="title">戶籍所在城市</div>
       <select class="select" v-model="data.household_city_code">
         <option value="null">無</option>
         <template v-for="(item, index) in cityList" :key="index">
@@ -270,7 +270,7 @@
       </select>
     </label>
     <label class="round-input-label md:col-span-3">
-      <div class="title">地址</div>
+      <div class="title">現居地址</div>
       <input class="input" type="text" v-model="data.address">
     </label>
     <label class="round-input-label basis-3/4">
