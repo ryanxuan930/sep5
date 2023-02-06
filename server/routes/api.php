@@ -25,6 +25,7 @@ use App\Http\Controllers\Game\Main\DivisionController as GameDivisionController;
 use App\Http\Controllers\Game\Main\LaneController as GameLaneController;
 use App\Http\Controllers\Game\Main\ParamsController as GameParamsController;
 use App\Http\Controllers\Game\Main\EventController as GameEventController;
+use App\Http\Controllers\Game\Registration\IndividualController as GameIndividualController;
 
 /*
 |--------------------------------------------------------------------------
@@ -159,6 +160,17 @@ Route::group([
             Route::get('', [$ControllerClass, 'getters']);
             Route::get('/full', [$ControllerClass, 'gettersFull']);
             Route::post('', [$ControllerClass, 'setters']);
+        });
+    });
+    Route::group([
+        'prefix' => 'registration'
+    ], function () {
+        Route::group([
+            'prefix' => 'individual'
+        ], function () {
+            $ControllerClass = GameIndividualController::class;
+            Route::apiResource('', $ControllerClass);
+            Route::patch('partial', [$ControllerClass, 'updatePartial']);
         });
     });
 });

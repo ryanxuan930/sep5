@@ -42,8 +42,6 @@ class ParamsController extends Controller
      */
     public function setters(Request $request, $sportCode, $gameId)
     {
-        // get sport module
-        $sportData = SportList::where('sport_code', $sportCode)->first();
         // validation
         $validator = Validator::make($request->all(),[
             '*.division_id' => 'required|integer',
@@ -67,6 +65,7 @@ class ParamsController extends Controller
      */
     public function patcher(Request $request, $sportCode, $gameId)
     {
-
+        // get sport module
+        $sportData = SportList::where('sport_code', $sportCode)->first();
     }
 }
