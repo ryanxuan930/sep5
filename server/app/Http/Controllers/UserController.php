@@ -40,7 +40,6 @@ class UserController extends Controller
         }
         $query = User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->select('users.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_id', 'departments.dept_name_ch', 'departments.dept_name_en');
         $permission = $user->permission;
-        return response()->json($user);
         if ($permission == 0){
             return response()->json($query->where('u_id', $user->u_id)->get());
         } else if ($permission == 1) {
