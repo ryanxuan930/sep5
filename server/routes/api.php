@@ -56,6 +56,7 @@ Route::group([
     ], function () {
         Route::post('/login', [AuthUserController::class, 'login']);
         Route::get('/info', [AuthUserController::class, 'info']);
+        Route::get('/info/pure', [AuthUserController::class, 'pureInfo']);
         Route::patch('/edit/{u_id}', [AuthUserController::class, 'edit']); // invalid
         Route::post('/logout', [AuthUserController::class, 'logout']);
         Route::post('/register', [AuthUserController::class, 'register']);
