@@ -105,6 +105,8 @@ Route::apiResource('/sport', SportController::class);
 Route::apiResource('/organization', OrganizationController::class);
 
 Route::apiResource('/user', UserController::class);
+Route::get('/user/by-user', [UserController::class, 'indexByUser']);
+Route::get('/user/athlete/{id}', [UserController::class, 'showByAthleteId']);
 
 Route::apiResource('/country', CountryController::class);
 
