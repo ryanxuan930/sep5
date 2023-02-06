@@ -43,9 +43,9 @@ class UserController extends Controller
         if ($permission == 0){
             return response()->json($query->where('u_id', $user->u_id)->get());
         } else if ($permission == 1) {
-            return response()->json($query->where('dept_id', $user->dept_id)->get());
+            return response()->json($query->where('users.dept_id', $user->dept_id)->get());
         } else if ($permission == 2) {
-            return response()->json($query->where('org_code', $user->org_code)->get());
+            return response()->json($query->where('users.org_code', $user->org_code)->get());
         } else {
             return response()->json([]);
         }
