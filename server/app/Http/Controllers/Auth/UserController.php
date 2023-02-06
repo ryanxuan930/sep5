@@ -108,6 +108,12 @@ class UserController extends Controller
         return response()->json($result);
     }
 
+    // pure info
+    public function pureInfo()
+    {
+        return response()->json(auth('user')->user());
+    }
+
     // register
     public function register(Request $request)
     {
