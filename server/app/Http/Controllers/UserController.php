@@ -33,6 +33,23 @@ class UserController extends Controller
             }
         }
     }
+    public function indexByUser()
+    {
+        if (is_null($user = auth('user')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $query = User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->select('users.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_id', 'departments.dept_name_ch', 'departments.dept_name_en');
+        $permission = $user->permission;
+        if ($permission == 0){
+            return response()->json($query->where('u_id', $user->u_id)->get());
+        } else if ($permission == 1) {
+            return response()->json($query->where('dept_id', $user->dept_id)->get());
+        } else if ($permission == 2) {
+            return response()->json($query->where('org_code', $user->org_code)->get());
+        } else {
+            return response()->json([]);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -42,6 +59,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        if (is_null($user = auth('user')->user()) && is_null($admin = auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
         $validator = Validator::make($request->all(),[
             'account' => 'required|unique:users,account',
             'password' => 'required',
@@ -100,10 +120,15 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        if (is_null($user = auth('user')->user()) && is_null($admin = auth('admin')->user())) {
+        return response()->json(User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->leftJoin('countries', 'users.nationality', '=', 'countries.country_code')->leftJoin('tribes', 'users.indigenous_tribe_id', '=', 'tribes.tribe_id')->leftJoin('sport_lists', 'users.gifited_sport_id', '=', 'sport_lists.sport_id')->leftJoin('cities', 'users.household_city_code', '=', 'cities.city_code')->select('users.*', 'organizations.*', 'departments.*', 'countries.*', 'tribes.*', 'sport_lists.*', 'cities.*')->where('u_id', $id)->first());
+    }
+    public function showByAthleteId($id)
+    {
+        if (is_null($user = auth('user')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         }
-        return response()->json(User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->leftJoin('countries', 'users.nationality', '=', 'countries.country_code')->leftJoin('tribes', 'users.indigenous_tribe_id', '=', 'tribes.tribe_id')->leftJoin('sport_lists', 'users.gifited_sport_id', '=', 'sport_lists.sport_id')->leftJoin('cities', 'users.household_city_code', '=', 'cities.city_code')->select('users.*', 'organizations.*', 'departments.*', 'countries.*', 'tribes.*', 'sport_lists.*', 'cities.*')->where('u_id', $id)->first());
+        $query = User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->select('users.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_id', 'departments.dept_name_ch', 'departments.dept_name_en');
+        return response()->json($query->where('athlete_id', $id)->first());
     }
 
     /**
