@@ -28,6 +28,10 @@ class ParamsController extends Controller
     {
         return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->get());
     }
+    public function gettersFull($sportCode, $gameId)
+    {
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.dividion_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')->leftJoin('events', 'events.event_code', '-', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->get());
+    }
     /**
      * Set a series of resource in storage.
      *
