@@ -172,7 +172,8 @@ Route::group([
         ], function () {
             $ControllerClass = GameIndividualController::class;
             Route::apiResource('', $ControllerClass);
-            Route::patch('partial', [$ControllerClass, 'updatePartial']);
+            Route::get('/by/user', [$ControllerClass, 'indexByUser']);
+            Route::get('/by/event', [$ControllerClass, 'indexByEvent']);
         });
     });
 });
