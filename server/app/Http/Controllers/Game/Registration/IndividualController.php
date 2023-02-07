@@ -71,7 +71,7 @@ class IndividualController extends Controller
         if (is_null($user = auth('user')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         }
-        $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id');
+        $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code');
         if ($unit == 2) {
             $query->where('users.org_code', $user->org_code)->select(DB::raw('count(*) as total'));
         } else if ($user == 1) {
@@ -79,7 +79,7 @@ class IndividualController extends Controller
         } else {
             $query->where('users.dept_id', $user->dept_id)->select(DB::raw('count(*) as total'));
         }
-        return response()->json($query->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')->get());
+        return response()->json($query->get());
     }
 
     /**
