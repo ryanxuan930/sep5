@@ -79,7 +79,7 @@ class IndividualController extends Controller
         } else {
             $query->where('users.dept_id', $user->dept_id)->select(DB::raw('count(*) as total'));
         }
-        return response()->json($query->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->get());
+        return response()->json($query->get());
     }
 
     /**
