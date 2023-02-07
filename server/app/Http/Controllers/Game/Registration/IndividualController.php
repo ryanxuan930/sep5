@@ -73,13 +73,14 @@ class IndividualController extends Controller
         }
         $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id');
         if ($unit == 2) {
-            $query->where('users.org_code', $user->org_code)->select(DB::raw('count(*) as total'));
+            // $query->where('users.org_code', $user->org_code)->select(DB::raw('count(*) as total'));
+            $query->where('users.org_code', $user->org_code);
         } else if ($user == 1) {
             $query->where('users.dept_id', $user->dept_id)->select(DB::raw('count(*) as total'));
         } else {
             $query->where('users.dept_id', $user->dept_id)->select(DB::raw('count(*) as total'));
         }
-        return response()->json($query->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->get());
+        return response()->json($query->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->count());
     }
 
     /**
