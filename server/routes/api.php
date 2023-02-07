@@ -174,7 +174,7 @@ Route::group([
             Route::apiResource('', $ControllerClass);
             Route::get('/by/user', [$ControllerClass, 'indexByUser']);
             Route::get('/by/event/{divisionId}/{eventCode}', [$ControllerClass, 'indexByEvent']);
-            Route::get('/by/count/{divisionId}/{eventCode}/{unit}', [$ControllerClass, 'indexByCount']);
+            Route::get('/by/count/{unit}', [$ControllerClass, 'indexByCount']);
         });
     });
 });
