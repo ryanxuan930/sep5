@@ -23,7 +23,14 @@ class IndividualController extends Controller
      */
     public function index($sportCode, $gameId)
     {
-        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->get());
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)
+        ->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')
+        ->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')
+        ->leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')
+        ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')
+        ->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')
+        ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*')
+        ->get());
     }
 
     /**
@@ -64,7 +71,15 @@ class IndividualController extends Controller
      */
     public function show($sportCode, $gameId, $id)
     {
-        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('ind_id', $id)->get());
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)
+        ->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')
+        ->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')
+        ->leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')
+        ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')
+        ->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')
+        ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*')
+        ->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.ind_id', $id)
+        ->first());
     }
 
     /**
