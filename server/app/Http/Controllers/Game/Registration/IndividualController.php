@@ -66,7 +66,7 @@ class IndividualController extends Controller
         ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*');
         return response()->json($query->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $divisionId)->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', $eventCode));
     }
-    public function indexByCount($sportCode, $gameId, $divisionId, $eventCode, $unit)
+    public function indexByCount($sportCode, $gameId, $unit)
     {
         if (is_null($user = auth('user')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
