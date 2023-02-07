@@ -167,6 +167,7 @@ Route::group([
     Route::group([
         'prefix' => 'common'
     ], function () {
+        Route::apiResource('individual', GameIndividualController::class);
         Route::group([
             'prefix' => 'individual'
         ], function () {
