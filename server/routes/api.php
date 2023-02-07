@@ -165,7 +165,7 @@ Route::group([
         });
     });
     Route::group([
-        'prefix' => 'registration'
+        'prefix' => 'common'
     ], function () {
         Route::group([
             'prefix' => 'individual'
