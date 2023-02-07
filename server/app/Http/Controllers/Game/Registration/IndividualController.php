@@ -100,6 +100,9 @@ class IndividualController extends Controller
             'division_id' => 'required|integer',
             'event_code' => 'required|size:8',
         ];
+        if ($sportData->module == 'ln' || $sportData->module == 'rd') {
+            $validationArray['ref_result'] = 'required';
+        }
         $validator = Validator::make($request->all(),$validationArray);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -147,6 +150,9 @@ class IndividualController extends Controller
             'division_id' => 'required|integer',
             'event_code' => 'required|size:8',
         ];
+        if ($sportData->module == 'ln' || $sportData->module == 'rd') {
+            $validationArray['ref_result'] = 'required';
+        }
         $validator = Validator::make($request->all(),$validationArray);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
