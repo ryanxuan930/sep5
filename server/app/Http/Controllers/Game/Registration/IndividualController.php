@@ -66,6 +66,21 @@ class IndividualController extends Controller
         ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*');
         return response()->json($query->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $divisionId)->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', $eventCode));
     }
+    public function indexByCount($sportCode, $gameId, $divisionId, $eventCode, $unit)
+    {
+        if (is_null($user = auth('user')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id');
+        if ($unit == 2) {
+            $query->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', DB::raw('count(*) as total'));
+        } else if ($user == 1) {
+            
+        } else {
+
+        }
+        return response()->json($query->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->get());
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -135,9 +150,6 @@ class IndividualController extends Controller
             'division_id' => 'required|integer',
             'event_code' => 'required|size:8',
         ];
-        if ($sportData->module == 'ln' || $sportData->module == 'rd') {
-            $validationArray['ref_result'] = 'required';
-        }
         $validator = Validator::make($request->all(),$validationArray);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
