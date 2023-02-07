@@ -12,10 +12,6 @@ use App\Mods\GameFunctions;
 class IndividualController extends Controller
 {
     private $tableName = 'individuals';
-    public function __construct()
-    {
-        $this->middleware('auth:admin', ['except' => ['index', 'show', 'store', 'updatePartial']]);
-    }
     /**
      * Display a listing of the resource.
      *
@@ -31,6 +27,29 @@ class IndividualController extends Controller
         ->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')
         ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*')
         ->get());
+    }
+    public function indexByUser($sportCode, $gameId)
+    {
+        if (is_null($user = auth('user')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $permission = $user->permission;
+        $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)
+        ->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')
+        ->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')
+        ->leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')
+        ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')
+        ->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')
+        ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*');
+        if ($permission == 0){
+            return response()->json($query->where('users.u_id', $user->u_id)->get());
+        } else if ($permission == 1) {
+            return response()->json($query->where('users.dept_id', $user->dept_id)->get());
+        } else if ($permission == 2) {
+            return response()->json($query->where('users.org_code', $user->org_code)->get());
+        } else {
+            return response()->json([]);
+        }
     }
 
     /**
@@ -91,10 +110,6 @@ class IndividualController extends Controller
      */
     public function update(Request $request, $sportCode, $gameId, $id)
     {
-        
-    }
-    public function updatePartial(Request $request, $sportCode, $gameId, $id)
-    {
         if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         }
@@ -125,6 +140,10 @@ class IndividualController extends Controller
      */
     public function destroy($sportCode, $gameId, $id)
     {
-        //
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('ind_id', $id)->delete();
+        return response()->json(['status'=>'A01']);
     }
 }
