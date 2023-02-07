@@ -72,16 +72,20 @@ class IndividualController extends Controller
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         }
         $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id');
+        $table = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id');
         if ($unit == 2) {
             $query->where('users.org_code', $user->org_code);
+            $table->where('users.org_code', $user->org_code);
         } else if ($user == 1) {
             $query->where('users.dept_id', $user->dept_id);
+            $table->where('users.dept_id', $user->dept_id);
         } else {
-            $query->where('users.dept_id', $user->dept_id);
+            $query->where('users.u_id', $user->u_id);
+            $table->where('users.u_id', $user->u_id);
         }
         $result = array();
         $result['event'] = $query->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', DB::raw('count(*) as total'))->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->get();
-        $result['athlete'] = $query->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id', DB::raw('count(*) as total'))->distinct($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')->get();
+        $result['athlete'] = $table->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id', DB::raw('count(*) as total'))->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')->get();
         return response()->json($result);
     }
 
