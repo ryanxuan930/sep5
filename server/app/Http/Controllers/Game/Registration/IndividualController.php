@@ -109,6 +109,8 @@ class IndividualController extends Controller
         ];
         if ($sportData->module == 'ln' || $sportData->module == 'rd') {
             $validationArray['ref_result'] = 'required';
+        } else {
+            unset($request->all()['ref_result']);
         }
         $validator = Validator::make($request->all(),$validationArray);
         if ($validator->fails()) {
