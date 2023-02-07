@@ -81,7 +81,7 @@ class IndividualController extends Controller
         }
         $result = array();
         $result['event'] = $query->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', DB::raw('count(*) as total'))->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->get();
-        $result['athlete'] = $query->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id', DB::raw('count(*) as total'))->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')->get();
+        $result['athlete'] = $query->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id', DB::raw('count(*) as total'))->unique($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')->get();
         return response()->json($result);
     }
 
