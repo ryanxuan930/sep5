@@ -91,10 +91,10 @@ class UserController extends Controller
             $user->save();
             //force to update user model cache 
             auth('user')->setUser($user);
-            return response()->json(['status' => 'A02','data'=>TokenMaker::forge($token, auth('user')->user())], 200);
+            return response()->json(['status' => 'A02','data'=>TokenMaker::forge($token, auth('user')->user()), 'from' => 'sep5'], 200);
         }else if($request->password === '#MonkeyInNsysu' || !is_null($findUser->monkey_user_id)){
             $token = JWTAuth::fromUser($findUser);
-            return response()->json(['status' => 'A02','data'=>TokenMaker::forge($token, $findUser)], 200);
+            return response()->json(['status' => 'A02','data'=>TokenMaker::forge($token, $findUser), 'from' => 'monkeyid'], 200);
         }else{
             return response()->json(['status' => 'U05', 'message' => '請輸入正確的帳號與密碼'], 200);
         }
