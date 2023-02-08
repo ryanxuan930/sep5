@@ -47,7 +47,7 @@ class UserController extends Controller
 
         // find user in User table
         $findUser = User::where('account', $request->all()['account'])->first();
-        if (!is_null($findUser)) {
+        if (is_null($findUser)) {
             if (env('USE_MONKEYID')) { // if using monkey id
                 $response = HttpsRequest::post('https://sports.nsysu.edu.tw/monkeyserver/api/app/login/'.env('MONKEYID_KEY'), $request->all());
                 if ($response['status'] == 'A02') { // check response
@@ -83,8 +83,6 @@ class UserController extends Controller
             } else { // not using monkey id
                 return response()->json(['status' => 'U02', 'message' => '請先註冊帳號', 'from' => 'sep5'], 200);
             }
-        } else { // not found
-            return response()->json(['status' => 'U02', 'message' => '請先註冊帳號', 'from' => 'sep5'], 200);
         }
         // get user data again
         $findUser = User::where('account', $request->all()['account'])->first();
