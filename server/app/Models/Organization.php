@@ -9,4 +9,7 @@ class Organization extends Model
 {
     use HasFactory;
     protected $primaryKey = "org_id";
+    protected $casts = [
+        'links' => 'array',
+    ];
 }
