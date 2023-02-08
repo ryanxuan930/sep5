@@ -2,7 +2,7 @@
   import { ref } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
-  import type { Ref } from 'vue';
+  import SmallLoader from '@/components/SmallLoader.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
@@ -116,6 +116,7 @@
       <button class="round-full-button red" @click="clearAll">全部清除</button>
     </div>
   </div>
+  <SmallLoader v-show="displayArray == null"></SmallLoader>
 </template>
 
 <style scoped lang="scss">

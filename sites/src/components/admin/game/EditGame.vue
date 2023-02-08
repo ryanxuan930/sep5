@@ -16,6 +16,10 @@
   const props: any = defineProps(['gameData']);
   const displayModal = ref(0);
 
+  const optionsPrototype = {
+    regUnit: 2,
+    bannerUrl: '',
+  }
   const currentTime = new Date();
   const data: any = reactive({
     game_name_ch: '',
@@ -35,10 +39,11 @@
     tags: [],
     sport_code: 'athl',
     archived: 0,
+    options: optionsPrototype,
   });
 
   if (props.gameData !== null) {
-    const columnList = ['game_name_ch', 'game_name_en', 'game_name_jp', 'game_info', 'host_list', 'event_start', 'selected', 'selected_list', 'use_reg', 'reg_url', 'use_manage', 'manage_url', 'use_site', 'site_url', 'tags', 'sport_code', 'archived'];
+    const columnList = ['game_name_ch', 'game_name_en', 'game_name_jp', 'game_info', 'host_list', 'event_start', 'selected', 'selected_list', 'use_reg', 'reg_url', 'use_manage', 'manage_url', 'use_site', 'site_url', 'tags', 'sport_code', 'archived', 'options'];
     columnList.forEach((index: string) => {
       data[index] = props.gameData[index];
     });
@@ -47,6 +52,9 @@
     }
     if (data.selected_list === null) {
       data.selected_list = [];
+    }
+    if (data.options === null) {
+      data.options = optionsPrototype;
     }
   }
 
@@ -173,6 +181,18 @@
         <input :disabled="data.use_site == 1" type="text" placeholder="自有報名系統網址" v-model="data.site_url">
       </div>
     </div>
+    <label class="round-input-label">
+      <div class="title">報名/計分計算單位</div>
+      <select class="select" v-model="data.options.regUnit">
+        <option value="0">以個人計算</option>
+        <option value="1">以分部/系所計算</option>
+        <option value="2">以組織單位計算</option>
+      </select>
+    </label>
+    <label class="round-input-label md:col-span-3">
+      <div class="title">頁面橫幅照片</div>
+      <input class="input" type="text" v-model="data.options.bannerUrl">
+    </label>
     <div class="md:col-span-4">
       <button class="round-full-button blue" @click="submitAll">儲存</button>
     </div>

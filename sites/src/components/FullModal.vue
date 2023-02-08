@@ -8,7 +8,7 @@
 <template>
   <transition name="modal">
   <div class="fixed z-10 left-0 top-0 w-full h-screen bg-black bg-opacity-40 p-5 box-border overflow-hidden">
-    <div class="box-border w-full h-full bg-white relative p-5 sm:p-10 flex flex-col overflow-hidden rounded">
+    <div class="box-border w-full 4xl:w-[2048px] 4xl:m-auto h-full bg-white relative p-5 sm:p-10 flex flex-col overflow-hidden rounded">
       <div class="flex items-center box-border">
         <div class="flex-grow font-medium">
           <slot name="title"></slot>

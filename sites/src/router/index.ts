@@ -123,6 +123,23 @@ const router = createRouter({
             },
           ],
         },
+        {
+          path: 'game/:sportCode/:gameId',
+          name: 'registrationGameHome',
+          component: () => import('../views/registration/GameLayout.vue'),
+          children: [
+            {
+              path: '',
+              name: 'registrationGameMainPage',
+              component: () => import('../views/registration/game/MainPage.vue'),
+            },
+            {
+              path: 'individual',
+              name: 'registrationGameIndividualPage',
+              component: () => import('../views/registration/game/IndividualPage.vue'),
+            },
+          ],
+        },
       ]
     },
     {

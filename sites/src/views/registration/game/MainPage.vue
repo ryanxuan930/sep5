@@ -10,13 +10,8 @@ const store = useUserStore();
 const currentTime = ref(Date.now());
 const route = useRoute();
 const vr = new VueRequest(store.token);
-let adminOrgId: string|string[] = '';
+const adminOrgId = route.params.adminOrgId;
 
-if (route.params.adminOrgId == undefined) {
-
-} else {
-  adminOrgId = route.params.adminOrgId;
-}
 const systemConfig: any = inject('systemConfig');
 
 const linkUrl:any= ref(null);
@@ -51,44 +46,9 @@ setInterval(() => {
 <template>
   <div class="h-full overflow-auto">
     <div class="flex flex-col gap-5 overflow-auto">
-      <div class="section-box text-center flex flex-col gap-2">
-        <div>{{ $d(currentTime, 'long') }}</div>
-        <div class="text-4xl font-medium">{{ t('greeting', { name: locale == 'zh-TW' ? store.userInfo.first_name_ch : store.userInfo.first_name_en }) }}
-        </div>
-      </div>
       <div class="section-box">
         <div class=title>系統訊息</div>
         <div class="rounded border-2 p-3" v-html="systemConfig.reg_content"></div>
-      </div>
-      <div class="section-box flex-grow flex flex-col gap-3">
-        <div class=title>近期賽事</div>
-        <table class="game-table" v-if="dataList != null">
-          <tr>
-            <th>名稱</th>
-            <th>項目</th>
-          </tr>
-          <template v-if="dataList.length > 0">
-            <template v-for="(item, index) in dataList" :key="index">
-              <tr>
-                <td class="hyperlink blue">
-                  <router-link :to="`/${route.params.adminOrgId}/registration/game/${item.sport_code}/${item.game_id}`">
-                    <template v-if="locale == 'zh-TW'">[{{ item.sport_name_ch }}] {{ item.game_name_ch }}</template>
-                    <template v-else>[{{ item.sport_name_en }}] {{ item.game_name_en }}</template>
-                  </router-link>
-                </td>
-                <td>{{ item.event_start }}</td>
-              </tr>
-            </template>
-          </template>
-          <tr v-else>
-            <td colspan="5" class="text-center">目前無賽事</td>
-          </tr>
-        </table>
-        <div class="page-btn">
-          <template v-for="(item, index) in linkUrl" :key="index">
-            <button :class="{'general-button': true, 'blue': !item.active, 'active': item.active }" :disabled="item.url===null" @click="getDataList(item.url)">{{ paginationText(item.label) }}</button>
-          </template>
-        </div>
       </div>
     </div>
   </div>

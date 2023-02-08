@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n';
 import VueRequest from '@/vue-request';
 import FullModal from '@/components/FullModal.vue';
 import AccountSettings from '@/components/registration/settings/AccountSettings.vue';
+import SpinnerLoading from '@/components/SpinnerLoading.vue';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
@@ -23,6 +24,7 @@ const { t, locale } = useI18n({
 </script>
 
 <template>
+  <SpinnerLoading v-show="userData == null"></SpinnerLoading>
   <div class="flex flex-col gap-5 h-full" v-if="userData != null">
     <div class="section-box">
       <div class="text-2xl font-medium">{{ t('setting') }}</div>

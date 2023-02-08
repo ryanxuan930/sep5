@@ -3,8 +3,8 @@
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import SmallModal from '@/components/SmallModal.vue';
+  import SmallLoader from '@/components/SmallLoader.vue';
   import DeptSelector from '@/components/admin/module/DeptSelector.vue';
-  import type { Ref } from 'vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
@@ -67,6 +67,7 @@
         </tr>
       </template>
     </table>
+    <SmallLoader v-show="orgList == null"></SmallLoader>
     <button class="round-full-button blue mt-3" @click="submit">確定</button>
     <SmallModal v-show="displayModal" @closeModal="displayModal = false">
       <template v-slot:title>

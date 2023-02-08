@@ -150,11 +150,16 @@ import { useI18n } from 'vue-i18n';
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('permission') }}</div>
-      <select class="select" v-model="data.permission">
-        <option value="0">{{ t('general')}}</option>
-        <option value="1">{{ t('departmental') }}</option>
-        <option value="2">{{ t('organizational') }}</option>
+      <select class="select" v-model="data.permission" v-if="store.userInfo.permission >= 2">
+        <option value="0">{{ t('l0')}}</option>
+        <option value="1">{{ t('l1') }}</option>
+        <option value="2">{{ t('l2') }}</option>
       </select>
+      <div class="input disabled" v-else>
+        <span v-if="data.permission == 0">{{ t('l0')}}</span>
+        <span v-if="data.permission == 1">{{ t('l1') }}</span>
+        <span v-if="data.permission == 2">{{ t('l2') }}</span>
+      </div>
     </label>
     <label class="round-input-label md:col-span-2">
       <div class="title">{{ t('organization') }}</div>
@@ -196,7 +201,7 @@ import { useI18n } from 'vue-i18n';
       </div>
     </label>
     <label class="round-input-label">
-      <div class="title">{{ t('nationalidy') }}</div>
+      <div class="title">{{ t('nationality') }}</div>
       <select class="select" v-model="data.nationality">
         <template v-for="(item, index) in countryList" :key="index">
           <option :value="item.country_code">
@@ -212,10 +217,7 @@ import { useI18n } from 'vue-i18n';
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('is-student') }}</div>
-      <select class="select" v-model="data.is_student">
-        <option value="0">{{ t('no') }}</option>
-        <option value="1">{{ t('yes') }}</option>
-      </select>
+      <div class="input disabled">{{ data.is_student == 1 ? t('yes') : t('no') }}</div>
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('school-id') }}</div>
@@ -335,22 +337,19 @@ import { useI18n } from 'vue-i18n';
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('sport-gifited') }}</div>
-      <select class="select" v-model="data.is_sport_gifited">
-        <option value="0">{{ t('no') }}</option>
-        <option value="1">{{ t('yes') }}</option>
-      </select>
+      <div class="input disabled">{{ data.is_sport_gifited == 1 ? t('yes') : t('no') }}</div>
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('sport-gifited-item') }}</div>
-      <select class="select" v-model="data.gifited_sport_id" :disabled="data.is_sport_gifited == 0">
-        <option value="0">---</option>
+      <div class="input disabled">
         <template v-for="(item, index) in sportList" :key="index">
-          <option :value="item.sport_id">
+          <span v-if="item.sport_id == data.gifited_sport_id">
             <template v-if="locale == 'zh-TW'">{{ item.sport_name_ch }}</template>
             <template v-else>{{ item.sport_name_en }}</template>
-          </option>
+          </span>
         </template>
-      </select>
+        <span v-if="data.is_sport_gifited == 0">---</span>
+      </div>
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('indigenous') }}</div>
@@ -372,33 +371,24 @@ import { useI18n } from 'vue-i18n';
       </select>
     </label>
     <label class="round-input-label">
-      <div class="title">{{ t('school-team') }}</div>
-      <select class="select" v-model="data.is_school_team">
-        <option value="0">{{ t('no') }}</option>
-        <option value="1">{{ t('yes') }}</option>
-      </select>
-    </label>
-    <div class="md:col-span-2 flex gap-3">
-      <div class="round-input-label">
-        <div class="title">{{ t('team') }}</div>
-        <button class="round-full-button blue" @click="displayModal = true" :disabled="data.is_school_team == 0">{{ t('select') }}</button>
-      </div>
-      <div class="round-input-label">
-        <div class="title">　</div>
-        <div class="team-list">
-          <template v-for="(item, index) in teamList" :key="index">
-            <div v-if="data.school_team_id_list.includes(item.school_team_id)">
-              <template v-if="locale == 'zh-TW'">{{ item.team_name_ch }}</template>
-              <template v-else>{{ item.team_name_en }}</template>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
-    <label class="round-input-label">
       <div class="title">{{ t('blood') }}</div>
       <input class="input" type="text" v-model="data.blood_type">
     </label>
+    <label class="round-input-label">
+      <div class="title">{{ t('school-team') }}</div>
+      <div class="input disabled">{{ data.is_school_team == 1 ? t('yes') : t('no') }}</div>
+    </label>
+    <div class="round-input-label md:col-span-2">
+      <div class="title">{{ t('team') }}</div>
+      <div class="team-list">
+        <template v-for="(item, index) in teamList" :key="index">
+          <div v-if="data.school_team_id_list.includes(item.school_team_id)">
+            <template v-if="locale == 'zh-TW'">{{ item.team_name_ch }}</template>
+            <template v-else>{{ item.team_name_en }}</template>
+          </div>
+        </template>
+      </div>
+    </div>
     <div class="md:col-span-4">
       <button class="round-full-button blue" @click="submitAll">{{ t('save') }}</button>
     </div>
@@ -419,7 +409,7 @@ import { useI18n } from 'vue-i18n';
 .team-list {
   @apply flex gap-3;
   div {
-    @apply border-2 rounded-full py-1 px-3;
+    @apply border-2 rounded-full py-1 px-4;
   }
 }
 .input.disabled {
