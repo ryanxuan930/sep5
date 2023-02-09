@@ -159,11 +159,11 @@ class UserController extends Controller
         $loginTime = date("Y-m-d H:i:s");
         $temp = $request->all();
         for ($i = 0; $i < count($temp); $i++) {
-            $temp['created_at'][$i] = $loginTime;
-            $temp['updated_at'][$i] = $loginTime;
-            $temp['last_ip'][$i] = $request->ip();
-            $temp['password'][$i] = password_hash($temp['password'][$i], PASSWORD_DEFAULT);
-            $temp['athlete_id'][$i] = strtoupper(str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT));
+            $temp[$i]['created_at'] = $loginTime;
+            $temp[$i]['updated_at'] = $loginTime;
+            $temp[$i]['last_ip'] = $request->ip();
+            $temp[$i]['password'] = password_hash($temp[$i]['password'], PASSWORD_DEFAULT);
+            $temp[$i]['athlete_id'] = strtoupper(str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT));
         }
         User::insert($temp);
         return response()->json(['status'=>'A01']);
