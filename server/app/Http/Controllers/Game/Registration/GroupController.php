@@ -11,6 +11,7 @@ use App\Mods\GameFunctions;
 
 class GroupController extends Controller
 {
+    private $tableName = 'groups';
     /**
      * Display a listing of the resource.
      *
