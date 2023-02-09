@@ -79,7 +79,7 @@ class GroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $sportCode, $gameId)
     {
         if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
