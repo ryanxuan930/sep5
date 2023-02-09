@@ -28,7 +28,7 @@ return new class extends Migration
             $table->char('country_code', 2)->default('TW');
             $table->string('zipcode', 6)->nullable();
             $table->char('city_code', 2)->nullable();
-            $table->string('address', 128)->nullable();
+            $table->text('address')->nullable();
             // contact
             $table->string('telephone', 16)->nullable();
             $table->string('telephone_ex', 8)->nullable();
