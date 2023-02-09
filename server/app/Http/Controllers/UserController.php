@@ -112,6 +112,61 @@ class UserController extends Controller
         return response()->json(['status'=>'A01']);
     }
 
+    public function storeByBatch(Request $request)
+    {
+        if (is_null($user = auth('user')->user()) && is_null($admin = auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $validator = Validator::make($request->all(),[
+            '*.account' => 'required|unique:users,account',
+            '*.password' => 'required',
+            '*.first_name_ch' => 'string|required',
+            '*.last_name_ch' => 'string|required',
+            '*.first_name_en' => 'string|nullable',
+            '*.last_name_en' => 'string|nullable',
+            '*.org_code' => 'required|size:5',
+            '*.is_student' => 'boolean',
+            '*.student_id' => 'string|nullable',
+            '*.dept_id' => 'integer',
+            '*.grade' => 'integer',
+            '*.unified_id' => 'nullable',
+            '*.birthday' => 'nullable',
+            '*.nationality' => 'string|size:2',
+            '*.is_indigenous' => 'boolean',
+            '*.indigenous_tribe_id' => 'integer',
+            '*.is_sport_gifited' => 'boolean',
+            '*.gifited_sport_id' => 'integer',
+            '*.is_school_team' => 'boolean',
+            '*.school_team_id_list' => 'nullable',
+            '*.sex' => 'integer',
+            '*.height' => 'integer',
+            '*.weight' => 'integer',
+            '*.blood_type' => 'string|nullable',
+            '*.cellphone' => 'string|nullable',
+            '*.telephone' => 'string|nullable',
+            '*.household_city_code' => 'string|nullable',
+            '*.address' => 'string|nullable',
+            '*.emergency_contact' => 'string|nullable',
+            '*.emergency_phone' => 'string|nullable',
+            '*.options' => 'nullable',
+            '*.avatar' => 'nullable',
+            '*.permission' => 'integer',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status'=>'A01', 'message' => $validator->errors()]);
+        }
+        // constant
+        $loginTime = date("Y-m-d H:i:s");
+        $temp = $request->all();
+        $temp['created_at'] = $loginTime;
+        $temp['updated_at'] = $loginTime;
+        $temp['last_ip'] = $request->ip();
+        $temp['password'] = password_hash($request->all()['password'], PASSWORD_DEFAULT);
+        $temp['athlete_id'] = strtoupper(str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT));
+        User::insert($temp);
+        return response()->json(['status'=>'A01']);
+    }
+
     /**
      * Display the specified resource.
      *
