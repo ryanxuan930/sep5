@@ -120,7 +120,7 @@ class GroupController extends Controller
         if ($sportData->module == 'ln' || $sportData->module == 'rd') {
             $groupInsert['ref_result'] = $temp['ref_result'];
         } 
-        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->insert($temp);
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->insert($groupInsert);
         return response()->json(['status'=>'A01']);
     }
 
