@@ -153,7 +153,7 @@ class UserController extends Controller
             '*.permission' => 'integer',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status'=>'A01', 'message' => $validator->errors()]);
+            return response()->json(['status'=>'E01', 'message' => $validator->errors()]);
         }
         // constant
         $loginTime = date("Y-m-d H:i:s");
