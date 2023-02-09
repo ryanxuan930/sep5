@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id('dept_id');
-            $table->char('related_org_id');
+            $table->bigInteger('related_org_id');
             $table->string('dept_name_ch', 32);
             $table->string('dept_name_en', 128)->nullable();
             $table->integer('sort_order')->default(0);
