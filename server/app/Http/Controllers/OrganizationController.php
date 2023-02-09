@@ -128,6 +128,7 @@ class OrganizationController extends Controller
         $user = User::find(auth('user')->user()->u_id);
         $user->org_code = $temp['org_code'];
         $user->dept_id = $deptData->dept_id;
+        $user->permission = 2;
         $user->save();
         return response()->json(['status'=>'A01']);
     }
