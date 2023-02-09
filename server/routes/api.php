@@ -104,7 +104,7 @@ Route::get('/event/sport/{sportId}', [EventController::class, 'indexBySport']);
 Route::apiResource('/sport', SportController::class);
 
 Route::apiResource('/organization', OrganizationController::class);
-Route::post('/organization-create', [UserController::class, 'create']);
+Route::post('/organization-create', [OrganizationController::class, 'create']);
 
 Route::apiResource('/user', UserController::class);
 Route::get('/user-partial', [UserController::class, 'indexByUser']);
