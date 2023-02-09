@@ -25,8 +25,7 @@ export default class VueRequest {
   private ErrHdl(error: any) {
     if (error.response) {
       if (error.response.data.message === 'Unauthenticated.') {
-        this.router.push('/login');
-        localStorage.removeItem('monkeyIdTemp');
+        //this.router.push('/login');
       }
       // this.LogError(JSON.stringify(error.response));
       // The request was made and the server responded with a status code

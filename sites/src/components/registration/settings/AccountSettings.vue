@@ -126,19 +126,19 @@ import { useI18n } from 'vue-i18n';
     </div>
     <label class="round-input-label md:col-span-3">
       <div class="title">{{ t('last-name-ch') }}*</div>
-      <input class="input" type="text" v-model="data.last_name_ch">
+      <input class="input" type="text" v-model="data.last_name_ch" maxlength="64">
     </label>
     <label class="round-input-label md:col-span-3">
       <div class="title">{{ t('first-name-ch') }}*</div>
-      <input class="input" type="text" v-model="data.first_name_ch">
+      <input class="input" type="text" v-model="data.first_name_ch" maxlength="16">
     </label>
     <label class="round-input-label md:col-span-3">
       <div class="title">{{ t('last-name-en') }}</div>
-      <input class="input" type="text" v-model="data.last_name_en">
+      <input class="input" type="text" v-model="data.last_name_en" maxlength="128">
     </label>
     <label class="round-input-label md:col-span-3">
       <div class="title">{{ t('first-name-en') }}</div>
-      <input class="input" type="text" v-model="data.first_name_en">
+      <input class="input" type="text" v-model="data.first_name_en" maxlength="128">
     </label>
     <label class="round-input-label md:col-span-2">
       <div class="title">{{ t('account') }}</div>
@@ -150,20 +150,20 @@ import { useI18n } from 'vue-i18n';
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('permission') }}</div>
-      <select class="select" v-model="data.permission" v-if="store.userInfo.permission >= 2">
+      <select class="select" v-model="data.permission" v-if="store.userInfo.permission >= 2  && store.userInfo.org_code != 'O0000'">
         <option value="0">{{ t('l0')}}</option>
         <option value="1">{{ t('l1') }}</option>
         <option value="2">{{ t('l2') }}</option>
       </select>
       <div class="input disabled" v-else>
-        <span v-if="data.permission == 0">{{ t('l0')}}</span>
-        <span v-if="data.permission == 1">{{ t('l1') }}</span>
-        <span v-if="data.permission == 2">{{ t('l2') }}</span>
+        <span v-show="data.permission == 0">{{ t('l0')}}</span>
+        <span v-show="data.permission == 1">{{ t('l1') }}</span>
+        <span v-show="data.permission == 2">{{ t('l2') }}</span>
       </div>
     </label>
     <label class="round-input-label md:col-span-2">
       <div class="title">{{ t('organization') }}</div>
-      <select class="select" v-model="data.org_code" v-if="store.userInfo.permission >= 2" @change="getDeptList(data.org_code)">
+      <select class="select" v-model="data.org_code" v-if="store.userInfo.permission >= 2  && store.userInfo.org_code != 'O0000'" @change="getDeptList(data.org_code)">
         <template v-for="(item, index) in orgList" :key="index">
           <option :value="item.org_code">
             <template v-if="locale == 'zh-TW'">{{ item.org_name_full_ch }}</template>
@@ -182,7 +182,7 @@ import { useI18n } from 'vue-i18n';
     </label>
     <label class="round-input-label md:col-span-2">
       <div class="title">{{ t('department') }}</div>
-      <select class="select" v-model="data.dept_id" v-if="store.userInfo.permission >= 1">
+      <select class="select" v-model="data.dept_id" v-if="store.userInfo.permission >= 1 && store.userInfo.org_code != 'O0000'">
         <option value="0">---</option>
         <template v-for="(item, index) in deptList" :key="index">
           <option :value="item.dept_id">
@@ -213,17 +213,17 @@ import { useI18n } from 'vue-i18n';
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('unified-id') }}</div>
-      <input class="input" type="text" placeholder="A123456789" v-model="data.unified_id">
+      <input class="input" type="text" placeholder="A123456789" v-model="data.unified_id" maxlength="10">
     </label>
-    <label class="round-input-label">
+    <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
       <div class="title">{{ t('is-student') }}</div>
       <div class="input disabled">{{ data.is_student == 1 ? t('yes') : t('no') }}</div>
     </label>
-    <label class="round-input-label">
+    <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
       <div class="title">{{ t('school-id') }}</div>
-      <input class="input" type="text" v-model="data.student_id">
+      <input class="input" type="text" v-model="data.student_id" maxlength="16">
     </label>
-    <label class="round-input-label">
+    <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
       <div class="title">{{ t('grade') }}</div>
       <select class="select" v-model="data.grade" :disabled="data.grade == 0">
         <option value="0">無 N/A</option>
@@ -282,6 +282,10 @@ import { useI18n } from 'vue-i18n';
         <option value="99">畢業 Graduate</option>
       </select>
     </label>
+    <label class="round-input-label md:col-span-2">
+      <div class="title">{{ t('address') }}</div>
+      <input class="input" type="text" v-model="data.address" maxlength="128">
+    </label>
     <label class="round-input-label">
       <div class="title">{{ t('city') }}</div>
       <select class="select" v-model="data.household_city_code">
@@ -295,25 +299,21 @@ import { useI18n } from 'vue-i18n';
       </select>
       <div class="text-sm mx-4 text-gray-500">{{ t('tw-only') }}</div> 
     </label>
-    <label class="round-input-label md:col-span-2">
-      <div class="title">{{ t('address') }}</div>
-      <input class="input" type="text" v-model="data.address">
-    </label>
     <label class="round-input-label basis-3/4">
       <div class="title">{{ t('cellphone') }}</div>
-      <input class="input" type="text" placeholder="0987654321" v-model="data.cellphone">
+      <input class="input" type="text" placeholder="0987654321" v-model="data.cellphone" maxlength="16">
     </label>
     <label class="round-input-label basis-3/4">
       <div class="title">{{ t('telephone') }}</div>
-      <input class="input" type="text" placeholder="(02) 12345678" v-model="data.telephone">
+      <input class="input" type="text" placeholder="(02) 12345678" v-model="data.telephone" maxlength="16">
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('emergency-contact') }}</div>
-      <input class="input" type="text" v-model="data.emergency_contact">
+      <input class="input" type="text" v-model="data.emergency_contact" maxlength="64">
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('emergency-phone') }}</div>
-      <input class="input" type="text" placeholder="0987654321" v-model="data.emergency_phone">
+      <input class="input" type="text" placeholder="0987654321" v-model="data.emergency_phone" maxlength="16">
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('sex') }}</div>
@@ -335,11 +335,11 @@ import { useI18n } from 'vue-i18n';
       <div class="title">{{ t('birthday') }}</div>
       <input class="input" type="date" v-model="data.birthday">
     </label>
-    <label class="round-input-label">
+    <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
       <div class="title">{{ t('sport-gifited') }}</div>
       <div class="input disabled">{{ data.is_sport_gifited == 1 ? t('yes') : t('no') }}</div>
     </label>
-    <label class="round-input-label">
+    <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
       <div class="title">{{ t('sport-gifited-item') }}</div>
       <div class="input disabled">
         <template v-for="(item, index) in sportList" :key="index">
@@ -372,13 +372,13 @@ import { useI18n } from 'vue-i18n';
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('blood') }}</div>
-      <input class="input" type="text" v-model="data.blood_type">
+      <input class="input" type="text" v-model="data.blood_type" maxlength="4">
     </label>
-    <label class="round-input-label">
+    <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
       <div class="title">{{ t('school-team') }}</div>
       <div class="input disabled">{{ data.is_school_team == 1 ? t('yes') : t('no') }}</div>
     </label>
-    <div class="round-input-label md:col-span-2">
+    <div class="round-input-label md:col-span-2" v-if="data.org_code.substring(0, 1) !== 'O'">
       <div class="title">{{ t('team') }}</div>
       <div class="team-list">
         <template v-for="(item, index) in teamList" :key="index">

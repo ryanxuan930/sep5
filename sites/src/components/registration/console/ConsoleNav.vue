@@ -19,9 +19,34 @@ const { t, locale } = useI18n({
 </script>
 
 <template>
-  <template v-for="(item, index) in navList" :key="index">
-    <router-link class="nav-link" :to="item.link" v-if="store.userInfo.permission >= item.permission">
-      <div>{{ item.title[locale] }}</div>
-    </router-link>
-  </template>
+  <router-link class="nav-link" :to="`/${useRoute().params.adminOrgId}/registration`">
+    <div>{{ t('home') }}</div>
+  </router-link>
+  <router-link class="nav-link" v-if="store.userInfo.permission > 0 && store.userInfo.org_code != 'O0000'" :to="`/${useRoute().params.adminOrgId}/registration/department`">
+    <div>{{ t('department') }}</div>
+  </router-link>
+  <router-link class="nav-link" v-if="store.userInfo.permission > 1 && store.userInfo.org_code != 'O0000'" :to="`/${useRoute().params.adminOrgId}/registration/organization`">
+    <div>{{ t('organization') }}</div>
+  </router-link>
+  <router-link class="nav-link" v-if="store.userInfo.permission > 0 && store.userInfo.org_code != 'O0000'" :to="`/${useRoute().params.adminOrgId}/registration/athlete`">
+    <div>{{ t('athlete') }}</div>
+  </router-link>
+  <router-link class="nav-link" v-if="store.userInfo.permission == 0 && store.userInfo.org_code == 'O0000'" :to="`/${useRoute().params.adminOrgId}/registration/create`">
+    <div>{{ t('create') }}</div>
+  </router-link>
 </template>
+
+<i18n lang="yaml">
+  en-US:
+    home: 'Home'
+    department: 'Department'
+    organization: 'Organization'
+    athlete: 'Athlete'
+    create: 'New Organization'
+  zh-TW:
+    home: '首頁'
+    department: '系所/分部'
+    organization: '組織單位'
+    athlete: '選手管理'
+    create: '建立單位'
+</i18n>

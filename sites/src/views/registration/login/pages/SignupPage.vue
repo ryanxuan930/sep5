@@ -16,7 +16,7 @@ const data = reactive({
   first_name_en: '',
   last_name_en: '',
   org_code: 'O0000',
-  dept_id: 0,
+  dept_id: 1,
   grade: 0,
   unified_id: '',
   birthday: '2000-01-01',

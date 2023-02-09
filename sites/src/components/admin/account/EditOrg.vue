@@ -181,7 +181,7 @@
       <input class="input" type="text" v-model="data.contact_email">
     </label>
     <div class="round-input-label md:row-span-2">
-      <div class="title">首長照片</div>
+      <div class="title">首長/校長照片</div>
       <div v-if="data.chairman_image == '' || data.chairman_image == null" class="p-5 text-center text-gray-300">目前無照片</div>
     </div>
     <div class="flex flex-col gap-3">
@@ -195,7 +195,7 @@
       </label>
     </div>
     <div class="round-input-label md:row-span-2">
-      <div class="title">主任照片</div>
+      <div class="title">領導/主任照片</div>
       <div v-if="data.leader_image == '' || data.leader_image == null" class="p-5 text-center text-gray-300">目前無照片</div>
     </div>
     <div class="flex flex-col gap-3">

@@ -16,6 +16,7 @@ const regConfig: any = inject('regConfig');
 const divisionList: any = inject('divisionList');
 const userList: any = inject('userList');
 const gameData: any = inject('gameData');
+const teamList: any = ref([]);
 const groupList: any = ref([]);
 const countData: any = ref([]);
 function getGrpList() {
@@ -26,12 +27,12 @@ getGrpList();
 
 
 const data = reactive({
-  u_id: 0,
+  team_list:[],
   event_code: '',
   division_id: 1,
   ref_result: '',
 });
-data.u_id = store.userInfo.u_id;
+const selectedUser = ref(store.userInfo.u_id);
 
 function backToHome(){
   router.push(`/${adminOrgId}/registration/game/${route.params.sportCode}/${route.params.gameId}`);
@@ -41,11 +42,11 @@ function check(params: any) {
   // check data has individual event
   let groupEventCount = 0;
   params.forEach((element: any) => {
-    if (element.multiple == 0) {
+    if (element.multiple == 1) {
       groupEventCount++;
     }
   });
-  if (groupEventCount == 1) {
+  if (groupEventCount == 0) {
     alert('無團體項目 No any group event');
     backToHome();
   }
@@ -129,7 +130,7 @@ const { t, locale } = useI18n({
   <div class="h-full overflow-auto">
     <div class="flex flex-col gap-5 overflow-auto">
       <div class="section-box">
-        <div class=title>{{ t('individual-event') }}</div>
+        <div class="section-title">{{ t('group-event') }}</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <label class="round-input-label">
             <div class="title">{{ t('division') }}</div>
@@ -146,33 +147,39 @@ const { t, locale } = useI18n({
             <div class="title">{{ t('event') }}</div>
             <select class="select" v-model="data.event_code">
               <template v-for="(item, index) in paramList" :key="index">
-                <option :value="item.event_code" v-if="item.division_id == data.division_id && item.multiple == 0">
+                <option :value="item.event_code" v-if="item.division_id == data.division_id && item.multiple == 1">
                   <template v-if="locale == 'zh-TW'">{{ item.event_ch}}</template>
                   <template v-else>{{ item.event_en }}</template>
                 </option>
               </template>
             </select>
           </label>
-          <label :class="{'round-input-label': true, 'md:col-span-2': gameData.module == 'ge'}">
+          <label class="round-input-label md:col-span-2">
             <div class="title">{{ t('name') }}</div>
-            <select class="select" v-model="data.u_id">
-              <template v-for="(item, index) in userList" :key="index">
-                <option :value="item.u_id">
-                  <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }} ({{ item.athlete_id }})</template>
-                  <template v-else>{{ item.first_name_en }} {{ item.last_name_en }} ({{ item.athlete_id }})</template>
-                </option>
-              </template>
-            </select>
+            <div class="flex flex-col gap-2">
+              <select class="select" v-model="data.u_id">
+                <template v-for="(item, index) in userList" :key="index">
+                  <option :value="item.u_id">
+                    <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }} ({{ item.athlete_id }})</template>
+                    <template v-else>{{ item.first_name_en }} {{ item.last_name_en }} ({{ item.athlete_id }})</template>
+                  </option>
+                </template>
+              </select>
+            </div>
+          </label>
+          <label :class="{'round-input-label': true, 'md:col-span-2': gameData.module == 'ge'}">
+            <div class="title">{{ t('team') }}</div>
+            <input class="input" type="text">
           </label>
           <label class="round-input-label" v-if="gameData.module != 'ge'">
             <div class="title">{{ t('ref-result') }}</div>
-            <input class="input" type="text">
+            <input class="input" type="text" v-model="data.ref_result">
           </label>
           <button class="round-full-button blue md:col-span-2" @click="addEvent(data)">{{ t('save') }}</button>
         </div>
       </div>
       <div class="section-box flex-grow">
-        <div class="title pb-3">{{ t('registered') }}</div>
+        <div class="section-title pb-3">{{ t('registered') }}</div>
         <table class="game-table">
           <tr>
             <th>{{ t('division') }}</th>
@@ -181,9 +188,10 @@ const { t, locale } = useI18n({
             <th>{{ t('sex') }}</th>
             <th>{{ t('organization') }}</th>
             <th>{{ t('department') }}</th>
+            <th v-if="gameData.module != 'ge'">{{ t('ref-result') }}</th>
             <th></th>
           </tr>
-          <template v-for="(item, index) in individualList" :key="index">
+          <template v-for="(item, index) in groupList" :key="index">
             <tr>
               <td>
                 <template v-if="locale == 'zh-TW'">{{ item.division_ch }}</template>
@@ -210,6 +218,7 @@ const { t, locale } = useI18n({
                 <template v-if="locale == 'zh-TW'">{{ item.dept_name_ch }}</template>
                 <template v-else>{{ item.dept_name_en }}</template>
               </td>
+              <td v-if="gameData.module != 'ge'">{{ item.ref_result }}</td>
               <td>
                 <button class="general-button red" @click="deleteItem(item.ind_id)">{{ t('delete') }}</button>
               </td>
@@ -222,10 +231,10 @@ const { t, locale } = useI18n({
 </template>
 
 <style scoped lang="scss">
-.title {
+.section-title {
   @apply text-2xl font-medium;
 }
-.title + hr {
+.section-title + hr {
   @apply my-3 border-[1px];
 }
 .game-table {
@@ -264,7 +273,7 @@ table {
     delete: 'Delete'
     organization: 'Organization'
     department: 'Department'
-    team: 'Team'
+    team: 'Team Name'
     sex: 'Sex'
     male: 'M'
     female: 'F'
@@ -281,7 +290,7 @@ table {
     delete: '刪除'
     organization: '組織單位'
     department: '分部/系所'
-    team: '隊伍'
+    team: '隊名'
     sex: '性別'
     male: '男'
     female: '女'

@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
-import { getUrlParams, paginationText } from '@/components/library/functions';
+import { getUrlParams } from '@/components/library/functions';
 
 const store = useUserStore();
 const currentTime = ref(Date.now());

@@ -52,7 +52,7 @@ interface regConfig {
       };
       group: {
         max_event_per_team: number; // 每項目最多幾隊報名
-        max_team_per_event: number; // 每隊最多報名幾項目
+        max_team_per_event?: number; // 每隊最多報名幾項目
       };
     };
     division: {

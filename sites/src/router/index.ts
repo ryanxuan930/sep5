@@ -117,6 +117,26 @@ const router = createRouter({
               component: () => import('../views/registration/pages/MainPage.vue'),
             },
             {
+              path: 'department',
+              name: 'registrationDepartmentPage',
+              component: () => import('../views/registration/pages/DepartmentPage.vue'),
+            },
+            {
+              path: 'organization',
+              name: 'registrationOrganizationPage',
+              component: () => import('../views/registration/pages/OrganizationPage.vue'),
+            },
+            {
+              path: 'create',
+              name: 'registrationCreatePage',
+              component: () => import('../views/registration/pages/CreatePage.vue'),
+            },
+            {
+              path: 'athlete',
+              name: 'registrationAthletePage',
+              component: () => import('../views/registration/pages/AthletePage.vue'),
+            },
+            {
               path: 'settings',
               name: 'registrationSettingsPage',
               component: () => import('../views/registration/pages/SettingsPage.vue'),
@@ -137,6 +157,11 @@ const router = createRouter({
               path: 'individual',
               name: 'registrationGameIndividualPage',
               component: () => import('../views/registration/game/IndividualPage.vue'),
+            },
+            {
+              path: 'group',
+              name: 'registrationGameGroupPage',
+              component: () => import('../views/registration/game/GroupPage.vue'),
             },
           ],
         },

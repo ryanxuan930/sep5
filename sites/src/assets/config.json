@@ -1,4 +1,5 @@
 {
   "logoSource": "",
-  "deptAsClass": false
+  "deptAsClass": false,
+  "deptEdible": true
 }

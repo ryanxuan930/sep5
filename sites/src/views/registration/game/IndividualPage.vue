@@ -129,7 +129,7 @@ const { t, locale } = useI18n({
   <div class="h-full overflow-auto">
     <div class="flex flex-col gap-5 overflow-auto">
       <div class="section-box">
-        <div class=title>{{ t('individual-event') }}</div>
+        <div class="section-title">{{ t('individual-event') }}</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <label class="round-input-label">
             <div class="title">{{ t('division') }}</div>
@@ -166,13 +166,13 @@ const { t, locale } = useI18n({
           </label>
           <label class="round-input-label" v-if="gameData.module != 'ge'">
             <div class="title">{{ t('ref-result') }}</div>
-            <input class="input" type="text">
+            <input class="input" type="text" v-model="data.ref_result">
           </label>
           <button class="round-full-button blue md:col-span-2" @click="addEvent(data)">{{ t('save') }}</button>
         </div>
       </div>
       <div class="section-box flex-grow">
-        <div class="title pb-3">{{ t('registered') }}</div>
+        <div class="section-title pb-3">{{ t('registered') }}</div>
         <table class="game-table">
           <tr>
             <th>{{ t('division') }}</th>
@@ -181,6 +181,7 @@ const { t, locale } = useI18n({
             <th>{{ t('sex') }}</th>
             <th>{{ t('organization') }}</th>
             <th>{{ t('department') }}</th>
+            <th v-if="gameData.module != 'ge'">{{ t('ref-result') }}</th>
             <th></th>
           </tr>
           <template v-for="(item, index) in individualList" :key="index">
@@ -210,6 +211,7 @@ const { t, locale } = useI18n({
                 <template v-if="locale == 'zh-TW'">{{ item.dept_name_ch }}</template>
                 <template v-else>{{ item.dept_name_en }}</template>
               </td>
+              <td v-if="gameData.module != 'ge'">{{ item.ref_result }}</td>
               <td>
                 <button class="general-button red" @click="deleteItem(item.ind_id)">{{ t('delete') }}</button>
               </td>
@@ -222,10 +224,10 @@ const { t, locale } = useI18n({
 </template>
 
 <style scoped lang="scss">
-.title {
+.section-title {
   @apply text-2xl font-medium;
 }
-.title + hr {
+.section-title + hr {
   @apply my-3 border-[1px];
 }
 .game-table {
