@@ -109,7 +109,7 @@ Route::post('/organization-create', [OrganizationController::class, 'create']);
 Route::apiResource('/user', UserController::class);
 Route::get('/user-partial', [UserController::class, 'indexByUser']);
 Route::get('/user/athlete/{id}', [UserController::class, 'showByAthleteId']);
-Route::get('/user-upload', [UserController::class, 'storeByBatch']);
+Route::post('/user-upload', [UserController::class, 'storeByBatch']);
 
 Route::apiResource('/country', CountryController::class);
 
