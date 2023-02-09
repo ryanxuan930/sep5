@@ -7,6 +7,7 @@ use Validator;
 use App\Models\Organization;
 use App\Models\Department;
 use App\Models\OrganizationTemp;
+use App\Models\User;
 
 class OrganizationController extends Controller
 {
