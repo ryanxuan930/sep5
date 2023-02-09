@@ -81,7 +81,47 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        // get sport module
+        $sportData = SportList::where('sport_code', $sportCode)->first();
+        $validationArray = [
+            'division_id' => 'required|integer',
+            'event_code' => 'required|size:8',
+            'member_list' => 'required',
+            'org_id' => 'required|integer',
+            'dept_id' => 'required|integer',
+            'team_name' => 'nullable',
+        ];
+        if ($sportData->module == 'ln' || $sportData->module == 'rd') {
+            $validationArray['ref_result'] = 'required';
+        } else {
+            unset($request->all()['ref_result']);
+        }
+        $validator = Validator::make($request->all(),$validationArray);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $temp = $request->all();
+        $teamInsert = [
+            'org_id' => $temp['org_id'],
+            'dept_id' => $temp['dept_id'],
+            'team_name' => $temp['team_name'],
+            'member_list' => $temp['member_list'],
+        ];
+        DB::table($sportCode.'_'.$gameId.'_teams')->insert($teamInsert);
+        $teamData = DB::table($sportCode.'_'.$gameId.'_teams')->where('team_id', DB::raw('(select max(`team_id`) from '.$sportCode.'_'.$gameId.'_teams)'))->first();
+        $groupInsert = [
+            'team_id' => $teamData->team_id,
+            'division_id' => $temp['division_id'],
+            'event_code' => $temp['event_code'],
+        ];
+        if ($sportData->module == 'ln' || $sportData->module == 'rd') {
+            $groupInsert['ref_result'] = $temp['ref_result'];
+        } 
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->insert($temp);
+        return response()->json(['status'=>'A01']);
     }
 
     /**
