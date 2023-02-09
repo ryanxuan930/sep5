@@ -76,7 +76,7 @@ class IndividualController extends Controller
         if ($unit == 2) {
             $query->where('users.org_code', $user->org_code);
             $table->where('users.org_code', $user->org_code);
-        } else if ($user == 1) {
+        } else if ($unit == 1) {
             $query->where('users.dept_id', $user->dept_id);
             $table->where('users.dept_id', $user->dept_id);
         } else {
