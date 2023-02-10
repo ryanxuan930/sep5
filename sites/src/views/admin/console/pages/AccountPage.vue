@@ -6,6 +6,7 @@
   import UserTable from '@/components/admin/account/UserTable.vue';
   import OrgTable from '@/components/admin/account/OrgTable.vue';
   import DeptTable from '@/components/admin/account/DeptTable.vue';
+  import AdminUserTable from '@/components/admin/account/AdminUserTable.vue';
   import AdminOrgTable from '@/components/admin/account/AdminOrgTable.vue';
   import AdminDeptTable from '@/components/admin/account/AdminDeptTable.vue';
   import TeamTable from '@/components/admin/account/TeamTable.vue';
@@ -35,6 +36,7 @@
       <UserTable v-if="currentPage == 0"></UserTable>
       <OrgTable v-if="currentPage == 1"></OrgTable>
       <DeptTable v-if="currentPage == 2"></DeptTable>
+      <AdminUserTable v-if="currentPage == 3"></AdminUserTable>
       <AdminOrgTable v-if="currentPage == 4"></AdminOrgTable>
       <AdminDeptTable v-if="currentPage == 5"></AdminDeptTable>
       <TeamTable v-if="currentPage == 6"></TeamTable>
