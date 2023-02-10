@@ -20,7 +20,7 @@ use App\Http\Controllers\TribeController;
 use App\Http\Controllers\SchoolTeamController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Game\Main\DateController as GameDateController;
 use App\Http\Controllers\Game\Main\DivisionController as GameDivisionController;
 use App\Http\Controllers\Game\Main\LaneController as GameLaneController;
