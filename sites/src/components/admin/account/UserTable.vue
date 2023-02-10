@@ -20,7 +20,7 @@
   async function getDataList(url = 'user') {
     const page = getUrlParams(url, 'page');
     if (page !== null) {
-      url = `/user?page=${page}`;
+      url = `user?page=${page}`;
     }
     const temp = await vr.Get(url, null, true, true);
     currentUrl.value = url;
