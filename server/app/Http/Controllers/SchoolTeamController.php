@@ -51,6 +51,7 @@ class SchoolTeamController extends Controller
             'team_name_en' => 'required',
             'sport_id' => 'required',
             'org_id' => 'required',
+            'team_info' => 'nullable',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -94,6 +95,7 @@ class SchoolTeamController extends Controller
             'team_name_en' => 'required',
             'sport_id' => 'required',
             'org_id' => 'required',
+            'team_info' => 'nullable',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
