@@ -130,9 +130,17 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($sportCode, $gameId, $id)
     {
-        //
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)
+        ->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')
+        ->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.team_id')
+        ->leftJoin('organizations', $sportCode.'_'.$gameId.'_teams.org_id', '=', 'organizations.org_id')
+        ->leftJoin('departments', $sportCode.'_'.$gameId.'_teams.dept_id', '=', 'departments.dept_id')
+        ->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')
+        ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_teams.*', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*')
+        ->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.grp_id', $id)
+        ->get());
     }
 
     /**
@@ -142,9 +150,49 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $sportCode, $gameId, $id)
     {
-        //
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        // get sport module
+        $sportData = SportList::where('sport_code', $sportCode)->first();
+        // get original data
+        $oldData = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->first();
+        $validationArray = [
+            'division_id' => 'required|integer',
+            'event_code' => 'required|size:8',
+            'member_list' => 'required',
+            'org_id' => 'required|integer',
+            'dept_id' => 'required|integer',
+            'team_name' => 'nullable',
+        ];
+        if ($sportData->module == 'ln' || $sportData->module == 'rd') {
+            $validationArray['ref_result'] = 'required';
+        } else {
+            unset($request->all()['ref_result']);
+        }
+        $validator = Validator::make($request->all(),$validationArray);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $temp = $request->all();
+        $teamUpdate = [
+            'org_id' => $temp['org_id'],
+            'dept_id' => $temp['dept_id'],
+            'team_name' => $temp['team_name'],
+            'member_list' => $temp['member_list'],
+        ];
+        DB::table($sportCode.'_'.$gameId.'_teams')->where('team_id', $oldData->team_id)->update($teamUpdate);
+        $groupUpdate = [
+            'division_id' => $temp['division_id'],
+            'event_code' => $temp['event_code'],
+        ];
+        if ($sportData->module == 'ln' || $sportData->module == 'rd') {
+            $groupInsert['ref_result'] = $temp['ref_result'];
+        } 
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->update($groupUpdate);
+        return response()->json(['status'=>'A01']);
     }
 
     /**
@@ -155,6 +203,12 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $oldData = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->first();
+        DB::table($sportCode.'_'.$gameId.'_teams')->where('team_id', $oldData->team_id)->delete();
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->delete();
+        return response()->json(['status'=>'A01']);
     }
 }
