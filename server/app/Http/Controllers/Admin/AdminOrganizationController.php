@@ -25,6 +25,10 @@ class AdminOrganizationController extends Controller
     {
         return response()->json(AO::leftJoin('organizations', 'organizations.org_id', '=', 'admin_organizations.related_user_org_id')->select('admin_organizations.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en')->get());
     }
+    public function indexByOrg($admin_org_id)
+    {
+        return response()->json(AO::leftJoin('organizations', 'organizations.org_id', '=', 'admin_organizations.related_user_org_id')->select('admin_organizations.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en')->where('admin_organizations.admin_org_id', $admin_org_id)->get());
+    }
 
     /**
      * Store a newly created resource in storage.
