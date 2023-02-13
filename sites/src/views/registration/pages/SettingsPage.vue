@@ -5,11 +5,11 @@ import { useI18n } from 'vue-i18n';
 import VueRequest from '@/vue-request';
 import FullModal from '@/components/FullModal.vue';
 import AccountSettings from '@/components/registration/settings/AccountSettings.vue';
-import SpinnerLoading from '@/components/SpinnerLoading.vue';
+import { openWindow } from '@/components/library/functions';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
-const displayModal = ref(false);
+const displayModal = ref(0);
 
 const userData: any = ref(null);
 function getUserData() {
@@ -24,9 +24,8 @@ const { t, locale } = useI18n({
 </script>
 
 <template>
-  <SpinnerLoading v-show="userData == null"></SpinnerLoading>
-  <div class="flex flex-col gap-5 h-full" v-if="userData != null">
-    <div class="section-box">
+  <div class="flex flex-col gap-5 h-full overflow-auto" v-if="userData != null">
+    <div class="section-box flex-shrink-0">
       <div class="text-2xl font-medium">{{ t('setting') }}</div>
       <hr class="my-2 border-[1px]">
       <label class="round-input-label mb-5">
@@ -37,10 +36,11 @@ const { t, locale } = useI18n({
         </select>
       </label>
     </div>
-    <div class="section-box">
+    <div class="section-box flex flex-col">
       <div class="text-2xl font-medium">{{ t('account-setting') }}</div>
       <hr class="my-2 border-[1px]">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-center overflow-auto">
+      <!--
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-center overflow-auto shadow-inner">
         <div class="md:row-span-6 lg:grid-cols-4"></div>
         <div class="break-words">{{ t('account') }} : {{ userData.account }}</div>
         <div>{{ t('athlete-id') }} : {{ userData.athlete_id }}</div>
@@ -71,17 +71,26 @@ const { t, locale } = useI18n({
         </div>
         <div>{{ t('height') }} : {{ userData.height/100 }} cm</div>
         <div>{{ t('weight') }} : {{ userData.weight/100 }} kg</div>
+      </div>-->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+        <button class="round-full-button blue mt-5" @click="displayModal = 1">{{ t('view') }}</button>
+        <template v-if="userData.monkey_user_id != undefined">
+          <button class="round-full-button blue mt-5" v-if="userData.monkey_user_id == null" @click="displayModal = 2">{{ t('reset-password') }}</button>
+          <button class="round-full-button blue mt-5" v-if="userData.monkey_user_id != null" @click="openWindow('https://sports.nsysu.edu.tw/monkeyid/#/login')">Monkey ID</button>
+        </template>
+        <button class="round-full-button blue mt-5" v-else @click="displayModal = 2">{{ t('reset-password') }}</button>
+        <button class="round-full-button blue mt-5" @click="displayModal = 3">{{ t('change-unit') }}</button>
       </div>
-      <button class="round-full-button blue mt-5" @click="displayModal = true">{{ t('edit') }}</button>
     </div>
-    <FullModal v-show="displayModal" @closeModal="displayModal = false">
+    <FullModal v-show="displayModal" @closeModal="displayModal = 0">
       <template v-slot:title>
         <div class="text-2xl">
-          <div>{{ t('account-setting') }}</div>
+          <div v-if="displayModal == 1">{{ t('account-setting') }}</div>
+          <div v-if="displayModal == 2">{{ t('reset-password') }}</div>
         </div>
       </template>
       <template v-slot:content>
-        <AccountSettings :input-data="userData" @refreshPage="getUserData" @closeModal="displayModal = false"></AccountSettings>
+        <AccountSettings v-if="displayModal == 1" :input-data="userData" @refreshPage="getUserData" @closeModal="displayModal = 0"></AccountSettings>
       </template>
     </FullModal>
   </div>
@@ -139,6 +148,9 @@ const { t, locale } = useI18n({
     l2: 'Organizational'
     school-team: 'School Team Member'
     teams: 'Teams'
+    view: 'View'
+    reset-password: 'Reset Password'
+    change-unit: 'Change Unit'
   zh-TW:
     setting: '設定'
     language: '語言'
@@ -186,4 +198,7 @@ const { t, locale } = useI18n({
     l2: '組織管理員'
     school-team: '校隊身份'
     teams: '所數校隊'
+    view: '查看'
+    reset-password: '重設密碼'
+    change-unit: '變更所屬單位'
 </i18n>

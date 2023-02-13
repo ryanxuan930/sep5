@@ -6,6 +6,7 @@ import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
 import SmallLoader from '@/components/SmallLoader.vue';
 import { csvToArray, openWindow } from '@/components/library/functions';
+import router from '@/router';
 
 const store = useUserStore();
 const route = useRoute();
@@ -32,12 +33,47 @@ function uploadFile(event: any) {
   fileName.value = event.target.files[0].name;
   const reader = new FileReader();
   reader.onload = function (e: any) {
-    uploadData.value = csvToArray(e.target.result);
+    uploadData.value = JSON.parse(JSON.stringify(csvToArray(e.target.result)));
+    console.log(uploadData.value);
     isLoading.value = false;
     return;
   };
   reader.readAsText(event.target.files[0]);
 }
+const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
+const close = () => {
+  emit('refreshPage');
+  emit('closeModal');
+}
+
+async function submitAll() {
+  for(let i = 0; i < uploadData.value.length; i++) {
+    uploadData.value[i].org_code = store.userInfo.org_code;
+    if (store.userInfo.permission == 1, store.userInfo.org_code.substring(0, 1) == 'O') {
+      uploadData.value[i].dept_id = store.userInfo.dept_id;
+    }
+    if (!isNaN(uploadData.value[i].height)) {
+      uploadData.value[i].height *= 100;
+    } else {
+      uploadData.value[i].height = 0;
+    }
+    if (!isNaN(uploadData.value[i].weight)) {
+      uploadData.value[i].weight*=100;
+    } else {
+      uploadData.value[i].weight = 0;
+    }
+  }
+  isLoading.value = true;
+  const res: any = await vr.Post('user-upload', uploadData.value, null, true, true);
+  isLoading.value = false;
+  if (res.status == 'A01') {
+    alert('上傳完畢');
+    close();
+  } else {
+    alert('上傳失敗，資料格式錯誤');
+  }
+}
+
 const { t, locale } = useI18n({
   inheritLocale: true,
   useScope: 'local'
@@ -45,7 +81,7 @@ const { t, locale } = useI18n({
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 py-2">
+  <div class="flex flex-col gap-5 py-2 h-full">
     <div>若需批次上傳單位內使用者，請下載csv範例檔填寫後上傳</div>
     <div class="grid grid-cols-1 md:grid-cols-2">
       <div>
@@ -59,7 +95,7 @@ const { t, locale } = useI18n({
         <div class="flex-grow">檔名 : {{ fileName }}</div>
       </div>
     </div>
-    <div class="overflow-auto h-full flex-grow shadow-inner">
+    <div class="overflow-auto h-full flex-grow shadow-inner" v-show="!isLoading">
       <table>
         <tr>
           <th>{{ t('account') }}</th>
@@ -168,7 +204,7 @@ const { t, locale } = useI18n({
       <SmallLoader v-show="isLoading"></SmallLoader>
     </div>
     <div>
-      <button class="round-full-button blue">{{ t('save') }}</button>
+      <button v-if="uploadData.length > 0" class="round-full-button blue" @click="submitAll">{{ t('save') }}</button>
     </div>
   </div>
 </template>

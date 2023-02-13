@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, inject, reactive } from 'vue';
+import { ref, inject, reactive, watch } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 import VueRequest from '@/vue-request';
@@ -11,10 +11,25 @@ const router = useRouter();
 const vr = new VueRequest(store.token);
 const adminOrgId = route.params.adminOrgId;
 
+const data = reactive({
+  u_id: 0,
+  event_code: '',
+  division_id: 0,
+  ref_result: '',
+});
+
 const paramList: any = inject('paramList');
 const regConfig: any = inject('regConfig');
 const divisionList: any = inject('divisionList');
 const userList: any = inject('userList');
+const divisionSex = ref(1);
+watch(data, () => {
+  for (const item of divisionList.value) {
+    if (item.division_id == data.division_id) {
+      divisionSex.value = item.sex;
+    }
+  }
+});
 const gameData: any = inject('gameData');
 const individualList: any = ref([]);
 const countData: any = ref([]);
@@ -23,15 +38,6 @@ function getIndList() {
   vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/by/count/${gameData.value.options.regUnit}`, countData, true, true);
 }
 getIndList();
-
-
-const data = reactive({
-  u_id: 0,
-  event_code: '',
-  division_id: 1,
-  ref_result: '',
-});
-data.u_id = store.userInfo.u_id;
 
 function backToHome(){
   router.push(`/${adminOrgId}/registration/game/${route.params.sportCode}/${route.params.gameId}`);
@@ -53,29 +59,39 @@ function check(params: any) {
 check(paramList.value);
 
 async function addEvent(input: any) {
+  if (data.u_id == 0) {
+    alert('請選擇選手 Please select an athlete');
+  }
   if (input.event_code == '' || input.event_code == null) {
     alert('請選擇項目 Please select an event');
     return;
   }
+  let athlete: any;
+  for (var i = 0; i < userList.value.length; i++) {
+    if (userList.value[i].u_id == input.u_id) {
+      athlete = userList.value[i];
+    }
+  }
+  console.log(athlete);
   for(const division of regConfig.value.options.division) {
     if (division.division_id == input.division_id) {
-      if (division.prevent_sport_gifited == true && store.userInfo.is_sport_gifited == true) {
+      if (division.prevent_sport_gifited == true && athlete.is_sport_gifited == 1) {
         alert('體優生不得報名此組別 Sport gifited student is not allowed');
         return;
       }
-      if (division.student_only == true && store.userInfo.is_student == 0) {
+      if (division.student_only == true && athlete.is_student == 0) {
         alert('此組別僅限學生報名 This division is only for students');
         return;
       }
     }
   }
   if (regConfig.value.options.event[input.event_code] != undefined) {
-    if (regConfig.value.options.event[input.event_code].prevent_sport_gifited && store.userInfo.is_sport_gifited == true) {
+    if (regConfig.value.options.event[input.event_code].prevent_sport_gifited && athlete.is_sport_gifited == 1) {
       alert('體優生不得報名此項目 Sport gifited student is not allowed');
       return;
     }
-    if (regConfig.value.options.event[input.event_code].student_only && store.userInfo.is_student == true) {
-      alert('此組別僅限學生報名 This event is only for students');
+    if (regConfig.value.options.event[input.event_code].student_only && athlete.is_student == 0) {
+      alert('此項目僅限學生報名 This event is only for students');
       return;
     }
   }
@@ -102,7 +118,7 @@ async function addEvent(input: any) {
   }
   const response = await vr.Post(`game/${route.params.sportCode}/${route.params.gameId}/common/individual`, data, null, true, true);
   if (response.status == 'A01') {
-    data.division_id = 1;
+    data.division_id = 0;
     data.event_code = '';
     data.ref_result = '';
     data.u_id = store.userInfo.u_id;
@@ -157,7 +173,7 @@ const { t, locale } = useI18n({
             <div class="title">{{ t('name') }}</div>
             <select class="select" v-model="data.u_id">
               <template v-for="(item, index) in userList" :key="index">
-                <option :value="item.u_id">
+                <option :value="item.u_id" v-if="item.sex == divisionSex || divisionSex == 0">
                   <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }} ({{ item.athlete_id }})</template>
                   <template v-else>{{ item.first_name_en }} {{ item.last_name_en }} ({{ item.athlete_id }})</template>
                 </option>

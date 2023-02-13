@@ -37,7 +37,7 @@ const { t, locale } = useI18n({
     </div>
     <div class="section-box h-full flex-grow overflow-hidden flex flex-col gap-3">
       <div class="section-title">{{ t('athlete-list') }}</div>
-      <div>
+      <div class="flex-grow h-full overflow-auto">
         <table>
           <tr>
             <th>{{ t('athlete-id') }}</th>

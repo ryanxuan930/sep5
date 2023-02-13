@@ -5,18 +5,22 @@
   import { useElementSize } from '@vueuse/core'
   import FullModal from '@/components/FullModal.vue';
   import EditTeam from '@/components/admin/account/EditTeam.vue';
+  import SmallLoader from '@/components/SmallLoader.vue';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
   const displayModal = ref(false);
   const boxRef: any = ref(null);
   const boxWidth = useElementSize(boxRef).width;
+  const isLoading = ref(false);
 
   const selectedData: any = ref(null);
   const dataList: any = ref([]);
   let userData: any = null;
-  async function getDataList(url = `${userData.related_user_org_id}/school-team`) {
+  async function getDataList(url = `${userData.related_user_org_id}/school-team-all`) {
+    isLoading.value = true;
     dataList.value = await vr.Get(url, null, true, true);
+    isLoading.value = false;
   }
 
   async function getUserData() {
@@ -33,7 +37,7 @@
 
 <template>
   <div id="section-box" ref="boxRef">
-    <table>
+    <table v-if="!isLoading">
       <tr>
         <th class="w-[10%]">編號</th>
         <th class="w-[30%]">中文名稱</th>
@@ -61,6 +65,7 @@
         </tr>
       </template>
     </table>
+    <SmallLoader v-show="isLoading"></SmallLoader>
     <FullModal v-show="displayModal" @closeModal="displayModal = false">
       <template v-slot:title>
         <div class="text-2xl">

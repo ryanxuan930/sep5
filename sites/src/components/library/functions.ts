@@ -25,8 +25,9 @@ export function paginationText(page: string|number) {
 }
 
 export function csvToArray(str: string, delimiter = ',') {
-  const headers = str.slice(0, str.indexOf('\n')).split(delimiter);
-  const rows = str.slice(str.indexOf('\n') + 1).split(/\r\n|\n|\r/);
+  const headers = str.slice(0, str.indexOf('\r\n')).split(delimiter);
+  const rows = str.slice(str.indexOf('\r\n') + 1).split(/\r\n|\n|\r/);
+  rows.splice(0, 1);
   const arr = rows.map((row) => {
     const values = row.split(delimiter);
     const el = headers.reduce((object: any, header: string, index: number) => {

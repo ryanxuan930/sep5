@@ -42,10 +42,10 @@
         <tr>
           <th class="w-[15%]">姓名</th>
           <th class="w-[25%]">帳號</th>
-          <th class="w-[20%]">組織</th>
+          <th class="w-[15%]">組織</th>
           <th class="w-[15%]">分部</th>
-          <th class="w-[10%]">權限</th>
-          <th class="w-[15%]">
+          <th class="w-[15%]">權限</th>
+          <th class="w-[10%]">
             <a class="hyperlink blue" @click="open(null)">新增</a>
           </th>
         </tr>
@@ -55,16 +55,23 @@
               <div :style="{'width': `${boxWidth*0.15}px`}">{{ item.name }}</div>
             </td>
             <td>
-              <div :style="{'width': `${boxWidth*0.15}px`}">{{ item.account }}</div>
+              <div :style="{'width': `${boxWidth*0.25}px`}">{{ item.account }}</div>
             </td>
             <td>
-              <div :style="{'width': `${boxWidth*0.25}px`}">{{ item.admin_org_name_ch }}</div>
+              <div :style="{'width': `${boxWidth*0.15}px`}">{{ item.admin_org_name_ch }}</div>
             </td>
             <td>
-              <div :style="{'width': `${boxWidth*0.20}px`}">{{ item.admin_dept_name_ch }}</div>
+              <div :style="{'width': `${boxWidth*0.15}px`}">{{ item.admin_dept_name_ch }}</div>
             </td>
-            <td :style="{'width': `${boxWidth*0.1}px`}"></td>
             <td :style="{'width': `${boxWidth*0.15}px`}">
+              <span v-if="item.permission == 0">一般管理員</span>
+              <span v-if="item.permission == 1">分部管理員</span>
+              <span v-if="item.permission == 2">組織管理員</span>
+              <span v-if="item.permission == 3">聯盟管理員</span>
+              <span v-if="item.permission == 8">系統管理員</span>
+              <span v-if="item.permission == 9">超級管理員</span>
+            </td>
+            <td :style="{'width': `${boxWidth*0.10}px`}">
               <a class="hyperlink blue" @click="open(item)">查看</a>
             </td>
           </tr>

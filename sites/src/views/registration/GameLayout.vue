@@ -8,7 +8,6 @@ import GameNav from '@/components/registration/console/GameNav.vue';
 import AccountBtn from '@/components/registration/console/AccountBtn.vue';
 import LogoSection from '@/components/registration/console/LogoSection.vue';
 import SpinnerLoading from '@/components/SpinnerLoading.vue';
-import { returnStatement } from '@babel/types';
 
 const store = useUserStore();
 const route = useRoute();
@@ -43,7 +42,7 @@ interface regConfig {
   options: {
     common: {
       min_reg_permission: number; // 最低報名權限
-      allow_grouping: boolean; // 允許自行組隊
+      allow_grouping: boolean; // 允許自行組隊->限制個人
       allow_cross_dept: boolean; // 允許跨分部組隊
       allow_cross_org: boolean; // 允許跨組織組隊
       individual: {
@@ -91,15 +90,14 @@ const regConfig: Ref<regConfig> = ref({
     common: {
       min_reg_permission: 0,
       allow_grouping: true,
-      allow_cross_dept: false,
-      allow_cross_org: false,
+      allow_cross_dept: true,
+      allow_cross_org: true,
       individual: {
         max_event_per_athlete: 3,
         max_athlete_per_event: 2,
       },
       group: {
         max_event_per_team: 2,
-        max_team_per_event: 3,
       }
     },
     division: [

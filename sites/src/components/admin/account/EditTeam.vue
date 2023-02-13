@@ -2,6 +2,8 @@
   import { ref, reactive } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
+  import { QuillEditor } from '@vueup/vue-quill'
+  import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
@@ -17,6 +19,7 @@
     team_name_en: '',
     sport_id: 1,
     org_id: 0,
+    team_info: ''
   }); 
 
   let userData: any = null;
@@ -93,6 +96,12 @@
           <option :value="item.sport_id">{{ item.sport_name_ch }}</option>
         </template>
       </select>
+    </label>
+    <label class="round-input-label md:col-span-4">
+      <div class="title">介紹頁面</div>
+      <div>
+        <QuillEditor theme="snow" toolbar="full" v-model:content="data.team_info" :contentType="'html'"></QuillEditor>
+      </div>
     </label>
     <div class="md:col-span-4">
       <button class="round-full-button blue" @click="submitAll">儲存</button>
