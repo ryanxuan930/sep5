@@ -12,7 +12,7 @@ class SchoolTeamController extends Controller
     // construct
     public function __construct()
     {
-        $this->middleware('auth:admin', ['except' => ['index', 'show']]);
+        $this->middleware('auth:admin', ['except' => ['index', 'indexAll', 'show']]);
     }
     /**
      * Display a listing of the resource.
