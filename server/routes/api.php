@@ -76,6 +76,7 @@ Route::group([
     'prefix' => 'admin'
 ], function () {
     Route::apiResource('/admin-dept', AdminDepartmentController::class);
+    Route::get('/admin-dept-by-org/{adminOrgId}', [AdminDepartmentController::class, 'indexByOrg']);
 
     Route::apiResource('/admin-org', AdminOrganizationController::class);
 
