@@ -51,6 +51,7 @@ class FileLogController extends Controller
         if ($request->hasFile('file')) {
             $fileName = floor(microtime(true) * 100);
             $temp['path'] = $request->file('file')->store($fileName, 'public');
+            unset($temp['file']);
             FileLog::insert($temp);
         } else {
             return response()->json(['status'=>'U08', 'message' => '上傳錯誤']);
