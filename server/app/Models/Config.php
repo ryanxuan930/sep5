@@ -9,6 +9,7 @@ class Config extends Model
 {
     use HasFactory;
     protected $primaryKey = "config_id";
+    public $timestamps = false;
     protected $casts = [
         'options' => 'array',
     ];
