@@ -3,6 +3,7 @@ import { ref, inject } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { onClickOutside } from '@vueuse/core'
 import type { IPageData } from '@/components/library/interfaces';
+import { openWindow } from '@/components/library/functions';
 
 const mobileNav = ref(false);
 const target = ref(null);
@@ -48,14 +49,15 @@ const navHoverSubColor = ref(gameData.value.options.navHoverSubColor);
         <span v-if="mobileNav==false" class="material-icons text-2xl text-gray-700">arrow_drop_down</span>
       </div>
       <div :class="{'hidden': !mobileNav, 'block': mobileNav, 'md:block cursor-pointer': true}">
-          <div :class="['md:flex shadow absolute md:bg-opacity-75 top-20 sm:top-28 md:top-20 left-0 w-full z-10', pageData.secondNavbarBackgroundColor]">
+          <div :class="['md:flex shadow absolute md:bg-opacity-75 top-20 sm:top-28 md:top-20 left-0 w-full z-10 bg-white']">
             <div class="hidden md:block md:flex-grow"></div>
             <button @click="$router.push(`/${$route.params.adminOrgId}/game/${$route.params.gameId}/`)" class="nav-button button-height block">{{ t('homepage') }}</button>
             <button @click="$router.push(`/${$route.params.adminOrgId}/game/${$route.params.gameId}/news`)" class="nav-button button-height block">{{ t('news') }}</button>
-            <button @click="$router.push(`/${$route.params.adminOrgId}/game/${$route.params.gameId}/regulation`)" class="nav-button button-height block">{{ t('regulation') }}</button>
+            <button v-if="gameData.options.regulationUrl != null" @click="openWindow(gameData.options.regulationUrl)" class="nav-button button-height block">{{ t('regulation') }}</button>
             <button @click="$router.push(`/${$route.params.adminOrgId}/game/${$route.params.gameId}/schedule`)" class="nav-button button-height block">{{ t('schedule') }}</button>
             <button @click="$router.push(`/${$route.params.adminOrgId}/game/${$route.params.gameId}/result`)" class="nav-button button-height block">{{ t('result') }}</button>
             <button @click="$router.push(`/${$route.params.adminOrgId}/game/${$route.params.gameId}/venues`)" class="nav-button button-height block">{{ t('venue') }}</button>
+            <button v-if="gameData.options.manualUrl != null" @click="openWindow(gameData.options.manualUrl)" class="nav-button button-height block">{{ t('manual') }}</button>
             <button @click="openWindow(pageData.orgUrl)" class="nav-button button-height  block md:hidden">{{ pageData.orgUrlTitle[locale] }}</button>
             <button @click="openWindow(pageData.registrationUrl)" class="nav-button button-height  block md:hidden">{{ t('registration') }}</button>
             <button class="nav-button button-height  block md:hidden" @click="$i18n.locale='zh-TW'">中文</button>

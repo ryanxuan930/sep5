@@ -1,4 +1,6 @@
 {
+  "serverUrl": "https://sports.nsysu.edu.tw/sepserver/api/",
+  "resourceUrl": "https://sports.nsysu.edu.tw/sepserver/storage/",
   "logoSource": "",
   "deptAsClass": false,
   "deptEdible": true

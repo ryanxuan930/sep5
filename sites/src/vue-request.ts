@@ -6,9 +6,10 @@ This module is to provide an easy way to fetch data from the server.
 
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import Config from './assets/config.json';
 
 export default class VueRequest {
-  private headerPrefix = 'https://sports.nsysu.edu.tw/sepserver/api/';
+  private headerPrefix = Config.serverUrl;
   private authToken = '';
   private acceptHeader = 'application/json';
   private contentType = 'application/json; charset=utf-8';

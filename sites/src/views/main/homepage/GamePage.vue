@@ -9,25 +9,12 @@ import type { IPageData } from '@/components/library/interfaces';
 
 const route = useRoute();
 const vr = new VueRequest();
-const pageData:Ref<IPageData> = ref({
-  homepageSlideshow: [
-    'https://ryanxuan930.github.io/cdn/nsysu_athletics/ufag/banner.JPG',
-  ],
-  showCountdown: true,
-  countdownTime: '2023-02-13T00:00:00',
-  countdownTitle: '<div class="text-xl md:text-2xl">系統要開發完畢</div><div class="text-lg">Deadline</div>',
-  registrationUrl: 'https://sports.nsysu.edu.tw/registration',
-  orgUrlTitle: {
-    'zh-TW': '中山首頁',
-    'en-US': 'NSYSU Homepage',
-  },
-  orgUrl: 'https://www.nsysu.edu.tw/',
-  footerContent: '<div>國立中山大學學務處體育發展組</div><div class="text-xs">Physical Development Division, OSA, NSYSU</div>',
-  firstNavbarBackgroundColor: 'bg-white',
-  secondNavbarBackgroundColor: 'bg-gray-100',
-  logoImageUrl: 'https://sports.nsysu.edu.tw/static/img/logo.79973e4d.svg',
-  orgId: 10,
-});
+const adminOrgId = useRoute().params.adminOrgId;
+const pageData:Ref<IPageData|null> = ref(null);
+(async () => {
+  const temp = await vr.Get(`config/${adminOrgId}`);
+  pageData.value = temp.options;
+})();
 const gameData: any = ref(null);
 vr.Get(`0/game/${route.params.gameId}`, gameData);
 provide('pageData', pageData);

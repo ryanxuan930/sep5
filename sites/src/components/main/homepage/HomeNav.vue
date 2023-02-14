@@ -44,7 +44,7 @@ const pageData: IPageData = inject('pageData');
         <span v-if="mobileNav==false" class="material-icons text-2xl text-gray-700">arrow_drop_down</span>
       </div>
       <div :class="{'hidden': !mobileNav, 'block': mobileNav, 'md:block cursor-pointer': true}">
-          <div :class="['md:flex shadow absolute md:bg-opacity-75 top-20 sm:top-28 md:top-20 left-0 w-full z-10', pageData.secondNavbarBackgroundColor]">
+          <div id="second-nav" class="md:flex shadow absolute bg-white md:bg-opacity-75 top-20 sm:top-28 md:top-20 left-0 w-full z-10" >
             <div class="hidden md:block md:flex-grow"></div>
             <button @click="$router.push(`/${$route.params.adminOrgId}/`)" class="nav-button button-height block">{{ t('homepage') }}</button>
             <button @click="$router.push(`/${$route.params.adminOrgId}/news`)" class="nav-button button-height block">{{ t('news') }}</button>

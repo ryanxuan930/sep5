@@ -98,6 +98,11 @@ const router = createRouter({
               component: () => import('../views/admin/console/pages/AccountPage.vue'),
             },
             {
+              path: 'files',
+              name: 'adminFilePage',
+              component: () => import('../views/admin/console/pages/FilePage.vue'),
+            },
+            {
               path: 'settings',
               name: 'adminSettingsPage',
               component: () => import('../views/admin/console/pages/SettingsPage.vue'),

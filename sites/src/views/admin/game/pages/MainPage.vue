@@ -19,9 +19,10 @@
   const sportCode = route.params.sportCode;
   const gameId = route.params.gameId;
 
-  (async () => {
+  async function getGameData() {
     vr.Get(`${store.userInfo.org_id}/game/${gameId}`, gameData, true, true);
-  })();
+  };
+  getGameData();
 </script>
 
 <template>
@@ -53,7 +54,7 @@
       </template>
       <template v-slot:content>
         <div class="overflow-auto h-full">
-          <EditGame v-if="displayModal == 1" :game-data="gameData" @closeModal="displayModal = 0"></EditGame>
+          <EditGame v-if="displayModal == 1" :game-data="gameData" @closeModal="displayModal = 0" @refresh-page="getGameData"></EditGame>
           <DateSetter v-if="displayModal == 2" :input-data="gameData" @closeModal="displayModal = 0"></DateSetter>
           <DivisionSetter v-if="displayModal == 3" :input-data="gameData" @closeModal="displayModal = 0"></DivisionSetter>
           <EventSetter v-if="displayModal == 4" :input-data="gameData" @closeModal="displayModal = 0"></EventSetter>

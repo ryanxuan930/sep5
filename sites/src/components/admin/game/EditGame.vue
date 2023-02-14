@@ -22,6 +22,8 @@
     navHoverColor: '#3B82F6',
     navHoverSubColor: '#60A5FA',
     navTextColor: '#374151',
+    regulationUrl: '',
+    manualUrl: '',
   }
   const currentTime = new Date();
   const data: any = reactive({
@@ -223,6 +225,14 @@
     <label class="round-input-label md:col-span-2">
       <div class="title">賽事Logo</div>
       <input class="input" type="text" v-model="data.options.gameLogoUrl">
+    </label>
+    <label class="round-input-label md:col-span-2">
+      <div class="title">競賽規程網址</div>
+      <input class="input" type="text" v-model="data.options.regulationUrl">
+    </label>
+    <label class="round-input-label md:col-span-2">
+      <div class="title">秩序冊網址</div>
+      <input class="input" type="text" v-model="data.options.manualUrl">
     </label>
     <div class="md:col-span-4">
       <button class="round-full-button blue" @click="submitAll">儲存</button>
