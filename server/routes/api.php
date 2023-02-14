@@ -122,7 +122,7 @@ Route::apiResource('/city', CityController::class);
 
 Route::apiResource('/tribe', TribeController::class);
 
-Route::apiResource('/file', FileLogController::class);
+Route::apiResource('/file-list', FileLogController::class);
 
 Route::group([
     'prefix' => '/file'
