@@ -22,6 +22,7 @@ use App\Http\Controllers\SchoolTeamController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RegistrationConfigController as RCController;
 use App\Http\Controllers\Game\Main\DateController as GameDateController;
 use App\Http\Controllers\Game\Main\DivisionController as GameDivisionController;
 use App\Http\Controllers\Game\Main\LaneController as GameLaneController;
@@ -123,6 +124,9 @@ Route::apiResource('/city', CityController::class);
 Route::apiResource('/tribe', TribeController::class);
 
 Route::apiResource('/file-list', FileLogController::class);
+
+Route::apiResource('/reg-config', RCController::class);
+Route::get('/reg-config-game/{gameId}', [RCController::class, 'showByGame']);
 
 Route::group([
     'prefix' => '/file'

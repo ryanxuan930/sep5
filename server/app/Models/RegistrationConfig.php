@@ -9,4 +9,8 @@ class RegistrationConfig extends Model
 {
     use HasFactory;
     protected $primaryKey = "reg_config_id";
+    protected $casts = [
+        'options' => 'array',
+        'deadline_list' => 'array',
+    ];
 }
