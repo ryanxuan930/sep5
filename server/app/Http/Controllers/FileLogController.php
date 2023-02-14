@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FileLog;
 use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FileLogController extends Controller
 {
@@ -40,7 +41,6 @@ class FileLogController extends Controller
             'admin_org_id' => 'required|integer',
             'file_name' => 'required',
             'format' => 'required',
-            'path' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -48,7 +48,13 @@ class FileLogController extends Controller
         $temp = $request->all();
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
-        FileLog::insert($temp);
+        if ($request->hasFile('file')) {
+            $fileName = floor(microtime(true) * 100);
+            $temp['path'] = $request->file('file')->store($fileName, 'public');
+            FileLog::insert($temp);
+        } else {
+            return response()->json(['status'=>'U08', 'message' => '上傳錯誤']);
+        }
         return response()->json(['status'=>'A01']);
     }
 
@@ -83,6 +89,8 @@ class FileLogController extends Controller
      */
     public function destroy($id)
     {
+        $fileTemp = FileLog::where('file_id', $id)->first();
+        Storage::disk('public')->delete($fileTemp->path);
         FileLog::where('file_id', $id)->delete();
         return response()->json(['status'=>'A01']);
     }
