@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Validator;
 use App\Models\RegistrationConfig as RC;
 
 class RegistrationConfigController extends Controller
