@@ -98,6 +98,7 @@ class AdminOrganizationController extends Controller
     public function destroy($id)
     {
         AO::where('admin_org_id', $id)->delete();
+        Config::where('config_id', $id)->delete();
         return response()->json(['status'=>'A01']);
     }
 }

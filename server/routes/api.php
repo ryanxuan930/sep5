@@ -16,6 +16,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\FileLogController;
 use App\Http\Controllers\TribeController;
 use App\Http\Controllers\SchoolTeamController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
@@ -120,6 +121,8 @@ Route::apiResource('/country', CountryController::class);
 Route::apiResource('/city', CityController::class);
 
 Route::apiResource('/tribe', TribeController::class);
+
+Route::apiResource('/file', FileLogController::class);
 
 Route::group([
     'prefix' => '/file'
