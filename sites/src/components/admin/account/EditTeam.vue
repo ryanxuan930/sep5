@@ -25,14 +25,19 @@
   let userData: any = null;
   async function getUserData() {
     userData = await vr.Get('auth/admin/info', null, true, true);
-    data.org_id = userData.related_user_org_id;
+    if (props.inputData == null) {
+      data.org_id = userData.related_user_org_id;
+    }
   }
   getUserData();
 
   if (props.inputData !== null) {
     Object.keys(data).forEach((index: string) => {
       data[index] = props.inputData[index];
-    })
+    });
+    if (data.team_info == null) {
+      data.team_info = '';
+    }
   }
 
   const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
@@ -83,7 +88,7 @@
     </label>
     <label class="round-input-label md:col-span-4">
       <div class="title">所屬單位</div>
-      <select class="select" v-model="data.org_id" :disabled="store.userInfo.admin_org_id != 1">
+      <select class="select" v-model="data.org_id" :disabled="store.userInfo.admin_org_id > 1">
         <template v-for="(item, index) in orgList" :key="index">
           <option :value="item.org_id">{{ item.org_name_full_ch }}</option>
         </template>

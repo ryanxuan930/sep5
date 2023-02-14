@@ -5,7 +5,7 @@
   import { getUrlParams, paginationText } from '@/components/library/functions';
   import { useElementSize } from '@vueuse/core'
   import FullModal from '@/components/FullModal.vue';
-  import EditUser from '@/components/admin/account/EditUser.vue';
+  import EditAdminUser from '@/components/admin/account/EditAdminUser.vue';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);

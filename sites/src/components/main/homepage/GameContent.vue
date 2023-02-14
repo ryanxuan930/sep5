@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n'
 
 const vr = new VueRequest();
+const pageData: IPageData = inject('pageData');
 const data: any = ref(null);
 vr.Get(`${useRoute().params.adminOrgId}/game/${useRoute().params.gameId}`, data);
 const { t, locale } = useI18n({
@@ -46,14 +47,14 @@ vr.Get(`${useRoute().params.adminOrgId}/game-tag`, gameTagList);
       <tr>
         <td class="head">{{ t('registration') }}</td>
         <td>
-          <router-link v-if="data.use_reg" class="hyperlink blue" to="">{{ t('click-me') }}</router-link>
+          <a v-if="data.use_reg" :href="pageData.registrationUrl" class="hyperlink blue">{{ t('click-me') }}</a>
           <a v-else :href="data.reg_url" target="_blank" class="hyperlink blue">{{ data.reg_url }}</a>
         </td>
       </tr>
       <tr>
         <td class="head">{{ t('website') }}</td>
         <td>
-          <router-link v-if="data.use_site" class="hyperlink blue" to="">{{ t('click-me') }}</router-link>
+          <router-link v-if="data.use_site" class="hyperlink blue" target="_blank" :to="`/${$route.params.adminOrgId}/game/${$route.params.gameId}`">{{ t('click-me') }}</router-link>
           <a v-else :href="data.site_url" target="_blank" class="hyperlink blue">{{ data.site_url }}</a>
         </td>
       </tr>

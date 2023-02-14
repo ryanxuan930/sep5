@@ -9,4 +9,7 @@ class Config extends Model
 {
     use HasFactory;
     protected $primaryKey = "config_id";
+    protected $casts = [
+        'options' => 'array',
+    ];
 }

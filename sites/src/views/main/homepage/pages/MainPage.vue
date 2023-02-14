@@ -2,7 +2,6 @@
 import { ref, inject } from 'vue';
 import CountDown from '@/components/main/homepage/CountDown.vue';
 import VueRequest from '@/vue-request';
-import type { Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import NewsSection from '@/components/main/homepage/NewsSection.vue';
 import GameSection from '@/components/main/homepage/GameSection.vue';

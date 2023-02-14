@@ -2,7 +2,6 @@
   import { ref, reactive } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
-  import type { Ref } from 'vue';
   import Toggle from '@vueform/toggle';
   import { QuillEditor } from '@vueup/vue-quill'
   import '@vueup/vue-quill/dist/vue-quill.snow.css';
@@ -16,9 +15,13 @@
   const props: any = defineProps(['gameData']);
   const displayModal = ref(0);
 
-  const optionsPrototype = {
+  const optionsPrototype: any = {
     regUnit: 2,
     bannerUrl: '',
+    gameLogoUrl: '',
+    navHoverColor: '#3B82F6',
+    navHoverSubColor: '#60A5FA',
+    navTextColor: '#374151',
   }
   const currentTime = new Date();
   const data: any = reactive({
@@ -56,6 +59,12 @@
     if (data.options === null) {
       data.options = optionsPrototype;
     }
+    /*
+    if (data.options !== null) {
+      Object.keys(optionsPrototype).forEach((index: string) => {
+        data.options[index] = optionsPrototype[index];
+      });
+    }*/
   }
 
   const sportList = ref();
@@ -189,9 +198,31 @@
         <option value="2">以組織單位計算</option>
       </select>
     </label>
-    <label class="round-input-label md:col-span-3">
+    <label class="round-input-label">
+      <div class="title">主要配色</div>
+      <label class="input">
+        <input type="color" v-model="data.options.navHoverColor">
+      </label>
+    </label>
+    <label class="round-input-label">
+      <div class="title">次要配色</div>
+      <label class="input">
+        <input type="color" v-model="data.options.navHoverSubColor">
+      </label>
+    </label>
+    <label class="round-input-label">
+      <div class="title">文字顏色</div>
+      <label class="input">
+        <input type="color" v-model="data.options.navTextColor">
+      </label>
+    </label>
+    <label class="round-input-label md:col-span-2">
       <div class="title">頁面橫幅照片</div>
       <input class="input" type="text" v-model="data.options.bannerUrl">
+    </label>
+    <label class="round-input-label md:col-span-2">
+      <div class="title">賽事Logo</div>
+      <input class="input" type="text" v-model="data.options.gameLogoUrl">
     </label>
     <div class="md:col-span-4">
       <button class="round-full-button blue" @click="submitAll">儲存</button>

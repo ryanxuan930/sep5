@@ -58,12 +58,18 @@ interface regConfig {
       division_id: number;
       prevent_sport_gifited: boolean; // 限非體優
       student_only: boolean; // 限學生報名
+      has_grade: boolean;
+      min_grade?: number;
+      max_grade?: number;
     }[];
     event: {
       [key: string]: {
         prevent_sport_gifited: boolean;
         student_only: boolean;
         pre_define_member?: boolean;
+        has_grade: boolean;
+        min_grade?: number;
+        max_grade?: number;
       }
     }
   }
@@ -105,17 +111,20 @@ const regConfig: Ref<regConfig> = ref({
         division_id: 1,
         prevent_sport_gifited: false,
         student_only: true,
+        has_grade: false,
       }
     ],
     event: {
       athl0001: {
         prevent_sport_gifited: true,
         student_only: true,
+        has_grade: false,
       },
       athl0024: {
         prevent_sport_gifited: true,
         student_only: true,
         pre_define_member: true,
+        has_grade: false,
       },
     }
   }

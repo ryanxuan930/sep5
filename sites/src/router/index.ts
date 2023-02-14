@@ -41,6 +41,28 @@ const router = createRouter({
               name: 'mainGalleryPage',
               component: () => import('../views/main/homepage/pages/GalleryPage.vue'),
             },
+            {
+              path: 'venues',
+              name: 'mainVenuePage',
+              component: () => import('../views/main/homepage/pages/VenuePage.vue'),
+            },
+            {
+              path: 'teams',
+              name: 'mainTeamPage',
+              component: () => import('../views/main/homepage/pages/TeamPage.vue'),
+            },
+          ]
+        },
+        {
+          path: '/:adminOrgId/game/:gameId',
+          name: 'gameHomePage',
+          component: () => import('../views/main/homepage/GamePage.vue'),
+          children: [
+            {
+              path: '/:adminOrgId',
+              name: 'gameMainPage',
+              component: () => import('../views/main/homepage/pages/MainPage.vue'),
+            },
           ]
         },
       ]
@@ -74,6 +96,11 @@ const router = createRouter({
               path: 'account',
               name: 'adminAccountPage',
               component: () => import('../views/admin/console/pages/AccountPage.vue'),
+            },
+            {
+              path: 'settings',
+              name: 'adminSettingsPage',
+              component: () => import('../views/admin/console/pages/SettingsPage.vue'),
             },
           ],
         },

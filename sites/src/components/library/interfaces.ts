@@ -40,4 +40,5 @@ export interface IPageData {
   firstNavbarBackgroundColor: string;
   secondNavbarBackgroundColor: string;
   logoImageUrl: string;
+  orgId: number;
 }
