@@ -19,7 +19,7 @@ class FileController extends Controller
             if ($fileName) {
                 Storage::disk('public')->delete($fileName.'.'.$fileFormat);
             } 
-            $path = $request->file('image')->store($fileName, 'public');
+            $path = $request->file('file')->store($fileName, 'public');
             return response()->json(['status'=>'A05']);
         } else {
             return response()->json(['status'=>'U08', 'message' => '上傳錯誤']);
