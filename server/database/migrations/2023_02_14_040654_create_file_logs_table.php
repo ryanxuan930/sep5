@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('file_logs', function (Blueprint $table) {
             $table->id('file_id');
-            $table->bigIncrements('admin_org_id');
+            $table->bigInteger('admin_org_id');
             $table->string('file_name', 128);
             $table->string('format', 32);
             $table->text('path');
