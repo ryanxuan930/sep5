@@ -55,11 +55,11 @@ class RegistrationConfigController extends Controller
      */
     public function show($id)
     {
-        return response()->json(RC::where('reg_config_id', $id)->get());
+        return response()->json(RC::where('reg_config_id', $id)->first());
     }
     public function showByGame($gameId)
     {
-        return response()->json(RC::where('game_id', $gameId)->get());
+        return response()->json(RC::where('game_id', $gameId)->first());
     }
 
     /**
