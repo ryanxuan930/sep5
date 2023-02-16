@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, reactive } from 'vue';
+  import { ref, reactive, watch } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import Toggle from '@vueform/toggle';
@@ -41,9 +41,10 @@
     multilingual: 1,
     options: optionsPrototype,
   });
+  const configId = ref(store.userInfo.admin_org_id)
   const configData: any = ref(null);
   async function getConfigData() {
-    await vr.Get(`config/${store.userInfo.admin_org_id}`, configData);
+    await vr.Get(`config/${configId.value}`, configData);
     Object.keys(data).forEach((index: string) => {
       data[index] = configData.value[index];
     });
@@ -53,8 +54,14 @@
   }
   getConfigData();
 
+  watch(configId, () => {
+    getConfigData();
+  })
+
   const orgList: any = ref([]);
   vr.Get('organization', orgList);
+  const adminOrgList: any = ref([]);
+  vr.Get('admin/admin-org', adminOrgList, true, true);
 
   const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
   const close = () => {
@@ -64,7 +71,7 @@
 
   function submitAll() {
     const temp = JSON.parse(JSON.stringify(data));
-    vr.Patch(`config/${store.userInfo.admin_org_id}`, temp, null, true, true).then( (res: any) => {
+    vr.Patch(`config/${configId.value}`, temp, null, true, true).then( (res: any) => {
       if (res.status !== 'A01') {
         alert('無法儲存');
         return;
@@ -83,12 +90,21 @@
         <Toggle class="general-toggle" offLabel="關" onLabel="開" :falseValue="0" :trueValue="1" v-model="data.root_page"></Toggle>
       </div>
     </label>
-    <label class="round-input-label md:col-span-3">
+    <label class="round-input-label md:col-span-2">
       <div class="title">所屬組織單位</div>
       <select class="select" v-model="data.options.orgId" :disabled="store.userInfo.admin_org_id > 1">
         <option value="0" v-if="store.userInfo.admin_org_id == 1">無</option>
         <template v-for="(item, index) in orgList" :key="index">
           <option :value="item.org_id">{{ item.org_name_full_ch }}</option>
+        </template>
+      </select>
+    </label>
+    <label class="round-input-label">
+      <div class="title">設定檔案</div>
+      <select class="select" v-model="configId" :disabled="store.userInfo.admin_org_id > 1">
+        <option value="0" v-if="store.userInfo.admin_org_id == 1">無</option>
+        <template v-for="(item, index) in adminOrgList" :key="index">
+          <option :value="item.admin_org_id">{{ item.admin_org_name_ch }}</option>
         </template>
       </select>
     </label>
@@ -199,4 +215,3 @@ table {
   }
 }
 </style>
-<style src="@vueform/toggle/themes/default.css"></style>

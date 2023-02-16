@@ -3,11 +3,14 @@ import { ref, provide } from 'vue';
 import type { Ref } from 'vue';
 import VueRequest from '@/vue-request';
 import VueHorizontal from 'vue-horizontal';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import HomeNav from '@/components/main/homepage/HomeNav.vue';
 import HomeFooter from '@/components/main/homepage/HomeFooter.vue';
 import type { IPageData } from '@/components/library/interfaces';
 const vr = new VueRequest();
+if (useRoute().params.adminOrgId == undefined) {
+  useRouter().push('/2');
+}
 const adminOrgId = useRoute().params.adminOrgId;
 
 const pageData:Ref<IPageData|null> = ref(null);

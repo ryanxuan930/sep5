@@ -59,7 +59,7 @@ const router = createRouter({
           component: () => import('../views/main/homepage/GamePage.vue'),
           children: [
             {
-              path: '/:adminOrgId',
+              path: '',
               name: 'gameMainPage',
               component: () => import('../views/main/homepage/pages/MainPage.vue'),
             },

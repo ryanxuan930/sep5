@@ -31,7 +31,7 @@
       <tr>
         <th class="w-[10%]">編號</th>
         <th class="w-[40%]">中文名稱</th>
-        <th class="w-[35%]">所使管理員組職</th>
+        <th class="w-[35%]">所屬管理員組職</th>
         <th class="w-[15%]">
           <a class="hyperlink blue" @click="open(null)">新增</a>
         </th>
