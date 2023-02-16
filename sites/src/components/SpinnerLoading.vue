@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Config from '@/assets/config.json'
 </script>
 
 <template>
@@ -6,7 +7,7 @@
     <div class="spin-content">
       <div id="loader" style="color: 250px;">
         <div class="spin-logo">
-          <img src="@/assets/logo_no_bg_white.png" alt="">
+          <img :src="Config.logoSquare" alt="">
         </div>
         <div class="spin-line text-white"></div>
       </div>

@@ -1,7 +1,8 @@
 {
   "serverUrl": "https://sports.nsysu.edu.tw/sepserver/api/",
   "resourceUrl": "https://sports.nsysu.edu.tw/sepserver/storage/",
-  "logoSource": "",
+  "logoSource": "https://ryanxuan930.github.io/cdn/logo/nsysu/logo.svg",
+  "logoSquare": "https://ryanxuan930.github.io/cdn/logo/nsysu/logo_no_bg_white.png",
   "deptAsClass": false,
   "changeDeptPermission": false,
   "allowAddUser": true,
