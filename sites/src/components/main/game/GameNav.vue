@@ -109,6 +109,7 @@ en-US:
   schedule: 'Schedules'
   result: 'Results'
   venue: 'Venues'
+  manual: 'Manual'
 zh-TW:
   homepage: '首頁'
   registration: '報名系統'
@@ -117,4 +118,5 @@ zh-TW:
   schedule: '賽程資訊'
   result: '成績公告'
   venue: '場館資訊'
+  manual: '秩序冊'
 </i18n>
