@@ -102,6 +102,7 @@
       temp.tags.push(tag.toString());
     })
     temp.tags = JSON.stringify(temp.tags);
+    temp.options = JSON.stringify(temp.options);
     if (props.gameData === null) {
       vr.Post(`${store.userInfo.admin_org_id}/game`, temp, null, true, true).then( (res: any) => {
         if (res.status !== 'A01') {
