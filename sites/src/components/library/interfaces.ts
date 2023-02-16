@@ -78,8 +78,7 @@ export interface IRegConfig {
       prevent_sport_gifited: boolean; // 限非體優
       student_only: boolean; // 限學生報名
       has_grade: boolean;
-      min_grade?: number;
-      max_grade?: number;
+      grade_list?: number[];
     }[];
     event: {
       [key: string]: {
@@ -87,8 +86,7 @@ export interface IRegConfig {
         student_only: boolean;
         pre_define_member?: boolean;
         has_grade: boolean;
-        min_grade?: number;
-        max_grade?: number;
+        grade_list?: number[];
       }
     }
   }

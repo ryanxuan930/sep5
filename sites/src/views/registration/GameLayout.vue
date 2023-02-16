@@ -131,6 +131,7 @@ const regConfig: Ref<regConfig> = ref({
 });
 (async () => {
   await vr.Get(`config/${adminOrgId}`, systemConfig);
+  await vr.Get(`reg-config-game/${route.params.gameId}`, regConfig);
   await vr.Get(`auth/user/info`, userData, true, true);
   await vr.Get(`${adminOrgId}/game/${route.params.gameId}`, gameData);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/params/full`, paramList);
@@ -152,12 +153,10 @@ function backToHome(){
 }
 
 async function check(){
-  /*
-  if (gameData.options == null) {
+  if (regConfig.value.reg_switch == undefined){
     alert('尚未開放 Not in service');
     backToHome();
-    return;
-  }*/
+  }
   if (regConfig.value.reg_switch == 0){
     alert('尚未開放 Not in service');
     backToHome();

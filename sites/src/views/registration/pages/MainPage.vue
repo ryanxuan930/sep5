@@ -57,15 +57,15 @@ setInterval(() => {
         </div>
       </div>
       <div class="section-box">
-        <div class=title>系統訊息</div>
+        <div class=title>{{ t('notice') }}</div>
         <div class="rounded border-2 p-3" v-html="systemConfig.reg_content"></div>
       </div>
       <div class="section-box flex-grow flex flex-col gap-3">
-        <div class=title>近期賽事</div>
+        <div class=title>{{ t('recent-game') }}</div>
         <table class="game-table" v-if="dataList != null">
           <tr>
-            <th>名稱</th>
-            <th>項目</th>
+            <th>{{ t('game') }}</th>
+            <th>{{ t('date') }}</th>
           </tr>
           <template v-if="dataList.length > 0">
             <template v-for="(item, index) in dataList" :key="index">
@@ -121,6 +121,14 @@ setInterval(() => {
 <i18n lang="yaml">
   en-US:
     greeting: 'Hi {name}, Welcome Back!'
+    notice: 'Notice'
+    recent-game: 'Recent Games'
+    game: 'Game'
+    date: 'Date'
   zh-TW:
     greeting: '嗨 {name}，歡迎回來！'
+    notice: '系統公告'
+    recent-game: '近期賽事'
+    game: '賽事名稱'
+    date: '日期'
 </i18n>

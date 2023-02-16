@@ -13,6 +13,7 @@ const vr = new VueRequest(store.token);
 const adminOrgId = route.params.adminOrgId;
 
 const systemConfig: any = inject('systemConfig');
+const gameData: any = inject('gameData');
 
 const linkUrl:any= ref(null);
 const dataList: any = ref([]);
@@ -47,8 +48,8 @@ setInterval(() => {
   <div class="h-full overflow-auto">
     <div class="flex flex-col gap-5 overflow-auto">
       <div class="section-box">
-        <div class=title>系統訊息</div>
-        <div class="rounded border-2 p-3" v-html="systemConfig.reg_content"></div>
+        <div class=title>{{ t('game-info') }}</div>
+        <div class="rounded border-2 p-3" v-html="gameData.game_info"></div>
       </div>
     </div>
   </div>
@@ -80,7 +81,7 @@ setInterval(() => {
 
 <i18n lang="yaml">
   en-US:
-    greeting: 'Hi {name}, Welcome Back!'
+    game-info: 'Game Information'
   zh-TW:
-    greeting: '嗨 {name}，歡迎回來！'
+    game-info: '賽事資訊'
 </i18n>

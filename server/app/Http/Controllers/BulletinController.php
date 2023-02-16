@@ -12,7 +12,7 @@ class BulletinController extends Controller
     // construct
     public function __construct()
     {
-        $this->middleware('auth:admin', ['except' => ['index', 'show']]);
+        $this->middleware('auth:admin', ['except' => ['index', 'show', 'indexByGame']]);
     }
     /**
      * Display a listing of the resource.
@@ -27,6 +27,10 @@ class BulletinController extends Controller
         } else {
             return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'bulletins.related_admin_dept')->where('admin_departments.admin_org_id', $org_id)->orderBy('pinned', 'desc')->orderBy('category', 'desc')->orderBy('post_date','desc')->paginate(10));
         }
+    }
+    public function indexByGame($game_id)
+    {
+        return response()->json(Bulletin::leftJoin('games', 'games.game_id', '=', 'bulletins.related_game')->leftJoin('admin_departments', 'admin_departments.admin_dept_id', '=', 'bulletins.related_admin_dept')->where('related_game', $game_id)->orderBy('pinned', 'desc')->orderBy('category', 'desc')->orderBy('post_date','desc')->paginate(10));
     }
 
     /**

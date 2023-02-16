@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 import VueRequest from '@/vue-request';
 import { useRoute, useRouter } from 'vue-router';
+import { onStartTyping } from '@vueuse/core';
 
 const store = useUserStore();
 const route = useRoute();
@@ -72,7 +73,6 @@ async function addEvent(input: any) {
       athlete = userList.value[i];
     }
   }
-  console.log(athlete);
   for(const division of regConfig.value.options.division) {
     if (division.division_id == input.division_id) {
       if (division.prevent_sport_gifited == true && athlete.is_sport_gifited == 1) {
@@ -81,6 +81,10 @@ async function addEvent(input: any) {
       }
       if (division.student_only == true && athlete.is_student == 0) {
         alert('此組別僅限學生報名 This division is only for students');
+        return;
+      }
+      if (!division.grade_list.includes(athlete.grade) && division.has_grade == true) {
+        alert('不是可報名此組別的年級 This grade is not allowed');
         return;
       }
     }
@@ -94,6 +98,10 @@ async function addEvent(input: any) {
       alert('此項目僅限學生報名 This event is only for students');
       return;
     }
+    if (!regConfig.value.options.event[input.event_code].grade_list.includes(athlete.grade) && regConfig.value.options.event[input.event_code].has_grade == true) {
+        alert('不是可報名此項目的年級 This grade is not allowed');
+        return;
+      }
   }
   for (const count of countData.value.event) {
     if (count.division_id == input.division_id && count.event_code == input.event_code && count.total >= regConfig.value.options.common.individual.max_athlete_per_event) {
