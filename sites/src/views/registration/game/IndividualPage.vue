@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 import VueRequest from '@/vue-request';
 import { useRoute, useRouter } from 'vue-router';
-import { onStartTyping } from '@vueuse/core';
+import Config from '@/assets/config.json';
 
 const store = useUserStore();
 const route = useRoute();
@@ -204,7 +204,8 @@ const { t, locale } = useI18n({
             <th>{{ t('name') }}</th>
             <th>{{ t('sex') }}</th>
             <th>{{ t('organization') }}</th>
-            <th>{{ t('department') }}</th>
+            <th v-if="Config.deptAsClass">{{ t('class') }}</th>
+            <th v-else>{{ t('department') }}</th>
             <th v-if="gameData.module != 'ge'">{{ t('ref-result') }}</th>
             <th></th>
           </tr>
@@ -295,6 +296,7 @@ table {
     male: 'M'
     female: 'F'
     others: 'X'
+    class: 'Class'
   zh-TW:
     individual-event: '個人項目'
     group-event: '團體項目'
@@ -312,4 +314,5 @@ table {
     male: '男'
     female: '女'
     others: '其他'
+    class: '班級'
 </i18n>

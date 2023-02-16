@@ -2,6 +2,7 @@
   import { ref, reactive } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
+  import Config from '@/assets/config.json';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
@@ -18,9 +19,8 @@
     has_grade: 0,
     grade: 0,
     options: {
-      isClass: false, // 是班級
+      isClass: Config.deptAsClass, // 是班級
       classType: 0, // 班級類型 0 混合 1 男生 2 女生
-      numOfPeople: 0, // 人數
     },
   }); 
   if (props.inputData !== null) {
@@ -29,9 +29,8 @@
     })
     if (data.options === null) {
       data.options = {
-        isClass: false,
+        isClass: Config.deptAsClass,
         classType: 0,
-        numOfPeople: 0,
       };
     }
   }
@@ -86,7 +85,11 @@
         </template>
       </select>
     </label>
-    <label class="round-input-label md:col-span-2">
+    <label class="round-input-label">
+      <div class="title">排序</div>
+      <input class="input" type="number" v-model="data.sort_order">
+    </label>
+    <label class="round-input-label">
       <div class="title">有無年級</div>
       <select class="select" v-model="data.has_grade">
         <option value="0">無</option>
@@ -97,6 +100,23 @@
       <div class="title">年級</div>
       <input class="input" type="number" v-model="data.grade" :disabled="data.has_grade == 0">
     </label>
+    <template v-if="Config.deptAsClass">
+      <label class="round-input-label md:col-span-2">
+        <div class="title">是否為班級</div>
+        <select class="select" v-model="data.options.isClass">
+          <option value="false">否</option>
+          <option value="true">是</option>
+        </select>
+      </label>
+      <label class="round-input-label md:col-span-2">
+        <div class="title">班級類型</div>
+        <select class="select" v-model="data.options.classType">
+          <option value="1">男生班</option>
+          <option value="2">女生班</option>
+          <option value="0">混合班</option>
+        </select>
+      </label>
+    </template>
     <div class="md:col-span-4">
       <button class="round-full-button blue" @click="submitAll">儲存</button>
     </div>

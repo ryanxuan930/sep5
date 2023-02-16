@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
+import Config from '@/assets/config.json';
 
 const store = useUserStore();
 
@@ -23,7 +24,8 @@ const { t, locale } = useI18n({
     <div>{{ t('home') }}</div>
   </router-link>
   <router-link class="nav-link" v-if="store.userInfo.permission > 0 && store.userInfo.org_code != 'O0000'" :to="`/${useRoute().params.adminOrgId}/registration/department`">
-    <div>{{ t('department') }}</div>
+    <div v-if="Config.deptAsClass">{{ t('class') }}</div>
+    <div v-else>{{ t('department') }}</div>
   </router-link>
   <router-link class="nav-link" v-if="store.userInfo.permission > 1 && store.userInfo.org_code != 'O0000'" :to="`/${useRoute().params.adminOrgId}/registration/organization`">
     <div>{{ t('organization') }}</div>
@@ -40,12 +42,14 @@ const { t, locale } = useI18n({
   en-US:
     home: 'Home'
     department: 'Department'
+    class: 'Class'
     organization: 'Organization'
     athlete: 'Athlete'
     create: 'New Organization'
   zh-TW:
     home: '首頁'
     department: '系所/分部'
+    class: '班級'
     organization: '組織單位'
     athlete: '選手管理'
     create: '建立單位'

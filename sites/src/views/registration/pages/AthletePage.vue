@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router';
 import SmallLoader from '@/components/SmallLoader.vue';
 import FullModal from '@/components/FullModal.vue';
 import ImportAthlete from '@/components/registration/module/ImportAthlete.vue'
+import Config from '@/assets/config.json';
 
 const store = useUserStore();
 const route = useRoute();
@@ -28,10 +29,10 @@ const { t, locale } = useI18n({
 
 <template>
   <div class="flex flex-col gap-5 h-full">
-    <div class="section-box">
+    <div class="section-box" v-if="Config.allowAddUser">
       <div class="section-title">{{ t('add-athlete') }}</div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 py-2">
-        <button class="round-full-button blue">{{ t('request') }}</button>
+        <button class="round-full-button blue" v-if="Config.changeDeptPermission">{{ t('request') }}</button>
         <button class="round-full-button blue" @click="displayModal = 2">{{ t('import') }}</button>
       </div>
     </div>
@@ -41,7 +42,8 @@ const { t, locale } = useI18n({
         <table>
           <tr>
             <th>{{ t('athlete-id') }}</th>
-            <th>{{ t('department') }}</th>
+            <th v-if="Config.deptAsClass">{{ t('class') }}</th>
+            <th v-else>{{ t('department') }}</th>
             <th>{{ t('name') }}</th>
             <th>{{ t('sex') }}</th>
             <th></th>
@@ -113,6 +115,7 @@ table {
     na: 'N/A'
     add: 'Add'
     view: 'View'
+    class: 'Class'
   zh-TW:
     add-athlete: '加入選手'
     athlete-list: '選手列表'
@@ -125,4 +128,5 @@ table {
     male: '男'
     female: '女'
     others: '其他'
+    class: '班級'
 </i18n>

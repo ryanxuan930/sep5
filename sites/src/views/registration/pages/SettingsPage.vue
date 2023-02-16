@@ -6,6 +6,7 @@ import VueRequest from '@/vue-request';
 import FullModal from '@/components/FullModal.vue';
 import AccountSettings from '@/components/registration/settings/AccountSettings.vue';
 import { openWindow } from '@/components/library/functions';
+import Config from '@/assets/config.json';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
@@ -79,7 +80,7 @@ const { t, locale } = useI18n({
           <button class="round-full-button blue mt-5" v-if="userData.monkey_user_id != null" @click="openWindow('https://sports.nsysu.edu.tw/monkeyid/#/login')">Monkey ID</button>
         </template>
         <button class="round-full-button blue mt-5" v-else @click="displayModal = 2">{{ t('reset-password') }}</button>
-        <button class="round-full-button blue mt-5" @click="displayModal = 3">{{ t('change-unit') }}</button>
+        <button class="round-full-button blue mt-5" @click="displayModal = 3" v-if="!Config.deptAsClass">{{ t('change-unit') }}</button>
       </div>
     </div>
     <FullModal v-show="displayModal" @closeModal="displayModal = 0">

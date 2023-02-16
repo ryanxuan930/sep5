@@ -1,4 +1,9 @@
 {
+  "serverUrl": "",
+  "resourceUrl": "",
   "logoSource": "",
-  "deptAsClass": false
+  "deptAsClass": false,
+  "changeDeptPermission": true,
+  "allowAddUser": true,
+  "allowSignup": true
 }

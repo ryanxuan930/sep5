@@ -7,6 +7,7 @@ import { useElementSize } from '@vueuse/core'
 import FullModal from '@/components/FullModal.vue';
 import EditDept from '@/components/registration/module/EditDept.vue';
 import SpinnerLoading from '@/components/SpinnerLoading.vue';
+import Config from '@/assets/config.json';
 
 const store = useUserStore()
 const vr = new VueRequest(store.token);
@@ -45,7 +46,8 @@ const { t, locale } = useI18n({
         <tr>
           <th class="w-[10%]">ID</th>
           <th class="w-[10%]">{{ t('order') }}</th>
-          <th class="w-[30%]">{{ t('department') }}</th>
+          <th class="w-[30%]" v-if="Config.deptAsClass">{{ t('class') }}</th>
+          <th class="w-[30%]" v-else>{{ t('department') }}</th>
           <th class="w-[25%]">{{ t('organization') }}</th>
           <th class="w-[10%]">{{ t('grade') }}</th>
           <th class="w-[15%]">
@@ -128,6 +130,7 @@ input[type=radio] {
     na: 'N/A'
     add: 'Add'
     view: 'View'
+    class: 'Class'
   zh-TW:
     dept-info: '分部/系所資訊'
     edit-dept-info: '編輯分部/系所資訊'
@@ -140,4 +143,5 @@ input[type=radio] {
     na: '不適用'
     add: '新增'
     view: '查看'
+    class: '班級'
 </i18n>

@@ -3,6 +3,7 @@
   "resourceUrl": "https://sports.nsysu.edu.tw/sepserver/storage/",
   "logoSource": "",
   "deptAsClass": false,
-  "deptEdible": true,
-  "changeDeptPermission": false
+  "changeDeptPermission": false,
+  "allowAddUser": true,
+  "allowSignup": true
 }

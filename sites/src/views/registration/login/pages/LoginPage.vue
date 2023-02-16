@@ -5,6 +5,8 @@
   import { useUserStore } from '@/stores/user';
   import type { Ref } from 'vue';
   import { useI18n } from 'vue-i18n';
+  import Config from '@/assets/config.json';
+
   const accountInput: any = ref(null);
   const passwordInput: any = ref(null);
   const status: Ref<string|null> = ref(null);
@@ -78,9 +80,11 @@
       </label>
       <router-link to="" class="hyperlink blue">{{ t('forget-password') }}</router-link>
       <button class="round-full-button blue mt-5" @click="submitAll">{{ t('login') }}</button>
-      <hr class="my-5">
-      <div class="mb-5 text-center">{{ t('no-account') }}</div>
-      <button class="round-full-button blue" @click="$router.push(useMonkeyId ? `/${$route.params.adminOrgId}/registration/login/signup-identity` : `/${$route.params.adminOrgId}/registration/login/signup`)">{{ t('signup') }}</button>
+      <template v-if="Config.allowSignup">
+        <hr class="my-5">
+        <div class="mb-5 text-center">{{ t('no-account') }}</div>
+        <button class="round-full-button blue" @click="$router.push(useMonkeyId ? `/${$route.params.adminOrgId}/registration/login/signup-identity` : `/${$route.params.adminOrgId}/registration/login/signup`)">{{ t('signup') }}</button>
+      </template>
     </div>
     <div class="flex-grow"></div>
   </div>

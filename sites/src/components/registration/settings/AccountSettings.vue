@@ -5,6 +5,7 @@
   import SmallModal from '@/components/SmallModal.vue';
   import SchoolTeamSelector from '@/components/registration/module/SchoolTeamSelector.vue';
 import { useI18n } from 'vue-i18n';
+import Config from '@/assets/config.json';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
@@ -181,7 +182,8 @@ import { useI18n } from 'vue-i18n';
       </div>
     </label>
     <label class="round-input-label md:col-span-2">
-      <div class="title">{{ t('department') }}</div>
+      <div class="title" v-if="Config.deptAsClass">{{ t('class') }}</div>
+      <div class="title" v-else>{{ t('department') }}</div>
       <select class="select" v-model="data.dept_id" v-if="store.userInfo.permission >= 1 && store.userInfo.org_code != 'O0000'">
         <option value="0">---</option>
         <template v-for="(item, index) in deptList" :key="index">
@@ -468,6 +470,7 @@ import { useI18n } from 'vue-i18n';
     tw-student-only: Taiwan Students Only
     save: 'Save'
     select: 'Select'
+    class: 'Class'
   zh-TW:
     setting: '設定'
     language: '語言'
@@ -519,4 +522,5 @@ import { useI18n } from 'vue-i18n';
     tw-student-only: 限本國學生
     save: '儲存'
     select: '選擇'
+    class: '班級'
 </i18n>

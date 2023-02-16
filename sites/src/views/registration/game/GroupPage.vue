@@ -6,6 +6,7 @@ import VueRequest from '@/vue-request';
 import { useRoute, useRouter } from 'vue-router';
 import FullModal from '@/components/FullModal.vue';
 import TeamData from '@/components/registration/module/TeamData.vue'
+import Config from '@/assets/config.json';
 
 const store = useUserStore();
 const route = useRoute();
@@ -324,7 +325,8 @@ function removeUser(id: number) {
             <th>{{ t('name') }}</th>
             <th>{{ t('sex') }}</th>
             <th>{{ t('organization') }}</th>
-            <th>{{ t('department') }}</th>
+            <th v-if="Config.deptAsClass">{{ t('class') }}</th>
+            <th v-else>{{ t('department') }}</th>
             <th v-if="gameData.module != 'ge'">{{ t('ref-result') }}</th>
             <th></th>
           </tr>
@@ -434,6 +436,7 @@ table {
     member: 'Members'
     not-found: 'Athlete Not Found'
     view: 'View'
+    class: 'Class'
   zh-TW:
     individual-event: '個人項目'
     group-event: '團體項目'
@@ -459,4 +462,5 @@ table {
     member: '成員'
     not-found: '找不到符合的資料'
     view: '查看'
+    class: '班級'
 </i18n>
