@@ -4,7 +4,7 @@
   import { useUserStore } from '@/stores/user';
   import type { Ref } from 'vue';
   import type { IPostData } from '@/components/library/interfaces';
-  import Toggle from '@vueform/toggle';
+  import '@vueform/toggle/themes/default.css';
   import { QuillEditor } from '@vueup/vue-quill'
   import '@vueup/vue-quill/dist/vue-quill.snow.css';
   import BulletinCategory from '@/assets/BulletinCategory.json';
@@ -178,7 +178,3 @@
     </SmallModal>
   </div>
 </template>
-
-<style src="@vueform/toggle/themes/default.css"></style>
-<style scoped lang="scss">
-</style>

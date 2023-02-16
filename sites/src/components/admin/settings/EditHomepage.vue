@@ -5,7 +5,6 @@
   import Toggle from '@vueform/toggle';
   import { QuillEditor } from '@vueup/vue-quill'
   import '@vueup/vue-quill/dist/vue-quill.snow.css';
-  import '@vueform/toggle/themes/default.css';
   import type { IPageData } from '@/components/library/interfaces';
 
   const store = useUserStore();
@@ -200,3 +199,4 @@ table {
   }
 }
 </style>
+<style src="@vueform/toggle/themes/default.css"></style>

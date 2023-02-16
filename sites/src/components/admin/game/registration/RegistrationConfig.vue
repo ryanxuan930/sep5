@@ -5,7 +5,6 @@
   import { useRoute } from 'vue-router';
   import type { IRegConfig } from '@/components/library/interfaces';
   import Toggle from '@vueform/toggle';
-  import '@vueform/toggle/themes/default.css';
   import GradeSelector from '../../module/GradeSelector.vue';
   import SmallModal from '@/components/SmallModal.vue';
 
