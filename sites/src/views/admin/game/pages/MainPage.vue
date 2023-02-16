@@ -20,6 +20,7 @@
   const gameId = route.params.gameId;
 
   async function getGameData() {
+    gameData.value = null;
     vr.Get(`${store.userInfo.org_id}/game/${gameId}`, gameData, true, true);
   };
   getGameData();
