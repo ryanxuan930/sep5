@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Models\Game;
 use App\Mods\GameMaker;
+use App\Models\AdminDepartment;
 
 class GameController extends Controller
 {
@@ -21,10 +22,15 @@ class GameController extends Controller
      */
     public function index($org_id)
     {
+        $temp = AdminDepartment::where('admin_org_id', $org_id)->get();
+        $deptArray = array();
+        foreach ($temp as $t) {
+            array_push($deptArray, $t->admin_dept_id);
+        }
         if ($org_id == 1) {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->orderBy('event_start', 'desc')->paginate(10));
         } else {
-            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->whereJsonContains('host_list', $org_id)->orderBy('event_start', 'desc')->paginate(10));
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->whereJsonContains('host_list', $deptArray)->orderBy('event_start', 'desc')->paginate(10));
         }
     }
     /**
@@ -34,10 +40,15 @@ class GameController extends Controller
      */
     public function indexAll($org_id)
     {
+        $temp = AdminDepartment::where('admin_org_id', $org_id)->get();
+        $deptArray = array();
+        foreach ($temp as $t) {
+            array_push($deptArray, $t->admin_dept_id);
+        }
         if ($org_id == 1) {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->paginate(10));
         } else {
-            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereJsonContains('host_list', $org_id)->paginate(10));
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereJsonContains('host_list', $deptArray)->paginate(10));
         }
     }
     /**
