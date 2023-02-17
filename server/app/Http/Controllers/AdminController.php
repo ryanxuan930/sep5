@@ -25,7 +25,7 @@ class AdminController extends Controller
         if ($admin->admin_org_id == 1) {
             return response()->json($query->paginate(25));
         } else {
-            return response()->json($query->where('admin_org_id', $admin->admin_org_id)->paginate(25));
+            return response()->json($query->where('admins.admin_org_id', $admin->admin_org_id)->paginate(25));
         }
     }
 
