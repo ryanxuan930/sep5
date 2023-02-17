@@ -27,6 +27,7 @@ class GameController extends Controller
         foreach ($temp as $t) {
             array_push($deptArray, $t->admin_dept_id);
         }
+        return $deptArray;
         if ($org_id == 1) {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->orderBy('event_start', 'desc')->paginate(10));
         } else {
