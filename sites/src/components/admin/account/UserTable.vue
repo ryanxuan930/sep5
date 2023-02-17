@@ -53,7 +53,7 @@
   <div id="section-box" class="overflow-hidden flex flex-col h-full relative" ref="boxRef">
     <div class="flex items-center p-2 gap-3 bg-blue-50">
       <label class="round-input-label">
-        <input class="input" type="text" v-model="searchData.account" placeholder="帳號">
+        <input class="input" type="text" v-model="searchData.account" placeholder="帳號" @keyup.enter="getSearchResult">
       </label>
       <div>
         <button class="round-full-button blue" @click="getSearchResult">查詢</button>
