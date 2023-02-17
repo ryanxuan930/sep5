@@ -93,7 +93,7 @@ Route::group([
 
     Route::apiResource('/game', GameController::class);
     Route::get('/game-all', [GameController::class, 'indexAll']);
-    Route::get('/game-dept/dept/{dept_id}/{all}', [GameController::class, 'indexByDept']);
+    Route::get('/game-dept/{dept_id}/{all}', [GameController::class, 'indexByDept']);
     Route::get('/game-by-tag/{gameTag}', [GameController::class, 'indexByTag']);
 
     Route::apiResource('/game-tag', GameTagController::class);
