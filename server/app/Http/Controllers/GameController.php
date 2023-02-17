@@ -30,11 +30,13 @@ class GameController extends Controller
         if ($org_id == 1) {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->orderBy('event_start', 'desc')->paginate(10));
         } else {
+            /*
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->where(function ($query) use ($deptArray) {
                 for ($i = 0; $i < count($deptArray); $i++) {
                     $query->orWhereJsonContains('host_list', $deptArray[$i]);
                 }
-            })->orderBy('event_start', 'desc')->paginate(10));
+            })->orderBy('event_start', 'desc')->paginate(10));*/
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->whereJsonContains('host_list', $deptArray)->orderBy('event_start', 'desc')->paginate(10));
         }
     }
     /**
