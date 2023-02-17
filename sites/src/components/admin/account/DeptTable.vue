@@ -5,6 +5,7 @@
   import { useElementSize } from '@vueuse/core'
   import FullModal from '@/components/FullModal.vue';
   import EditDept from '@/components/admin/account/EditDept.vue';
+  import Grade from '@/assets/grade.json';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
@@ -53,7 +54,7 @@
             <div :style="{'width': `${boxWidth*0.25}px`}">{{ item.org_name_full_ch }}</div>
           </td>
           <td>
-            <div :style="{'width': `${boxWidth*0.1}px`}">{{ item.has_grade == 1 ? item.grade : '不適用' }}</div>
+            <div :style="{'width': `${boxWidth*0.1}px`}">{{ item.has_grade == 1 ? Grade[Grade.findIndex((el) => el.grade_id == item.grade)].grade : '不適用' }}</div>
           </td>
           <td :style="{'width': `${boxWidth*0.15}px`}">
             <a class="hyperlink blue" @click="open(item)">查看</a>

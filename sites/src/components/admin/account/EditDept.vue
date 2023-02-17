@@ -3,6 +3,7 @@
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import Config from '@/assets/config.json';
+  import Grade from '@/assets/grade.json';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
@@ -98,7 +99,11 @@
     </label>
     <label class="round-input-label md:col-span-2">
       <div class="title">年級</div>
-      <input class="input" type="number" v-model="data.grade" :disabled="data.has_grade == 0">
+      <select class="select" v-model="data.grade" :disabled="data.has_grade == 0">
+        <template v-for="(item, index) in Grade">
+          <option :value="item.grade_id">{{ item.grade }}</option>
+        </template>
+      </select>
     </label>
     <template v-if="Config.deptAsClass">
       <label class="round-input-label md:col-span-2">
