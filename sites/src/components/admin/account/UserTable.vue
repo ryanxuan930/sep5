@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, reactive } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import { getUrlParams, paginationText } from '@/components/library/functions';
@@ -28,15 +28,56 @@
     linkUrl.value = temp.links;
   }
   getDataList();
-  
+
+  // search
+  const searchData = reactive({
+    account: '',
+    name: '',
+  });
+  const resultList: any = ref(null);
+  const isSearching = ref(false);
+  async function getSearchResult() {
+    isSearching.value = true;
+    await vr.Post('user-search', searchData, resultList, true, true);
+    isSearching.value = false;
+  }
+  // open
   function open(input: any) {
     selectedData.value = input;
     displayModal.value = true;
+    resultList.value = null;
   }
 </script>
 
 <template>
-  <div id="section-box" class="overflow-hidden flex flex-col h-full" ref="boxRef">
+  <div id="section-box" class="overflow-hidden flex flex-col h-full relative" ref="boxRef">
+    <div class="flex items-center p-2 gap-3 bg-blue-50">
+      <label class="round-input-label">
+        <input class="input" type="text" v-model="searchData.account" placeholder="帳號">
+      </label>
+      <div>
+        <button class="round-full-button blue" @click="getSearchResult">查詢</button>
+      </div>
+    </div>
+    <div v-if="resultList != null" class="absolute p-5 bg-white bg-opacity-95 border-[1px] border-gray-100 flex flex-col gap-2 w-full top-14 shadow-md max-h-80 overflow-hidden z-[10000]">
+      <div class="flex text-lg">
+        <div class="flex-grow">搜尋結果</div>
+        <div class="text-blue-500 cursor-pointer hover:text-blue-400 duration-200" @click="resultList = null">清除</div>
+      </div>
+      <hr class="border-gray-400 border-[1px]">
+      <div class="flex-grow h-full overflow-auto">
+        <table>
+          <template v-for="(item, index) in resultList" :key="index">
+            <tr>
+              <td>{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
+              <td>{{ item.account }}</td>
+              <td>{{ item.org_name_full_ch }}</td>
+              <td><a class="hyperlink blue" @click="open(item)">查看</a></td>
+            </tr>
+          </template>
+        </table>
+      </div>
+    </div>
     <div class="flex-grow overflow-auto">
       <table>
         <tr>
