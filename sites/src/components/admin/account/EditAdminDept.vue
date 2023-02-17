@@ -15,7 +15,7 @@
   const sportList: any = ref(null);
   vr.Get('sport', sportList);
   const adminOrgList: any = ref(null);
-  vr.Get('admin-org', adminOrgList);
+  vr.Get('admin-org', adminOrgList, true, true);
 
   const data: any = reactive({
     admin_dept_name_ch: '',
@@ -80,7 +80,7 @@
     </label>
     <label class="round-input-label md:col-span-4">
       <div class="title">所屬管理組織</div>
-      <select v-model="data.admin_org_id">
+      <select class="select" v-model="data.admin_org_id">
         <template v-for="(item, index) in adminOrgList">
           <option :value="item.admim_org_id">{{ item.admim_org_name_ch }}</option>
         </template>
