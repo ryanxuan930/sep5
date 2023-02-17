@@ -4,7 +4,7 @@ import Config from '@/assets/config.json'
 
 <template>
   <div class="p-5">
-    <img :src="Config.logoSquare" class="block" alt="">
+    <img :src="Config.logoSource" class="block" alt="">
   </div>
 </template>
 
