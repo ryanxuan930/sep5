@@ -175,7 +175,7 @@ class UserController extends Controller
             return response()->json($query->where('organizations.org_code', $org_code)->limit(20)->get());
         } else {
             if ($admin->admin_org_id == 1) {
-                return response()->json($query->paginate(25));
+                return response()->json($query->limit(20)->get());
             } else {
                 $orgData = AdminOrganization::leftJoin('organizations', 'organizations.org_id', '=', 'admin_organizations.related_user_org_id')->where('admin_org_id', $admin->admin_org_id)->first();
                 return response()->json($query->where('organizations.org_code', $orgData->org_code)->limit(20)->get());
