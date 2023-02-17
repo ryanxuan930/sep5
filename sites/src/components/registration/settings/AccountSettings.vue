@@ -164,7 +164,7 @@ import Config from '@/assets/config.json';
     </label>
     <label class="round-input-label md:col-span-2">
       <div class="title">{{ t('organization') }}</div>
-      <select class="select" v-model="data.org_code" v-if="store.userInfo.permission >= 2  && store.userInfo.org_code != 'O0000'" @change="getDeptList(data.org_code)">
+      <select class="select" v-model="data.org_code" v-if="store.userInfo.permission >= 2 && store.userInfo.org_code != 'O0000'" @change="getDeptList(data.org_code)">
         <template v-for="(item, index) in orgList" :key="index">
           <option :value="item.org_code">
             <template v-if="locale == 'zh-TW'">{{ item.org_name_full_ch }}</template>
@@ -184,7 +184,7 @@ import Config from '@/assets/config.json';
     <label class="round-input-label md:col-span-2">
       <div class="title" v-if="Config.deptAsClass">{{ t('class') }}</div>
       <div class="title" v-else>{{ t('department') }}</div>
-      <select class="select" v-model="data.dept_id" v-if="store.userInfo.permission >= 1 && store.userInfo.org_code != 'O0000'">
+      <select class="select" v-model="data.dept_id" v-if="store.userInfo.permission >= 1 && Config.deptAsClass == false && store.userInfo.org_code != 'O0000'">
         <option value="0">---</option>
         <template v-for="(item, index) in deptList" :key="index">
           <option :value="item.dept_id">
@@ -227,7 +227,7 @@ import Config from '@/assets/config.json';
     </label>
     <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
       <div class="title">{{ t('grade') }}</div>
-      <select class="select" v-model="data.grade" :disabled="data.grade == 0">
+      <select class="select" v-model="data.grade" :disabled="data.grade == 0 || Config.deptAsClass == true" >
         <option value="0">無 N/A</option>
         <option value="1">小一 Grade 1</option>
         <option value="2">小二 Grade 2</option>
