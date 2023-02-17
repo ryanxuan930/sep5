@@ -201,7 +201,7 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($sportCode, $gameId, $id)
     {
         if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
