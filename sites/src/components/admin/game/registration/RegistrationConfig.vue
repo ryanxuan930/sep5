@@ -209,6 +209,7 @@
           <th class="w-[10%] text-center">性別</th>
           <th class="w-[10%] text-center">排除體優</th>
           <th class="w-[10%] text-center">限定學生</th>
+          <th class="w-[10%] text-center">預選選手</th>
           <th class="w-[10%] text-center">年級限制</th>
           <th>年級設定</th>
         </tr>
@@ -225,6 +226,9 @@
             </td>
             <td class="text-center">
               <input type="checkbox" v-model="configData.options.division[index].student_only">
+            </td>
+            <td class="text-center">
+              <input type="checkbox" v-model="configData.options.division[index].pre_define_member">
             </td>
             <td class="text-center">
               <input type="checkbox" v-model="configData.options.division[index].has_grade">
@@ -248,7 +252,6 @@
           <th class="w-[20%]">項目</th>
           <th class="w-[10%] text-center">排除體優</th>
           <th class="w-[10%] text-center">限定學生</th>
-          <th class="w-[10%] text-center">預選選手</th>
           <th class="w-[10%] text-center">年級限制</th>
           <th>年級設定</th>
         </tr>
@@ -261,10 +264,6 @@
             <td class="text-center">
               <input type="checkbox" v-model="configData.options.event[item.event_code].student_only">
             </td>
-            <td class="text-center" v-if="configData.options.event[item.event_code].pre_define_member != undefined">
-              <input type="checkbox" v-model="configData.options.event[item.event_code].pre_define_member">
-            </td>
-            <td v-else></td>
             <td class="text-center">
               <input type="checkbox" v-model="configData.options.event[item.event_code].has_grade">
             </td>
