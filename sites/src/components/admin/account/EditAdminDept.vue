@@ -21,7 +21,7 @@
     admin_dept_name_ch: '',
     admin_dept_name_en: '',
     sport_management_list: [],
-    admin_org_id: 0,
+    admin_org_id: store.userInfo.admin_org_id,
   }); 
   if (props.inputData !== null) {
     Object.keys(data).forEach((index: string) => {
