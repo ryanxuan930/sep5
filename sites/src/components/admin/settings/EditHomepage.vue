@@ -155,6 +155,7 @@
       <input type="text" class="input" v-model="data.options.orgUrl">
     </label>
     <div class="md:col-span-4">
+      <div class="title">首頁相片輪播</div>
       <table>
         <tr>
           <th>順序</th>
