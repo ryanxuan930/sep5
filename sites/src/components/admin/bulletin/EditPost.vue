@@ -4,7 +4,7 @@
   import { useUserStore } from '@/stores/user';
   import type { Ref } from 'vue';
   import type { IPostData } from '@/components/library/interfaces';
-  import '@vueform/toggle/themes/default.css';
+  import Toggle from '@vueform/toggle';
   import { QuillEditor } from '@vueup/vue-quill'
   import '@vueup/vue-quill/dist/vue-quill.snow.css';
   import BulletinCategory from '@/assets/BulletinCategory.json';
