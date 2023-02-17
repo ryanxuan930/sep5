@@ -86,12 +86,12 @@
     </label>
     <label class="round-input-label">
       <div class="title">權限</div>
-      <select class="select" v-model="data.permission">
+      <select class="select" v-model="data.permission" :disabled="store.userInfo.permission < 3">
         <option value="0">一般使用者</option>
         <option value="1">分部管理員</option>
-        <option value="2">單位管理員</option>
-        <option value="8">系統管理員</option>
-        <option value="9">超級管理員</option>
+        <option value="2" v-if="store.userInfo.permission >= 3">單位管理員</option>
+        <option value="8" v-if="store.userInfo.permission >= 8">系統管理員</option>
+        <option value="9" v-if="store.userInfo.permission >= 9" disabled>超級管理員</option>
       </select>
     </label>
     <label class="round-input-label">
