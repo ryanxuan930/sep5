@@ -30,7 +30,7 @@ class GameController extends Controller
         if ($org_id == 1) {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->orderBy('event_start', 'desc')->paginate(10));
         } else {
-            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->whereJsonContains('host_list', $deptArray)->orderBy('event_start', 'desc')->paginate(10));
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->whereIn('host_list', $deptArray)->orderBy('event_start', 'desc')->paginate(10));
         }
     }
     /**
@@ -48,7 +48,7 @@ class GameController extends Controller
         if ($org_id == 1) {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->paginate(10));
         } else {
-            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereJsonContains('host_list', $deptArray)->paginate(10));
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereIn('host_list', $deptArray)->paginate(10));
         }
     }
     /**
