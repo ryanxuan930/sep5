@@ -31,6 +31,7 @@ class GameController extends Controller
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->orderBy('event_start', 'desc')->paginate(10));
         } else {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->where(function ($query) use ($deptArray) {
+                echo $deptArray[0];
                 $query->whereJsonContains('host_list', $deptArray[0]);
                 for ($i = 1; $i <= count($deptArray) - 1; $i++) {
                     $query->orWhereJsonContains('host_list', $deptArray[$i]);
