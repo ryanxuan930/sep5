@@ -28,15 +28,15 @@
   function getGameList(url = 'game') {
     let suffix = '';
     if (showAllGame.value === true) {
-      suffix = '-all';
+      suffix = '/all';
     } else {
       suffix = '';
     }
     const page = getUrlParams(url, 'page');
     if (page !== null) {
-      url = `${store.userInfo.admin_org_id}/game${suffix}?page=${page}`;
+      url = `${store.userInfo.admin_org_id}/game/dept/${store.userInfo.admin_dept_id}${suffix}?page=${page}`;
     } else {
-      url = `${store.userInfo.admin_org_id}/game${suffix}`;
+      url = `${store.userInfo.admin_org_id}/game/dept/${store.userInfo.admin_dept_id}${suffix}`;
     }
     currentUrl.value = url;
     vr.Get(url).then( (res: any) => {
