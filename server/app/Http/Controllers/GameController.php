@@ -59,6 +59,18 @@ class GameController extends Controller
             })->paginate(10));
         }
     }
+    public function indexByDept($org_id, $dept_id, $all = NULL)
+    {
+        $query = Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code');
+        if (is_null($all)) {
+            $query->where('archived', 0);
+        }
+        if ($org_id == 1) {
+            return response()->json($query->orderBy('event_start', 'desc')->paginate(10));
+        } else {
+            return response()->json($query->whereJsonContains('host_list', strval($dept_id))->orderBy('event_start', 'desc')->paginate(10));
+        }
+    }
     /**
      * Display a listing of the resource. (No filtering)
      * 
