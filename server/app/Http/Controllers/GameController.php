@@ -27,11 +27,16 @@ class GameController extends Controller
         foreach ($temp as $t) {
             array_push($deptArray, $t->admin_dept_id);
         }
-        return $deptArray;
         if ($org_id == 1) {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->orderBy('event_start', 'desc')->paginate(10));
         } else {
-            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->whereIn('host_list', $deptArray)->orderBy('event_start', 'desc')->paginate(10));
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where('archived', 0)->where(function ($query) use ($deptArray) {
+                $query->whereJsonContains('host_list', $deptArray[0]);
+                for ($i = 1; $i < count($deptArray); $i++) {
+                    $query->orWhereJsonContains('host_list', $deptArray[$i]);
+                }
+                return $query;
+            })->orderBy('event_start', 'desc')->paginate(10));
         }
     }
     /**
@@ -49,7 +54,13 @@ class GameController extends Controller
         if ($org_id == 1) {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->paginate(10));
         } else {
-            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->whereIn('host_list', $deptArray)->paginate(10));
+            return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where(function ($query) use ($deptArray) {
+                $query->whereJsonContains('host_list', $deptArray[0]);
+                for ($i = 1; $i < count($deptArray); $i++) {
+                    $query->orWhereJsonContains('host_list', $deptArray[$i]);
+                }
+                return $query;
+            })->paginate(10));
         }
     }
     /**
