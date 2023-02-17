@@ -34,8 +34,8 @@ class GameController extends Controller
                 $query->whereJsonContains('host_list', $deptArray[0]);
                 for ($i = 1; $i <= count($deptArray) - 1; $i++) {
                     $query->orWhereJsonContains('host_list', $deptArray[$i]);
+                    echo $deptArray[$i];
                 }
-                var_dump($query);
                 return $query;
             })->orderBy('event_start', 'desc')->paginate(10));
         }
