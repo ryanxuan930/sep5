@@ -80,9 +80,9 @@
     </label>
     <label class="round-input-label md:col-span-4">
       <div class="title">所屬管理組織</div>
-      <select class="select" v-model="data.admin_org_id" v-if="store.userInfo.permission <= 8">
+      <select class="select" v-model="data.admin_org_id" :disabled="store.userInfo.permission <= 8">
         <template v-for="(item, index) in adminOrgList">
-          <option :value="item.admim_org_id">{{ item.admin_org_name_ch }}</option>
+          <option :value="item.admin_org_id">{{ item.admin_org_name_ch }}</option>
         </template>
       </select>
     </label>
