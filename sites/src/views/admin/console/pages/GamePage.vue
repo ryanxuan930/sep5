@@ -25,7 +25,7 @@
   const gameList:Ref<IObjList|null> = ref(null);
   const currentUrl = ref('');
 
-  function getGameList(url = 'game') {
+  function getGameList(url = `${store.userInfo.admin_org_id}/game-dept/${store.userInfo.admin_dept_id}`) {
     let suffix = '';
     if (showAllGame.value === true) {
       suffix = '/all';
