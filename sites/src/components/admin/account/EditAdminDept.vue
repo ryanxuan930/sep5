@@ -15,7 +15,7 @@
   const sportList: any = ref(null);
   vr.Get('sport', sportList);
   const adminOrgList: any = ref(null);
-  vr.Get('admin-org', adminOrgList, true, true);
+  vr.Get('admin/admin-org', adminOrgList, true, true);
 
   const data: any = reactive({
     admin_dept_name_ch: '',
