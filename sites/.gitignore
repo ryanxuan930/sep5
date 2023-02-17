@@ -17,6 +17,8 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
+/Users/ryanchang/Library/Mobile Documents/com~apple~CloudDocs/Project/sep5/sites/src/assets/config.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
