@@ -47,17 +47,15 @@ class GameController extends Controller
         $temp = AdminDepartment::where('admin_org_id', $org_id)->get();
         $deptArray = array();
         foreach ($temp as $t) {
-            array_push($deptArray, $t->admin_dept_id);
+            array_push($deptArray, strval($t->admin_dept_id));
         }
         if ($org_id == 1) {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->paginate(10));
         } else {
             return response()->json(Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code')->where(function ($query) use ($deptArray) {
-                $query->whereJsonContains('host_list', $deptArray[0]);
-                for ($i = 1; $i <= count($deptArray) - 1; $i++) {
-                    $query->orWhereJsonContains('host_list', $deptArray[$i]);
+                for ($i = 0; $i < count($deptArray); $i++) {
+                    $query->orWhereJsonContains('host_list', [$deptArray[$i]]);
                 }
-                return $query;
             })->paginate(10));
         }
     }
