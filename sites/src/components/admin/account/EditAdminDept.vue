@@ -82,7 +82,7 @@
       <div class="title">所屬管理組織</div>
       <select class="select" v-model="data.admin_org_id">
         <template v-for="(item, index) in adminOrgList">
-          <option :value="item.admim_org_id">{{ item.admim_org_name_ch }}</option>
+          <option :value="item.admim_org_id">{{ item.admin_org_name_ch }}</option>
         </template>
       </select>
     </label>
