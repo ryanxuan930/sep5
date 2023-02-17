@@ -6,7 +6,6 @@ import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
 import SmallLoader from '@/components/SmallLoader.vue';
 import { csvToArray, openWindow } from '@/components/library/functions';
-import router from '@/router';
 
 const store = useUserStore();
 const route = useRoute();
@@ -201,8 +200,8 @@ const { t, locale } = useI18n({
           </tr>
         </template>
       </table>
-      <SmallLoader v-show="isLoading"></SmallLoader>
     </div>
+    <SmallLoader v-show="isLoading"></SmallLoader>
     <div>
       <button v-if="uploadData.length > 0" class="round-full-button blue" @click="submitAll">{{ t('save') }}</button>
     </div>
