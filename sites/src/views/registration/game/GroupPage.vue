@@ -93,10 +93,10 @@ async function addEvent(input: any) {
   for (i = 0; i < paramList.value.length; i++) {
     if (paramList.value[i].event_code == input.event_code) {
       let preDefine = false;
-      if (regConfig.value.options.event[input.event_code] != undefined) {
+      if (regConfig.value.options.event[input.event_code].pre_define_member != undefined) {
         preDefine = regConfig.value.options.event[input.event_code].pre_define_member;
       }
-      if (input.member_list.length < paramList.value[i].player_num && preDefine == false) {
+      if (input.member_list.length < paramList.value[i].player_num && preDefine == true) {
         alert(`本項目需至少${paramList.value[i].player_num}位選手 This event requires at least ${paramList.value[i].player_num} athletes`);
         return;
       }
