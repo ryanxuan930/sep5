@@ -22,7 +22,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return response()->json(Event::all());
+        return response()->json(Event::leftJoin('sport_lists', 'sport_lists.sport_id', '=', 'events.sport_id')->select('events.*', 'sport_lists.sport_name_ch', 'sport_lists.sport_name_en', 'sport_lists.sport_code')->get());
     }
     public function indexBySport($sportId)
     {
@@ -72,7 +72,7 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Event::where('event_id', $id)->first());
+        return response()->json(Event::leftJoin('sport_lists', 'sport_lists.sport_id', '=', 'events.sport_id')->select('events.*', 'sport_lists.sport_name_ch', 'sport_lists.sport_name_en', 'sport_lists.sport_code')->where('events.event_id', $id)->first());
     }
 
     /**

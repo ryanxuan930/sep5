@@ -5,6 +5,7 @@
   import { useUserStore } from '@/stores/user';
   import FullModal from '@/components/FullModal.vue';
   import EditHomepage from '@/components/admin/settings/EditHomepage.vue';
+  import EditEvent from '@/components/admin/settings/EditEvent.vue';
 
   const store = useUserStore();
   const router = useRouter();
@@ -17,18 +18,21 @@
   <div>
     <div class="section-box flex flex-col gap-5">
       <div class="flex-grow text-3xl font-medium">系統管理</div>
-      <div class="grid grid-cols-1 md:grid-cols-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
         <button class="round-full-button blue" @click="displayModal = 1">頁面設定</button>
+        <button class="round-full-button blue" @click="displayModal = 2">項目設定</button>
       </div>
     </div>
     <FullModal v-show="displayModal" @closeModal="displayModal = 0">
       <template v-slot:title>
         <div class="text-2xl">
           <div v-if="displayModal == 1">頁面設定</div>
+          <div v-if="displayModal == 2">項目設定</div>
         </div>
       </template>
       <template v-slot:content>
         <EditHomepage v-if="displayModal == 1" @closeModal="displayModal = 0"></EditHomepage>
+        <EditEvent v-if="displayModal == 2" @closeModal="displayModal = 0"></EditEvent>
       </template>
     </FullModal>
   </div>

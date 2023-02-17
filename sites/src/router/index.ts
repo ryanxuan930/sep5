@@ -61,7 +61,27 @@ const router = createRouter({
             {
               path: '',
               name: 'gameMainPage',
-              component: () => import('../views/main/homepage/pages/MainPage.vue'),
+              component: () => import('../views/main/homepage/games/MainPage.vue'),
+            },
+            {
+              path: 'news/:postId?',
+              name: 'gameNewsPage',
+              component: () => import('../views/main/homepage/games/NewsPage.vue'),
+            },
+            {
+              path: 'schedule',
+              name: 'gameSchedulePage',
+              component: () => import('../views/main/homepage/games/TempPage.vue'),
+            },
+            {
+              path: 'result',
+              name: 'gameResultPage',
+              component: () => import('../views/main/homepage/games/TempPage.vue'),
+            },
+            {
+              path: 'venues',
+              name: 'gameVenuesPage',
+              component: () => import('../views/main/homepage/games/TempPage.vue'),
             },
           ]
         },

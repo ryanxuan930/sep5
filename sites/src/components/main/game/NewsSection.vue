@@ -15,11 +15,11 @@ const adminOrgId = useRoute().params.adminOrgId;
 const linkUrl:any= ref(null);
 const bulletinList:Ref<IPostData[]> = ref([]);
 const currentUrl = ref('');
-function getBulletinList(url = `${adminOrgId}/bulletin`) {
+function getBulletinList(url = `${adminOrgId}/bulletin-game`) {
   currentUrl.value = url;
   const page = getUrlParams(url, 'page');
   if (page !== null) {
-    url = `${adminOrgId}/bulletin?page=${page}`;
+    url = `${adminOrgId}/bulletin-game?page=${page}`;
   }
   vr.Get(url).then( (res: any) => {
     bulletinList.value = res.data;
@@ -48,7 +48,7 @@ const { t, locale } = useI18n({
     </div>
     <table class="bulletin-table">
       <template v-for="(item, index) in bulletinList" :key="index">
-        <tbody @click="$router.push(`/${$route.params.adminOrgId}/news/${item.bulletin_id}`)" v-if="((props.displayMode == 'home' && index < 5)|| props.displayMode == 'news') && (newsFilter==9 || item.category==newsFilter) && item.release!=0">
+        <tbody @click="$router.push(`/${$route.params.adminOrgId}/game/${$route.params.gameId}/news/${item.bulletin_id}`)" v-if="((props.displayMode == 'home' && index < 5)|| props.displayMode == 'news') && (newsFilter==9 || item.category==newsFilter) && item.release!=0">
           <tr>
             <td class="w-[3%]"><span v-if="item.pinned==1" class="material-icons text-3xl text-blue-500">label_important</span></td>
             <td class="text-left w-[40%] md:w-[20%] lg:w-[15%] xl:w-[12%]">
@@ -70,7 +70,7 @@ const { t, locale } = useI18n({
       </template>
     </table>
     <div v-if="props.displayMode == 'home'" class="bg-gray-100 p-3 tezt-center mb-3 text-center">
-      <button class="bg-gray-500 text-white py-2 px-5" @click="$router.push(`/${$route.params.adminOrgId}/news`)">{{ t('more') }}...</button>
+      <button class="bg-gray-500 text-white py-2 px-5" @click="$router.push(`/${$route.params.adminOrgId}/game/${$route.params.gameId}/news`)">{{ t('more') }}...</button>
     </div>
     <div v-if="props.displayMode == 'news'" class="page-btn">
       <template v-for="(item, index) in linkUrl" :key="index">
