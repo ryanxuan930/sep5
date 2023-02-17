@@ -8,6 +8,7 @@ use Validator;
 use App\Models\User;
 use App\Models\AdminOrganization;
 use Illuminate\Support\Facades\Storage;
+set_time_limit(0);
 
 class UserController extends Controller
 {
