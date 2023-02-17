@@ -126,7 +126,7 @@ class UserController extends Controller
             '*.first_name_en' => 'string|nullable',
             '*.last_name_en' => 'string|nullable',
             '*.org_code' => 'required|size:5',
-            '*.is_student' => 'boolean',
+            '*.is_student' => 'integer',
             '*.student_id' => 'string|nullable',
             '*.dept_id' => 'integer',
             '*.grade' => 'integer',
