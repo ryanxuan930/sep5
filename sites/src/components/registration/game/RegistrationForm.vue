@@ -161,6 +161,8 @@ getDataList();
                 <div class="font10 text-gray-400">{{ item.event_en }}</div>
               </td>
               <td>
+                <div>{{ item.team_name }}</div>
+                <hr>
                 <div class="flex items-center gap-3">
                   <template v-for="member in item.members">
                     <div>{{ member.last_name_ch }}{{ member.first_name_ch }}</div>
