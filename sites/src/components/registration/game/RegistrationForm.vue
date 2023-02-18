@@ -76,10 +76,10 @@ getDataList();
         <div class="h-[0.25cm]"></div>
         <table class="table2">
           <tr>
-            <th class="w-1/6">編號 No.</th>
-            <th class="w-1/6">組別 Division</th>
-            <th class="w-1/6">項目 Event</th>
-            <th class="w-1/2">姓名 Name</th>
+            <th class="w-1/12">編號<div class="font10">No.</div></th>
+            <th class="w-3/12">組別<div class="font10">Division</div></th>
+            <th class="w-3/12">項目<div class="font10">Event</div></th>
+            <th class="w-5/12">姓名<div class="font10">Name</div></th>
           </tr>
           <template v-for="(item, index) in individualList">
             <tr>
@@ -144,10 +144,10 @@ getDataList();
         <div class="h-[0.25cm]"></div>
         <table class="table2">
           <tr>
-            <th class="w-1/6">編號 No.</th>
-            <th class="w-1/6">組別 Division</th>
-            <th class="w-1/6">項目 Event</th>
-            <th class="w-1/2">姓名 Name</th>
+            <th class="w-1/12">編號<div class="font10">No.</div></th>
+            <th class="w-3/12">組別<div class="font10">Division</div></th>
+            <th class="w-3/12">項目<div class="font10">Event</div></th>
+            <th class="w-5/12">姓名<div class="font10">Name</div></th>
           </tr>
           <template v-for="(item, index) in groupList">
             <tr>
