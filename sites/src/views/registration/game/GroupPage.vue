@@ -88,6 +88,7 @@ check(paramList.value);
 async function addEvent(input: any) {
   if (input.event_code == '' || input.event_code == null) {
     alert('請選擇項目 Please select an event');
+    console.log(1);
     return;
   }
   for (i = 0; i < paramList.value.length; i++) {
@@ -98,6 +99,7 @@ async function addEvent(input: any) {
       }
       if (input.member_list.length < paramList.value[i].player_num && preDefine == true) {
         alert(`本項目需至少${paramList.value[i].player_num}位選手 This event requires at least ${paramList.value[i].player_num} athletes`);
+        console.log(2);
         return;
       }
     }
@@ -111,10 +113,12 @@ async function addEvent(input: any) {
         if (division.division_id == input.division_id) {
           if (division.prevent_sport_gifited == true && athlete.is_sport_gifited == 1) {
             alert('體優生不得報名此組別 Sport gifited student is not allowed');
+            console.log(3);
             return;
           }
           if (division.student_only == true && athlete.is_student == 0) {
             alert('此組別僅限學生報名 This division is only for students');
+            console.log(4);
             return;
           }
         }
@@ -122,10 +126,12 @@ async function addEvent(input: any) {
       if (regConfig.value.options.event[input.event_code] != undefined) {
         if (regConfig.value.options.event[input.event_code].prevent_sport_gifited && athlete.is_sport_gifited == true) {
           alert('體優生不得報名此項目 Sport gifited student is not allowed');
+          console.log(5);
           return;
         }
         if (regConfig.value.options.event[input.event_code].student_only && athlete.is_student == 0) {
           alert('此組別僅限學生報名 This event is only for students');
+          console.log(6);
           return;
         }
       }
@@ -135,6 +141,7 @@ async function addEvent(input: any) {
   for (const count of countData.value.event) {
     if (count.division_id == input.division_id && count.event_code == input.event_code && count.total >= regConfig.value.options.common.group.max_team_per_event) {
       alert('此項目已超過可報名隊伍數 Exceed max team number of this event');
+      console.log(7);
       return;
     }
   }
@@ -156,6 +163,7 @@ async function addEvent(input: any) {
       console.log(count);
       if (count == input.member_list.length) {
         alert('此隊伍已報名此項目 This team has already registerd for this event');
+        console.log(8);
         return;
       }
     }
@@ -254,8 +262,10 @@ function removeUser(id: number) {
               <select class="select flex-grow" v-model="selectedUser">
                 <template v-for="(item, index) in userList" :key="index">
                   <option :value="item.u_id" v-if="item.sex == divisionSex || divisionSex == 0">
-                    <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }} ({{ item.athlete_id }})</template>
-                    <template v-else>{{ item.first_name_en }} {{ item.last_name_en }} ({{ item.athlete_id }})</template>
+                    <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }}</template>
+                    <template v-else>{{ item.first_name_en }} {{ item.last_name_en }}</template>
+                    <span v-if="Config.deptAsClass"> ({{ item.dept_name_ch }}{{ item.num_in_dept.toString().padStart(2, '0') }})</span>
+                    <span v-else> ({{ item.athlete_id }})</span>
                   </option>
                 </template>
               </select>
@@ -322,7 +332,7 @@ function removeUser(id: number) {
           <tr>
             <th>{{ t('division') }}</th>
             <th>{{ t('event') }}</th>
-            <th>{{ t('name') }}</th>
+            <th>{{ t('team') }}</th>
             <th>{{ t('sex') }}</th>
             <th>{{ t('organization') }}</th>
             <th v-if="Config.deptAsClass">{{ t('class') }}</th>
@@ -340,10 +350,7 @@ function removeUser(id: number) {
                 <template v-if="locale == 'zh-TW'">{{ item.event_ch }}</template>
                 <template v-else>{{ item.event_en }}</template>
               </td>
-              <td>
-                <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }}</template>
-                <template v-else>{{ item.first_name_en }} {{ item.last_name_en }}</template>
-              </td>
+              <td>{{ item.team_name }}</td>
               <td>
                 <template v-if="item.sex == 0">{{ t('others') }}</template>
                 <template v-if="item.sex == 1">{{ t('male') }}</template>

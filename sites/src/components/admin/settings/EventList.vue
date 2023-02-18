@@ -11,7 +11,10 @@
   const isLoading = ref(false);
 
   const eventList: any = ref(null);
-  vr.Get('event', eventList);
+  function getEventList() {
+    vr.Get('event', eventList);
+  }
+  getEventList();
 
   const selectedData = ref(null);
   function open(input: any) {
@@ -66,7 +69,7 @@
         </div>
       </template>
       <template v-slot:content>
-        <EditEvent v-if="displayModal" @closeModal="displayModal = false" :input-data="selectedData"></EditEvent>
+        <EditEvent v-if="displayModal" @closeModal="displayModal = false" :input-data="selectedData" @refreshPage="getEventList"></EditEvent>
       </template>
     </FullModal>
   </div>

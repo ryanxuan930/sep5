@@ -13,6 +13,7 @@ const navList = reactive([
   {title: {'zh-TW': '個人項目', 'en-US': 'Individual'}, link: `/${useRoute().params.adminOrgId}/registration/game/${useRoute().params.sportCode}/${useRoute().params.gameId}/individual`, permission: 0, type: 1},
   {title: {'zh-TW': '團體項目', 'en-US': 'Group'}, link: `/${useRoute().params.adminOrgId}/registration/game/${useRoute().params.sportCode}/${useRoute().params.gameId}/group`, permission: 0, type: 1},
   {title: {'zh-TW': '項目列表', 'en-US': 'Event List'}, link: `/${useRoute().params.adminOrgId}/registration/game/${useRoute().params.sportCode}/${useRoute().params.gameId}/event-list`, permission: 0, type: 2},
+  {title: {'zh-TW': '報名列印', 'en-US': 'Print'}, link: `/${useRoute().params.adminOrgId}/registration/game/${useRoute().params.sportCode}/${useRoute().params.gameId}/print`, permission: 0, type: 0},
 ]);
 
 const { t, locale } = useI18n({

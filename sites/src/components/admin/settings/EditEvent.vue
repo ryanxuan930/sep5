@@ -12,6 +12,7 @@
   const displayModal = ref(false);
   const props: any = defineProps(['inputData']);
   const data: any = reactive({
+    event_id: 0,
     sport_id: 1,
     event_code: '',
     event_ch: '',
@@ -47,6 +48,9 @@
         data.sport_id = deptData.value.sport_management_list[0];
       }
     }
+    if (data.combined_list == null) {
+      data.combined_list = [];
+    }
     isLoading.value = false;
   })();
   
@@ -75,10 +79,11 @@
     let res: any = null;
     const temp = JSON.parse(JSON.stringify(data));
     temp.combined_list = JSON.stringify(temp.combined_list);
+    delete temp.event_id;
     if (props.inputData == null) {
       res = await vr.Post('event', temp, null, true, true);
     } else {
-      res = await vr.Patch('event', temp, null, true, true);
+      res = await vr.Patch(`event/${data.event_id}`, temp, null, true, true);
     }
     if (res.status == 'A01') {
       alert('已儲存');
@@ -151,11 +156,13 @@
     </label>
     <label class="round-input-label md:col-span-2">
       <div class="title">複合項目</div>
-      <div class="flex">
-        <button class="general-button blue block" @click="displayModal = true">選取</button>
-        <template v-for="(item, index) in eventList">
-          <div v-if="data.combined_list.includes(item.event_code)">{{ item.event_ch }}</div>
-        </template>
+      <div class="flex items-center gap-5">
+        <button class="general-button blue block flex-shrink-0" @click="displayModal = true">選取</button>
+        <div class="flex-grow flex overflow-auto gap-3 p-1 bg-gray-50">
+          <template v-for="(item, index) in eventList">
+            <div class="flex-shrink-0 py-0.5 px-2 border-2 rounded bg-white" v-if="data.combined_list.includes(item.event_code)">{{ item.event_ch }}</div>
+          </template>
+        </div>
       </div>
     </label>
     <div class="round-input-label md:col-span-4">
@@ -170,7 +177,7 @@
       </div>
     </template>
     <template v-slot:content>
-      <EventSelector v-if="displayModal" @closeModal="displayModal = false" :input-data="data.combined_list"></EventSelector>
+      <EventSelector v-if="displayModal" @closeModal="displayModal = false" :input-data="data.combined_list" @returnData="(input: any) => { data.combined_list = input;}"></EventSelector>
     </template>
   </SmallModal>
   <SmallLoader v-show="isLoading"></SmallLoader>

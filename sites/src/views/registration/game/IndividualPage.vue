@@ -182,8 +182,10 @@ const { t, locale } = useI18n({
             <select class="select" v-model="data.u_id">
               <template v-for="(item, index) in userList" :key="index">
                 <option :value="item.u_id" v-if="item.sex == divisionSex || divisionSex == 0">
-                  <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }} ({{ item.athlete_id }})</template>
-                  <template v-else>{{ item.first_name_en }} {{ item.last_name_en }} ({{ item.athlete_id }})</template>
+                  <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }}</template>
+                  <template v-else>{{ item.first_name_en }} {{ item.last_name_en }}</template>
+                  <span v-if="Config.deptAsClass"> ({{ item.dept_name_ch }}{{ item.num_in_dept.toString().padStart(2, '0') }})</span>
+                  <span v-else> ({{ item.athlete_id }})</span>
                 </option>
               </template>
             </select>

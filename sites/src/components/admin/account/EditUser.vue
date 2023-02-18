@@ -4,6 +4,7 @@
   import { useUserStore } from '@/stores/user';
   import SmallModal from '@/components/SmallModal.vue';
   import SchoolTeamSelector from '@/components/admin/module/SchoolTeamSelector.vue';
+  import Config from '@/assets/config.json';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
@@ -44,6 +45,7 @@
     options: optionsPrototype,
     avatar: '',
     permission: 0,
+    num_in_dept: 0,
   });
   if (props.inputData !== null) {
     Object.keys(data).forEach((index: string) => {
@@ -193,10 +195,16 @@
         <option value="1">是</option>
       </select>
     </label>
-    <label class="round-input-label">
-      <div class="title">學號/職員編號</div>
-      <input class="input" type="text" v-model="data.student_id">
-    </label>
+    <div :class="{'flex gap-3': Config.deptAsClass}">
+      <label class="round-input-label flex-grow">
+        <div class="title">學號/職員編號</div>
+        <input class="input" type="text" v-model="data.student_id">
+      </label>
+      <label class="round-input-label basis-1/3">
+        <div class="title">座號</div>
+        <input class="input" type="text" v-model="data.num_in_dept">
+      </label>
+    </div>
     <label class="round-input-label">
       <div class="title">年級</div>
       <select class="select" v-model="data.grade" :disabled="data.grade == 0">

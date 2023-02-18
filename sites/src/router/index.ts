@@ -6,6 +6,7 @@ import AdminView from '../views/admin/AdminView.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // Home
     {
       path: '/',
       name: 'mainSelection',
@@ -87,6 +88,7 @@ const router = createRouter({
         },
       ]
     },
+    // Admin
     {
       path: '/admin',
       name: 'adminRoot',
@@ -153,6 +155,7 @@ const router = createRouter({
       name: 'adminLogin',
       component: () => import('../views/admin/login/LoginView.vue'),
     },
+    // Registration
     {
       path: '/:adminOrgId/registration',
       name: 'registrationRoot',
@@ -215,7 +218,17 @@ const router = createRouter({
               name: 'registrationGameGroupPage',
               component: () => import('../views/registration/game/GroupPage.vue'),
             },
+            {
+              path: 'print',
+              name: 'registrationGamePrintPage',
+              component: () => import('../views/registration/game/PrintPage.vue'),
+            },
           ],
+        },
+        {
+          path: 'game/:sportCode/:gameId/print/reg-data',
+          name: 'registrationGamePrintPageData',
+          component: () => import('../components/registration/game/RegistrationForm.vue'),
         },
       ]
     },
