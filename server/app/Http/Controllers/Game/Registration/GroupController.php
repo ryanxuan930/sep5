@@ -143,7 +143,7 @@ class GroupController extends Controller
         ->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.grp_id', $id)
         ->get());
     }
-    public function showTeam($teamId)
+    public function showTeam($sportCode, $gameId, $teamId)
     {
         
         $teamData = DB::table($sportCode.'_'.$gameId.'_teams')->where('team_id', $teamId)->first();
