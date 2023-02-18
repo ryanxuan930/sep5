@@ -101,6 +101,41 @@ async function addEvent(input: any) {
         alert(`本項目需至少${paramList.value[i].player_num}位選手 This event requires at least ${paramList.value[i].player_num} athletes`);
         console.log(2);
         return;
+      } else {
+        for(const division of regConfig.value.options.division) {
+          if (division.division_id == input.division_id) {
+            if (division.prevent_sport_gifited == true && store.userInfo.is_sport_gifited == 1) {
+              alert('體優生不得報名此組別 Sport gifited student is not allowed');
+              console.log(3);
+              return;
+            }
+            if (division.student_only == true && store.userInfo.is_student == 0) {
+              alert('此組別僅限學生報名 This division is only for students');
+              console.log(4);
+              return;
+            }
+            if (!division.grade_list.includes(store.userInfo.grade) && division.has_grade == true) {
+              alert('不是可報名此組別的年級 This grade is not allowed');
+              return;
+            }
+          }
+        }
+        if (regConfig.value.options.event[input.event_code] != undefined) {
+          if (regConfig.value.options.event[input.event_code].prevent_sport_gifited && store.userInfo.is_sport_gifited == true) {
+            alert('體優生不得報名此項目 Sport gifited student is not allowed');
+            console.log(5);
+            return;
+          }
+          if (regConfig.value.options.event[input.event_code].student_only && store.userInfo.is_student == 0) {
+            alert('此組別僅限學生報名 This event is only for students');
+            console.log(6);
+            return;
+          }
+          if (!regConfig.value.options.event[input.event_code].grade_list.includes(store.userInfo.grade) && regConfig.value.options.event[input.event_code].has_grade == true) {
+            alert('不是可報名此項目的年級 This grade is not allowed');
+            return;
+          }
+        }
       }
     }
   }
@@ -121,6 +156,10 @@ async function addEvent(input: any) {
             console.log(4);
             return;
           }
+          if (!division.grade_list.includes(athlete.grade) && division.has_grade == true) {
+            alert('不是可報名此組別的年級 This grade is not allowed');
+            return;
+          }
         }
       }
       if (regConfig.value.options.event[input.event_code] != undefined) {
@@ -132,6 +171,10 @@ async function addEvent(input: any) {
         if (regConfig.value.options.event[input.event_code].student_only && athlete.is_student == 0) {
           alert('此組別僅限學生報名 This event is only for students');
           console.log(6);
+          return;
+        }
+        if (!regConfig.value.options.event[input.event_code].grade_list.includes(athlete.grade) && regConfig.value.options.event[input.event_code].has_grade == true) {
+          alert('不是可報名此項目的年級 This grade is not allowed');
           return;
         }
       }
