@@ -150,7 +150,7 @@ class GroupController extends Controller
         $memberList = json_decode($teamData->member_list, true);
         $memberArray = array();
         foreach($memberList as $member) {
-            $temp = User::where('u_id', $member)->select('u_id', 'first_name_ch', 'last_name_ch', 'first_name_en', 'last_name_en', 'org_code', 'dept_id')->first();
+            $temp = User::where('u_id', $member)->select('u_id', 'first_name_ch', 'last_name_ch', 'first_name_en', 'last_name_en', 'org_code', 'dept_id', 'num_ind_dept')->first();
             array_push($memberArray, $temp);
         }
         return response()->json($memberArray);
