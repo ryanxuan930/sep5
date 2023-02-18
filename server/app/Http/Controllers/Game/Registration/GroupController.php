@@ -8,6 +8,7 @@ use Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\SportList;
 use App\Mods\GameFunctions;
+use App\Models\User;
 
 class GroupController extends Controller
 {
@@ -141,6 +142,17 @@ class GroupController extends Controller
         ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_teams.*', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*')
         ->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.grp_id', $id)
         ->get());
+    }
+    public function showTeam($teamId)
+    {
+        $teamData = DB::table($sportCode.'_'.$gameId.'_teams')->where('team_id', $teamId)->first();
+        $memberList = json_decode($teamData->member_list, true);
+        $memberArray = array();
+        foreach($memberList as $member) {
+            $temp = User::where('u_id', $member)->select('u_id', 'first_name_ch', 'last_name_ch', 'first_name_en', 'last_name_en', 'org_code', 'dept_id')->first();
+            array_push($memberArray, $temp);
+        }
+        return response()->json($memberArray);
     }
 
     /**

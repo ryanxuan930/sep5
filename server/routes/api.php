@@ -116,6 +116,7 @@ Route::post('/organization-create', [OrganizationController::class, 'create']);
 
 Route::apiResource('/user', UserController::class);
 Route::get('/user-partial', [UserController::class, 'indexByUser']);
+Route::get('/user-team', [UserController::class, 'showTeam']);
 Route::get('/user/athlete/{id}', [UserController::class, 'showByAthleteId']);
 Route::post('/user-upload', [UserController::class, 'storeByBatch']);
 Route::post('/user-search', [UserController::class, 'search']);
