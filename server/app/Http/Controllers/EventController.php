@@ -39,7 +39,6 @@ class EventController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'sport_id' => 'required',
-            'event_code' => 'required|size:8',
             'event_ch' => 'required',
             'event_en' => 'required',
             'event_jp' => 'nullable',
@@ -59,6 +58,8 @@ class EventController extends Controller
         $temp = $request->all();
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
+        $sportData = SportList::where('sport_id', $temp['sport_id'])->first();
+        $temp['event_code'] = $sportData->sport_code.str_pad($sportData->event_id_count, 4, '0', STR_PAD_LEFT);
         Event::insert($temp);
         SportList::where('sport_id', $temp['sport_id'])->update(['event_id_count' => DB::raw('event_id_count + 1')]);
         return response()->json(['status'=>'A01']);
@@ -86,7 +87,6 @@ class EventController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'sport_id' => 'required',
-            'event_code' => 'required|size:8',
             'event_ch' => 'required',
             'event_en' => 'required',
             'event_jp' => 'nullable',

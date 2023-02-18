@@ -5,7 +5,7 @@
   import { useUserStore } from '@/stores/user';
   import FullModal from '@/components/FullModal.vue';
   import EditHomepage from '@/components/admin/settings/EditHomepage.vue';
-  import EditEvent from '@/components/admin/settings/EditEvent.vue';
+  import EventList from '@/components/admin/settings/EventList.vue';
 
   const store = useUserStore();
   const router = useRouter();
@@ -32,7 +32,7 @@
       </template>
       <template v-slot:content>
         <EditHomepage v-if="displayModal == 1" @closeModal="displayModal = 0"></EditHomepage>
-        <EditEvent v-if="displayModal == 2" @closeModal="displayModal = 0"></EditEvent>
+        <EventList v-if="displayModal == 2" @closeModal="displayModal = 0"></EventList>
       </template>
     </FullModal>
   </div>

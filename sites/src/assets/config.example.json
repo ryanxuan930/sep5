@@ -2,6 +2,7 @@
   "serverUrl": "",
   "resourceUrl": "",
   "logoSource": "",
+  "logoSquare": "",
   "deptAsClass": false,
   "changeDeptPermission": true,
   "allowAddUser": true,

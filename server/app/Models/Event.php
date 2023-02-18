@@ -9,4 +9,7 @@ class Event extends Model
 {
     use HasFactory;
     protected $primaryKey = "event_id";
+    protected $casts = [
+        'combined_list' => 'array',
+    ];
 }
