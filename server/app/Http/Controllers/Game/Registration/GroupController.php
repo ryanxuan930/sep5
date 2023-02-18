@@ -146,6 +146,7 @@ class GroupController extends Controller
     public function showTeam($teamId)
     {
         $teamData = DB::table($sportCode.'_'.$gameId.'_teams')->where('team_id', $teamId)->first();
+        var_dump($teamData);
         $memberList = json_decode($teamData->member_list, true);
         $memberArray = array();
         foreach($memberList as $member) {
