@@ -59,13 +59,14 @@ class EventController extends Controller
         $temp['created_at'] = date("Y-m-d H:i:s");
         $temp['updated_at'] = date("Y-m-d H:i:s");
         $sportData = SportList::where('sport_id', $temp['sport_id'])->first();
-        $temp['event_code'] = $sportData->sport_code.str_pad($sportData->event_id_count, 4, '0', STR_PAD_LEFT);
+        $count = $sportData->event_id_count + 1;
+        $temp['event_code'] = $sportData->sport_code.str_pad($count, 4, '0', STR_PAD_LEFT);
         Event::insert($temp);
-        SportList::where('sport_id', $temp['sport_id'])->update(['event_id_count' => DB::raw('event_id_count + 1')]);
+        SportList::where('sport_id', $temp['sport_id'])->update(['event_id_count' => $count]);
         return response()->json(['status'=>'A01']);
     }
 
-    /**
+    /**å
      * Display the specified resource.
      *
      * @param  int  $id
