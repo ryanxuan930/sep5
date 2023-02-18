@@ -7,6 +7,7 @@ import ConsoleNav from '@/components/registration/console/ConsoleNav.vue';
 import AccountBtn from '@/components/registration/console/AccountBtn.vue';
 import LogoSection from '@/components/registration/console/LogoSection.vue';
 import SpinnerLoading from '@/components/SpinnerLoading.vue';
+import Config from '@/assets/config.json';
 
 const store = useUserStore();
 const route = useRoute();
@@ -14,6 +15,7 @@ const vr = new VueRequest(store.token);
 const loadinStatus = ref(false);
 const adminOrgId = route.params.adminOrgId;
 const systemConfig: any = ref(null);
+document.title = Config.systemName;
 
 (async () => {
   await vr.Get(`config/${adminOrgId}`, systemConfig);

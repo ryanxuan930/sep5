@@ -99,9 +99,9 @@ async function addEvent(input: any) {
       return;
     }
     if (!regConfig.value.options.event[input.event_code].grade_list.includes(athlete.grade) && regConfig.value.options.event[input.event_code].has_grade == true) {
-        alert('不是可報名此項目的年級 This grade is not allowed');
-        return;
-      }
+      alert('不是可報名此項目的年級 This grade is not allowed');
+      return;
+    }
   }
   for (const count of countData.value.event) {
     if (count.division_id == input.division_id && count.event_code == input.event_code && count.total >= regConfig.value.options.common.individual.max_athlete_per_event) {

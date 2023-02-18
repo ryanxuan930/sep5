@@ -137,6 +137,7 @@ const regConfig: Ref<regConfig> = ref({
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/params/full`, paramList);
   await vr.Get('user-partial', userList, true, true);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/division`, divisionList);
+  document.title = gameData.value.game_name_ch;
   await check();
   loadingStatus.value = true;
 })();

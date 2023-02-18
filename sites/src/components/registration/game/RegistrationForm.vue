@@ -21,6 +21,7 @@
     await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/user`, groupList, true, true);
     await vr.Get(`reg-config-game/${route.params.gameId}`, regConfig);
     await vr.Get(`auth/user/info`, userData, true, true);
+    document.title = gameData.value.game_name_ch;
     (async () => {
       for (let i = 0; i < groupList.value.length; i++) {
         groupList.value[i].members = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/team/${groupList.value[i].team_id}`, null, true, true);
@@ -214,7 +215,7 @@ table {
 }
 .table1 {
   td {
-    @apply border-[1px] border-gray-400 py-1 px-2 w-1/6 break-all;
+    @apply border-[1px] border-gray-400 py-1 px-2 w-1/6 break-words;
   }
 }
 .table2 {
