@@ -113,6 +113,7 @@ Route::get('/event/sport/{sportId}', [EventController::class, 'indexBySport']);
 Route::apiResource('/sport', SportController::class);
 
 Route::apiResource('/reg-form', RFController::class);
+Route::apiResource('/reg-form/game/{gameId}', [RFController::class, 'indexByGame']);
 
 Route::apiResource('/organization', OrganizationController::class);
 Route::post('/organization-create', [OrganizationController::class, 'create']);
