@@ -22,6 +22,7 @@ use App\Http\Controllers\SchoolTeamController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RegistrationFormController as RFController;
 use App\Http\Controllers\RegistrationConfigController as RCController;
 use App\Http\Controllers\Game\Main\DateController as GameDateController;
 use App\Http\Controllers\Game\Main\DivisionController as GameDivisionController;
@@ -110,6 +111,8 @@ Route::apiResource('/event', EventController::class);
 Route::get('/event/sport/{sportId}', [EventController::class, 'indexBySport']);
 
 Route::apiResource('/sport', SportController::class);
+
+Route::apiResource('/reg-form', RFController::class);
 
 Route::apiResource('/organization', OrganizationController::class);
 Route::post('/organization-create', [OrganizationController::class, 'create']);
