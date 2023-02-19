@@ -101,6 +101,45 @@ getDataList();
           </tr>
         </table>
       </div>
+      <div class="h-[0.25cm]"></div>
+      <div class="font16">承辦人員簽章 Signature</div>
+      <div class="h-[0.25cm]"></div>
+      <div>
+        <table class="table3">
+          <tr>
+            <th>
+              <template v-if="Config.deptAsClass">
+                <div>體育組</div>
+                <div class="font10">Physical Education Division</div>
+              </template>
+              <template v-else>
+                <div>主辦單位</div>
+                <div class="font10">Organizer</div>
+              </template>
+            </th>
+            <th>
+              <template v-if="Config.deptAsClass">
+                <div>導師</div>
+                <div class="font10">Homeroom Teacher</div>
+              </template>
+              <template v-else>
+                <div>單位主管</div>
+                <div class="font10">Supervisor</div>
+              </template>
+            </th>
+            <th>
+              <template v-if="Config.deptAsClass">
+                <div>體育股長</div>
+                <div class="font10">Sport Activities Leader</div>
+              </template>
+              <template v-else>
+                <div>承辦人</div>
+                <div class="font10">Contact Person</div>
+              </template>
+            </th>
+          </tr>
+        </table>
+      </div>
     </div>
     <div class="page">
       <div class="text-center font20 font-medium">{{ gameData.game_name_ch }}</div>
@@ -178,6 +217,45 @@ getDataList();
           </tr>
         </table>
       </div>
+      <div class="h-[0.25cm]"></div>
+      <div class="font16">承辦人員簽章 Signature</div>
+      <div class="h-[0.25cm]"></div>
+      <div>
+        <table class="table3">
+          <tr>
+            <th>
+              <template v-if="Config.deptAsClass">
+                <div>體育組</div>
+                <div class="font10">Physical Education Division</div>
+              </template>
+              <template v-else>
+                <div>主辦單位</div>
+                <div class="font10">Organizer</div>
+              </template>
+            </th>
+            <th>
+              <template v-if="Config.deptAsClass">
+                <div>導師</div>
+                <div class="font10">Homeroom Teacher</div>
+              </template>
+              <template v-else>
+                <div>單位主管</div>
+                <div class="font10">Supervisor</div>
+              </template>
+            </th>
+            <th>
+              <template v-if="Config.deptAsClass">
+                <div>體育股長</div>
+                <div class="font10">Sport Activities Leader</div>
+              </template>
+              <template v-else>
+                <div>承辦人</div>
+                <div class="font10">Contact Person</div>
+              </template>
+            </th>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -221,6 +299,11 @@ table {
 .table2 {
   th, td {
     @apply border-[1px] border-gray-400 py-1 px-2 text-left;
+  }
+}
+.table3 {
+  th, td {
+    @apply py-1 px-2 text-left w-1/3;
   }
 }
 @page {

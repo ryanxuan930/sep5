@@ -32,13 +32,16 @@
       <button class="round-full-button blue">團體項目項目</button>
       <button class="round-full-button blue">參賽選手名單</button>
       <button class="round-full-button blue">報名資料下載</button>
+      <button class="round-full-button blue">紙本報名管理</button>
+      <button class="round-full-button blue">其他表件管理</button>
     </div>
   </div>
   <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
       <template v-slot:title>
         <div class="text-2xl">
           <div v-if="displayModal == 1">報名系統設定</div>
-
+          <div v-if="displayModal == 7">紙本報名管理</div>
+          <div v-if="displayModal == 8">其他表件管理</div>
         </div>
       </template>
       <template v-slot:content>
