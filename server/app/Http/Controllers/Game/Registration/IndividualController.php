@@ -88,6 +88,39 @@ class IndividualController extends Controller
         $result['athlete'] = $table->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id', DB::raw('count(*) as total'))->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')->get();
         return response()->json($result);
     }
+    public function indexByAthlete($sportCode, $gameId)
+    {
+        if (is_null($user = auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $result = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')
+        ->leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')
+        ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')
+        ->distinct('users,u_id')
+        ->select('users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')
+        ->get();
+        return response()->json($result);
+    }
+    public function indexByAthleteUnit($sportCode, $gameId, $unit)
+    {
+        if (is_null($user = auth('user')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id');
+        $table = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id');
+        if ($unit == 2) {
+            $query->where('users.org_code', $user->org_code);
+            $table->where('users.org_code', $user->org_code);
+        } else if ($unit == 1) {
+            $query->where('users.dept_id', $user->dept_id);
+            $table->where('users.dept_id', $user->dept_id);
+        } else {
+            $query->where('users.u_id', $user->u_id);
+            $table->where('users.u_id', $user->u_id);
+        }
+        $result = $query->select('users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept')->get();
+        return response()->json($result);
+    }
 
     /**
      * Store a newly created resource in storage.

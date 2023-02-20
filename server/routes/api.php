@@ -195,6 +195,8 @@ Route::group([
             $ControllerClass = GameIndividualController::class;
             Route::apiResource('', $ControllerClass);
             Route::get('/by/user', [$ControllerClass, 'indexByUser']);
+            Route::get('/by/athlete', [$ControllerClass, 'indexByAthlete']);
+            Route::get('/by/athlete/unit', [$ControllerClass, 'indexByAthleteUnit']);
             Route::get('/by/event/{divisionId}/{eventCode}', [$ControllerClass, 'indexByEvent']);
             Route::get('/by/count/{unit}', [$ControllerClass, 'indexByCount']);
         });

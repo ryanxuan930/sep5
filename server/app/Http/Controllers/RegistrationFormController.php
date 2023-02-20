@@ -24,7 +24,7 @@ class RegistrationFormController extends Controller
     }
     public function indexByGame($gameId)
     {
-        return response()->json(RF::where('game_id', $gameId)->orderBy('unit_id', 'asc')->get());
+        return response()->json(RF::where('game_id', $gameId)->orderBy('org_id', 'asc')->orderBy('dept_id', 'asc')->orderBy('u_id', 'asc')->get());
     }
 
     /**

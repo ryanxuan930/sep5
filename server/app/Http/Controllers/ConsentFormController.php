@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ConsentForm;
 use Illuminate\Http\Request;
+use App\Models\ConsentForm as CF;
+use Validator;
 
 class ConsentFormController extends Controller
 {
@@ -14,7 +16,12 @@ class ConsentFormController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(CF::all());
+    }
+
+    public function indexByGame($gameId)
+    {
+        return response()->json(CF::where('game_id', $gameId)->orderBy('u_id', 'asc')->get());
     }
 
     /**
@@ -25,7 +32,23 @@ class ConsentFormController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $validator = Validator::make($request->all(),[
+            'u_id' => 'required|integer',
+            'game_id' => 'required|integer',
+            'status' => 'required|integer',
+            'remarks' => 'nullable',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $temp = $request->all();
+        $temp['created_at'] = date("Y-m-d H:i:s");
+        $temp['updated_at'] = date("Y-m-d H:i:s");
+        CF::insert($temp);
+        return response()->json(['status'=>'A01']);
     }
 
     /**
@@ -34,9 +57,9 @@ class ConsentFormController extends Controller
      * @param  \App\Models\ConsentForm  $consentForm
      * @return \Illuminate\Http\Response
      */
-    public function show(ConsentForm $consentForm)
+    public function show($id)
     {
-        //
+        return response()->json(CF::where('consent_form_id', $id)->first());
     }
 
     /**
@@ -46,9 +69,24 @@ class ConsentFormController extends Controller
      * @param  \App\Models\ConsentForm  $consentForm
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ConsentForm $consentForm)
+    public function update(Request $request, $id)
     {
-        //
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $validator = Validator::make($request->all(),[
+            'u_id' => 'required|integer',
+            'game_id' => 'required|integer',
+            'status' => 'required|integer',
+            'remarks' => 'nullable',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $temp = $request->all();
+        $temp['updated_at'] = date("Y-m-d H:i:s");
+        CF::where('consent_form_id', $id)->update($temp);
+        return response()->json(['status'=>'A01']);
     }
 
     /**
@@ -57,8 +95,12 @@ class ConsentFormController extends Controller
      * @param  \App\Models\ConsentForm  $consentForm
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ConsentForm $consentForm)
+    public function destroy($id)
     {
-        //
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        CF::where('consent_form_id', $id)->delete();
+        return response()->json(['status'=>'A01']);
     }
 }
