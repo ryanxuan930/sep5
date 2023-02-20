@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\AdminDepartmentController;
 use App\Http\Controllers\Admin\AdminOrganizationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RegistrationFormController as RFController;
+use App\Http\Controllers\ConsentFormController as CFController;
 use App\Http\Controllers\RegistrationConfigController as RCController;
 use App\Http\Controllers\Game\Main\DateController as GameDateController;
 use App\Http\Controllers\Game\Main\DivisionController as GameDivisionController;
@@ -115,8 +116,8 @@ Route::apiResource('/sport', SportController::class);
 Route::apiResource('/reg-form', RFController::class);
 Route::get('/reg-form-game/{gameId}', [RFController::class, 'indexByGame']);
 
-Route::apiResource('/consent-form', RFController::class);
-Route::get('/consent-form-game/{gameId}', [RFController::class, 'indexByGame']);
+Route::apiResource('/consent-form', CFController::class);
+Route::get('/consent-form-game/{gameId}', [CFController::class, 'indexByGame']);
 
 Route::apiResource('/organization', OrganizationController::class);
 Route::post('/organization-create', [OrganizationController::class, 'create']);
