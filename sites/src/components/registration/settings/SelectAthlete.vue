@@ -116,7 +116,7 @@ const { t, locale } = useI18n({
         </th>
       </tr>
       <template v-for="(item, index) in consentList">
-        <tr>
+        <tr v-if="(gameData.options.regUnit == 2 && item.org_code == store.userInfo.org_code) || (gameData.options.regUnit == 1 && item.dept_id == store.userInfo.dept_id) || (gameData.options.regUnit == 0 && item.u_id == store.userInfo.u_id)">
           <td>
             <span v-if="locale = 'zh-TW'">{{ item.org_name_full_ch }}</span>
             <span v-else>{{ item.org_name_full_en }}</span>
