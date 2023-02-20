@@ -115,6 +115,9 @@ Route::apiResource('/sport', SportController::class);
 Route::apiResource('/reg-form', RFController::class);
 Route::get('/reg-form-game/{gameId}', [RFController::class, 'indexByGame']);
 
+Route::apiResource('/consent-form', RFController::class);
+Route::get('/consent-form-game/{gameId}', [RFController::class, 'indexByGame']);
+
 Route::apiResource('/organization', OrganizationController::class);
 Route::post('/organization-create', [OrganizationController::class, 'create']);
 
