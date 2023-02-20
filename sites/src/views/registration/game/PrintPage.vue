@@ -4,6 +4,7 @@
   import { useUserStore } from '@/stores/user';
   import SmallModal from '@/components/SmallModal.vue';
   import { useI18n } from 'vue-i18n';
+  import SelectAthlete from '@/components/registration/settings/SelectAthlete.vue';
 
   const displayModal = ref(false);
 
@@ -33,7 +34,7 @@
     <SmallModal v-show="displayModal" @closeModal="displayModal = false">
       <template v-slot:title>
         <div class="text-2xl">
-          <div>{{ t('select-athlete') }}</div>
+          <div>{{ t('athlete-list') }}</div>
         </div>
       </template>
       <template v-slot:content>
@@ -53,9 +54,11 @@
     reg-form: 'Registration Form'
     consent-form: 'Consent Form'
     print: 'Print'
+    athlete-list: 'Athlete List'
   zh-TW:
     select-athlete: '勾選選手'
     reg-form: '報名表'
     consent-form: '同意書'
     print: '列印'
+    athlete-list: '選手列表'
 </i18n>

@@ -36,7 +36,7 @@
             <div style="height: 1cm"></div>\
             <div style="font-size: 36pt; text-align: center;">家長同意書</div>\
             <div style="height: 1cm"></div>\
-            <div style="font-size: 18pt">　　本人同意敝子弟 {{dept_name_ch}} 班 {{num_of_dept}} 號 {{last_name_ch}}{{first_name_ch}} 報名參加學校於&nbsp;2023年03月30日至2023年03月31日&nbsp;(共 2 天)&nbsp;舉行&nbsp;111學年度運動會田徑錦標賽</div>\
+            <div style="font-size: 18pt">　　本人同意敝子弟 {{dept_name_ch}} 班 {{num_in_dept}} 號 {{last_name_ch}}{{first_name_ch}} 報名參加學校於&nbsp;2023年03月30日至2023年03月31日&nbsp;(共 2 天)&nbsp;舉行&nbsp;111學年度運動會田徑錦標賽</div>\
             <div style="height: 1cm"></div>\
             <div style="font-size: 18pt">　　此致</div>\
             <div style="height: 1cm"></div>\
@@ -49,14 +49,7 @@
         '
     ],
   });
-  const userList: any = [
-    {
-      dept_name_ch: '1234',
-      num_of_dept: 1,
-      last_name_ch: '測試',
-      first_name_ch: '帳號'
-    }
-  ]
+  const consentList: any = ref(null);
   async function getDataList() {
     isLoading.value = true;
     await vr.Get(`${route.params.adminOrgId}/game/${route.params.gameId}`, gameData);
@@ -64,6 +57,8 @@
     await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/user`, groupList, true, true);
     await vr.Get(`reg-config-game/${route.params.gameId}`, regConfig);
     await vr.Get(`auth/user/info`, userData, true, true);
+    await vr.Get(`consent-form-game/${route.params.gameId}`, consentList, true, true);
+    console.log(consentList.value);
     document.title = gameData.value.game_name_ch;
     (async () => {
       for (let i = 0; i < groupList.value.length; i++) {
@@ -77,10 +72,10 @@ getDataList();
 
 <template>
   <div id="print-root" v-if="!isLoading">
-    <template v-for="(item, index) in userList" :key="index">
+    <template v-for="(item, index) in consentList" :key="index">
       <template v-for="template in consentConfig.formData">
-      <div class="page" v-html="TemplateParser(template, item)"></div>
-    </template>
+        <div class="page" v-html="TemplateParser(template, item)"></div>
+      </template>
     </template>
   </div>
 </template>
