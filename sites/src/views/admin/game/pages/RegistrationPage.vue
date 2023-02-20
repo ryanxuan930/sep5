@@ -5,6 +5,7 @@
   import { useRoute } from 'vue-router';
   import FullModal from '@/components/FullModal.vue';
   import RegistrationConfig from '@/components/admin/game/registration/RegistrationConfig.vue';
+  import RegistrationForm from '@/components/admin/game/registration/RegistrationForm.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
@@ -32,8 +33,8 @@
       <button class="round-full-button blue">團體項目項目</button>
       <button class="round-full-button blue">參賽選手名單</button>
       <button class="round-full-button blue">報名資料下載</button>
-      <button class="round-full-button blue">紙本報名管理</button>
-      <button class="round-full-button blue">其他表件管理</button>
+      <button class="round-full-button blue" @click="displayModal = 7">紙本報名管理</button>
+      <button class="round-full-button blue" @click="displayModal = 8">其他表件管理</button>
     </div>
   </div>
   <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
@@ -47,6 +48,7 @@
       <template v-slot:content>
         <div class="overflow-auto h-full">
           <RegistrationConfig v-if="displayModal == 1" @closeModal="displayModal = 0"></RegistrationConfig>
+          <RegistrationForm v-if="displayModal == 7" :input-data="gameData" @closeModal="displayModal = 0"></RegistrationForm>
         </div>
       </template>
     </FullModal>

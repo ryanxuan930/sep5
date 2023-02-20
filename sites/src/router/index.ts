@@ -230,6 +230,11 @@ const router = createRouter({
           name: 'registrationGamePrintPageData',
           component: () => import('../components/registration/game/RegistrationForm.vue'),
         },
+        {
+          path: 'game/:sportCode/:gameId/print/consent-data',
+          name: 'registrationGamePrintConsentData',
+          component: () => import('../components/registration/game/ConsentForm.vue'),
+        },
       ]
     },
     {

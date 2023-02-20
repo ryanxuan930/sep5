@@ -15,7 +15,9 @@ return new class extends Migration
     {
         Schema::create('registration_forms', function (Blueprint $table) {
             $table->id('reg_form_id');
-            $table->bigInteger('unit_id');
+            $table->bigInteger('org_id');
+            $table->bigInteger('dept_id')->default(0);
+            $table->bigInteger('u_id')->default(0);
             $table->bigInteger('game_id');
             $table->tinyInteger('status')->default(0);
             $table->string('remarks', 256)->nullable();
