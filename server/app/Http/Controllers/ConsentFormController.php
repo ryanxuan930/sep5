@@ -18,14 +18,14 @@ class ConsentFormController extends Controller
     {
         return response()->json(CF::leftJoin('users', 'users.u_id', '=', 'consent_forms.u_id')
         ->leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')
-        ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->select('users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->get());
+        ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->select('consent_forms.*', 'users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->get());
     }
 
     public function indexByGame($gameId)
     {
         return response()->json(CF::leftJoin('users', 'users.u_id', '=', 'consent_forms.u_id')
         ->leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')
-        ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->select('users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->where('game_id', $gameId)->orderBy('u_id', 'asc')->get());
+        ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->select('consent_forms.*', 'users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->where('game_id', $gameId)->orderBy('u_id', 'asc')->get());
     }
 
     /**
@@ -65,7 +65,7 @@ class ConsentFormController extends Controller
     {
         return response()->json(CF::leftJoin('users', 'users.u_id', '=', 'consent_forms.u_id')
         ->leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')
-        ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->select('users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->where('consent_form_id', $id)->first());
+        ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->select('consent_forms.*', 'users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->where('consent_form_id', $id)->first());
     }
 
     /**
