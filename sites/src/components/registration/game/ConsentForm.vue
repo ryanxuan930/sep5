@@ -59,7 +59,7 @@
     await vr.Get(`auth/user/info`, userData, true, true);
     await vr.Get(`consent-form-game/${route.params.gameId}`, consentList, true, true);
     console.log(consentList.value);
-    document.title = gameData.value.game_name_ch;
+    document.title = gameData.value.game_name_ch + '同意書';
     (async () => {
       for (let i = 0; i < groupList.value.length; i++) {
         groupList.value[i].members = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/team/${groupList.value[i].team_id}`, null, true, true);
@@ -73,8 +73,10 @@ getDataList();
 <template>
   <div id="print-root" v-if="!isLoading">
     <template v-for="(item, index) in consentList" :key="index">
-      <template v-for="template in consentConfig.formData">
-        <div class="page" v-html="TemplateParser(template, item)"></div>
+      <template v-if="(gameData.options.regUnit == 2 && item.org_code == store.userInfo.org_code) || (gameData.options.regUnit == 1 && item.dept_id == store.userInfo.dept_id) || (gameData.options.regUnit == 0 && item.u_id == store.userInfo.u_id)">
+        <template v-for="template in consentConfig.formData">
+          <div class="page" v-html="TemplateParser(template, item)"></div>
+        </template>
       </template>
     </template>
   </div>

@@ -3,10 +3,11 @@
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import { useRoute } from 'vue-router';
+  import SmallModalVue from '@/components/SmallModal.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
-  const displayModal = ref(0);
+  const displayModal = ref(false);
   const props = defineProps(['inputData'])
   const gameData: any = ref(props.inputData);
   const route = useRoute();
@@ -31,7 +32,7 @@
           <a class="hyperlink blue">新增</a>
         </th>
       </tr>
-      <template>
+      <template v-for="(item, index) in formList">
         <td></td>
         <td></td>
         <td></td>
@@ -40,6 +41,15 @@
         </td>
       </template>
     </table>
+    <SmallModal v-show="displayModal" @closeModal="displayModal = false">
+      <template v-slot:title>
+        <div class="text-2xl">
+          <div v-if="displayModal">新增繳交紀錄</div>
+        </div>
+      </template>
+      <template v-slot:content>
+      </template>
+    </SmallModal>
   </div>
 </template>
 
