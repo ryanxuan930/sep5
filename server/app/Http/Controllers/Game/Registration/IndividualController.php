@@ -96,7 +96,7 @@ class IndividualController extends Controller
         $result = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')
         ->leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')
         ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')
-        ->distinct('users,u_id')
+        ->distinct('users.u_id')
         ->select('users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')
         ->get();
         return response()->json($result);
@@ -118,7 +118,7 @@ class IndividualController extends Controller
             $query->where('users.u_id', $user->u_id);
             $table->where('users.u_id', $user->u_id);
         }
-        $result = $query->select('users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept')->get();
+        $result = $query->distinct('users.u_id')->select('users.u_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept')->get();
         return response()->json($result);
     }
 
