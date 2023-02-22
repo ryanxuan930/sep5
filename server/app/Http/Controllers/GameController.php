@@ -78,11 +78,24 @@ class GameController extends Controller
      */
     public function indexByTag($org_id, $gameTag)
     {
+        $temp = AdminDepartment::where('admin_org_id', $org_id)->get();
+        $deptArray = array();
+        foreach ($temp as $t) {
+            array_push($deptArray, strval($t->admin_dept_id));
+        }
         $query = Game::leftJoin('sport_lists', 'sport_lists.sport_code', '=', 'games.sport_code');
         if ($gameTag == 0) {
-            return response()->json($query->whereJsonContains('host_list', $org_id)->paginate(10));
+            return response()->json($query->where(function ($query) use ($deptArray) {
+                for ($i = 0; $i < count($deptArray); $i++) {
+                    $query->orWhereJsonContains('host_list', [$deptArray[$i]]);
+                }
+            })->where('archived', 0)->orderBy('event_start', 'desc')->paginate(10));
         } else {
-            return response()->json($query->whereJsonContains('host_list', $org_id)->whereJsonContains('tags', $gameTag)->paginate(10));
+            return response()->json($query->where(function ($query) use ($deptArray) {
+                for ($i = 0; $i < count($deptArray); $i++) {
+                    $query->orWhereJsonContains('host_list', [$deptArray[$i]]);
+                }
+            })->where('archived', 0)->orderBy('event_start', 'desc')->whereJsonContains('tags', $gameTag)->paginate(10));
         } 
     }
 
