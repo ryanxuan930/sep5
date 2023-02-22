@@ -127,6 +127,7 @@ Route::get('/user-partial', [UserController::class, 'indexByUser']);
 Route::get('/user/athlete/{id}', [UserController::class, 'showByAthleteId']);
 Route::post('/user-upload', [UserController::class, 'storeByBatch']);
 Route::post('/user-search', [UserController::class, 'search']);
+Route::post('/user-search-unit', [UserController::class, 'searchByUnit']);
 
 Route::apiResource('/country', CountryController::class);
 
