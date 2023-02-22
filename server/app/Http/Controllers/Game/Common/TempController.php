@@ -52,7 +52,7 @@ class TempController extends Controller
      */
     public function show($sportCode, $gameId, $key)
     {
-        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('key', $key)->first());
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('temp_key', $key)->first());
     }
 
     /**
@@ -71,7 +71,7 @@ class TempController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
-        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('temp_key', '=' , strval($key))->update($temp);
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('temp_key', '=' , $key)->update($temp);
         return response()->json(['status'=>'A01']);
     }
 
