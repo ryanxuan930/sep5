@@ -61,7 +61,7 @@ class RegistrationFormController extends Controller
      */
     public function show($id)
     {
-        return response()->json(RF::where('reg_form_id', $id)->get());
+        return response()->json(RF::leftJoin('organizations', 'registration_forms.org_id', '=', 'organizations.org_id')->leftJoin('departments', 'registration_forms.dept_id', '=', 'departments.dept_id')->leftJoin('users', 'registration_forms.u_id', '=', 'users.u_id')->select('registration_forms.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->where('reg_form_id', $id)->get());
     }
     public function showByUnit($gameId, $orgId, $deptId = null, $uId = null)
     {
