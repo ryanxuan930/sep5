@@ -36,7 +36,9 @@ class RegistrationFormController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'unit_id' => 'required|integer',
+            'org_id' => 'required|integer',
+            'dept_id' => 'required|integer',
+            'u_id' => 'required|integer',
             'game_id' => 'required|integer',
             'status' => 'required|integer',
             'remarks' => 'nullable',
@@ -61,6 +63,18 @@ class RegistrationFormController extends Controller
     {
         return response()->json(RF::where('reg_form_id', $id)->get());
     }
+    public function showByUnit($gameId, $orgId, $deptId = null, $uId = null)
+    {
+        $query = RF::where('game_id', $id)->where('org_id', $orgId);
+        if (!is_null($uId)) {
+            $result = $query->where('dept_id', $deptId)->get();
+        } else if (!is_null($deptId)) {
+            $result = $query->where('org_id', $orgId)->get();
+        } else {
+            $result = $query->where('u_id', $uId)->get();
+        }
+        return response()->json($result);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -72,7 +86,9 @@ class RegistrationFormController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'unit_id' => 'required|integer',
+            'org_id' => 'required|integer',
+            'dept_id' => 'required|integer',
+            'u_id' => 'required|integer',
             'game_id' => 'required|integer',
             'status' => 'required|integer',
             'remarks' => 'nullable',
