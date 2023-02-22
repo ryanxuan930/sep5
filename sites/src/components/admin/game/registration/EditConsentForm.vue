@@ -49,7 +49,7 @@
     </label>
     <label class="round-input-label">
       <div class="title">狀態</div>
-      <select class="select" v-model="data.u_id">
+      <select class="select" v-model="data.status">
         <option value="1">已繳交</option>
         <option value="0">尚未處理</option>
         <option value="2">其他</option>

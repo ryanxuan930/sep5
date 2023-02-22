@@ -39,6 +39,9 @@
 
 <template>
   <div>
+    <div class="">
+
+    </div>
     <table>
       <tr>
         <th>組織單位</th>
