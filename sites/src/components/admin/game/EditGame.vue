@@ -48,7 +48,7 @@
   });
 
   if (props.gameData !== null) {
-    const columnList = ['game_name_ch', 'game_name_en', 'game_name_jp', 'game_info', 'host_list', 'event_start', 'selected', 'selected_list', 'use_reg', 'reg_url', 'use_manage', 'manage_url', 'use_site', 'site_url', 'tags', 'sport_code', 'archived', 'options'];
+    const columnList = ['game_name_ch', 'game_name_en', 'game_name_jp', 'game_info', 'host_list', 'event_start', 'selected', 'selected_list', 'use_reg', 'reg_url', 'use_manage', 'manage_url', 'use_site', 'site_url', 'tags', 'sport_code', 'archived', 'options', 'sport_code'];
     columnList.forEach((index: string) => {
       data[index] = props.gameData[index];
     });
@@ -142,7 +142,7 @@
     </label>
     <label class="round-input-label">
       <div class="title">運動項目</div>
-      <select class="select" v-model="data.sport_code">
+      <select class="select" v-model="data.sport_code" :disabled="props.gameData !== null">
         <template v-for="(item, index) in sportList" :key="index">
           <option :value="item.sport_code">{{ item.sport_name_ch }}</option>
         </template>
