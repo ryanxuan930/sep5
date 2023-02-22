@@ -4,8 +4,8 @@
   import { useUserStore } from '@/stores/user';
   import SmallModal from '@/components/SmallModal.vue';
   import SchoolTeamSelector from '@/components/registration/module/SchoolTeamSelector.vue';
-import { useI18n } from 'vue-i18n';
-import Config from '@/assets/config.json';
+  import { useI18n } from 'vue-i18n';
+  import Config from '@/assets/config.json';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);

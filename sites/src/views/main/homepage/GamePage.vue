@@ -11,12 +11,14 @@ const route = useRoute();
 const vr = new VueRequest();
 const adminOrgId = useRoute().params.adminOrgId;
 const pageData:Ref<IPageData|null> = ref(null);
+const gameData: any = ref(null);
 (async () => {
   const temp = await vr.Get(`config/${adminOrgId}`);
+  await vr.Get(`0/game/${route.params.gameId}`, gameData);
   pageData.value = temp.options;
+  document.title = gameData.value.game_name_ch;
 })();
-const gameData: any = ref(null);
-vr.Get(`0/game/${route.params.gameId}`, gameData);
+
 provide('pageData', pageData);
 provide('gameData', gameData);
 </script>
@@ -32,7 +34,7 @@ provide('gameData', gameData);
         <router-view></router-view>
       </div>
       <div class="flex-grow"></div>
-      <HomeFooter>
+      <HomeFooter v-if="pageData != null">
         <template #content>
           <div v-html="pageData.footerContent"></div>
         </template>

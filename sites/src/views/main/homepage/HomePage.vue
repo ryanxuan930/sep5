@@ -17,6 +17,7 @@ const pageData:Ref<IPageData|null> = ref(null);
 (async () => {
   const temp = await vr.Get(`config/${adminOrgId}`);
   pageData.value = temp.options;
+  document.title = 'Sports';
 })();
 provide('pageData', pageData);
 </script>
