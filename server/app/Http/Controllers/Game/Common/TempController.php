@@ -19,7 +19,7 @@ class TempController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($sportCode, $gameId)
     {
         return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->get());
     }
@@ -30,7 +30,7 @@ class TempController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $sportCode, $gameId)
     {
         $validator = Validator::make($request->all(),[
             'key' => 'required',
@@ -50,7 +50,7 @@ class TempController extends Controller
      * @param  string  $key
      * @return \Illuminate\Http\Response
      */
-    public function show($key)
+    public function show($sportCode, $gameId, $key)
     {
         return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('key', $key)->first());
     }
@@ -62,7 +62,7 @@ class TempController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $key)
+    public function update(Request $request, $sportCode, $gameId, $key)
     {
         $validator = Validator::make($request->all(),[
             'division_en' => 'nullable'
@@ -81,7 +81,7 @@ class TempController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($key)
+    public function destroy($sportCode, $gameId, $key)
     {
         DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('temp_key', $key)->delete();
         return response()->json(['status'=>'A01']);
