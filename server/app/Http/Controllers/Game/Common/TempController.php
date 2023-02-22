@@ -33,7 +33,7 @@ class TempController extends Controller
     public function store(Request $request, $sportCode, $gameId)
     {
         $validator = Validator::make($request->all(),[
-            'key' => 'required',
+            'temp_key' => 'required',
             'temp_data' => 'nullable'
         ]);
         if ($validator->fails()) {
