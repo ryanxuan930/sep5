@@ -183,6 +183,25 @@ class UserController extends Controller
             }
         }
     }
+    public function searchByUnit(Request $request)
+    {
+        $temp = $request->all();
+        if (is_null($admin = auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        } 
+        $validator = Validator::make($request->all(),[
+            'org_id' => 'integer|required',
+            'dept_id' => 'integer|required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $query = User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->leftJoin('countries', 'users.nationality', '=', 'countries.country_code')->leftJoin('tribes', 'users.indigenous_tribe_id', '=', 'tribes.tribe_id')->leftJoin('sport_lists', 'users.gifited_sport_id', '=', 'sport_lists.sport_id')->leftJoin('cities', 'users.household_city_code', '=', 'cities.city_code')->select('users.*', 'organizations.org_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_id', 'departments.dept_name_ch', 'departments.dept_name_en', 'countries.country_name_ch', 'countries.country_name_en', 'tribes.tribe_name_ch', 'tribes.tribe_name', 'sport_lists.sport_name_ch', 'sport_lists.sport_name_en', 'sport_lists.sport_code', 'cities.city_name_ch', 'cities.city_name_en')->where('org_id', $temp['org_id']);
+        if ($temp['dept_id'] > 0) {
+            $query->where('dept_id', $temp['dept_id']);
+        }
+        return response()->json($query->get());
+    }
 
     /**
      * Display the specified resource.
