@@ -42,8 +42,8 @@
     <table>
       <tr>
         <th>組織單位</th>
-        <th>分部/系所</th>
-        <th>姓名</th>
+        <th v-if="gameData.options.regUnit < 2">分部/系所</th>
+        <th v-if="gameData.options.regUnit < 1">姓名</th>
         <th>狀態</th>
         <th>
           <a class="hyperlink blue" @click="open(1, null)">新增</a>
@@ -52,8 +52,8 @@
       <template v-for="(item, index) in formList">
          <tr>
           <td>{{ item.org_name_full_ch }}</td>
-          <td>{{ item.dept_name_ch }}</td>
-          <td>{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
+          <td v-if="gameData.options.regUnit < 2">{{ item.dept_name_ch }}</td>
+          <td v-if="gameData.options.regUnit < 1">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
           <td>
             <span v-if="item.status == 0">尚未處理</span>
             <span v-if="item.status == 1">已繳交</span>
