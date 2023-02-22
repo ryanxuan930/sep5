@@ -139,7 +139,14 @@ const regConfig: Ref<regConfig> = ref({
   await vr.Get('user-partial', userList, true, true);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/division`, divisionList);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/temp/consentForm`, consentConfig);
-  consentConfig.value = JSON.parse(consentConfig.value.temp_data);
+  if (consentConfig.value.temp_id == undefined) {
+    consentConfig.value = {
+      useForm : false,
+      FormData: [],
+    }
+  } else {
+    consentConfig.value = JSON.parse(consentConfig.value.temp_data);
+  }
   document.title = gameData.value.game_name_ch;
   await check();
   loadingStatus.value = true;
