@@ -24,7 +24,7 @@ class RegistrationFormController extends Controller
     }
     public function indexByGame($gameId)
     {
-        return response()->json(RF::leftJoin('organizations', 'registration_forms.org_id', '=', 'organizations.org_id')->leftJoin('departments', 'registration_forms.dept_id', '=', 'departments.dept_id')->leftJoin('users', 'registration_forms.u_id', '=', 'users.u_id')->select('registration_forms.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->where('game_id', $gameId)->orderBy('org_id', 'asc')->orderBy('dept_id', 'asc')->orderBy('u_id', 'asc')->get());
+        return response()->json(RF::leftJoin('organizations', 'registration_forms.org_id', '=', 'organizations.org_id')->leftJoin('departments', 'registration_forms.dept_id', '=', 'departments.dept_id')->leftJoin('users', 'registration_forms.u_id', '=', 'users.u_id')->select('registration_forms.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->where('game_id', $gameId)->orderBy('organizations.org_id', 'asc')->orderBy('departments.dept_id', 'asc')->orderBy('u_id', 'asc')->get());
     }
 
     /**
@@ -65,7 +65,7 @@ class RegistrationFormController extends Controller
     }
     public function showByUnit($gameId, $orgId, $deptId = null, $uId = null)
     {
-        $query = RF::leftJoin('organizations', 'registration_forms.org_id', '=', 'organizations.org_id')->leftJoin('departments', 'registration_forms.dept_id', '=', 'departments.dept_id')->leftJoin('users', 'registration_forms.u_id', '=', 'users.u_id')->select('registration_forms.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->where('game_id', $id)->where('org_id', $orgId);
+        $query = RF::leftJoin('organizations', 'registration_forms.org_id', '=', 'organizations.org_id')->leftJoin('departments', 'registration_forms.dept_id', '=', 'departments.dept_id')->leftJoin('users', 'registration_forms.u_id', '=', 'users.u_id')->select('registration_forms.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->where('game_id', $id)->where('organizations.org_id', $orgId);
         if (!is_null($uId)) {
             $result = $query->where('dept_id', $deptId)->get();
         } else if (!is_null($deptId)) {
