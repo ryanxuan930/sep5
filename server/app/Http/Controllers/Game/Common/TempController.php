@@ -34,7 +34,7 @@ class TempController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'key' => 'required',
-            'division_en' => 'nullable'
+            'temp_data' => 'nullable'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -65,7 +65,7 @@ class TempController extends Controller
     public function update(Request $request, $sportCode, $gameId, $key)
     {
         $validator = Validator::make($request->all(),[
-            'division_en' => 'nullable'
+            'temp_data' => 'nullable'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
