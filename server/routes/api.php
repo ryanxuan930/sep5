@@ -32,6 +32,7 @@ use App\Http\Controllers\Game\Main\ParamsController as GameParamsController;
 use App\Http\Controllers\Game\Main\EventController as GameEventController;
 use App\Http\Controllers\Game\Registration\IndividualController as GameIndividualController;
 use App\Http\Controllers\Game\Registration\GroupController as GameGroupController;
+use App\Http\Controllers\Game\Common\TempController as GameTempController;
 
 /*
 |--------------------------------------------------------------------------
@@ -216,5 +217,6 @@ Route::group([
             Route::get('/by/event/{divisionId}/{eventCode}', [$ControllerClass, 'indexByEvent']);
             Route::get('/by/count/{unit}', [$ControllerClass, 'indexByCount']);
         });
+        Route::apiResource('temp', GameTempController::class);
     });
 });
