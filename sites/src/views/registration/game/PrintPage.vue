@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import VueRequest from '@/vue-request';
-  import { useUserStore } from '@/stores/user';
+  import { ref, inject } from 'vue';
   import SmallModal from '@/components/SmallModal.vue';
   import { useI18n } from 'vue-i18n';
   import SelectAthlete from '@/components/registration/settings/SelectAthlete.vue';
 
   const displayModal = ref(false);
+  const consentConfig: any = inject('consentConfig');
 
   const { t, locale } = useI18n({
     inheritLocale: true,
@@ -23,7 +22,7 @@
         <router-link :to="`/${$route.params.adminOrgId}/registration/game/${$route.params.sportCode}/${$route.params.gameId}/print/reg-data`" target="_blank"><button class="round-full-button blue">{{ t('print') }}</button></router-link>
       </div>
     </div>
-    <div class="section-box flex flex-col gap-2">
+    <div class="section-box flex flex-col gap-2" v-if="consentConfig.useForm == true">
       <div class="text-2xl font-medium">{{ t('consent-form') }}</div>
       <hr>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-3">

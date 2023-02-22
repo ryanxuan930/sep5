@@ -15,40 +15,7 @@
   const gameData: any = ref([]);
   const individualList: any = ref([]);
   const groupList: any = ref([]);
-  const consentConfig: any = ref({
-    useForm: false,
-    formData: [
-      '<div v-for="i in list_len" class="page nondisplay consent_form">\
-            <div style="height: 1cm"></div>\
-            <div style="font-size: 36pt; text-align: center;">家長通知書</div>\
-            <div style="height: 2cm"></div>\
-            <div style="font-size: 18pt">　　本校於&nbsp;2023年03月30日至2023年03月31日&nbsp;(共 2 天)&nbsp;舉行&nbsp;111學年度運動會田徑錦標賽，貴子弟身體若有安全顧慮 (如心臟病、癲癇、氣喘、感冒等)，請敦促其勿勉強參賽。\
-            </div>\
-            <div style="height: 2cm"></div>\
-            <div style="font-size: 12pt; text-align: right;">國立臺灣師範大學附屬高級中學</div>\
-            <div style="font-size: 16pt; text-align: right;">\
-                <span style="font-size: 14pt;">學生事務處</span>　體育運動組　敬啟\
-            </div>\
-            <div style="height: 1cm"></div>\
-            <div style="font-size: 12pt; text-align: center ">\
-                ---------------------------------------------------請沿虛線撕下---------------------------------------------------\
-            </div>\
-            <div style="height: 1cm"></div>\
-            <div style="font-size: 36pt; text-align: center;">家長同意書</div>\
-            <div style="height: 1cm"></div>\
-            <div style="font-size: 18pt">　　本人同意敝子弟 {{dept_name_ch}} 班 {{num_in_dept}} 號 {{last_name_ch}}{{first_name_ch}} 報名參加學校於&nbsp;2023年03月30日至2023年03月31日&nbsp;(共 2 天)&nbsp;舉行&nbsp;111學年度運動會田徑錦標賽</div>\
-            <div style="height: 1cm"></div>\
-            <div style="font-size: 18pt">　　此致</div>\
-            <div style="height: 1cm"></div>\
-            <div style="font-size: 18pt">導師</div>\
-            <div style="height: 1cm"></div>\
-            <div style="font-size: 16pt; text-align: right;">學生家長：　　　　　　　(簽章)</div>\
-            <div style="height: 0.5cm"></div>\
-            <div style="font-size: 18pt; text-align: center;"><strong>[未按時繳交視同未報名不得參賽]</strong></div>\
-        </div>\
-        '
-    ],
-  });
+  const consentConfig: any = ref({});
   const consentList: any = ref(null);
   async function getDataList() {
     isLoading.value = true;
@@ -58,7 +25,8 @@
     await vr.Get(`reg-config-game/${route.params.gameId}`, regConfig);
     await vr.Get(`auth/user/info`, userData, true, true);
     await vr.Get(`consent-form-game/${route.params.gameId}`, consentList, true, true);
-    console.log(consentList.value);
+    await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/temp/consentForm`, consentConfig);
+    consentConfig.value = JSON.parse(consentConfig.value.temp_data);
     document.title = gameData.value.game_name_ch + '同意書';
     (async () => {
       for (let i = 0; i < groupList.value.length; i++) {

@@ -18,7 +18,6 @@
     remarks: '',
   });
   const formId = ref(0);
-  const isLoading = ref(false);
   if (props.inputData != null) {
     Object.keys(data).forEach((index: string) => {
       data[index] = props.inputData[index];

@@ -5,6 +5,7 @@
   import { useRoute } from 'vue-router';
   import SmallModal from '@/components/SmallModal.vue';
   import EditConsentForm from '@/components/admin/game/registration/EditConsentForm.vue';
+  import EditConsentFormat from './EditConsentFormat.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
@@ -39,8 +40,8 @@
 
 <template>
   <div>
-    <div class="">
-
+    <div class="grid md:grid-cols-5 gap-3 py-5">
+      <button class="round-full-button blue" @click="displayModal = 1">格式設定</button>
     </div>
     <table>
       <tr>
@@ -76,6 +77,7 @@
         </div>
       </template>
       <template v-slot:content>
+        <EditConsentFormat v-if="displayModal == 1" @closeModal="displayModal = 0"></EditConsentFormat>
         <EditConsentForm v-if="displayModal == 2" :game-data="$props.inputData" :input-data="selectedData" @closeModal="displayModal = 0" @refreshPage="getFormData"></EditConsentForm>
       </template>
     </SmallModal>

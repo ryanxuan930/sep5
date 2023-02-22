@@ -22,6 +22,7 @@ const userList = ref(null);
 const divisionList = ref(null);
 const gameData: any = ref(null);
 const userData: any = ref(null);
+const consentConfig: any = ref(null);
 
 interface regConfig {
   reg_config_id: number,
@@ -137,6 +138,8 @@ const regConfig: Ref<regConfig> = ref({
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/params/full`, paramList);
   await vr.Get('user-partial', userList, true, true);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/division`, divisionList);
+  await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/temp/consentForm`, consentConfig);
+  consentConfig.value = JSON.parse(consentConfig.value.temp_data);
   document.title = gameData.value.game_name_ch;
   await check();
   loadingStatus.value = true;
@@ -148,6 +151,7 @@ provide('userList', userList);
 provide('divisionList', divisionList);
 provide('gameData', gameData);
 provide('userData', userData);
+provide('consentConfig', consentConfig);
 
 function backToHome(){
   router.push(`/${adminOrgId}/registration`);
