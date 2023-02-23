@@ -184,7 +184,7 @@
     <label class="round-input-label md:col-span-2">
       <div class="title" v-if="Config.deptAsClass">{{ t('class') }}</div>
       <div class="title" v-else>{{ t('department') }}</div>
-      <select class="select" v-model="data.dept_id" v-if="store.userInfo.permission >= 1 && Config.deptAsClass == false && store.userInfo.org_code != 'O0000'">
+      <select class="select" v-model="data.dept_id" v-if="(store.userInfo.permission >= 1 || Config.changeDeptPermission == false) && Config.deptAsClass == false && store.userInfo.org_code != 'O0000'">
         <option value="0">---</option>
         <template v-for="(item, index) in deptList" :key="index">
           <option :value="item.dept_id">
