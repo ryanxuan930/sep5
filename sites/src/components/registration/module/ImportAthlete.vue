@@ -6,6 +6,7 @@ import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
 import SmallLoader from '@/components/SmallLoader.vue';
 import { csvToArray, openWindow } from '@/components/library/functions';
+import Grade from '@/assets/grade.json';
 
 const store = useUserStore();
 const route = useRoute();
@@ -31,28 +32,43 @@ getDeptList();
 const uploadEntity: any = ref(null);
 const fileName = ref('');
 const uploadData: any = ref([]);
-function uploadFile(event: any) {
-  isLoading.value = true;
-  fileName.value = event.target.files[0].name;
-  const reader = new FileReader();
-  reader.onload = function (e: any) {
-    uploadData.value = JSON.parse(JSON.stringify(csvToArray(e.target.result)));
-    isLoading.value = false;
-    return;
-  };
-  reader.readAsText(event.target.files[0]);
-}
-const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
-const close = () => {
-  emit('refreshPage');
-  emit('closeModal');
-}
 
-async function submitAll() {
+function check() {
   for(let i = 0; i < uploadData.value.length; i++) {
+    console.log(uploadData.value[i]);
     uploadData.value[i].org_code = store.userInfo.org_code;
     if (store.userInfo.permission == 1, store.userInfo.org_code.substring(0, 1) == 'O') {
       uploadData.value[i].dept_id = store.userInfo.dept_id;
+    }
+    if (uploadData.value[i].is_student != 1) {
+      uploadData.value[i].is_student = 0;
+    }
+    if (uploadData.value[i].nationality.length == 0) {
+      uploadData.value[i].nationality = 'TW';
+    }
+    if (isNaN(uploadData.value[i].grade)) {
+      let flag = true;
+      for(let j = 0; j < Grade.length; j++) {
+        if (uploadData.value[i].grade == Grade[j].grade) {
+          flag = false;
+          uploadData.value[i].grade = Grade[j].grade_id;
+        }
+      }
+      if (flag) {
+        uploadData.value[i].grade = 0;
+      }
+    }
+    if (isNaN(uploadData.value[i].sex)) {
+      if (uploadData.value[i].sex == '男') {
+        uploadData.value[i].sex = 1;
+      } else if (uploadData.value[i].sex == '女') {
+        uploadData.value[i].sex = 2;
+      } else {
+        uploadData.value[i].sex = 1;
+      }
+    }
+    if (isNaN(uploadData.value[i].dept_id)) {
+      uploadData.value[i].dept_id = 0;
     }
     if (!isNaN(uploadData.value[i].height)) {
       uploadData.value[i].height *= 100;
@@ -65,7 +81,29 @@ async function submitAll() {
       uploadData.value[i].weight = 0;
     }
   }
+}
+
+function uploadFile(event: any) {
   isLoading.value = true;
+  fileName.value = event.target.files[0].name;
+  const reader = new FileReader();
+  reader.onload = function (e: any) {
+    uploadData.value = JSON.parse(JSON.stringify(csvToArray(e.target.result)));
+    check();
+    isLoading.value = false;
+    return;
+  };
+  reader.readAsText(event.target.files[0]);
+}
+const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
+const close = () => {
+  emit('refreshPage');
+  emit('closeModal');
+}
+
+async function submitAll() {
+  isLoading.value = true;
+  check();
   const res: any = await vr.Post('user-upload', uploadData.value, null, true, true);
   isLoading.value = false;
   if (res.status == 'A01') {
@@ -167,7 +205,11 @@ const { t, locale } = useI18n({
               <div>{{ item.student_id }}</div>
             </td>
             <td :style="{'width': `${boxWidth*0.1}px`}">
-              <div>{{ item.grade }}</div>
+              <template v-for="(grade, index) in Grade" :key="index">
+                <div v-if="grade.grade_id == item.grade">
+                  <div>{{ grade.grade }}</div>
+                </div>
+              </template>
             </td>
             <td :style="{'width': `${boxWidth*0.1}px`}">
               <div>{{ item.unified_id }}</div>
@@ -176,7 +218,10 @@ const { t, locale } = useI18n({
               <div>{{ item.birthday }}</div>
             </td>
             <td :style="{'width': `${boxWidth*0.1}px`}">
-              <div>{{ item.sex }}</div>
+              <div v-if="item.sex == 1">男</div>
+              <div v-else-if="item.sex == 2">女</div>
+              <div v-else>其他</div>
+              <div></div>
             </td>
             <td :style="{'width': `${boxWidth*0.1}px`}">
               <div>{{ item.height }}</div>

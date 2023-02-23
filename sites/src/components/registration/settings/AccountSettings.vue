@@ -9,7 +9,13 @@
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
-  const props: any = defineProps(['inputData']);
+  const props: any = defineProps(['inputData', 'inputMode']);
+  const inputMode = ref(0);
+  if (props.inputMode != undefined) {
+    inputMode.value = 1;
+  } else {
+    inputMode.value = 0;
+  }
   const displayModal = ref(false);
 
   const optionsPrototype = {};

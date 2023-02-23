@@ -8,6 +8,7 @@ import SmallLoader from '@/components/SmallLoader.vue';
 import FullModal from '@/components/FullModal.vue';
 import ImportAthlete from '@/components/registration/module/ImportAthlete.vue'
 import Config from '@/assets/config.json';
+import AccountSettings from '@/components/registration/settings/AccountSettings.vue';
 
 const store = useUserStore();
 const route = useRoute();
@@ -15,6 +16,7 @@ const vr = new VueRequest(store.token);
 const displayModal = ref(0);
 const adminOrgId = route.params.adminOrgId;
 const userList: any = ref(null);
+const selectedData: any = ref({});
 
 async function getUserList() {
   await vr.Get('user-partial', userList, true, true);
@@ -25,6 +27,10 @@ const { t, locale } = useI18n({
   inheritLocale: true,
   useScope: 'local'
 });
+function open(index: number, input: any) {
+  selectedData.value = input;
+  displayModal.value = index;
+}
 </script>
 
 <template>
@@ -64,7 +70,9 @@ const { t, locale } = useI18n({
                 <span v-show="item.sex == 1">{{ t('male') }}</span>
                 <span v-show="item.sex == 2">{{ t('female') }}</span>
               </td>
-              <td></td>
+              <td>
+                <a class="hyperlink blue" @click="open(3, item)">{{ t('view') }}</a>
+              </td>
             </tr>
           </template>
         </table>
@@ -75,10 +83,12 @@ const { t, locale } = useI18n({
       <template v-slot:title>
         <div class="text-2xl">
           <div v-if="displayModal == 2">{{ t('import') }}</div>
+          <div v-if="displayModal == 3">{{ t('view') }}</div>
         </div>
       </template>
       <template v-slot:content>
-        <ImportAthlete v-if="displayModal" @refreshPage="getUserList()" @closeModal="displayModal = 0"></ImportAthlete>
+        <ImportAthlete v-if="displayModal == 2" @refreshPage="getUserList()" @closeModal="displayModal = 0"></ImportAthlete>
+        <AccountSettings v-if="displayModal == 3" @refreshPage="getUserList()" @closeModal="displayModal = 0" :input-data="selectedData"></AccountSettings>
       </template>
     </FullModal>
   </div>
@@ -116,6 +126,7 @@ table {
     female: 'Female'
     others: 'Other'
     class: 'Class'
+    view: 'View'
   zh-TW:
     add-athlete: '加入帳號'
     athlete-list: '帳號列表'
@@ -129,4 +140,5 @@ table {
     female: '女'
     others: '其他'
     class: '班級'
+    view: '查看'
 </i18n>
