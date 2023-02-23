@@ -33,7 +33,6 @@ function uploadFile(event: any) {
   const reader = new FileReader();
   reader.onload = function (e: any) {
     uploadData.value = JSON.parse(JSON.stringify(csvToArray(e.target.result)));
-    console.log(uploadData.value);
     isLoading.value = false;
     return;
   };
