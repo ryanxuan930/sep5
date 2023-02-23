@@ -12,6 +12,10 @@ const route = useRoute();
 const vr = new VueRequest(store.token);
 const boxWidth = 2300;
 const isLoading = ref(false);
+const countryList: any = ref(null);
+vr.Get('country', countryList);
+const cityList: any = ref(null);
+vr.Get('city', cityList);
 
 const deptList: any = ref([]);
 async function getDeptList() {
@@ -138,10 +142,15 @@ const { t, locale } = useI18n({
               <div>{{ item.last_name_en }}</div>
             </td>
             <td :style="{'width': `${boxWidth*0.1}px`}">
-              <div>{{ item.first_name_ch }}</div>
+              <div>{{ item.first_name_en }}</div>
             </td>
             <td :style="{'width': `${boxWidth*0.1}px`}">
-              <div>{{ item.nationality }}</div>
+              <template v-for="(country, index) in countryList" :key="index">
+                <div v-if="country.country_code == item.nationality">
+                  <template v-if="locale == 'zh-TW'">{{ country.country_name_ch }}</template>
+                  <template v-else>{{ country.country_name_en }}</template>
+                </div>
+              </template>
             </td>
             <td :style="{'width': `${boxWidth*0.1}px`}">
               <template v-for="(dept, index) in deptList" :key="index">
@@ -185,7 +194,12 @@ const { t, locale } = useI18n({
               <div>{{ item.telephone }}</div>
             </td>
             <td :style="{'width': `${boxWidth*0.1}px`}">
-              <div>{{ item.household_city }}</div>
+              <template v-for="(city, index) in cityList" :key="index">
+                <div v-if="city.city_code == item.household_city_code">
+                  <template v-if="locale == 'zh-TW'">{{ city.city_name_ch }}</template>
+                  <template v-else>{{ city.city_name_en }}</template>
+                </div>
+              </template>
             </td>
             <td :style="{'width': `${boxWidth*0.1}px`}">
               <div>{{ item.address }}</div>
