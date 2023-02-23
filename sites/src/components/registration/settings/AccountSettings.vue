@@ -193,7 +193,7 @@
           </option>
         </template>
       </select>
-      <div class="input disabled">
+      <div class="input disabled" v-else>
         <template v-for="(item, index) in deptList" :key="index">
           <span v-if="item.dept_id == data.dept_id">
             <template v-if="locale == 'zh-TW'">{{ item.dept_name_ch }}</template>
