@@ -18,7 +18,7 @@
     last_name_ch: '',
     first_name_en: '',
     last_name_en: '',
-    org_code: '',
+    org_code: 'O0000',
     is_student: 0,
     student_id: '',
     dept_id: 0,
@@ -102,6 +102,10 @@
     }
     if (data.first_name_ch.length === 0) {
       alert('請輸入中文名字');
+      return;
+    }
+    if (data.org_code.length === 0) {
+      alert('請選擇單位');
       return;
     }
     data.height *= 100;
@@ -200,7 +204,7 @@
         <div class="title">學號/職員編號</div>
         <input class="input" type="text" v-model="data.student_id">
       </label>
-      <label class="round-input-label basis-1/3">
+      <label class="round-input-label basis-1/3" v-if="Config.deptAsClass">
         <div class="title">座號</div>
         <input class="input" type="text" v-model="data.num_in_dept">
       </label>

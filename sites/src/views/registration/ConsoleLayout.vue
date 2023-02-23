@@ -41,6 +41,11 @@ provide('systemConfig', systemConfig);
     <div class="common-box right-box">
       <router-view></router-view>
     </div>
+    <div class="fixed bottom-0 right-0 p-2">
+      <button>
+        <span class="material-icons text-5xl text-blue-500 hover:text-blue-400 duration-200 drop-shadow">help</span>
+      </button>
+    </div>
   </div>
 </template>
 

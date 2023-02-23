@@ -48,7 +48,7 @@ setInterval(() => {
   <div class="h-full overflow-auto">
     <div class="flex flex-col gap-5 overflow-auto">
       <div class="section-box">
-        <div class=title>{{ t('game-info') }}</div>
+        <div class="title mb-2">{{ t('game-info') }}</div>
         <div class="rounded border-2 p-3" v-html="gameData.game_info"></div>
       </div>
     </div>

@@ -44,13 +44,13 @@ const { t, locale } = useI18n({
     department: 'Department'
     class: 'Class'
     organization: 'Organization'
-    athlete: 'Athlete'
+    athlete: 'User Account'
     create: 'New Organization'
   zh-TW:
     home: '首頁'
     department: '系所/分部'
     class: '班級'
     organization: '組織單位'
-    athlete: '選手管理'
+    athlete: '帳號管理'
     create: '建立單位'
 </i18n>

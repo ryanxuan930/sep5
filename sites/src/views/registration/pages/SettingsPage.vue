@@ -40,39 +40,6 @@ const { t, locale } = useI18n({
     <div class="section-box flex flex-col">
       <div class="text-2xl font-medium">{{ t('account-setting') }}</div>
       <hr class="my-2 border-[1px]">
-      <!--
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-center overflow-auto shadow-inner">
-        <div class="md:row-span-6 lg:grid-cols-4"></div>
-        <div class="break-words">{{ t('account') }} : {{ userData.account }}</div>
-        <div>{{ t('athlete-id') }} : {{ userData.athlete_id }}</div>
-        <div>{{ t('nationality') }} : 
-          <span v-if="locale == 'zh-TW'">{{ userData.country_name_ch }}</span>
-          <span v-else>{{ userData.country_name_en }}</span>
-        </div>
-        <div>{{ t('chinese-name') }} : {{ userData.last_name_ch }}{{ userData.first_name_ch }}</div>
-        <div>{{ t('english-name') }} : {{ userData.first_name_en }} {{ userData.last_name_en }}</div>
-        <div>{{ t('cellphone') }} : {{ userData.phone }}</div>
-        <div>{{ t('organization') }} : 
-          <span v-if="locale == 'zh-TW'">{{ userData.org_name_full_ch }}</span>
-          <span v-else>{{ userData.org_name_full_en }}</span>
-        </div>
-        <div>{{ t('department') }} : 
-          <span v-if="locale == 'zh-TW'">{{ userData.dept_name_ch }}</span>
-          <span v-else>{{ userData.dept_name_en }}</span>
-        </div>
-        <div>{{ t('permission') }} : 
-          <span v-if="userData.permission == 0">{{ t('l0') }}</span>
-          <span v-if="userData.permission == 1">{{ t('l1') }}</span>
-          <span v-if="userData.permission == 2">{{ t('l2') }}</span>
-        </div>
-        <div>{{ t('sex') }} : 
-          <span v-if="userData.sex == 0">{{ t('others') }}</span>
-          <span v-if="userData.sex == 1">{{ t('male') }}</span>
-          <span v-if="userData.sex == 2">{{ t('female') }}</span>
-        </div>
-        <div>{{ t('height') }} : {{ userData.height/100 }} cm</div>
-        <div>{{ t('weight') }} : {{ userData.weight/100 }} kg</div>
-      </div>-->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
         <button class="round-full-button blue mt-5" @click="displayModal = 1">{{ t('view') }}</button>
         <template v-if="userData.monkey_user_id != undefined">
@@ -80,7 +47,7 @@ const { t, locale } = useI18n({
           <button class="round-full-button blue mt-5" v-if="userData.monkey_user_id != null" @click="openWindow('https://sports.nsysu.edu.tw/monkeyid/#/login')">Monkey ID</button>
         </template>
         <button class="round-full-button blue mt-5" v-else @click="displayModal = 2">{{ t('reset-password') }}</button>
-        <button class="round-full-button blue mt-5" @click="displayModal = 3" v-if="!Config.deptAsClass">{{ t('change-unit') }}</button>
+        <button class="round-full-button blue mt-5" @click="displayModal = 3" v-if="!Config.deptAsClass && Config.changeDeptPermission">{{ t('change-unit') }}</button>
       </div>
     </div>
     <FullModal v-show="displayModal" @closeModal="displayModal = 0">
