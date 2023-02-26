@@ -402,20 +402,18 @@
       <div class="title">{{ t('blood') }}</div>
       <input class="input" type="text" v-model="data.blood_type" maxlength="4">
     </label>
-    <div class="flex">
-      <label class="round-input-label">
-        <div class="title">{{ t('sport') }}</div>
-        <div class="flex items-center gap-3">
-          <button class="general-button blue" @click="displayModal = 2">{{ t('select') }}</button>
-          <template v-for="(item, index) in sportList" :key="index">
-            <div v-if="data.sport_list.includes(item.sport_id)">
-              <template v-if="locale == 'zh-TW'">{{ item.sport_name_ch }}</template>
-              <template v-else>{{ item.sport_name_en }}</template>
-            </div>
-          </template>
-        </div>
-      </label>
-    </div>
+    <label class="round-input-label">
+      <div class="title">{{ t('sport') }}</div>
+      <div class="flex items-center gap-3">
+        <button class="general-button blue" @click="displayModal = 2">{{ t('select') }}</button>
+        <template v-for="(item, index) in sportList" :key="index">
+          <div v-if="data.sport_list.includes(item.sport_id)">
+            <template v-if="locale == 'zh-TW'">{{ item.sport_name_ch }}</template>
+            <template v-else>{{ item.sport_name_en }}</template>
+          </div>
+        </template>
+      </div>
+    </label>
     <div class="md:col-span-2 flex">
       <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
         <div class="title">{{ t('school-team') }}</div>

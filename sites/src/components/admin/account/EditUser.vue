@@ -5,11 +5,12 @@
   import SmallModal from '@/components/SmallModal.vue';
   import SchoolTeamSelector from '@/components/admin/module/SchoolTeamSelector.vue';
   import Config from '@/assets/config.json';
+  import SportSelector from '@/components/admin/module/SportSelector.vue';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
   const props: any = defineProps(['inputData']);
-  const displayModal = ref(false);
+  const displayModal = ref(0);
 
   const optionsPrototype = {};
   const data: any = reactive({
@@ -46,6 +47,7 @@
     avatar: '',
     permission: 0,
     num_in_dept: 0,
+    sport_list: [],
   });
   if (props.inputData !== null) {
     Object.keys(data).forEach((index: string) => {
@@ -113,6 +115,7 @@
     const temp = JSON.parse(JSON.stringify(data));
     temp.school_team_id_list = JSON.stringify(temp.school_team_id_list);
     temp.options = JSON.stringify(temp.options);
+    temp.sport_list = JSON.stringify(temp.sport_list);
     if (props.inputData === null) {
       vr.Post('user', temp, null, true, true).then( (res: any) => {
         if (res.status !== 'A01') {
@@ -362,37 +365,46 @@
       </select>
     </label>
     <label class="round-input-label">
-      <div class="title">是否為校隊</div>
-      <select class="select" v-model="data.is_school_team">
-        <option value="0">否</option>
-        <option value="1">是</option>
-      </select>
+      <div class="title">專長項目</div>
+      <div class="flex items-center gap-3">
+        <button class="general-button blue" @click="displayModal = 2">選擇</button>
+        <template v-for="(item, index) in sportList" :key="index">
+          <div v-if="data.sport_list.includes(item.sport_id)">{{ item.sport_name_ch }}</div>
+        </template>
+      </div>
     </label>
     <div class="md:col-span-2 flex gap-3">
-      <div class="round-input-label">
-        <div class="title">所屬校隊</div>
-        <button class="round-full-button blue" @click="displayModal = true" :disabled="data.is_school_team == 0">選擇</button>
-      </div>
+      <label class="round-input-label">
+        <div class="title">是否為校隊</div>
+        <select class="select" v-model="data.is_school_team">
+          <option value="0">否</option>
+          <option value="1">是</option>
+        </select>
+      </label>
       <div class="round-input-label">
         <div class="title">校隊列表</div>
-        <div class="team-list">
-          <template v-for="(item, index) in teamList" :key="index">
-            <div v-if="data.school_team_id_list.includes(item.school_team_id)">{{ item.team_name_ch }}</div>
-          </template>
+        <div class="flex items-center gap-3">
+          <button class="round-full-button blue" @click="displayModal = 1" :disabled="data.is_school_team == 0">選擇</button>
+          <div class="team-list">
+            <template v-for="(item, index) in teamList" :key="index">
+              <div v-if="data.school_team_id_list.includes(item.school_team_id)">{{ item.team_name_ch }}</div>
+            </template>
+          </div>
         </div>
       </div>
     </div>
     <div class="md:col-span-4">
       <button class="round-full-button blue" @click="submitAll">儲存</button>
     </div>
-    <SmallModal v-show="displayModal" @closeModal="displayModal = false">
+    <SmallModal v-show="displayModal > 0" @closeModal="displayModal = 0">
       <template v-slot:title>
         <div class="text-2xl">
-          <div>校隊列表</div>
+          <div v-if="displayModal == 1">校隊列表</div>
         </div>
       </template>
       <template v-slot:content>
-        <SchoolTeamSelector v-if="displayModal" :input-data="data.school_team_id_list" @returnData="(input: number[]) => { data.school_team_id_list = input;}" @closeModal="displayModal = false"></SchoolTeamSelector>
+        <SchoolTeamSelector v-if="displayModal == 1" :input-data="data.school_team_id_list" @returnData="(input: number[]) => { data.school_team_id_list = input;}" @closeModal="displayModal = 0"></SchoolTeamSelector>
+        <SportSelector v-if="displayModal == 2" :input-data="data.sport_list" @returnData="(input: number[]) => { data.sport_list = input;}" @closeModal="displayModal = 0"></SportSelector>
       </template>
     </SmallModal>
   </div>
@@ -404,5 +416,8 @@
   div {
     @apply border-2 rounded p-1;
   }
+}
+.round-full-button[disabled] {
+  @apply bg-gray-200 border-gray-200;
 }
 </style>
