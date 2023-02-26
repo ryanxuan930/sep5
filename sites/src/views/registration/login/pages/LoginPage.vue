@@ -53,7 +53,7 @@
     useScope: 'local'
   });
   // configs
-  const useMonkeyId = true;
+  const useMonkeyId = Config.useMonkeyId;
 </script>
 
 <template>
@@ -68,6 +68,7 @@
       </div>
       <label class="round-input-label">
         <div class="title">{{ t('account') }}</div>
+        <div class="px-1 pb-2 text-sm text-gray-500" v-if="useMonkeyId">{{ t('monkeyid-login-info') }}</div>
         <input type="email" class="input" ref="accountInput" placeholder="abc@xyz.com" v-model="data.account" @keyup.enter="passwordInput.focus()">
       </label>
       <label class="round-input-label">
@@ -112,6 +113,7 @@
     no-account: "Don't have an account?"
     require-account: 'Please input your account'
     require-password: 'Please input your password'
+    monkeyid-login-info: 'You can use your MonkeyID to login.'
   zh-TW:
     registration-login: '報名系統登入'
     login: '登入'
@@ -124,4 +126,5 @@
     no-account: '還沒有帳號嗎？'
     require-accout: '請輸入帳號'
     require-password: '請輸入密碼'
+    monkeyid-login-info: '您可以直接以 MonkeyID 登入。'
 </i18n>
