@@ -28,8 +28,8 @@ provide('gameData', gameData);
     <GameNav></GameNav>
     <div class="flex-grow overflow-auto flex flex-col">
       <div>
-        <div class="h-16 overflow-hidden">
-          <img :src="gameData.options.bannerUrl" class="hidden md:block w-full h-auto nav-background" alt="">
+        <div class="hidden md:block h-16 overflow-hidden">
+          <img :src="gameData.options.bannerUrl" class="w-full h-auto nav-background" alt="">
         </div>
         <img class="w-full" :src="gameData.options.bannerUrl">
       </div>
