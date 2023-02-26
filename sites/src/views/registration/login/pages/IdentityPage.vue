@@ -20,9 +20,11 @@ const { t, locale } = useI18n({
         <div class="mb-3 text-xl text-center relative">
           {{ t('line2') }}
           <span class="-top-2 p-1 absolute">
-            <span class="material-icons text-base text-gray-300 hover:text-gray-400 duration-150 cursor-pointer">help</span>
+            <div class="tooltip">
+              <span class="material-icons text-base text-gray-400 hover:text-gray-500 duration-150 cursor-pointer">help</span>
+              <div class="tooltip-text" v-html="t('info')"></div>
+            </div>
           </span>
-          
         </div>
         <a href="https://sports.nsysu.edu.tw/monkeyid/#/login/signup" target="_blank">
           <button class="round-full-button blue">{{ t('monkeyid') }}</button>
@@ -38,6 +40,18 @@ const { t, locale } = useI18n({
     <div class="flex-grow"></div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.tooltip {
+  @apply inline-block relative;
+  .tooltip-text {
+    @apply invisible w-48 sm:w-60 md:w-72 bg-black bg-opacity-80 text-white text-sm text-left rounded p-2 absolute z-50 top-full right-0 sm:left-1/2 sm:transform sm:-translate-x-1/2 opacity-0 transition-all duration-300;
+  }
+  &:hover .tooltip-text {
+    @apply visible opacity-100;
+  }
+}
+</style>
 
 <i18n lang="yaml">
   en-US:
@@ -56,5 +70,5 @@ const { t, locale } = useI18n({
     line4: '請直接註冊'
     monkeyid: '註冊 MonkeyID'
     signup: '註冊'
-    info: 'MonkeyID是用來進行學生、校友、教職員的身份驗證系統，經過驗證後才能取得上述身份別。可以用學校發配的信箱或學生證、教職員證與校友證進行驗證。'
+    info: 'MonkeyID是用來進行學生、校友、教職員的身份驗證系統，可以用學校發配的信箱或學生證、教職員證與校友證進行驗證。<br>驗證完畢後可以直接以MonkeyID帳號登入本報名系統。<div class="text-sx">*若未經過MonkeyID驗證，則無法取得上述身份的權限。</div>'
 </i18n>
