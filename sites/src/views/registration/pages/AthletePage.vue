@@ -8,7 +8,7 @@ import SmallLoader from '@/components/SmallLoader.vue';
 import FullModal from '@/components/FullModal.vue';
 import ImportAthlete from '@/components/registration/module/ImportAthlete.vue'
 import Config from '@/assets/config.json';
-import AccountSettings from '@/components/registration/settings/AccountSettings.vue';
+import EditAccount from '@/components/registration/account/EditAccount.vue';
 
 const store = useUserStore();
 const route = useRoute();
@@ -52,7 +52,9 @@ function open(index: number, input: any) {
             <th v-else>{{ t('department') }}</th>
             <th>{{ t('name') }}</th>
             <th>{{ t('sex') }}</th>
-            <th></th>
+            <th>
+              <a class="hyperlink blue" @click="open(3, null)">{{ t('add') }}</a>
+            </th>
           </tr>
           <template v-for="(item, index) in userList" :key="index">
             <tr>
@@ -88,7 +90,7 @@ function open(index: number, input: any) {
       </template>
       <template v-slot:content>
         <ImportAthlete v-if="displayModal == 2" @refreshPage="getUserList()" @closeModal="displayModal = 0"></ImportAthlete>
-        <AccountSettings v-if="displayModal == 3" @refreshPage="getUserList()" @closeModal="displayModal = 0" :input-data="selectedData"></AccountSettings>
+        <EditAccount v-if="displayModal == 3" @refreshPage="getUserList()" @closeModal="displayModal = 0" :input-data="selectedData"></EditAccount>
       </template>
     </FullModal>
   </div>
@@ -127,6 +129,7 @@ table {
     others: 'Other'
     class: 'Class'
     view: 'View'
+    add: 'Add'
   zh-TW:
     add-athlete: '加入帳號'
     athlete-list: '帳號列表'
@@ -141,4 +144,5 @@ table {
     others: '其他'
     class: '班級'
     view: '查看'
+    add: '新增'
 </i18n>

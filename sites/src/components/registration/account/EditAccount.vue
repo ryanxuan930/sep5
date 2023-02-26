@@ -20,7 +20,7 @@
     last_name_ch: '',
     first_name_en: '',
     last_name_en: '',
-    org_code: '',
+    org_code: store.userInfo.org_code,
     is_student: 0,
     student_id: '',
     dept_id: 0,
@@ -34,7 +34,7 @@
     gifited_sport_id: 0,
     is_school_team: 0,
     school_team_id_list: [],
-    sex: 0,
+    sex: 1,
     height: 0.00,
     weight: 0.00,
     blood_type: '',
@@ -49,6 +49,7 @@
     permission: 0,
     sport_list: [],
   });
+  const password = ref('');
   if (props.inputData != null) {
     Object.keys(data).forEach((index: string) => {
       data[index] = props.inputData[index];
@@ -69,23 +70,30 @@
     }
   }
 
+  const userData: any = ref(null)
   const countryList: any = ref(null);
-  vr.Get('country', countryList);
   const cityList: any = ref(null);
-  vr.Get('city', cityList);
   const orgList: any = ref([]);
-  vr.Get('organization', orgList);
   const deptList: any = ref([]);
-  function getDeptList(orgCode: string) {
-    vr.Get(`department/org/code/${orgCode}`, deptList, true, true);
-  }
-  vr.Get(`department/org/code/${store.userInfo.org_code}`, deptList, true, true);
   const sportList: any = ref(null);
-  vr.Get('sport', sportList);
   const tribeList: any = ref(null);
-  vr.Get('tribe', tribeList);
   const teamList: any = ref(null);
-  vr.Get(`${props.inputData.org_id}/school-team`, teamList, true, true);
+
+  async function getDeptList(orgCode: string) {
+    await vr.Get(`department/org/code/${orgCode}`, deptList, true, true);
+    return;
+  }
+ 
+  (async () => {
+    await vr.Get('auth/user/info', userData, true, true);
+    await vr.Get('country', countryList);
+    await vr.Get('city', cityList);
+    await vr.Get('organization', orgList);
+    await vr.Get(`department/org/code/${userData.value.org_code}`, deptList, true, true);
+    await vr.Get('sport', sportList);
+    await vr.Get('tribe', tribeList);
+    await vr.Get(`${userData.value.org_id}/school-team`, teamList, true, true);
+  })();
 
   const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
   const close = () => {
@@ -107,14 +115,23 @@
     temp.options = JSON.stringify(temp.options);
     temp.height *= 100;
     temp.weight *= 100;
-    await vr.Patch(`user/${props.inputData.u_id}`, temp, null, true, true).then( (res: any) => {
+    if (props.inputData != null) {
+      await vr.Patch(`user/${props.inputData.u_id}`, temp, null, true, true).then( (res: any) => {
       if (res.status !== 'A01') {
         alert('無法儲存 Error');
         return;
       }
     });
-    const info = await vr.Get('auth/user/info/pure', null, true, true);
-    store.userInfo = info;
+    } else {
+      temp.password = password.value;
+      await vr.Post('user', temp, null, true, true).then( (res: any) => {
+        console.log(res);
+        if (res.status !== 'A01') {
+          alert('無法儲存 Error');
+          return;
+        }
+      });
+    }
     alert('已儲存 Done');
     close();
   }
@@ -148,11 +165,15 @@
     </label>
     <label class="round-input-label md:col-span-2">
       <div class="title">{{ t('account') }}</div>
-      <div class="input disabled">{{ data.account }}</div>
+      <input class="input" :disabled="props.inputData != null" type="text" v-model="data.account" maxlength="128">
     </label>
-    <label class="round-input-label">
+    <label class="round-input-label" v-if="props.inputData != null">
       <div class="title">{{ t('athlete-id') }}</div>
       <div class="input disabled">{{ store.userInfo.athlete_id }}</div>
+    </label>
+    <label class="round-input-label" v-else>
+      <div class="title">{{ t('password') }}</div>
+      <input class="input" type="password" v-model="password">
     </label>
     <label class="round-input-label">
       <div class="title">{{ t('permission') }}</div>
@@ -495,6 +516,7 @@
     select: 'Select'
     class: 'Class'
     sport: 'Sports'
+    password: 'Password'
   zh-TW:
     setting: '設定'
     language: '語言'
@@ -548,4 +570,5 @@
     select: '選擇'
     class: '班級'
     sport: '專長項目'
+    password: '密碼'
 </i18n>
