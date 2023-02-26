@@ -20,7 +20,7 @@ const { t, locale } = useI18n({
         <div class="mb-3 text-xl text-center relative">
           {{ t('line2') }}
           <span class="-top-2 p-1 absolute">
-            <div class="tooltip">
+            <div class="tooltip" onClick="">
               <span class="material-icons text-base text-gray-400 hover:text-gray-500 duration-150 cursor-pointer">help</span>
               <div class="tooltip-text" v-html="t('info')"></div>
             </div>
@@ -45,7 +45,7 @@ const { t, locale } = useI18n({
 .tooltip {
   @apply inline-block relative;
   .tooltip-text {
-    @apply invisible w-48 sm:w-60 md:w-72 bg-black bg-opacity-80 text-white text-sm text-left rounded p-2 absolute z-50 top-full right-0 sm:left-1/2 sm:transform sm:-translate-x-1/2 opacity-0 transition-all duration-300;
+    @apply invisible w-60 md:w-72 bg-black bg-opacity-80 text-white text-sm text-left rounded p-2 absolute z-50 top-full right-0 sm:left-1/2 sm:transform sm:-translate-x-1/2 opacity-0 transition-all duration-300;
   }
   &:hover .tooltip-text {
     @apply visible opacity-100;
