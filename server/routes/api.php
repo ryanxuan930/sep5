@@ -92,7 +92,7 @@ Route::group([
     'prefix' => '{org_id}'
 ], function () {
     Route::apiResource('/bulletin', BulletinController::class);
-    Route::get('/bulletin-game', [BulletinController::class, 'indexByGame']);
+    Route::get('/bulletin-game/{game_id}', [BulletinController::class, 'indexByGame']);
 
     Route::apiResource('/game', GameController::class);
     Route::get('/game-all', [GameController::class, 'indexAll']);
