@@ -20,7 +20,7 @@ const { t, locale } = useI18n({
         <div class="mb-3 text-xl text-center relative">
           {{ t('line2') }}
           <span class="-top-2 p-1 absolute">
-            <div class="tooltip" onClick="">
+            <div class="tooltip">
               <span class="material-icons text-base text-gray-400 hover:text-gray-500 duration-150 cursor-pointer">help</span>
               <div class="tooltip-text" v-html="t('info')"></div>
             </div>
