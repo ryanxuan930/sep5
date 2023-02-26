@@ -44,7 +44,7 @@ const navHoverSubColor = ref(gameData.value.options.navHoverSubColor);
       <div class="hidden md:block h-12 sm:h-20 w-2 sm:w-6"></div>
     </div>
     <div ref="target">
-      <div class="h-8 block bg-gray-100 shadow-lg absolute top-12 sm:top-20 md:hidden left-0 w-full z-10 cursor-pointer text-center" @click="mobileNav = ! mobileNav">
+      <div class="h-8 block bg-gray-100 shadow-lg sm:top-20 md:hidden left-0 w-full z-10 cursor-pointer text-center" @click="mobileNav = ! mobileNav">
         <span v-if="mobileNav==true" class="material-icons text-2xl text-gray-700">arrow_drop_up</span>
         <span v-if="mobileNav==false" class="material-icons text-2xl text-gray-700">arrow_drop_down</span>
       </div>
