@@ -86,6 +86,7 @@
         <div class="mb-5 text-center">{{ t('no-account') }}</div>
         <button class="round-full-button blue" @click="$router.push(useMonkeyId ? `/${$route.params.adminOrgId}/registration/login/signup-identity` : `/${$route.params.adminOrgId}/registration/login/signup`)">{{ t('signup') }}</button>
       </template>
+      <div class="text-center text-xs mt-3 text-gray-500">{{ t('recommend-browser') }}</div>
     </div>
     <div class="flex-grow"></div>
   </div>
@@ -114,6 +115,7 @@
     require-account: 'Please input your account'
     require-password: 'Please input your password'
     monkeyid-login-info: 'You can use your MonkeyID to login directly'
+    recommend-browser: 'We recommend using Chrome or Firefox for the best experience'
   zh-TW:
     registration-login: '報名系統登入'
     login: '登入'
@@ -126,5 +128,6 @@
     no-account: '還沒有帳號嗎？'
     require-accout: '請輸入帳號'
     require-password: '請輸入密碼'
-    monkeyid-login-info: '您可以直接以 MonkeyID 登入'
+    monkeyid-login-info: '您可以直接用 MonkeyID 登入'
+    recommend-browser: '建議使用 Chrome 或 Firefox 以獲得最佳操作體驗'
 </i18n>
