@@ -113,7 +113,7 @@
     no-account: "Don't have an account?"
     require-account: 'Please input your account'
     require-password: 'Please input your password'
-    monkeyid-login-info: 'You can use your MonkeyID to login.'
+    monkeyid-login-info: 'You can use your MonkeyID to login directly'
   zh-TW:
     registration-login: '報名系統登入'
     login: '登入'
@@ -126,5 +126,5 @@
     no-account: '還沒有帳號嗎？'
     require-accout: '請輸入帳號'
     require-password: '請輸入密碼'
-    monkeyid-login-info: '您可以直接以 MonkeyID 登入。'
+    monkeyid-login-info: '您可以直接以 MonkeyID 登入'
 </i18n>
