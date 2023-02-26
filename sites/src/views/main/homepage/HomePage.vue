@@ -28,6 +28,9 @@ provide('pageData', pageData);
     <div class="flex-grow overflow-auto flex flex-col">
       <VueHorizontal snap="center" ref="horizontal" class="horizontal" :button-between="false">
         <div v-for="(item, index) in pageData.homepageSlideshow" :key="index" class="w-full">
+            <div class="h-16 overflow-hidden">
+              <img :src="item" class="hidden md:block w-full h-auto nav-background" alt="">
+            </div>
             <img :src="item" class="w-full h-auto" alt="">
         </div>
       </VueHorizontal>
@@ -45,4 +48,7 @@ provide('pageData', pageData);
 </template>
 
 <style scoped lang="scss">
+.nav-background {
+  filter: blur(5px);
+}
 </style>
