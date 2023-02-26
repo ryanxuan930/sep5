@@ -15,7 +15,7 @@ const adminOrgId = useRoute().params.adminOrgId;
 const linkUrl:any= ref(null);
 const bulletinList:Ref<IPostData[]> = ref([]);
 const currentUrl = ref('');
-function getBulletinList(url = `${adminOrgId}/bulletin-game`) {
+function getBulletinList(url = `${adminOrgId}/bulletin-game/${useRoute().params.gameId}`) {
   currentUrl.value = url;
   const page = getUrlParams(url, 'page');
   if (page !== null) {
