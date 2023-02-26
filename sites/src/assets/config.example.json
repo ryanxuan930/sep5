@@ -6,5 +6,7 @@
   "deptAsClass": false,
   "changeDeptPermission": true,
   "allowAddUser": true,
-  "allowSignup": true
+  "allowSignup": true,
+  "systemName": "SportEvent Pro 5",
+  "useMonkeyId": true
 }
