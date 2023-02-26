@@ -36,7 +36,7 @@ import SmallLoader from '@/components/SmallLoader.vue';
 </script>
 
 <template>
-  <div>
+  <div class="h-full flex flex-col">
     <hr>
     <div class="grid grid-cols-2 gap-3 text-lg font-medium py-2">
       <div>{{ t('division') }} :</div>
@@ -55,7 +55,7 @@ import SmallLoader from '@/components/SmallLoader.vue';
       <div>{{ props.inputData.ref_result }}</div>
 
     </div>
-    <div class="w-full overflow-auto">
+    <div class="w-full h-full overflow-auto">
       <table class="game-table">
         `<tr>
           <th>{{ t('athlete-id') }}</th>
@@ -107,7 +107,7 @@ import SmallLoader from '@/components/SmallLoader.vue';
     @apply border-b-[1px] p-2 border-gray-300 font-medium;
   }
   th {
-    @apply bg-blue-100;
+    @apply bg-blue-100 sticky top-0;
   }
 }
 .general-button.active {

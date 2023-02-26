@@ -5,7 +5,11 @@ module.exports = {
     './src/**/*.{vue,js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        'screen-phone': '-webkit-fill-available',
+      }
+    },
     screens: {
       'sm': '640px',
       'md': '768px',

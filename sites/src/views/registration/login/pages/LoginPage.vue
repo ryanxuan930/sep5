@@ -57,9 +57,9 @@
 </script>
 
 <template>
-  <div class="h-screen flex flex-col overflow-auto">
+  <div class="h-screen-phone md:h-screen flex flex-col">
     <div class="flex-grow"></div>
-    <div class="bg-white sm:shadow p-5 w-full h-screen sm:w-2/3 md:w-96 sm:h-fit mx-auto">
+    <div class="bg-white sm:shadow p-5 w-full sm:w-2/3 md:w-96 mx-auto">
       <div class="text-2xl text-gray-500">{{ t('registration-login') }}</div>
       <div class="mt-3 text-lg">
         <a class="inline-block hyperlink blue" @click="$i18n.locale = 'zh-TW'">中文</a>

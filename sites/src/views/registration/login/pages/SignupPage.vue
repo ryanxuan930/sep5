@@ -112,9 +112,9 @@ function submitAll() {
 </script>
 
 <template>
-  <div class="h-screen flex flex-col overflow-auto">
-    <div class="flex-grow p-5"></div>
-    <div class="bg-white sm:shadow p-5 w-full h-screen sm:w-2/3 sm:h-fit mx-auto flex flex-col gap-5">
+  <div class="h-screen-phone md:h-screen flex flex-col overflow-auto">
+    <div class="flex-grow md:min-h-[1rem]"></div>
+    <div class="bg-white sm:shadow p-5 w-full sm:w-2/3 sm:h-fit mx-auto flex flex-col gap-5">
       <div>
         <router-link :to="`/${$route.params.adminOrgId}/registration/login`" class="hyperlink blue">{{ t('back') }}</router-link>
       </div>
@@ -124,7 +124,7 @@ function submitAll() {
           <div class="title">{{ t('account') }}</div>
           <input class="input" type="text" v-model="data.account" @blur="exist">
           <div v-show="errorList.account.filled == false" class="warning">{{ t('require-account') }}</div>
-          <div v-show="errorList.account.unique == false" class="warning">{{ t('exist') }}</div>
+          <div v-show="errorList.account.unique == false && data.account.length > 0" class="warning">{{ t('exist') }}</div>
         </label>
         <label class="round-input-label">
           <div class="title">{{ t('nationality') }}</div>
@@ -156,7 +156,7 @@ function submitAll() {
         <label class="round-input-label">
           <div class="title">{{ t('first-name-en') }}</div>
           <input class="input" type="text" v-model="data.first_name_en">
-          <div v-show="errorList.firstNameEn.filled == false" class="warning">{{ t('require-first-name-en') }}</div>
+          <div v-show="errorList.firstNameEn.filled == false  && data.first_name_en.length > 0" class="warning">{{ t('require-first-name-en') }}</div>
         </label>
         <label class="round-input-label">
           <div class="title">{{ t('sex') }}</div>
@@ -174,19 +174,19 @@ function submitAll() {
           <div class="title">{{ t('password') }}</div>
           <input class="input" type="password" v-model="data.password">
           <div v-show="errorList.password.filled == false" class="warning">{{ t('require-password') }}</div>
-          <div v-show="errorList.password.format == false" class="warning">{{ t('password-format') }}</div>
+          <div v-show="errorList.password.format == false && data.password.length > 0" class="warning">{{ t('password-format') }}</div>
         </label>
         <label class="round-input-label">
           <div class="title">{{ t('password-confirm') }}</div>
           <input class="input" type="password" v-model="passwordConfirm">
           <div v-show="errorList.passwordConfirm.filled == false" class="warning">{{ t('require-password-confirm') }}</div>
-          <div v-show="errorList.passwordConfirm.same == false" class="warning">{{ t('password-same') }}</div>
+          <div v-show="errorList.passwordConfirm.same == false && passwordConfirm.length > 0" class="warning">{{ t('password-same') }}</div>
         </label>
       </div>
       <button class="round-full-button blue" @click="submitAll">{{ t('signup') }}</button>
-      <div >傳輸中 Processing...</div>
+      <div v-if="isProcessing">傳輸中 Processing...</div>
     </div>
-    <div class="flex-grow p-5"></div>
+    <div class="flex-grow md:min-h-[1rem]"></div>
   </div>
 </template>
 

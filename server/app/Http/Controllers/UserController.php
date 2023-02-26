@@ -267,6 +267,7 @@ class UserController extends Controller
             'options' => 'nullable',
             'avatar' => 'nullable',
             'permission' => 'integer',
+            'num_in_dept' => 'nullable|integer',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);

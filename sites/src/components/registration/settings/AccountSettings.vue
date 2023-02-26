@@ -6,6 +6,7 @@
   import SchoolTeamSelector from '@/components/registration/module/SchoolTeamSelector.vue';
   import { useI18n } from 'vue-i18n';
   import Config from '@/assets/config.json';
+  import SportSelector from '@/components/admin/module/SportSelector.vue';
 
   const store = useUserStore()
   const vr = new VueRequest(store.token);
@@ -16,7 +17,7 @@
   } else {
     inputMode.value = 0;
   }
-  const displayModal = ref(false);
+  const displayModal = ref(0);
 
   const optionsPrototype = {};
   const data: any = reactive({
@@ -52,6 +53,7 @@
     options: optionsPrototype,
     avatar: '',
     permission: 0,
+    sport_list: [],
   });
   Object.keys(data).forEach((index: string) => {
     data[index] = props.inputData[index];
@@ -382,32 +384,50 @@
       <div class="title">{{ t('blood') }}</div>
       <input class="input" type="text" v-model="data.blood_type" maxlength="4">
     </label>
-    <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
-      <div class="title">{{ t('school-team') }}</div>
-      <div class="input disabled">{{ data.is_school_team == 1 ? t('yes') : t('no') }}</div>
-    </label>
-    <div class="round-input-label md:col-span-2" v-if="data.org_code.substring(0, 1) !== 'O'">
-      <div class="title">{{ t('team') }}</div>
-      <div class="team-list">
-        <template v-for="(item, index) in teamList" :key="index">
-          <div v-if="data.school_team_id_list.includes(item.school_team_id)">
-            <template v-if="locale == 'zh-TW'">{{ item.team_name_ch }}</template>
-            <template v-else>{{ item.team_name_en }}</template>
-          </div>
-        </template>
+    <div class="flex">
+      <label class="round-input-label">
+        <div class="title">{{ t('sport') }}</div>
+        <div class="flex items-center gap-3">
+          <button class="general-button blue" @click="displayModal = 2">{{ t('select') }}</button>
+          <template v-for="(item, index) in sportList" :key="index">
+            <div v-if="data.sport_list.includes(item.sport_id)">
+              <template v-if="locale == 'zh-TW'">{{ item.sport_name_ch }}</template>
+              <template v-else>{{ item.sport_name_en }}</template>
+            </div>
+          </template>
+        </div>
+      </label>
+    </div>
+    <div class="md:col-span-2 flex">
+      <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
+        <div class="title">{{ t('school-team') }}</div>
+        <div class="input disabled">{{ data.is_school_team == 1 ? t('yes') : t('no') }}</div>
+      </label>
+      <div class="round-input-label flex-grow" v-if="data.org_code.substring(0, 1) !== 'O'">
+        <div class="title">{{ t('team') }}</div>
+        <div class="team-list">
+          <template v-for="(item, index) in teamList" :key="index">
+            <div v-if="data.school_team_id_list.includes(item.school_team_id)">
+              <template v-if="locale == 'zh-TW'">{{ item.team_name_ch }}</template>
+              <template v-else>{{ item.team_name_en }}</template>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
     <div class="md:col-span-4">
       <button class="round-full-button blue" @click="submitAll">{{ t('save') }}</button>
     </div>
-    <SmallModal v-show="displayModal" @closeModal="displayModal = false">
+    <SmallModal v-show="displayModal > 0" @closeModal="displayModal = 0">
       <template v-slot:title>
         <div class="text-2xl">
-          <div>{{ t('team') }}</div>
+          <div v-if="displayModal == 1">{{ t('team') }}</div>
+          <div v-if="displayModal == 2">{{ t('sport') }}</div>
         </div>
       </template>
       <template v-slot:content>
-        <SchoolTeamSelector v-if="displayModal" :input-data="data.school_team_id_list" :org-id="props.inputData.org_id" @returnData="(input: number[]) => { data.school_team_id_list = input;}" @closeModal="displayModal = false"></SchoolTeamSelector>
+        <SchoolTeamSelector v-if="displayModal == 1" :input-data="data.school_team_id_list" :org-id="props.inputData.org_id" @returnData="(input: number[]) => { data.school_team_id_list = input;}" @closeModal="displayModal = 0"></SchoolTeamSelector>
+        <SportSelector v-if="displayModal == 2" :input-data="data.sport_list" @returnData="(input: number[]) => { data.sport_list = input;}" @closeModal="displayModal = 0"></SportSelector>
       </template>
     </SmallModal>
   </div>
@@ -477,6 +497,7 @@
     save: 'Save'
     select: 'Select'
     class: 'Class'
+    sport: 'Sports'
   zh-TW:
     setting: '設定'
     language: '語言'
@@ -529,4 +550,5 @@
     save: '儲存'
     select: '選擇'
     class: '班級'
+    sport: '專長項目'
 </i18n>

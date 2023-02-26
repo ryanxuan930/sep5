@@ -26,7 +26,7 @@ provide('systemConfig', systemConfig);
 
 <template>
   <SpinnerLoading v-show="loadinStatus == false"></SpinnerLoading>
-  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:h-screen" v-if="loadinStatus">
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 h-full md:h-screen" v-if="loadinStatus">
     <div class="common-box left-box">
       <div>
         <LogoSection></LogoSection>
