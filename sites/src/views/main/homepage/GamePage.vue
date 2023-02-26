@@ -27,6 +27,9 @@ provide('gameData', gameData);
   <div class="h-screen flex flex-col bg-white" v-if="gameData != null">
     <GameNav></GameNav>
     <div class="flex-grow overflow-auto flex flex-col">
+      <div class="h-16 overflow-hidden">
+        <img :src="gameData.options.bannerUrl" class="hidden md:block w-full h-auto nav-background" alt="">
+      </div>
       <div>
         <img class="w-full" :src="gameData.options.bannerUrl">
       </div>
@@ -44,5 +47,7 @@ provide('gameData', gameData);
 </template>
 
 <style scoped lang="scss">
-    
+.nav-background {
+  filter: blur(5px);
+}
 </style>
