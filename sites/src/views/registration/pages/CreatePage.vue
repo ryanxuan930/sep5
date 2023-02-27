@@ -11,7 +11,7 @@ const vr = new VueRequest(store.token);
 const router = useRouter();
 const route = useRoute();
 
-const isEdit = true;
+const isEdit = ref(true);
 const isLoading = ref(false);
 const countryList: any = ref(null);
 vr.Get('country', countryList);
