@@ -43,7 +43,7 @@
 
 <style scoped lang="scss">
 table {
-  @apply w-[768px] md:w-full text-left;
+  @apply w-full text-left;
   td, th {
     @apply border-b-[1px] p-2 border-gray-300 font-medium;
   }
