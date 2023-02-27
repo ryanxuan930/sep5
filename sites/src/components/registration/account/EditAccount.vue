@@ -271,7 +271,7 @@
     </label>
     <label class="round-input-label" v-if="data.org_code.substring(0, 1) !== 'O'">
       <div class="title">{{ t('grade') }}</div>
-      <select class="select" v-model="data.grade" :disabled="data.grade == 0 || Config.deptAsClass == true" >
+      <select class="select" v-model="data.grade" :disabled="data.is_student == 0 || Config.deptAsClass == true" >
         <option value="0">無 N/A</option>
         <option value="1">小一 Grade 1</option>
         <option value="2">小二 Grade 2</option>
@@ -374,7 +374,7 @@
       <input class="input" type="number" v-model.number="data.height">
     </label>
     <label class="round-input-label">
-      <div class="title">{{ t('weight') }} (w.ww) kg</div>
+      <div class="title">{{ t('weight') }} (ww.ww) kg</div>
       <input class="input" type="number" v-model.number="data.weight">
     </label>
     <label class="round-input-label">
