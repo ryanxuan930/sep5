@@ -270,7 +270,7 @@ function removeUser(id: number) {
   data.member_list.splice(data.member_list.indexOf(id), 1);
 }
 
-function acceptUser(){
+function acceptUser(): boolean{
   if (regConfig.value.options.common.allow_cross_org) {
     return true;
   } else if (regConfig.value.options.common.allow_cross_dept) {
@@ -280,7 +280,7 @@ function acceptUser(){
       return false;
     }
   } else {
-    if (crossUserData.value.org_code == store.userInfo.org_code && crossUserData.value.dept_code == store.userInfo.dept_code) {
+    if (crossUserData.value.org_code == store.userInfo.org_code && crossUserData.value.dept_id == store.userInfo.dept_id) {
       return true;
     } else {
       return false;
@@ -354,7 +354,7 @@ function acceptUser(){
                     <span v-else>{{ crossUserData.first_name_ch }}{{ crossUserData.last_name_ch }} | {{ crossUserData.org_name_full_ch }} {{ crossUserData.dept_name_ch }}</span>
                   </div>
                   <div class="flex-shrink-0">
-                    <button class="round-full-button blue" v-if="acceptUser()" @click="addUser(crossUserData.u_id, true)">{{ t('add') }}</button>
+                    <button class="round-full-button blue" v-if="acceptUser() == true" @click="addUser(crossUserData.u_id, true)">{{ t('add') }}</button>
                     <div class="round-full-button blue-hollow" v-else>{{ t('not-meet-require') }}</div>
                   </div>
                 </template>
