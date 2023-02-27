@@ -75,6 +75,7 @@
           alert('無法儲存');
           return;
         }
+        close();
       });
     } else {
       vr.Patch(`${store.userInfo.admin_org_id}/bulletin/${props.postData.bulletin_id}`, temp, null, true, true).then( (res: any) => {
@@ -82,9 +83,9 @@
           alert('無法儲存');
           return;
         }
+        close();
       });
     }
-    close();
   }
 </script>
 
