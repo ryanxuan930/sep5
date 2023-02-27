@@ -350,8 +350,8 @@ function acceptUser(): boolean{
               <div class="p-1 flex items-center gap-5">
                 <template v-if="crossUserData.u_id != undefined">
                   <div class="input">
-                    <span v-if="locale == 'zh-TW'">{{ crossUserData.first_name_ch }}{{ crossUserData.last_name_ch }} | {{ crossUserData.org_name_full_ch }} {{ crossUserData.dept_name_ch }}</span>
-                    <span v-else>{{ crossUserData.first_name_ch }}{{ crossUserData.last_name_ch }} | {{ crossUserData.org_name_full_ch }} {{ crossUserData.dept_name_ch }}</span>
+                    <span v-if="locale == 'zh-TW'">{{ crossUserData.last_name_ch }}{{ crossUserData.first_name_ch }} | {{ crossUserData.org_name_full_ch }} {{ crossUserData.dept_name_ch }}</span>
+                    <span v-else>{{ crossUserData.first_name_en }}{{ crossUserData.last_name_en }} | {{ crossUserData.org_name_full_en }} {{ crossUserData.dept_name_en }}</span>
                   </div>
                   <div class="flex-shrink-0">
                     <button class="round-full-button blue" v-if="acceptUser() == true" @click="addUser(crossUserData.u_id, true)">{{ t('add') }}</button>
