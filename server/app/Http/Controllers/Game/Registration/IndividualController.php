@@ -88,6 +88,10 @@ class IndividualController extends Controller
         $result['athlete'] = $table->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id', DB::raw('count(*) as total'))->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.u_id')->get();
         return response()->json($result);
     }
+    public function indexByCountFull($sportCode, $gameId)
+    {
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', DB::raw('count(*) as total'))->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->get());
+    }
     public function indexByAthlete($sportCode, $gameId)
     {
         if (is_null($user = auth('admin')->user())) {
