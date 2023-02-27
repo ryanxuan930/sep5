@@ -83,6 +83,19 @@
     await vr.Get(`department/org/code/${orgCode}`, deptList, true, true);
     return;
   }
+  const accountExist = ref(false);
+  async function exist() {
+    if (data.account.length > 0) {
+      const res = await vr.Get(`auth/user/exist/${data.account}`);
+      if (res.message == true) {
+        accountExist.value = true;
+      } else {
+        accountExist.value = false;
+      }
+    } else {
+      accountExist.value = false;
+    }
+  }
  
   (async () => {
     await vr.Get('auth/user/info', userData, true, true);
@@ -107,6 +120,10 @@
     }
     if (data.first_name_ch.length === 0) {
       alert('請輸入中文名字');
+      return;
+    }
+    if (accountExist.value) {
+      alert('帳號已存在');
       return;
     }
     const temp = JSON.parse(JSON.stringify(data));
@@ -165,7 +182,8 @@
     </label>
     <label class="round-input-label md:col-span-2">
       <div class="title">{{ t('account') }}*</div>
-      <input class="input" :disabled="props.inputData != null" type="text" v-model="data.account" maxlength="128">
+      <input class="input" :disabled="props.inputData != null" type="text" v-model="data.account" maxlength="128" @blur="exist">
+      <div class="text-red-500 p-1" v-show="accountExist == true && data.account.length > 0">帳號已存在 Account exists</div>
     </label>
     <label class="round-input-label" v-if="props.inputData != null">
       <div class="title">{{ t('athlete-id') }}</div>
