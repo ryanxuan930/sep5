@@ -57,8 +57,8 @@ watch(data, () => {
     }
   }
 });
-async function findUserById(athleteId: string) {
-  crossUserData.value = await vr.Get(`user/athlete/${athleteId}`, null, true, true);
+function findUserById(athleteId: string) {
+  vr.Get(`user/athlete/${athleteId}`, crossUserData, true, true);
 }
 function getGrpList() {
   vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/user`, groupList, true, true);
@@ -317,7 +317,7 @@ function removeUser(id: number) {
               </div>
             </div>
           </label>
-          <template v-if="(regConfig.options.common.allow_cross_org || regConfig.options.common.allow_cross_dept) && ((regConfig.options.common.allow_grouping == true && store.userInfo.permission == 0) || store.userInfo.permission > 0)">
+          <template v-if="(regConfig.options.common.allow_grouping == true && store.userInfo.permission == 0) || store.userInfo.permission > 0">
             <label class="round-input-label md:col-span-2">
               <div class="title">{{ t('cross-athlete') }}</div>
               <div class="flex items-center gap-5">
@@ -336,7 +336,7 @@ function removeUser(id: number) {
                     <span v-else>{{ crossUserData.first_name_ch }}{{ crossUserData.last_name_ch }} | {{ crossUserData.org_name_full_ch }} {{ crossUserData.dept_name_ch }}</span>
                   </div>
                   <div class="flex-shrink-0">
-                    <button class="round-full-button blue" v-if="regConfig.options.common.allow_cross_org || regConfig.options.common.allow_cross_dept && crossUserData.org_code == store.userInfo.org_code" @click="addUser(crossUserData.u_id, true)">{{ t('add') }}</button>
+                    <button class="round-full-button blue" v-if="(regConfig.options.common.allow_cross_org && crossUserData.org_code == store.userInfo.org_code) || (regConfig.options.common.allow_cross_dept && crossUserData.dept_id == store.userInfo.dept_id)" @click="addUser(crossUserData.u_id, true)">{{ t('add') }}</button>
                     <div class="round-full-button blue-hollow" v-else>{{ t('not-meet-require') }}</div>
                   </div>
                 </template>
@@ -480,7 +480,7 @@ table {
     others: 'X'
     add: 'Add'
     find: 'Find'
-    cross-athlete: 'Cross Department / Organization Athlete'
+    cross-athlete: 'Search Athlete'
     result: 'Search Result'
     not-meet-require: 'Not Allowed'
     member: 'Members'
@@ -506,7 +506,7 @@ table {
     others: '其他'
     add: '加入'
     find: '查詢'
-    cross-athlete: '跨單位選手'
+    cross-athlete: '選手查詢'
     result: '搜尋結果'
     not-meet-require: '不符合資格'
     member: '成員'
