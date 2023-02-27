@@ -271,6 +271,9 @@ function removeUser(id: number) {
 }
 
 function acceptUser(): boolean{
+  console.log(regConfig.value.options.common);
+  console.log(crossUserData.value);
+  console.log(store.userInfo);
   if (regConfig.value.options.common.allow_cross_org) {
     return true;
   } else if (regConfig.value.options.common.allow_cross_dept) {
