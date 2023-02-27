@@ -115,7 +115,7 @@
         </div>
       </template>
       <template v-slot:content>
-        <EditPost v-if="displayModal" :post-data="selectedPost" @refreshPage="getBulletinList(currentUrl)" @closeModal="displayModal = false"></EditPost>
+        <EditPost v-if="displayModal" :post-data="selectedPost" @refreshPage="getBulletinList()" @closeModal="displayModal = false"></EditPost>
       </template>
     </FullModal>
   </div>
