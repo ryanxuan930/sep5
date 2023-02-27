@@ -81,9 +81,13 @@ watch(passwordConfirm, () => {
 })
 
 async function exist() {
-  const res = await vr.Get(`auth/user/exist/${data.account}`);
-  if (res.message == true) {
-    errorList.account.unique = false;
+  if (data.account.length > 0) {
+    const res = await vr.Get(`auth/user/exist/${data.account}`);
+    if (res.message == true) {
+      errorList.account.unique = false;
+    } else {
+      errorList.account.unique = true;
+    }
   }
 }
 
