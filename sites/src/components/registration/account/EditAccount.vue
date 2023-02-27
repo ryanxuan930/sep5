@@ -164,7 +164,7 @@
       <input class="input" type="text" v-model="data.first_name_en" maxlength="128">
     </label>
     <label class="round-input-label md:col-span-2">
-      <div class="title">{{ t('account') }}</div>
+      <div class="title">{{ t('account') }}*</div>
       <input class="input" :disabled="props.inputData != null" type="text" v-model="data.account" maxlength="128">
     </label>
     <label class="round-input-label" v-if="props.inputData != null">
@@ -172,7 +172,7 @@
       <div class="input disabled">{{ store.userInfo.athlete_id }}</div>
     </label>
     <label class="round-input-label" v-else>
-      <div class="title">{{ t('password') }}</div>
+      <div class="title">{{ t('password') }}*</div>
       <input class="input" type="password" v-model="password">
     </label>
     <label class="round-input-label">
