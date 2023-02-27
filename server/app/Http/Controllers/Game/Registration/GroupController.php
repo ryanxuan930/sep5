@@ -74,6 +74,10 @@ class GroupController extends Controller
         $result['athlete'] = $table->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.team_id', DB::raw('count(*) as total'))->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.team_id')->get();
         return response()->json($result);
     }
+    public function indexByCountFull($sportCode, $gameId)
+    {
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', DB::raw('count(*) as total'))->groupBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->get());
+    }
     /**
      * Store a newly created resource in storage.
      *
