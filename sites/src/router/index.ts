@@ -1,7 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainView from '../views/main/MainView.vue';
+import MainHomeView from '../views/main/homepage/HomePage.vue';
+import GameHomeView from '../views/main/homepage/GamePage.vue';
 import RegistrationView from '../views/registration/RegistrationView.vue';
 import AdminView from '../views/admin/AdminView.vue';
+import AdminHomeView from '../views/admin/console/ConsoleLayout.vue';
+import AdminGameView from '../views/admin/game/GameLayout.vue';
+import RegistrationHomeView from '../views/registration/ConsoleLayout.vue';
+import RegistrationGameView from '../views/registration/GameLayout.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +26,7 @@ const router = createRouter({
         {
           path: '/:adminOrgId',
           name: 'mainHomePage',
-          component: () => import('../views/main/homepage/HomePage.vue'),
+          component: MainHomeView,
           children: [
             {
               path: '/:adminOrgId',
@@ -57,7 +63,7 @@ const router = createRouter({
         {
           path: '/:adminOrgId/game/:gameId',
           name: 'gameHomePage',
-          component: () => import('../views/main/homepage/GamePage.vue'),
+          component: GameHomeView,
           children: [
             {
               path: '',
@@ -97,7 +103,7 @@ const router = createRouter({
         {
           path: '/admin',
           name: 'adminHome',
-          component: () => import('../views/admin/console/ConsoleLayout.vue'),
+          component: AdminHomeView,
           children: [
             {
               path: '/admin',
@@ -134,7 +140,7 @@ const router = createRouter({
         {
           path: 'game/:sportCode/:gameId',
           name: 'adminGameLayout',
-          component: () => import('../views/admin/game/GameLayout.vue'),
+          component: AdminGameView,
           children: [
             {
               path: '',
@@ -164,7 +170,7 @@ const router = createRouter({
         {
           path: '/:adminOrgId/registration',
           name: 'registrationHome',
-          component: () => import('../views/registration/ConsoleLayout.vue'),
+          component: RegistrationHomeView,
           children: [
             {
               path: '',
@@ -201,7 +207,7 @@ const router = createRouter({
         {
           path: 'game/:sportCode/:gameId',
           name: 'registrationGameHome',
-          component: () => import('../views/registration/GameLayout.vue'),
+          component: RegistrationGameView,
           children: [
             {
               path: '',
