@@ -22,12 +22,15 @@
     await vr.Get(`reg-config-game/${route.params.gameId}`, regConfig);
     await vr.Get(`auth/user/info`, userData, true, true);
     document.title = gameData.value.game_name_ch + '報名表';
-    (async () => {
+    await (async () => {
       for (let i = 0; i < groupList.value.length; i++) {
         groupList.value[i].members = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/team/${groupList.value[i].team_id}`, null, true, true);
       }
     })();
     isLoading.value = false;
+    setTimeout(() => {
+      window.print();
+    }, 1000);
   }
 getDataList();
 </script>
@@ -69,7 +72,7 @@ getDataList();
           </tr>
           <tr>
             <td>連絡電話<br>Phone</td>
-            <td colspan="3">{{ userData.phone }}</td>
+            <td colspan="3">{{ userData.cellphone }}</td>
           </tr>
         </table>
         <div class="h-[0.25cm]"></div>

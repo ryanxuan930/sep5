@@ -34,6 +34,9 @@
       }
     })();
     isLoading.value = false;
+    setTimeout(() => {
+      window.print();
+    }, 1000);
   }
 getDataList();
 </script>

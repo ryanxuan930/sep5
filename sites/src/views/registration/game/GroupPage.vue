@@ -271,7 +271,9 @@ function removeUser(id: number) {
 }
 
 function acceptUser(): boolean{
-  if (regConfig.value.options.common.allow_cross_org) {
+  if (data.member_list.includes(crossUserData.value.u_id)) {
+    return false;
+  } else if (regConfig.value.options.common.allow_cross_org) {
     return true;
   } else if (regConfig.value.options.common.allow_cross_dept) {
     if (crossUserData.value.org_code == store.userInfo.org_code) {
