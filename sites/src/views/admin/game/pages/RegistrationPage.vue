@@ -11,6 +11,7 @@
   import IndividualData from '@/components/admin/game/registration/IndividualData.vue';
   import GroupData from '@/components/admin/game/registration/GroupData.vue';
   import AthleteData from '@/components/admin/game/registration/AthleteData.vue';
+  import DownloadData from '@/components/admin/game/registration/DownloadData.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
@@ -37,7 +38,7 @@
       <button class="round-full-button blue" @click="displayModal = 3">個人報名資訊</button>
       <button class="round-full-button blue" @click="displayModal = 4">團體報名資訊</button>
       <button class="round-full-button blue" @click="displayModal = 5">參賽選手名單</button>
-      <button class="round-full-button blue">報名資料下載</button>
+      <button class="round-full-button blue" @click="displayModal = 6">報名資料下載</button>
       <button class="round-full-button blue" @click="displayModal = 7">紙本報名管理</button>
       <button class="round-full-button blue" @click="displayModal = 8">其他表件管理</button>
     </div>
@@ -50,6 +51,7 @@
           <div v-if="displayModal == 3">個人報名資訊</div>
           <div v-if="displayModal == 4">團體報名資訊</div>
           <div v-if="displayModal == 5">參賽選手名單</div>
+          <div v-if="displayModal == 6">報名資料下載</div>
           <div v-if="displayModal == 7">紙本報名管理</div>
           <div v-if="displayModal == 8">其他表件管理</div>
         </div>
@@ -57,10 +59,11 @@
       <template v-slot:content>
         <div class="overflow-auto h-full">
           <RegistrationConfig v-if="displayModal == 1" @closeModal="displayModal = 0"></RegistrationConfig>
-          <EventCount v-if="displayModal == 2" @closeModal="displayModal = 0"></EventCount>
-          <IndividualData v-if="displayModal == 3" @closeModal="displayModal = 0"></IndividualData>
-          <GroupData v-if="displayModal == 4" @closeModal="displayModal = 0"></GroupData>
-          <AthleteData v-if="displayModal == 5" @closeModal="displayModal = 0"></AthleteData>
+          <EventCount v-if="displayModal == 2" :input-data="gameData" @closeModal="displayModal = 0"></EventCount>
+          <IndividualData v-if="displayModal == 3" :input-data="gameData" @closeModal="displayModal = 0"></IndividualData>
+          <GroupData v-if="displayModal == 4" :input-data="gameData" @closeModal="displayModal = 0"></GroupData>
+          <AthleteData v-if="displayModal == 5" :input-data="gameData" @closeModal="displayModal = 0"></AthleteData>
+          <DownloadData v-if="displayModal == 6" :input-data="gameData" @closeModal="displayModal = 0"></DownloadData>
           <RegistrationForm v-if="displayModal == 7" :input-data="gameData" @closeModal="displayModal = 0"></RegistrationForm>
           <ConsentForm v-if="displayModal == 8" :input-data="gameData" @closeModal="displayModal = 0"></ConsentForm>
         </div>
