@@ -7,6 +7,9 @@
   import RegistrationConfig from '@/components/admin/game/registration/RegistrationConfig.vue';
   import RegistrationForm from '@/components/admin/game/registration/RegistrationForm.vue';
   import ConsentForm from '@/components/admin/game/registration/ConsentForm.vue';
+  import EventCount from '@/components/admin/game/registration/EventCount.vue';
+  import IndividualData from '@/components/admin/game/registration/IndividualData.vue';
+  import GroupData from '@/components/admin/game/registration/GroupData.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
@@ -29,9 +32,9 @@
       <div class="col-span-4 text-2xl">報名系統</div>
       <hr class="col-span-4">
       <button class="round-full-button blue" @click="displayModal = 1">報名系統設定</button>
-      <button class="round-full-button blue">依項目別統計</button>
-      <button class="round-full-button blue">個人項目統計</button>
-      <button class="round-full-button blue">團體項目項目</button>
+      <button class="round-full-button blue" @click="displayModal = 2">依項目別統計</button>
+      <button class="round-full-button blue" @click="displayModal = 3">個人報名資訊</button>
+      <button class="round-full-button blue" @click="displayModal = 4">團體報名資訊</button>
       <button class="round-full-button blue">參賽選手名單</button>
       <button class="round-full-button blue">報名資料下載</button>
       <button class="round-full-button blue" @click="displayModal = 7">紙本報名管理</button>
@@ -42,6 +45,9 @@
       <template v-slot:title>
         <div class="text-2xl">
           <div v-if="displayModal == 1">報名系統設定</div>
+          <div v-if="displayModal == 2">依項目別統計</div>
+          <div v-if="displayModal == 3">個人報名資訊</div>
+          <div v-if="displayModal == 4">團體報名資訊</div>
           <div v-if="displayModal == 7">紙本報名管理</div>
           <div v-if="displayModal == 8">其他表件管理</div>
         </div>
@@ -49,6 +55,9 @@
       <template v-slot:content>
         <div class="overflow-auto h-full">
           <RegistrationConfig v-if="displayModal == 1" @closeModal="displayModal = 0"></RegistrationConfig>
+          <EventCount v-if="displayModal == 2" @closeModal="displayModal = 0"></EventCount>
+          <IndividualData v-if="displayModal == 3" @closeModal="displayModal = 0"></IndividualData>
+          <GroupData v-if="displayModal == 4" @closeModal="displayModal = 0"></GroupData>
           <RegistrationForm v-if="displayModal == 7" :input-data="gameData" @closeModal="displayModal = 0"></RegistrationForm>
           <ConsentForm v-if="displayModal == 8" :input-data="gameData" @closeModal="displayModal = 0"></ConsentForm>
         </div>
@@ -57,5 +66,5 @@
 </template>
 
 <style scoped lang="scss">
-    
+
 </style>
