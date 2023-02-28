@@ -26,7 +26,7 @@ class GroupController extends Controller
         ->leftJoin('organizations', $sportCode.'_'.$gameId.'_teams.org_id', '=', 'organizations.org_id')
         ->leftJoin('departments', $sportCode.'_'.$gameId.'_teams.dept_id', '=', 'departments.dept_id')
         ->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')
-        ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_teams.*', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*')->orderBy($sportCode.'_'.$gameId.'_divisions.division_id', 'asc')->orderBy($sportCode.'_'.$gameId.'_events.event_code', 'asc')
+        ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_teams.*', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*')->orderBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', 'asc')->orderBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', 'asc')
         ->get());
     }
     public function indexByUser($sportCode, $gameId)
