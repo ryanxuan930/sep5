@@ -33,6 +33,7 @@ use App\Http\Controllers\Game\Main\EventController as GameEventController;
 use App\Http\Controllers\Game\Registration\IndividualController as GameIndividualController;
 use App\Http\Controllers\Game\Registration\GroupController as GameGroupController;
 use App\Http\Controllers\Game\Common\TempController as GameTempController;
+use App\Http\Controllers\Game\Common\AthleteController as GameAthleteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -214,12 +215,12 @@ Route::group([
             $ControllerClass = GameGroupController::class;
             Route::apiResource('', $ControllerClass);
             Route::get('/by/user', [$ControllerClass, 'indexByUser']);
-            Route::get('/by/athlete', [$ControllerClass, 'indexByAthlete']);
             Route::get('/by/team/{teamId}', [$ControllerClass, 'showTeam']);
             Route::get('/by/event/{divisionId}/{eventCode}', [$ControllerClass, 'indexByEvent']);
             Route::get('/by/count/{unit}', [$ControllerClass, 'indexByCount']);
             Route::get('/by/count', [$ControllerClass, 'indexByCountFull']);
         });
         Route::apiResource('temp', GameTempController::class);
+        Route::get('athlete/list', [GameAthleteController::class, 'index']);
     });
 });
