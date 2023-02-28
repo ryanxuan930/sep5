@@ -24,9 +24,11 @@
         <th>性別</th>
         <th v-if="Config.deptAsClass">座號</th>
         <th>姓名</th>
+        <!--
         <th>
           <a class="hyperlink blue">新增</a>
         </th>
+         -->
       </tr>
       <template v-for="(item, index) in dataList">
         <tr>
@@ -41,9 +43,11 @@
           </td>
           <td v-if="Config.deptAsClass">{{ item.num_in_dept }}</td>
           <td>{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
+          <!--
           <td>
             <a class="hyperlink blue">查看</a>
           </td>
+          -->
         </tr>
       </template>
     </table>
