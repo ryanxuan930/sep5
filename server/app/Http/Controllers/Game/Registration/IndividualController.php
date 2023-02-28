@@ -25,7 +25,7 @@ class IndividualController extends Controller
         ->leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')
         ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')
         ->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')
-        ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*')->orderBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', 'asc')->orderBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', 'asc')
+        ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', 'users.athlete_id', 'users.school_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*')->orderBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', 'asc')->orderBy($sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', 'asc')
         ->get());
     }
     public function indexByUser($sportCode, $gameId)
