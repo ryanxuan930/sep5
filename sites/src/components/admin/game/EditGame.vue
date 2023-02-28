@@ -107,6 +107,7 @@
       vr.Post(`${store.userInfo.admin_org_id}/game`, temp, null, true, true).then( (res: any) => {
         if (res.status !== 'A01') {
           alert('無法儲存');
+          close();
           return;
         }
       });
@@ -114,11 +115,11 @@
       vr.Patch(`${store.userInfo.admin_org_id}/game/${props.gameData.game_id}`, temp, null, true, true).then( (res: any) => {
         if (res.status !== 'A01') {
           alert('無法儲存');
+          close();
           return;
         }
       });
     }
-    close();
   }
 </script>
 

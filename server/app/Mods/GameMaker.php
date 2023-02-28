@@ -220,7 +220,7 @@ class GameMaker {
         GameMaker::customSchema($header, $sportCode);
     }
 
-    public static function reverse(int $gameId, GameModule $module, string $sportCode) {
+    public static function reverse(int $gameId, string $sportCode, string $module = 'ge') {
         $header = $sportCode.'_'.$gameId.'_';
         Schema::dropIfExists($header.'dates');
         Schema::dropIfExists($header.'divisions');

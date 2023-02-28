@@ -198,7 +198,7 @@ class GameController extends Controller
     public function destroy($org_id, $id)
     {
         $game = Game::leftJoin('sport_lists', 'games.sport_code', '=', 'sport_lists.sport_code')->select('games.*', 'sport_lists.sport_code', 'sport_lists.module')->where('game_id', $id)->first();
-        GameMaker::make($game->game_id, $game->sport_code, $game->module);
+        GameMaker::reverse($game->game_id, $game->sport_code, $game->module);
         Game::where('game_id', $id)->delete();
         return response()->json(['status'=>'A01']);
     }

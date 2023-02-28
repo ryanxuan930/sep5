@@ -27,23 +27,19 @@
 </script>
 
 <template>
-  <div v-if="gameData != null">
+  <div v-if="gameData != null" class="flex flex-col gap-5">
     <div class="section-box grid grid-cols-1 md:grid-cols-4 gap-x-3 gap-y-4">
       <div class="col-span-4 text-2xl">選手編配</div>
       <hr class="col-span-4">
       <button class="round-full-button blue" @click="displayModal = 1">賽別賽制設定</button>
       <button class="round-full-button blue" @click="displayModal = 2">名次取數設定</button>
       <button class="round-full-button blue" @click="displayModal = 3">組別道次管理</button>
-      <button class="round-full-button blue" @click="displayModal = 4">競賽項目管理</button>
-      <button class="round-full-button blue" @click="displayModal = 5">分組項目設定</button>
     </div>
-  </div>
-  <div v-if="gameData != null">
     <div class="section-box grid grid-cols-1 md:grid-cols-4 gap-x-3 gap-y-4">
       <div class="col-span-4 text-2xl">賽程管理</div>
       <hr class="col-span-4">
       <button class="round-full-button blue">賽程編排</button>
-      <button class="round-full-button blue">名次取數設定</button>
+      <button class="round-full-button blue">秩序冊資料</button>
     </div>
   </div>
   <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">

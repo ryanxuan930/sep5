@@ -152,6 +152,11 @@ const router = createRouter({
               name: 'adminGameRegistrationPage',
               component: () => import('../views/admin/game/pages/RegistrationPage.vue'),
             },
+            {
+              path: 'schedule',
+              name: 'adminGameSchedulePage',
+              component: () => import('../views/admin/game/pages/SchedulePage.vue'),
+            },
           ]
         },
       ],
