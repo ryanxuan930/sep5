@@ -52,6 +52,18 @@ class GroupController extends Controller
             return response()->json([]);
         }
     }
+    public function indexByAthlete($sportCode, $gameId)
+    {
+        if (is_null($user = auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $temp = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.team_id')->select($sportCode.'_'.$gameId.'_teams.team_id', $sportCode.'_'.$gameId.'_teams.member_list')->get();
+        $userArray = array();
+        foreach ($temp as $row) {
+            array_merge($userArray, json_decode($row, true));
+        }
+        return response()->json($userArray);
+    }
     public function indexByCount($sportCode, $gameId, $unit)
     {
         if (is_null($user = auth('user')->user())) {
