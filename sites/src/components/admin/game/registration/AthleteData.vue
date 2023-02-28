@@ -16,6 +16,7 @@
   <div class="overflow-auto">
     <table>
       <tr>
+        <th>序號</th>
         <th>選手代碼</th>
         <th>組織單位</th>
         <th>分部/系所</th>
@@ -25,6 +26,7 @@
       </tr>
       <template v-for="(item, index) in dataList">
         <tr>
+          <td>{{ index + 1 }}</td>
           <td>{{ item.athlete_id }}</td>
           <td>{{ item.org_name_full_ch }}</td>
           <td>{{ item.dept_name_ch }}</td>
