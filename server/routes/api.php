@@ -205,7 +205,7 @@ Route::group([
             Route::get('/by/athlete/unit/{unit}', [$ControllerClass, 'indexByAthleteUnit']);
             Route::get('/by/event/{divisionId}/{eventCode}', [$ControllerClass, 'indexByEvent']);
             Route::get('/by/count/{unit}', [$ControllerClass, 'indexByCount']);
-            Route::get('/by/count', [$ControllerClass, 'indexByCountFull']);
+            Route::get('/by/count-all', [$ControllerClass, 'indexByCountFull']);
         });
         Route::apiResource('group', GameGroupController::class);
         Route::group([
@@ -217,7 +217,7 @@ Route::group([
             Route::get('/by/team/{teamId}', [$ControllerClass, 'showTeam']);
             Route::get('/by/event/{divisionId}/{eventCode}', [$ControllerClass, 'indexByEvent']);
             Route::get('/by/count/{unit}', [$ControllerClass, 'indexByCount']);
-            Route::get('/by/count', [$ControllerClass, 'indexByCountFull']);
+            Route::get('/by/count-all', [$ControllerClass, 'indexByCountFull']);
         });
         Route::apiResource('temp', GameTempController::class);
     });
