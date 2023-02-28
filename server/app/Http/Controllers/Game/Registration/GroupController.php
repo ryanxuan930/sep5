@@ -62,7 +62,7 @@ class GroupController extends Controller
         foreach ($temp as $row) {
             array_merge($userArray, json_decode($row->member_list, true));
         }
-        return response()->json($userArray);
+        return response()->json($temp);
     }
     public function indexByCount($sportCode, $gameId, $unit)
     {
