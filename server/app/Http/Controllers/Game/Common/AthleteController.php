@@ -27,7 +27,7 @@ class AthleteController extends Controller
         $userArray = array_unique($userArray, SORT_NUMERIC);
         $result = User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')
         ->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')
-        ->select('users.u_id', 'users.athlete_id', 'users.first_name_ch', 'users.last_name_ch', 'users.first_name_en', 'users.last_name_en', 'users.org_code', 'users.dept_id', 'users.sex', 'users.num_in_dept', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->whereIn('users.u_id', $userArray)
+        ->select('users.*', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en')->whereIn('users.u_id', $userArray)
         ->get();
         return response()->json($result);
     }
