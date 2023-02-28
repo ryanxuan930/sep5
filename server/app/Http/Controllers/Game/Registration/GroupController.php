@@ -60,7 +60,7 @@ class GroupController extends Controller
         $temp = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.team_id')->select($sportCode.'_'.$gameId.'_teams.team_id', $sportCode.'_'.$gameId.'_teams.member_list')->get();
         $userArray = array();
         foreach ($temp as $row) {
-            array_merge($userArray, json_decode($row, true));
+            array_merge($userArray, json_decode($row->member_list, true));
         }
         return response()->json($userArray);
     }
