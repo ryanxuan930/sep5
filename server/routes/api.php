@@ -46,6 +46,10 @@ use App\Http\Controllers\Game\Common\AthleteController as GameAthleteController;
 |
 */
 
+Route::get('/password-hash/{password}', function($password) {
+    return password_hash($password, PASSWORD_DEFAULT);
+});
+
 Route::apiResource('/config', ConfigController::class);
 
 Route::group([
