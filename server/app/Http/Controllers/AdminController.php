@@ -38,7 +38,7 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'account' => 'required|unique:users,account',
+            'account' => 'required|unique:admins,account',
             'password' => 'required',
             'name' => 'string|required',
             'permission' => 'integer|required',
