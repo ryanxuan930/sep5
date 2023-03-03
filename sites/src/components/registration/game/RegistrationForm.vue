@@ -294,6 +294,9 @@ getDataList();
 table {
   @apply border-collapse w-full;
 }
+tr, td {
+  break-inside: avoid !important;
+}
 .table1 {
   td {
     @apply border-[1px] border-gray-400 py-1 px-2 w-1/6 break-words;
