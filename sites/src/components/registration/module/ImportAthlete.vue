@@ -47,7 +47,7 @@ function check() {
     if (uploadData.value[i].nationality.length == 0) {
       uploadData.value[i].nationality = 'TW';
     }
-    if (isNaN(uploadData.value[i].grade)) {
+    if (!Number.isInteger(uploadData.value[i].grade)) {
       let flag = true;
       for(let j = 0; j < Grade.length; j++) {
         if (uploadData.value[i].grade == Grade[j].grade) {
@@ -60,7 +60,7 @@ function check() {
       }
     }
     uploadData.value[i].grade = parseInt(uploadData.value[i].grade);
-    if (isNaN(uploadData.value[i].sex)) {
+    if (!Number.isInteger(uploadData.value[i].sex)) {
       if (uploadData.value[i].sex == '男') {
         uploadData.value[i].sex = 1;
       } else if (uploadData.value[i].sex == '女') {
@@ -69,7 +69,7 @@ function check() {
         uploadData.value[i].sex = 1;
       }
     }
-    if (isNaN(uploadData.value[i].dept_id)) {
+    if (!Number.isInteger(uploadData.value[i].dept_id)) {
       uploadData.value[i].dept_id = 0;
     }
     if (!isNaN(uploadData.value[i].height)) {
@@ -82,7 +82,7 @@ function check() {
     } else {
       uploadData.value[i].weight = 0;
     }
-    if (isNaN(Number(uploadData.value[i].num_in_dept))) {
+    if (!Number.isInteger(uploadData.value[i].num_in_dept)) {
       uploadData.value[i].num_in_dept = 0;
     }
   }
