@@ -58,6 +58,7 @@ function check() {
         uploadData.value[i].grade = 0;
       }
     }
+    uploadData.value[i].grade = parseInt(uploadData.value[i].grade);
     if (isNaN(uploadData.value[i].sex)) {
       if (uploadData.value[i].sex == '男') {
         uploadData.value[i].sex = 1;
