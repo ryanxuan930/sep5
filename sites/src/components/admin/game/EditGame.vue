@@ -105,18 +105,32 @@
     temp.options = JSON.stringify(temp.options);
     if (props.gameData === null) {
       vr.Post(`${store.userInfo.admin_org_id}/game`, temp, null, true, true).then( (res: any) => {
-        if (res.status !== 'A01') {
-          alert('無法儲存');
+        if (res.status == 'A01') {
           close();
           return;
+        } else {
+          alert('無法儲存');
         }
       });
     } else {
       vr.Patch(`${store.userInfo.admin_org_id}/game/${props.gameData.game_id}`, temp, null, true, true).then( (res: any) => {
-        if (res.status !== 'A01') {
-          alert('無法儲存');
+        if (res.status == 'A01') {
           close();
           return;
+        } else {
+          alert('無法儲存');
+        }
+      });
+    }
+  }
+  function deleteGame() {
+    if (confirm('確定刪除本賽事？此動作無法復原！')) {
+      vr.Delete(`${store.userInfo.admin_org_id}/game/${props.gameData.game_id}`, null, true, true).then( (res: any) => {
+        if (res.status == 'A01') {
+          close();
+          return;
+        } else {
+          alert('無法刪除');
         }
       });
     }
@@ -238,6 +252,9 @@
     </label>
     <div class="md:col-span-4">
       <button class="round-full-button blue" @click="submitAll">儲存</button>
+    </div>
+    <div class="md:col-span-4" v-if="props.gameData !== null">
+      <button class="round-full-button red" @click="deleteGame">刪除</button>
     </div>
     <SmallModal v-show="displayModal > 0" @closeModal="displayModal = 0">
       <template v-slot:title>
