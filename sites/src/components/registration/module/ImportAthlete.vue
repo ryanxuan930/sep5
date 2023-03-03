@@ -34,6 +34,7 @@ const fileName = ref('');
 const uploadData: any = ref([]);
 
 function check() {
+  console.log(uploadData.value);
   for(let i = 0; i < uploadData.value.length; i++) {
     console.log(uploadData.value[i]);
     uploadData.value[i].org_code = store.userInfo.org_code;
@@ -81,7 +82,7 @@ function check() {
     } else {
       uploadData.value[i].weight = 0;
     }
-    if (isNaN(uploadData.value[i].num_in_dept)) {
+    if (isNaN(Number(uploadData.value[i].num_in_dept))) {
       uploadData.value[i].num_in_dept = 0;
     }
   }
