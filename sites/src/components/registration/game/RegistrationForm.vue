@@ -269,7 +269,7 @@ getDataList();
   min-height: 100vh;
 }
 .page {
-  @apply p-[1cm];
+  @apply p-0;
   page-break-after: always;
   min-height: 100vh;
 }
@@ -313,7 +313,7 @@ tr, td {
   }
 }
 @page {
-  margin: 0;
+  margin: 1cm;
   border: 0;
   background-color: white !important;
   -webkit-print-color-adjust:exact !important;
