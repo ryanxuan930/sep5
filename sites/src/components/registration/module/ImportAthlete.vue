@@ -82,7 +82,7 @@ function check() {
       uploadData.value[i].weight = 0;
     }
     if (isNaN(uploadData.value[i].num_in_dept)) {
-      uploadData.value[i].weight = 0;
+      uploadData.value[i].num_in_dept = 0;
     }
   }
 }
