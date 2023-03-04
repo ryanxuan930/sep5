@@ -194,6 +194,7 @@ Route::group([
             Route::get('', [$ControllerClass, 'getters']);
             Route::get('/full', [$ControllerClass, 'gettersFull']);
             Route::post('', [$ControllerClass, 'setters']);
+            Route::patch('', [$ControllerClass, 'patcher']);
         });
     });
     Route::group([
