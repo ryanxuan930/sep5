@@ -67,5 +67,38 @@ class ParamsController extends Controller
     {
         // get sport module
         $sportData = SportList::where('sport_code', $sportCode)->first();
+        if ($sportData->module == 'ln') {
+            // validation
+            $validator = Validator::make($request->all(),[
+                '*.division_id' => 'required|integer',
+                '*.event_code' => 'required',
+                '*.r1' => 'required|boolean',
+                '*.r1_aq' => 'required|integer',
+                '*.r1_sq' => 'required|integer',
+                '*.r1_split' => 'required|integer',
+                '*.r2' => 'required|boolean',
+                '*.r2_aq' => 'required|integer',
+                '*.r2_sq' => 'required|integer',
+                '*.r2_split' => 'required|integer',
+                '*.r3' => 'required|boolean',
+                '*.r3_aq' => 'required|integer',
+                '*.r3_sq' => 'required|integer',
+                '*.r3_split' => 'required|integer',
+                '*.r4' => 'required|boolean',
+                '*.r4_aq' => 'required|integer',
+                '*.r4_sq' => 'required|integer',
+                '*.r4_split' => 'required|integer',
+            ]);
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 400);
+            }
+            $temp = $request->all();
+            foreach ($temp as $value) {
+                $data = $value;
+                unset($data['division_id']);
+                unset($data['event_code']);
+                DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('dividion_id', $value->division_id)->where('event_code', $value->event_code)->update($data);
+            }
+        }
     }
 }
