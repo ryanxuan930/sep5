@@ -79,7 +79,7 @@ class GameMaker {
             $table->integer('division_id');
             $table->char('event_code', 8);
             $table->tinyInteger('round');
-            $table->tinyInteger('session'); // 場次
+            $table->smallInteger('session'); // 場次
             $table->tinyInteger('status')->default(0);
             $table->text('options')->nullable();
         });
