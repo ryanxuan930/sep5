@@ -182,7 +182,7 @@ async function addEvent(input: any) {
   }
   
   for (const count of countData.value.event) {
-    if (count.division_id == input.division_id && count.event_code == input.event_code && count.total >= regConfig.value.options.common.group.max_team_per_event) {
+    if (count.division_id == input.division_id && count.event_code == input.event_code && count.total >= regConfig.value.options.common.group.max_event_per_team) {
       alert('此項目已超過可報名隊伍數 Exceed max team number of this event');
       console.log(7);
       return;
