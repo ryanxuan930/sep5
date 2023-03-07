@@ -212,6 +212,7 @@ Route::group([
             Route::get('/by/event/{divisionId}/{eventCode}', [$ControllerClass, 'indexByEvent']);
             Route::get('/by/count/{unit}', [$ControllerClass, 'indexByCount']);
             Route::get('/by/count', [$ControllerClass, 'indexByCountFull']);
+            Route::patch('/update/heat-lane', [$ControllerClass, 'updateHeatLane']);
         });
         Route::apiResource('group', GameGroupController::class);
         Route::group([
