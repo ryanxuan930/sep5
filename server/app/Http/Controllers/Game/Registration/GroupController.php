@@ -52,12 +52,28 @@ class GroupController extends Controller
             return response()->json([]);
         }
     }
+    public function indexByEvent($sportCode, $gameId, $divisionId, $eventCode)
+    {
+        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)
+        ->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')
+        ->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.team_id')
+        ->leftJoin('organizations', $sportCode.'_'.$gameId.'_teams.org_id', '=', 'organizations.org_id')
+        ->leftJoin('departments', $sportCode.'_'.$gameId.'_teams.dept_id', '=', 'departments.dept_id')
+        ->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')
+        ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_teams.*', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*');
+        return response()->json($query->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $divisionId)->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', $eventCode));
+    }
     public function indexByCount($sportCode, $gameId, $unit)
     {
         if (is_null($user = auth('user')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         }
-        $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.team_id')->leftJoin('organizations', $sportCode.'_'.$gameId.'_teams.org_id', '=', 'organizations.org_id');
+        $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)
+        ->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.team_id')
+        ->leftJoin('organizations', $sportCode.'_'.$gameId.'_teams.org_id', '=', 'organizations.org_id');
         $table = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.team_id')->leftJoin('organizations', $sportCode.'_'.$gameId.'_teams.org_id', '=', 'organizations.org_id');
         if ($unit == 2) {
             $query->where('organizations.org_code', $user->org_code);
