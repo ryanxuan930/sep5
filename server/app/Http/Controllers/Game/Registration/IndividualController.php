@@ -193,6 +193,30 @@ class IndividualController extends Controller
         DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('ind_id', $id)->update($temp);
         return response()->json(['status'=>'A01']);
     }
+    public function updateHeatLane(Request $request, $sportCode, $gameId)
+    {
+        if (is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        // get sport module
+        $validationArray = [
+            '*.u_id' => 'required|integer',
+            '*.division_id' => 'required|integer',
+            '*.event_code' => 'required|size:8',
+            '*.phase' => 'required|size:2',
+            '*.heat' => 'required',
+            '*.lane' => 'required',
+        ];
+        $validator = Validator::make($request->all(),$validationArray);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $temp = $request->all();
+        foreach($temp as $t) {
+            DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('division_id', $t['division_id'])->where('event_code', $t['event_code'])->where('u_id', $t['u_id'])->update([$phase.'_heat'=> $t['heat'], $phase.'_lane'=> $t['lane']]);
+        }
+        return response()->json(['status'=>'A01']);
+    }
 
     /**
      * Remove the specified resource from storage.
