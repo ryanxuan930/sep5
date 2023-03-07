@@ -213,7 +213,7 @@ class IndividualController extends Controller
         }
         $temp = $request->all();
         foreach($temp as $t) {
-            DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('division_id', $t['division_id'])->where('event_code', $t['event_code'])->where('u_id', $t['u_id'])->update([$phase.'_heat'=> $t['heat'], $phase.'_lane'=> $t['lane']]);
+            DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('division_id', $t['division_id'])->where('event_code', $t['event_code'])->where('u_id', $t['u_id'])->update([$t['phase'].'_heat'=> $t['heat'], $t['phase'].'_lane'=> $t['lane']]);
         }
         return response()->json(['status'=>'A01']);
     }
