@@ -132,7 +132,7 @@ class GameMaker {
                 $table->boolean('r'.$i)->default(0); // 
                 $table->tinyInteger('r'.$i.'_aq')->default(0);
                 $table->tinyInteger('r'.$i.'_sq')->default(0);
-                $table->boolean('r'.$i.'_split')->default(0);
+                $table->tinyInteger('r'.$i.'_split')->default(1);
             }
         });
         Schema::create($header.'schedules', function(Blueprint $table){
