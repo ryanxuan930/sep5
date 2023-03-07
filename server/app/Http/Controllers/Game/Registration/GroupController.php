@@ -64,7 +64,7 @@ class GroupController extends Controller
         ->leftJoin('departments', $sportCode.'_'.$gameId.'_teams.dept_id', '=', 'departments.dept_id')
         ->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')
         ->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_teams.*', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', 'events.event_ch', 'events.event_en', 'events.event_jp', 'events.event_abbr', $sportCode.'_'.$gameId.'_divisions.*');
-        return response()->json($query->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $divisionId)->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', $eventCode));
+        return response()->json($query->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id', $divisionId)->where($sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code', $eventCode)->get());
     }
     public function indexByCount($sportCode, $gameId, $unit)
     {
