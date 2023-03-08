@@ -5,6 +5,7 @@
   import { useUserStore } from '@/stores/user';
   import { useRoute } from 'vue-router';
   import draggable from 'vuedraggable';
+  import SmallLoader from '@/components/SmallLoader.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
@@ -184,7 +185,7 @@
 </script>
 
 <template>
-  <div class="border-box grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 h-full overflow-hidden gap-3">
+  <div v-if="isLoading == false" class="border-box grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 h-full overflow-hidden gap-3">
     <div class="left-box">
       <div class="flex gap-2 py-2">
         <button class="general-button blue" @click="submitAll">儲存</button>
@@ -249,6 +250,7 @@
       </template>
     </div>
   </div>
+  <SmallLoader v-show="isLoading"></SmallLoader>
 </template>
 
 <style scoped lang="scss">
