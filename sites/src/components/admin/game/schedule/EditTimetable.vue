@@ -86,7 +86,7 @@
     for(let i = 0; i < fullList.length; i++) {
       for (let j = 0; j < 4; j++){
         if (paramList[i][phaseArray[j]] == 1) {
-          const index = scheduleList.findIndex((item: any) => item.division_id == fullList[i].division_id && item.event_code == fullList[i].event_code && fullList[i][phaseArray[item.round - 1]] == 1);
+          const index = scheduleList.findIndex((item: any) => item.division_id == fullList[i].division_id && item.event_code == fullList[i].event_code && item.round == j + 1);
           if (index == -1) {
             eventList.value.push({
               time: '00:00',
