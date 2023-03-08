@@ -52,7 +52,7 @@
 
 <template>
   <div v-if="noData" class="text-lg py-2">目前無資料</div>
-  <div v-else class="w-full overflow-auto">
+  <div v-else class="w-full h-full overflow-auto">
     <table v-if="displayData.length > 0">
       <template v-for="(heat, indexA) in displayData" :key="indexA">
         <tr>
