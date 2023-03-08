@@ -14,7 +14,6 @@
   const store = useUserStore();
   const vr = new VueRequest(store.token);
   const displayModal = ref(0);
-  const gameData: any = inject('gameData');
   const route = useRoute();
   const isLoading = ref(true);
   const sportCode = route.params.sportCode;
