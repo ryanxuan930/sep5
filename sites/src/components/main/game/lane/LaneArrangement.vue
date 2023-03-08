@@ -15,9 +15,25 @@ const eventCode = useRoute().params.eventCode;
 const gameId = route.params.gameId;
 const pageData: any = inject('pageData');
 const gameData: any = inject('gameData');
+const isLoading = ref(false);
 const dataList: any = ref([]);
+const laneList: any = ref([]);
+const params: any = ref({});
 (async () => {
-  await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/group/by/event/${divisionId}/${eventCode}`);
+  isLoading.value = true;
+  const paramList = await vr.Get(`game/${gameData.value.sport_code}/${gameId}/main/params/full`);
+  await vr.Get(`game/${gameData.value.sport_code}/${gameId}/main/lane`, laneList);
+  paramList.forEach((element: any) => {
+    if (element.division_id == divisionId && element.event_code == eventCode) {
+      params.value = element;
+    }
+  });
+  if (params.value.multiple == 0){
+    await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/individual/by/event/${divisionId}/${eventCode}`, dataList);
+  } else {
+    await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/group/by/event/${divisionId}/${eventCode}`, dataList);
+  }
+  isLoading.value = false;
 })();
 
 const { t, locale } = useI18n({
@@ -29,41 +45,9 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
 </script>
 
 <template>
-  <div class="bg-gray-50">
-    <table>
-      <tr>
-        <th>{{ t('time') }}</th>
-        <th>{{ t('division') }}</th>
-        <th>{{ t('event') }}</th>
-        <th>{{ t('round') }}</th>
-        <th>{{ t('status') }}</th>
-        <th></th>
-      </tr>
-      <template v-for="(item, index) in scheduleList" :key="index">
-        <tr>
-          <td>{{ item.timestamp.substring(5, 7) }}/{{ item.timestamp.substring(8, 10) }} {{ item.timestamp.substring(10, 16) }}</td>
-          <td colspan="3" v-if="item.division_id == null && item.event_code == null">{{ JSON.parse(item.options).title }}</td>
-          <template v-else>
-            <td>
-              <span v-if="locale == 'zh-TW'">{{ item.division_ch }}</span>
-              <span v-else>{{ item.division_en }}</span>
-            </td>
-            <td>
-              <span v-if="locale == 'zh-TW'">{{ item.event_ch }}</span>
-              <span v-else>{{ item.event_en }}</span>
-            </td>
-            <td>{{ lanePhaseToString(item.round, String(locale)) }}</td>
-          </template>
-          <td v-if="item.division_id != null && item.event_code != null">
-            <span v-if="locale == 'zh-TW'">{{ statusCh[item.status] }}</span>
-            <span v-else>{{ statusEn[item.status] }}</span>
-          </td>
-          <td>
-            <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" to="" target="_blank">{{ t('list') }}</router-link>
-          </td>
-        </tr>
-      </template>
-    </table>
+  <div v-if="isLoading == false">
+    <LaneLayout v-if="params.remarks == 'ts' || params.remarks == 'tr' || params.remarks == 'rr'" :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple"></LaneLayout>
+    <OrderLayout v-else :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple"></OrderLayout>
   </div>
 </template>
 

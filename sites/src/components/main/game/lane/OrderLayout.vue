@@ -23,9 +23,9 @@
         for (let j = 0; j <= maxHeat; j++) {
           if (i == 0) {
             if (j > 0) {
-              heatArray[i][j] = `第 ${ j } 組`;
+              heatArray[i][j] = `第 ${ j } 組<br>Group ${ j }`;
             } else {
-              heatArray[i][j] = '序號｜組別';
+              heatArray[i][j] = '序號｜組別<br>No.｜Group';
             }
           } else {
             if (j == 0) {
@@ -52,14 +52,14 @@
 </script>
 
 <template>
-  <div v-if="noData" class="text-lg py-2">目前無資料</div>
+  <div v-if="noData" class="text-lg py-2">目前無資料 No data</div>
    <div v-else class="h-full w-full overflow-auto">
     <table v-if="displayData.length > 0">
       <template v-for="(lane, indexA) in displayData" :key="indexA">
         <tr>
           <template v-for="(heat, indexB) in lane" :key="indexB">
             <template v-if="heat != null">
-              <td v-if="indexA == 0 || indexB == 0">{{ heat }}</td>
+              <td v-if="indexA == 0 || indexB == 0" v-html="heat"></td>
               <td v-else>
                   <div>
                     <div>{{ heat.last_name_ch }}{{ heat.first_name_ch }}</div>

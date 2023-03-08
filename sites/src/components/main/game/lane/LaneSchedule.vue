@@ -60,7 +60,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
             <span v-else>{{ statusEn[item.status] }}</span>
           </td>
           <td>
-            <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/arrangement/${item.division_id}/${item.event_code}/${item.round}`" target="_blank">{{ t('list') }}</router-link>
+            <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/arrangement/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list') }}</router-link>
           </td>
         </tr>
       </template>

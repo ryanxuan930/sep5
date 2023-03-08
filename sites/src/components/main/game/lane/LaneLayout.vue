@@ -22,13 +22,13 @@
         for (let j = 0; j <= props.trackData.length; j++) {
           if (i == 0) {
             if (j > 0) {
-              heatArray[i][j] = `第 ${ j } 道`;
+              heatArray[i][j] = `第 ${ j } 道<br>Lane ${ j }`;
             } else {
-              heatArray[i][j] = '組別｜道次';
+              heatArray[i][j] = '組別｜道次<br>Heat｜Lane';
             }
           } else {
             if (j == 0) {
-              heatArray[i][j] = `第 ${ i } 組`;
+              heatArray[i][j] = `第 ${ i } 組<br>Heat ${ i }`;
             } else {
               const temp = dataList.value.find((item: any) => item[`r${[props.phaseNum]}_heat`] == i && item[`r${[props.phaseNum]}_lane`] == j);
               if (temp) {
@@ -51,14 +51,14 @@
 </script>
 
 <template>
-  <div v-if="noData" class="text-lg py-2">目前無資料</div>
+  <div v-if="noData" class="text-lg py-2">目前無資料 No data</div>
   <div v-else class="w-full h-full overflow-auto">
     <table v-if="displayData.length > 0">
       <template v-for="(heat, indexA) in displayData" :key="indexA">
         <tr>
           <template v-for="(lane, indexB) in heat" :key="indexB">
             <template v-if="lane != null">
-              <td v-if="indexA == 0 || indexB == 0">{{ lane }}</td>
+              <td v-if="indexA == 0 || indexB == 0" v-html="lane"></td>
               <td v-else-if="props.isMultiple == 0">
                 <div>{{ lane.last_name_ch }}{{ lane.first_name_ch }}</div>
                 <div class="text-sm">{{ lane.org_name_ch }}</div>
@@ -80,7 +80,7 @@
 
 <style scoped lang="scss">
 table {
-  @apply w-[1024px] lg:w-full;
+  @apply w-[768px] md:w-full;
   td {
     @apply p-2 text-center border-[1px];
   }

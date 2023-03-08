@@ -127,21 +127,6 @@
     const distanceEvent = ['fj', 'ft'];
     const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
     const data: any = JSON.parse(JSON.stringify(dataList.value));
-    /*
-    const data: any = [
-      {r1_heat: 1, r1_lane: 1, r1_result: '11.21', ref_result: '0', r1_options: JSON.stringify({aq: true, sq: false})},
-      {r1_heat: 1, r1_lane: 2, r1_result: '11.20', ref_result: '0', r1_options: JSON.stringify({aq: true, sq: false})},
-      {r1_heat: 1, r1_lane: 3, r1_result: '11.28', ref_result: '0', r1_options: JSON.stringify({aq: false, sq: true})},
-      {r1_heat: 1, r1_lane: 4, r1_result: '11.29', ref_result: '0', r1_options: JSON.stringify({aq: false, sq: true})},
-      {r1_heat: 1, r1_lane: 5, r1_result: '11.30', ref_result: '0', r1_options: JSON.stringify({aq: false, sq: true})},
-      {r1_heat: 1, r1_lane: 6, r1_result: '11.31', ref_result: '0', r1_options: JSON.stringify({aq: false, sq: true})},
-      {r1_heat: 2, r1_lane: 1, r1_result: '11.21', ref_result: '0', r1_options: JSON.stringify({aq: true, sq: false})},
-      {r1_heat: 2, r1_lane: 2, r1_result: '11.40', ref_result: '0', r1_options: JSON.stringify({aq: true, sq: false})},
-      {r1_heat: 2, r1_lane: 3, r1_result: '11.48', ref_result: '0', r1_options: JSON.stringify({aq: false, sq: false})},
-      {r1_heat: 2, r1_lane: 4, r1_result: '11.49', ref_result: '0', r1_options: JSON.stringify({aq: false, sq: false})},
-      {r1_heat: 2, r1_lane: 5, r1_result: '11.50', ref_result: '0', r1_options: JSON.stringify({aq: false, sq: false})},
-      {r1_heat: 2, r1_lane: 6, r1_result: '11.51', ref_result: '0', r1_options: JSON.stringify({aq: false, sq: false})},
-    ];*/
     const trackArray: number[] = [];
 
     // convert time or length to milliseconds or centermeters
