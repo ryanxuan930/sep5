@@ -34,6 +34,7 @@ use App\Http\Controllers\Game\Registration\IndividualController as GameIndividua
 use App\Http\Controllers\Game\Registration\GroupController as GameGroupController;
 use App\Http\Controllers\Game\Common\TempController as GameTempController;
 use App\Http\Controllers\Game\Common\AthleteController as GameAthleteController;
+use App\Http\Controllers\Game\Common\ScheduleController as GameScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -229,5 +230,14 @@ Route::group([
         });
         Route::apiResource('temp', GameTempController::class);
         Route::get('athlete/list', [GameAthleteController::class, 'index']);
+        Route::group([
+            'prefix' => 'schedule'
+        ], function () {
+            $ControllerClass = GameScheduleController::class;
+            Route::get('', [$ControllerClass, 'getters']);
+            Route::get('/full', [$ControllerClass, 'gettersFull']);
+            Route::post('', [$ControllerClass, 'setters']);
+            Route::post('/update', [$ControllerClass, 'patcher']);
+        });
     });
 });

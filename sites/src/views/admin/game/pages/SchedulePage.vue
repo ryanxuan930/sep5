@@ -7,6 +7,7 @@
   import EditPhase from '@/components/admin/game/schedule/EditPhase.vue';
   import EditQualify from '@/components/admin/game/schedule/EditQualify.vue';
   import EditArrange from '@/components/admin/game/schedule/EditArrange.vue';
+  import EditTimetable from '@/components/admin/game/schedule/EditTimetable.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
@@ -36,7 +37,7 @@
     <div class="section-box grid grid-cols-1 md:grid-cols-4 gap-x-3 gap-y-4">
       <div class="col-span-4 text-2xl">賽程管理</div>
       <hr class="col-span-4">
-      <button class="round-full-button blue">賽程編排</button>
+      <button class="round-full-button blue" @click="displayModal = 4">賽程編排</button>
       <button class="round-full-button blue">秩序冊資料</button>
     </div>
   </div>
@@ -46,6 +47,7 @@
         <div v-if="displayModal == 1">賽別賽制設定</div>
         <div v-if="displayModal == 2">名次取數設定</div>
         <div v-if="displayModal == 3">組別道次管理</div>
+        <div v-if="displayModal == 4">賽程編排</div>
       </div>
     </template>
     <template v-slot:content>
@@ -53,6 +55,7 @@
         <EditPhase v-if="displayModal == 1"></EditPhase>
         <EditQualify v-if="displayModal == 2"></EditQualify>
         <EditArrange v-if="displayModal == 3"></EditArrange>
+        <EditTimetable v-if="displayModal == 4"></EditTimetable>
       </div>
     </template>
   </FullModal>
