@@ -110,6 +110,14 @@
     if (!confirm('確定進行自動排列？此動作無法復原')){
       return;
     }
+    if (laneList.value.length == 0) {
+      alert('請先設定跑道資訊');
+      return;
+    }
+    if (dataList.value.length == 0) {
+      alert('無參賽者資料');
+      return;
+    }
     // set phase
     const targetPhaseIndex = getTargetPhase(selectedTab.value, params.value[selectedIndex.value]);
     const targetPhasePrefix = phaseArray[targetPhaseIndex];
