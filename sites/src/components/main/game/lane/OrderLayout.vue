@@ -77,7 +77,7 @@
 
 <style scoped lang="scss">
 table {
-  @apply w-[768px] md:w-full overflow-auto;
+  @apply w-[640px] sm:w-full overflow-auto;
   td {
     @apply p-2 text-left border-[1px];
   }
