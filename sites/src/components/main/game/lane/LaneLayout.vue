@@ -80,7 +80,7 @@
 
 <style scoped lang="scss">
 table {
-  @apply w-[768px] md:w-full;
+  @apply w-[1024px] lg:w-full;
   td {
     @apply p-2 text-center border-[1px];
   }
