@@ -89,3 +89,13 @@ export function stringToMilliseconds(str: string) {
   }
   return ms;
 }
+
+export function lanePhaseToString(phase: number, locale: string) {
+  const ch = ['第一輪', '預賽', '準決賽', '決賽'];
+  const en = ['Round 1', 'Preliminary', 'Semi-finals', 'Finals'];
+  if (locale == 'zh-TW') {
+    return ch[phase - 1];
+  } else {
+    return en[phase - 1];
+  }
+}

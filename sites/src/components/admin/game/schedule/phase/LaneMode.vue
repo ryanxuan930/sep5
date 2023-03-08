@@ -65,7 +65,7 @@
         <th>組別</th>
         <th>項目</th>
         <th class=text-center>第一輪</th>
-        <th class=text-center>第二輪</th>
+        <th class=text-center>預賽</th>
         <th class=text-center>準決</th>
         <th class=text-center>決賽</th>
       </tr>

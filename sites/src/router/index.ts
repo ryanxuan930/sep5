@@ -78,7 +78,7 @@ const router = createRouter({
             {
               path: 'schedule',
               name: 'gameSchedulePage',
-              component: () => import('../views/main/homepage/games/TempPage.vue'),
+              component: () => import('../views/main/homepage/games/SchedulePage.vue'),
             },
             {
               path: 'result',

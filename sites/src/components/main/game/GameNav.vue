@@ -2,7 +2,6 @@
 import { ref, inject } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { onClickOutside } from '@vueuse/core'
-import type { IPageData } from '@/components/library/interfaces';
 import { openWindow } from '@/components/library/functions';
 
 const mobileNav = ref(false);
@@ -16,7 +15,7 @@ onClickOutside(target, (event) => mobileNav.value = false);
 function openWindow(url: string) {
   window.open(url);
 }
-const pageData: IPageData = inject('pageData');
+const pageData: any = inject('pageData');
 const gameData: any = inject('gameData');
 const navHoverColor = ref(gameData.value.options.navHoverColor);
 const navTextColor = ref(gameData.value.options.navTextColor);

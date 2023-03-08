@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue';
-import VueRequest from '@/vue-request';
-import { useRoute } from 'vue-router';
+import { ref } from 'vue';
 import NewsSection from '@/components/main/game/NewsSection.vue';
 </script>
 

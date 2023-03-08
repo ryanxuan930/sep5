@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import NewsSection from '@/components/main/game/NewsSection.vue';
 import PostContent from '@/components/main/game/PostContent.vue';
 

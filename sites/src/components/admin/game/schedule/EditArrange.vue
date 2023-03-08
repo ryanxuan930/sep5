@@ -336,8 +336,8 @@
       </div>
       <div class="items flex-grow overflow-hidden h-full flex flex-col" v-if="isFetching == false">
         <div class="bookmark">
-          <div v-if="params[selectedIndex].r1 == 1" @click="selectedTab = 1" :class="{'active': selectedTab == 1}">預賽</div>
-          <div v-if="params[selectedIndex].r2 == 1" @click="selectedTab = 2" :class="{'active': selectedTab == 2}">第二輪</div>
+          <div v-if="params[selectedIndex].r1 == 1" @click="selectedTab = 1" :class="{'active': selectedTab == 1}">第一輪</div>
+          <div v-if="params[selectedIndex].r2 == 1" @click="selectedTab = 2" :class="{'active': selectedTab == 2}">預賽</div>
           <div v-if="params[selectedIndex].r3 == 1" @click="selectedTab = 3" :class="{'active': selectedTab == 3}">準決賽</div>
           <div v-if="params[selectedIndex].r4 == 1" @click="selectedTab = 4" :class="{'active': selectedTab == 4}">決賽</div>
           <span class="block hidden-span"></span>

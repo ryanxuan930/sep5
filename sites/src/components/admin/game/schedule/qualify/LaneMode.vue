@@ -62,8 +62,8 @@
             <th rowspan="2" class="w-1/12">組別</th>
             <th rowspan="2" class="w-1/12">項目</th>
             <th colspan="3" class=text-center>第一輪</th>
-            <th colspan="3" class=text-center>第二輪</th>
-            <th colspan="3" class=text-center>準決</th>
+            <th colspan="3" class=text-center>預賽</th>
+            <th colspan="3" class=text-center>準決賽</th>
             <th colspan="3" class=text-center>決賽</th>
           </tr>
           <tr>

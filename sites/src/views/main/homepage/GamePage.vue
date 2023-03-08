@@ -1,22 +1,23 @@
 <script setup lang="ts">
 import { ref, provide } from 'vue';
-import type { Ref } from 'vue';
 import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
 import GameNav from '@/components/main/game/GameNav.vue';
 import HomeFooter from '@/components/main/homepage/HomeFooter.vue';
-import type { IPageData } from '@/components/library/interfaces';
 
 const route = useRoute();
 const vr = new VueRequest();
+const isLoading = ref(false);
 const adminOrgId = useRoute().params.adminOrgId;
-const pageData:Ref<IPageData|null> = ref(null);
+const pageData: any = ref(null);
 const gameData: any = ref(null);
 (async () => {
+  isLoading.value = true;
   const temp = await vr.Get(`config/${adminOrgId}`);
   await vr.Get(`0/game/${route.params.gameId}`, gameData);
   pageData.value = temp.options;
   document.title = gameData.value.game_name_ch;
+  isLoading.value = false;
 })();
 
 provide('pageData', pageData);
@@ -24,7 +25,7 @@ provide('gameData', gameData);
 </script>
 
 <template>
-  <div class="h-screen flex flex-col bg-white" v-if="gameData != null">
+  <div class="h-screen flex flex-col bg-white" v-if="isLoading == false">
     <GameNav></GameNav>
     <div class="flex-grow overflow-auto flex flex-col">
       <div>
