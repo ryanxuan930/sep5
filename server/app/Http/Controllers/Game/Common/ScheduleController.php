@@ -11,7 +11,7 @@ use App\Mods\GameFunctions;
 
 class ScheduleController extends Controller
 {
-    private $tableName = 'schedule';
+    private $tableName = 'schedules';
     // construct
     public function __construct()
     {
