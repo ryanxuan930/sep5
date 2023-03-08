@@ -238,8 +238,8 @@
       pointer = 0;
       for(let i = 0; i < heat; i++){
         for(let j = 0; j < heatArray[i]; j++){
-          participants[pointer][`${currentPhasePrefix}_heat`] = i + 1;
-          participants[pointer][`${currentPhasePrefix}_lane`] = j + 1;
+          participants[pointer][`${currentPhasePrefix}_heat`] = j + 1;
+          participants[pointer][`${currentPhasePrefix}_lane`] = i + 1;
           pointer++;
         }
       }
