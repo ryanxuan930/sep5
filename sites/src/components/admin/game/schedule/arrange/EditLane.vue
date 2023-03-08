@@ -22,33 +22,41 @@ const close = () => {
   emit('closeModal');
 }
 
-function submitAll() {
+async function submitAll() {
   const phaseArray = ['ref', 'r1', 'r2', 'r3', 'r4'];
   let dataset: any = [];
-  dataList.value.forEach((d: any) => {
-    dataset.push({
-      u_id: d.u_id,
-      division_id: d.division_id,
-      event_code: d.event_code,
-      phase: phaseArray[props.phaseNum],
-      heat: d[`${phaseArray[props.phaseNum]}_heat`],
-      lane: d[`${phaseArray[props.phaseNum]}_lane`],
+  let res: any = null;
+  if(props.paramList.multiple == 1){
+    dataList.value.forEach((d: any) => {
+      dataset.push({
+        team_id: d.team_id,
+        division_id: d.division_id,
+        event_code: d.event_code,
+        phase: phaseArray[props.phaseNum],
+        heat: d[`${phaseArray[props.phaseNum]}_heat`],
+        lane: d[`${phaseArray[props.phaseNum]}_lane`],
+      });
     });
-  });
-  (async () => {
-    let res: any = null;
-    if(props.paramList.multiple == 1){
-      res = await vr.Patch(`game/${sportCode}/${gameId}/common/group/update/heat-lane`, dataset, null, true, true);
-    } else {
-      res = await vr.Patch(`game/${sportCode}/${gameId}/common/individual/update/heat-lane`, dataset, null, true, true);
-    }
-    if (res.status == 'A01') {
-      alert('已儲存');
-      close();
-    } else {
-      alert('儲存失敗');
-    }
-  })();
+    res = await vr.Patch(`game/${sportCode}/${gameId}/common/group/update/heat-lane`, dataset, null, true, true);
+  } else {
+    dataList.value.forEach((d: any) => {
+      dataset.push({
+        u_id: d.u_id,
+        division_id: d.division_id,
+        event_code: d.event_code,
+        phase: phaseArray[props.phaseNum],
+        heat: d[`${phaseArray[props.phaseNum]}_heat`],
+        lane: d[`${phaseArray[props.phaseNum]}_lane`],
+      });
+    });
+    res = await vr.Patch(`game/${sportCode}/${gameId}/common/individual/update/heat-lane`, dataset, null, true, true);
+  }
+  if (res.status == 'A01') {
+    alert('已儲存');
+    close();
+  } else {
+    alert('儲存失敗');
+  }
 }
 
 </script>
