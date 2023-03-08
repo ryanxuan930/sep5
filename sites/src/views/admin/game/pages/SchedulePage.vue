@@ -41,21 +41,21 @@
     </div>
   </div>
   <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
-      <template v-slot:title>
-        <div class="text-2xl">
-          <div v-if="displayModal == 1">賽別賽制設定</div>
-          <div v-if="displayModal == 2">名次取數設定</div>
-          <div v-if="displayModal == 3">組別道次管理</div>
-        </div>
-      </template>
-      <template v-slot:content>
-        <div class="overflow-auto h-full">
-          <EditPhase v-if="displayModal == 1"></EditPhase>
-          <EditQualify v-if="displayModal == 2"></EditQualify>
-          <EditArrange v-if="displayModal == 3"></EditArrange>
-        </div>
-      </template>
-    </FullModal>
+    <template v-slot:title>
+      <div class="text-2xl">
+        <div v-if="displayModal == 1">賽別賽制設定</div>
+        <div v-if="displayModal == 2">名次取數設定</div>
+        <div v-if="displayModal == 3">組別道次管理</div>
+      </div>
+    </template>
+    <template v-slot:content>
+      <div class="overflow-auto h-full">
+        <EditPhase v-if="displayModal == 1"></EditPhase>
+        <EditQualify v-if="displayModal == 2"></EditQualify>
+        <EditArrange v-if="displayModal == 3"></EditArrange>
+      </div>
+    </template>
+  </FullModal>
 </template>
 
 <style scoped lang="scss">

@@ -72,3 +72,20 @@ export function shuffle(array: any[]) {
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+
+// string format: 00:00:00 or 00:00.00 or 00.00 or 00:00.000 or 00.000
+export function stringToMilliseconds(str: string) {
+  const arr = str.split(':');
+  let ms = 0;
+  if (arr.length === 3) {
+    ms += Number(arr[0]) * 3600000;
+    ms += Number(arr[1]) * 60000;
+    ms += Number(arr[2]) * 1000;
+  } else if (arr.length === 2) {
+    ms += Number(arr[0]) * 60000;
+    ms += Number(arr[1]) * 1000;
+  } else {
+    ms += Number(arr[0]) * 1000;
+  }
+  return ms;
+}

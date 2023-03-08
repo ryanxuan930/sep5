@@ -51,7 +51,7 @@
   }
   getData();
   async function submitAll() {
-    const res: any = vr.Post(`game/${sportCode}/${gameId}/main/params`, paramsData.value, null, true, true);
+    const res: any = await vr.Post(`game/${sportCode}/${gameId}/main/params`, paramsData.value, null, true, true);
     if (res.status == 'A01') {
       alert('已儲存');
     }
