@@ -53,7 +53,7 @@
 
 <template>
   <div v-if="noData" class="text-lg py-2">目前無資料</div>
-   <div v-else>
+   <div v-else class="w-full overflow-auto">
     <table v-if="displayData.length > 0">
       <template v-for="(lane, indexA) in displayData" :key="indexA">
         <tr>
@@ -77,7 +77,7 @@
 
 <style scoped lang="scss">
 table {
-  @apply w-[1024px] lg:w-full overflow-auto;
+  @apply w-[768px] md:w-full overflow-auto;
   td {
     @apply p-2 text-left border-[1px];
   }
