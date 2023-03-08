@@ -265,7 +265,7 @@
       let dataset: any = [];
       let res: any = null;
       const index = selectedIndex.value;
-      if(paramsList.value[index].multiple == 1){
+      if(currentParamsFull.multiple == 1){
         data.forEach((d: any) => {
           dataset.push({
             team_id: d.team_id,
@@ -276,6 +276,7 @@
             lane: d[`${currentPhasePrefix}_lane`],
           });
         });
+        console.log(dataset);
         res = await vr.Patch(`game/${sportCode}/${gameId}/common/group/update/heat-lane`, dataset, null, true, true);
       } else {
         data.forEach((d: any) => {
