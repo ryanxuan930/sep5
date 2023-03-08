@@ -276,7 +276,6 @@
             lane: d[`${currentPhasePrefix}_lane`],
           });
         });
-        console.log(dataset);
         res = await vr.Patch(`game/${sportCode}/${gameId}/common/group/update/heat-lane`, dataset, null, true, true);
       } else {
         data.forEach((d: any) => {
@@ -336,7 +335,7 @@
           </span>
         </div>
       </div>
-      <div class="items" v-if="isFetching == false">
+      <div class="items flex-grow overflow-hidden h-full flex flex-col" v-if="isFetching == false">
         <div class="bookmark">
           <div v-if="params[selectedIndex].r1 == 1" @click="selectedTab = 1" :class="{'active': selectedTab == 1}">預賽</div>
           <div v-if="params[selectedIndex].r2 == 1" @click="selectedTab = 2" :class="{'active': selectedTab == 2}">第二輪</div>
@@ -344,7 +343,7 @@
           <div v-if="params[selectedIndex].r4 == 1" @click="selectedTab = 4" :class="{'active': selectedTab == 4}">決賽</div>
           <span class="block hidden-span"></span>
         </div>
-        <div class="overflow-hidden">
+        <div class="overflow-hidden flex-grow h-full">
           <LaneLayout :input-data="dataList" :phase-num="selectedTab" :track-data="laneList" :is-multiple="paramsList[selectedIndex].multiple" v-if="paramsList[selectedIndex].remarks == 'ts' || paramsList[selectedIndex].remarks == 'tr' || paramsList[selectedIndex].remarks == 'rr'"></LaneLayout>
           <OrderLayout :input-data="dataList" :phase-num="selectedTab" v-else></OrderLayout>
         </div>
@@ -376,7 +375,7 @@
   }
 }
 .right-box {
-  @apply md:col-span-2 lg:col-span-3 p-3 bg-gray-100 shadow-inner overflow-hidden flex flex-col gap-3;
+  @apply md:col-span-2 lg:col-span-3 p-3 bg-gray-100 shadow-inner overflow-hidden flex flex-col gap-3 h-full;
   .items {
     @apply p-3 bg-white shadow;
   }
