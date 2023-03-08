@@ -261,23 +261,33 @@
         }
       }
     }
-    let dataset: any = [];
-    data.forEach((d: any) => {
-      dataset.push({
-        u_id: d.u_id,
-        division_id: d.division_id,
-        event_code: d.event_code,
-        phase: currentPhasePrefix,
-        heat: d[`${currentPhasePrefix}_heat`],
-        lane: d[`${currentPhasePrefix}_lane`],
-      });
-    });
     (async () => {
-      const index = selectedIndex.value;
+      let dataset: any = [];
       let res: any = null;
+      const index = selectedIndex.value;
       if(paramsList.value[index].multiple == 1){
+        data.forEach((d: any) => {
+          dataset.push({
+            team_id: d.team_id,
+            division_id: d.division_id,
+            event_code: d.event_code,
+            phase: currentPhasePrefix,
+            heat: d[`${currentPhasePrefix}_heat`],
+            lane: d[`${currentPhasePrefix}_lane`],
+          });
+        });
         res = await vr.Patch(`game/${sportCode}/${gameId}/common/group/update/heat-lane`, dataset, null, true, true);
       } else {
+        data.forEach((d: any) => {
+          dataset.push({
+            u_id: d.u_id,
+            division_id: d.division_id,
+            event_code: d.event_code,
+            phase: currentPhasePrefix,
+            heat: d[`${currentPhasePrefix}_heat`],
+            lane: d[`${currentPhasePrefix}_lane`],
+          });
+        });
         res = await vr.Patch(`game/${sportCode}/${gameId}/common/individual/update/heat-lane`, dataset, null, true, true);
       }
       if (res.status == 'A01') {
