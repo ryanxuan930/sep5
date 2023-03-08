@@ -4,21 +4,20 @@ import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n'
 import { lanePhaseToString } from '@/components/library/functions';
+import LaneLayout from '@/components/main/game/lane/LaneLayout.vue';
+import OrderLayout from '@/components/main/game/lane/OrderLayout.vue';
 
 const route = useRoute();
 const vr = new VueRequest();
 const adminOrgId = useRoute().params.adminOrgId;
+const divisionId = useRoute().params.divisionId;
+const eventCode = useRoute().params.eventCode;
 const gameId = route.params.gameId;
 const pageData: any = inject('pageData');
 const gameData: any = inject('gameData');
-const scheduleList: any = ref([]);
+const dataList: any = ref([]);
 (async () => {
-  await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/schedule/full`, scheduleList);
-  scheduleList.value.sort((a: any, b: any) => {
-    const t1 = new Date(a.timestamp);
-    const t2 = new Date(b.timestamp);
-    return t1.getTime() - t2.getTime();
-  });
+  await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/group/by/event/${divisionId}/${eventCode}`);
 })();
 
 const { t, locale } = useI18n({
@@ -60,7 +59,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
             <span v-else>{{ statusEn[item.status] }}</span>
           </td>
           <td>
-            <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/arrangement/${item.division_id}/${item.event_code}/${item.round}`" target="_blank">{{ t('list') }}</router-link>
+            <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" to="" target="_blank">{{ t('list') }}</router-link>
           </td>
         </tr>
       </template>

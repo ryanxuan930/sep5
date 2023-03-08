@@ -54,9 +54,6 @@ class GroupController extends Controller
     }
     public function indexByEvent($sportCode, $gameId, $divisionId, $eventCode)
     {
-        if (is_null(auth('user')->user()) && is_null(auth('admin')->user())) {
-            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
-        }
         $query = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)
         ->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')
         ->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.team_id')

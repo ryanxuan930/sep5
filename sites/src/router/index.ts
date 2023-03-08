@@ -81,6 +81,11 @@ const router = createRouter({
               component: () => import('../views/main/homepage/games/SchedulePage.vue'),
             },
             {
+              path: 'arrangement/:divisionId/:eventCode/:round?',
+              name: 'gameArrangementPage',
+              component: () => import('../views/main/homepage/games/ArrangementPage.vue'),
+            },
+            {
               path: 'result',
               name: 'gameResultPage',
               component: () => import('../views/main/homepage/games/TempPage.vue'),
