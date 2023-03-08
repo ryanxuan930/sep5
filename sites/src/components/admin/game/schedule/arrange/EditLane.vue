@@ -67,7 +67,7 @@ async function submitAll() {
       <tr>
         <th>組織單位</th>
         <th>系所/分部</th>
-        <th>姓名</th>
+        <th>名稱</th>
         <th>組別</th>
         <th>道次</th>
       </tr>
