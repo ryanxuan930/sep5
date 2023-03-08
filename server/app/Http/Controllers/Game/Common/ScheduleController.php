@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\SportList;
 use App\Mods\GameFunctions;
 
-class ParamsController extends Controller
+class ScheduleController extends Controller
 {
     private $tableName = 'schedule';
     // construct
