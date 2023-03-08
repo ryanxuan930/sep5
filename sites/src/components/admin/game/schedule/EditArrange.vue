@@ -195,7 +195,7 @@
         }
       }
     }
-    if (timeEvent.includes(currentParamsFull.remarks)) {
+    if (currentParamsFull.remarks == 'ts' || currentParamsFull.remarks == 'tr' || currentParamsFull.remarks == 'rr') {
       participants.sort((a: any, b: any) => a.temp - b.temp);
       const heat = Math.ceil(participants.length / trackArray.length);
       const heatArray = new Array(heat).fill(0);
