@@ -227,6 +227,30 @@ class GroupController extends Controller
         DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->update($groupUpdate);
         return response()->json(['status'=>'A01']);
     }
+    public function updateHeatLane(Request $request, $sportCode, $gameId)
+    {
+        if (is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        // get sport module
+        $validationArray = [
+            '*.team_id' => 'required|integer',
+            '*.division_id' => 'required|integer',
+            '*.event_code' => 'required|size:8',
+            '*.phase' => 'required|size:2',
+            '*.heat' => 'required',
+            '*.lane' => 'required',
+        ];
+        $validator = Validator::make($request->all(),$validationArray);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $temp = $request->all();
+        foreach($temp as $t) {
+            DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('division_id', $t['division_id'])->where('event_code', $t['event_code'])->where('team_id', $t['team_id'])->update([$t['phase'].'_heat'=> $t['heat'], $t['phase'].'_lane'=> $t['lane']]);
+        }
+        return response()->json(['status'=>'A01']);
+    }
 
     /**
      * Remove the specified resource from storage.
