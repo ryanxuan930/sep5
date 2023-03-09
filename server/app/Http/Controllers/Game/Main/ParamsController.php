@@ -15,7 +15,7 @@ class ParamsController extends Controller
     // construct
     public function __construct()
     {
-        $this->middleware('auth:admin', ['except' => ['getters', 'gettersFull']]);
+        $this->middleware('auth:admin', ['except' => ['getters', 'gettersFull', 'gettersByEvent']]);
     }
     /**
      * Display a listing of the resource.
