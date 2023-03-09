@@ -31,4 +31,24 @@ class AthleteController extends Controller
         ->get();
         return response()->json($result);
     }
+    public function find($sportCode, $gameId, $uid)
+    {
+        if (is_null($user = auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        $userArray = array();
+        $tempIndividual = DB::table($sportCode.'_'.$gameId.'_individuals')->distinct('u_id')->select('u_id')->get();
+        foreach ($tempIndividual as $row) {
+            array_push($userArray, $row->u_id);
+        }
+        $tempGroup = DB::table($sportCode.'_'.$gameId.'_groups')->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_groups'.'.team_id')->select($sportCode.'_'.$gameId.'_teams.team_id', $sportCode.'_'.$gameId.'_teams.member_list')->get();
+        foreach ($tempGroup as $row) {
+            $userArray = array_merge($userArray, json_decode($row->member_list, true));
+        }
+        if (in_array($uid, $userArray)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
