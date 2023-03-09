@@ -194,6 +194,7 @@ Route::group([
             $ControllerClass = GameParamsController::class;
             Route::get('', [$ControllerClass, 'getters']);
             Route::get('/full', [$ControllerClass, 'gettersFull']);
+            Route::get('/{divisionId}/{eventCode}', [$ControllerClass, 'gettersByEvent']);
             Route::post('', [$ControllerClass, 'setters']);
             Route::post('/patch', [$ControllerClass, 'patcher']);
         });
