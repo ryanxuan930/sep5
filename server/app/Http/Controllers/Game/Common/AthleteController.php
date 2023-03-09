@@ -46,9 +46,9 @@ class AthleteController extends Controller
             $userArray = array_merge($userArray, json_decode($row->member_list, true));
         }
         if (in_array($uid, $userArray)) {
-            return true;
+            return response()->json(true);
         } else {
-            return false;
+            return response()->json(false);
         }
     }
 }
