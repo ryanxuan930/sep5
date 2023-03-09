@@ -48,7 +48,7 @@ export function exportCsv(data: any[], title: string, header: any[]|null = null)
     temp += `${data[i].join(',')}\r\n`;
   }
   const hiddenElement = document.createElement('a');
-  hiddenElement.href = `data:text/csv;charset=utf-8,${encodeURI(temp)}`;
+  hiddenElement.href = `data:text/csv;charset=utf-8,${encodeURIComponent(temp)}`;
   hiddenElement.target = '_blank';
   hiddenElement.download = `${title}.csv`;
   hiddenElement.click();
