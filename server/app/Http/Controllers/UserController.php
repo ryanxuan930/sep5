@@ -224,6 +224,10 @@ class UserController extends Controller
         }
         return response()->json($result);
     }
+    public function showByName($firstName, $lastName)
+    {
+        return response()->json(User::leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->leftJoin('countries', 'users.nationality', '=', 'countries.country_code')->leftJoin('tribes', 'users.indigenous_tribe_id', '=', 'tribes.tribe_id')->leftJoin('sport_lists', 'users.gifited_sport_id', '=', 'sport_lists.sport_id')->leftJoin('cities', 'users.household_city_code', '=', 'cities.city_code')->select('users.*', 'organizations.*', 'departments.*', 'countries.*', 'tribes.*', 'sport_lists.*', 'cities.*')->where('first_name_ch', $firstName)->where('last_name_ch', $lastName)->first());
+    }
 
     /**
      * Update the specified resource in storage.
