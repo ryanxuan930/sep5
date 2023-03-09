@@ -11,7 +11,11 @@ const gameStore = useGameStore();
 const route = useRoute();
 const gameId = route.params.gameId;
 if (gameStore.data == null) {
-  gameStore.data = JSON.parse(String(localStorage.getItem('gameData')));
+  if (localStorage.getItem('gameData') == undefined) {
+    gameStore.fetch(store.userInfo.admin_org_id, Number(gameId));
+  } else {
+    gameStore.data = JSON.parse(String(localStorage.getItem('gameData')));
+  }
 }
 </script>
 
