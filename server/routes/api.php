@@ -136,6 +136,7 @@ Route::get('/user/name/{firstName}/{lastName}', [UserController::class, 'showByN
 Route::post('/user-upload', [UserController::class, 'storeByBatch']);
 Route::post('/user-search', [UserController::class, 'search']);
 Route::post('/user-search-unit', [UserController::class, 'searchByUnit']);
+Route::post('/user-from-list', [UserController::class, 'getUserFronList']);
 
 Route::apiResource('/country', CountryController::class);
 
