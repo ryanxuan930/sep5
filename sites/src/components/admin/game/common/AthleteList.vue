@@ -4,27 +4,59 @@ import VueRequest from '@/vue-request';
 import { useUserStore } from '@/stores/user';
 import { useRoute } from 'vue-router';
 import { lanePhaseToString } from '@/components/library/functions';
+import SmallModal from '@/components/SmallModal.vue';
+import LegsList from '@/components/admin/game/management/LegsList.vue';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
 const route = useRoute();
+const displayModal = ref(0);
 const props = defineProps(['inputData', 'displayMode']);
 const gameData: any = inject('gameData');
 const dataList: any = ref([]);
-if (props.inputData.multiple == 0){
-  vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/by/event/${props.inputData.division_id}/${props.inputData.event_code}`, dataList);
-} else {
-  vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/event/${props.inputData.division_id}/${props.inputData.event_code}`, dataList);
-}
+const isLoading = ref(false);
+(async () => {
+  isLoading.value = true;
+  if (props.inputData.multiple == 0){
+    await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/by/event/${props.inputData.division_id}/${props.inputData.event_code}`, dataList);
+  } else {
+    await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/event/${props.inputData.division_id}/${props.inputData.event_code}`, dataList);
+  }
+  dataList.value.sort((a: any, b: any) => a[`r${[props.inputData.round]}_heat`] - b[`r${[props.inputData.round]}_heat`] || a[`r${[props.inputData.round]}_lane`] - b[`r${[props.inputData.round]}_lane`]);
+  isLoading.value = false;
+})();
 async function submitAll() {
   let res: any = null;
+  const dataset: any = [];
   if (props.inputData.multiple == 0){
-    res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/update/result`, dataList.value, null, true, true);
+    dataList.value.forEach((item: any) => {
+      dataset.push({
+        u_id: item.u_id,
+        division_id: item.division_id,
+        event_code: item.event_code,
+        phase: `r${props.inputData.round}`,
+        result: item[`r${props.inputData.round}_result`],
+        ranking: 0,
+        options: {},
+      });
+    });
+    res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/update/result`, dataset, null, true, true);
   } else {
-    res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/group/update/result`, dataList.value, null, true, true);
+    dataList.value.forEach((item: any) => {
+      dataset.push({
+        team_id: item.team_id,
+        division_id: item.division_id,
+        event_code: item.event_code,
+        phase: `r${props.inputData.round}`,
+        result: item[`r${props.inputData.round}_result`],
+        ranking: 0,
+        options: {},
+      });
+    });
+    res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/group/update/result`, dataset, null, true, true);
   }
   if (res.status == 'A01') {
-    const r: any = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/schedule/update/${props.inputData.schedule_id}`, {status: 1}, null, true, true);
+    const r: any = await vr.Post(`game/${route.params.sportCode}/${route.params.gameId}/common/schedule/update/${props.inputData.schedule_id}`, {status: 1}, null, true, true);
     if (r.status == 'A01') {
       alert('已儲存');
     } else {
@@ -34,10 +66,15 @@ async function submitAll() {
     alert('儲存失敗');
   }
 }
+const selectedData: any = ref([]);
+function setLegs(input: any) {
+  selectedData.value = input;
+  displayModal.value = 1;
+}
 </script>
 
 <template>
-  <div>
+  <div v-if="isLoading == false">
     <div class="py-3 text-xl">
       <span>{{ props.inputData.timestamp }} {{ props.inputData.division_ch }}-{{ props.inputData.event_ch }}</span>
       <span v-if="gameData.module == 'ln'"> [{{ lanePhaseToString(props.inputData.round, 'zh-TW') }}]</span>
@@ -53,6 +90,7 @@ async function submitAll() {
           <th>道次</th>
         </template>
         <th v-if="props.displayMode == 'call'">檢錄</th>
+        <th v-if="gameData.module == 'ln' && props.inputData.multiple == 1 && props.displayMode == 'call'">棒次</th>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
         <tr>
@@ -77,6 +115,9 @@ async function submitAll() {
               </div>
             </div>
           </td>
+          <td v-if="gameData.module == 'ln' && props.inputData.multiple == 1 && props.displayMode == 'call'">
+            <button class="general-button blue" @click="setLegs(item)">設定</button>
+          </td>
         </tr>
       </template>
     </table>
@@ -84,6 +125,18 @@ async function submitAll() {
       <button class="round-full-button blue" @click="submitAll">儲存</button>
     </div>
   </div>
+  <SmallModal v-show="displayModal > 0" @closeModal="displayModal = 0">
+    <template v-slot:title>
+      <div class="text-2xl">
+        <div v-if="displayModal == 1">棒次</div>
+      </div>
+    </template>
+    <template v-slot:content>
+      <div class="overflow-auto h-full">
+        <LegsList v-if="displayModal == 1" :input-data="selectedData" :player-num="props.inputData.player_num" @closeModal="displayModal = 0" @returnData="(res: any) => selectedData.member_list = res"></LegsList>
+      </div>
+    </template>
+  </SmallModal>
 </template>
 
 <style scoped lang="scss">
@@ -104,7 +157,7 @@ table {
   .item {
     @apply p-1 bg-gray-100 hover:bg-blue-400 hover:text-white cursor-pointer duration-150;
     &.active {
-      @apply bg-blue-500 text-white;
+      @apply bg-blue-500 text-white shadow;
     }
   }
 }

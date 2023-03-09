@@ -4,9 +4,9 @@ import VueRequest from '@/vue-request';
 import { useUserStore } from '@/stores/user';
 import { useRoute } from 'vue-router';
 import SmallLoader from '@/components/SmallLoader.vue';
-import { lanePhaseToString } from '@/components/library/functions';
 import FullModal from '@/components/FullModal.vue';
 import AthleteList from '@/components/admin/game/common/AthleteList.vue';
+import { exportCsv, lanePhaseToString } from '@/components/library/functions';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
@@ -39,13 +39,38 @@ setInterval(() => {
   }
   counter.value--;
 }, 1000);
+
+async function exportData(input: any) {
+  const data: any = [];
+  let res: any = null;
+  if (input.multiple == 0){
+    res =  await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/by/event/${input.division_id}/${input.event_code}`);
+  } else {
+    res =  await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/event/${input.division_id}/${input.event_code}`);
+  }
+  res.sort((a: any, b: any) => a[`r${[input.round]}_heat`] - b[`r${[input.round]}_heat`] || a[`r${[input.round]}_lane`] - b[`r${[input.round]}_lane`]);
+  const maxHeat = res[res.length - 1][`r${[input.round]}_heat`];
+  for (let i = 1; i <= maxHeat; i++) {
+    data.push([`${input.division_ch}_${input.event_ch}_${lanePhaseToString(input.round, 'zh-TW')}`, i, input.round, input.schedule_id, '']);
+    for (let j = 0; j < res.length; j++) {
+      if (res[j][`r${[input.round]}_heat`] == i) {
+        data.push([res[j].u_id, res[j][`r${[input.round]}_lane`], res[j].first_name_ch, res[j].last_name_ch, res[j].org_name_ch]);
+      }
+    }
+    if (i < maxHeat) {
+      data.push(['#', '', '', '', '']);
+    }
+  }
+  exportCsv(data, `${input.division_ch}_${input.event_ch}_${lanePhaseToString(input.round, 'zh-TW')}`, null);
+}
 </script>
 
 <template>
   <div class="h-full w-full overflow-auto">
     <table class="data-table">
       <template v-for="(item, index) in scheduleList" :key="index">
-        <tr>
+        <tr v-if="props.displayMode == 'management' || props.displayMode == 'result' || (props.displayMode == 'call' && item.status <= 1) || (props.displayMode == 'input' && item.status > 1 && item.status < 4)">
+          <td>{{ item.timestamp.substring(5,7) }}/{{ item.timestamp.substring(8,10) }} {{ item.timestamp.substring(11,16) }}</td>
           <template v-if="item.division_id != null && item.event_ch != null">
             <td>{{ item.division_ch }}</td>
             <td>{{ item.event_ch }}</td>
@@ -55,11 +80,10 @@ setInterval(() => {
           </td>
           <td v-if="gameData.module == 'ln'">{{ lanePhaseToString(item.round, 'zh-TW') }}</td>
           <td>
-            <div class="flex gap-2 items-center flex-wrap">
+            <div class="flex gap-2 items-center flex-wrap" v-if="item.division_id != null && item.event_ch != null">
               <button class="general-button blue" @click="openEvent(item, 1)">查看</button>
-              <button v-if="gameData.module == 'ln' || gameData.module == 'rd' && item.status == 0" class="general-button blue" @click="openEvent(item, 2)">檢錄</button>
-              <button v-if="gameData.module == 'ln'" class="general-button blue">電計下載</button>
-              <button v-if="gameData.module == 'ln' && item.remarks == 'rr'" class="general-button blue">棒次</button>
+              <button v-if="gameData.module == 'ln' || gameData.module == 'rd' && item.status < 2" class="general-button blue" @click="openEvent(item, 2)">檢錄</button>
+              <button v-if="gameData.module == 'ln'" class="general-button blue" @click="exportData(item)">電計下載</button>
             </div>
           </td>
         </tr>

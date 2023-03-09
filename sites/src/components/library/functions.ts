@@ -39,9 +39,11 @@ export function csvToArray(str: string, delimiter = ',') {
   return arr;
 }
 
-export function exportCsv(data: any[], title: string, header: any[]) {
+export function exportCsv(data: any[], title: string, header: any[]|null = null) {
   let temp = '';
-  temp += `${header.join(',')}\r\n`;
+  if (header != null) {
+    temp += `${header.join(',')}\r\n`;
+  }
   for (let i = 0; i < data.length; i++) {
     temp += `${data[i].join(',')}\r\n`;
   }
