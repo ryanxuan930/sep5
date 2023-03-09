@@ -50,10 +50,10 @@ async function exportData(input: any) {
   }
   res.sort((a: any, b: any) => a[`r${[input.round]}_heat`] - b[`r${[input.round]}_heat`] || a[`r${[input.round]}_lane`] - b[`r${[input.round]}_lane`]);
   const maxHeat = res[res.length - 1][`r${[input.round]}_heat`];
-  console.log(maxHeat);
   for (let i = 0; i < maxHeat; i++) {
     data.push([`${input.division_ch}_${input.event_ch}_${lanePhaseToString(input.round, 'zh-TW')}`, i + 1, input.round, input.schedule_id, '']);
     for (let j = 0; j < res.length; j++) {
+      console.log(res[j][`r${[input.round]}_heat`], i+1);
       if (res[j][`r${[input.round]}_heat`] == i + 1) {
         data.push([res[j].u_id, res[j][`r${[input.round]}_lane`], res[j].first_name_ch, res[j].last_name_ch, res[j].org_name_ch]);
       }
