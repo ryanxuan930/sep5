@@ -224,6 +224,23 @@ class GroupController extends Controller
         DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->update($groupUpdate);
         return response()->json(['status'=>'A01']);
     }
+    public function updateTeam(Request $request, $sportCode, $gameId, $id)
+    {
+        if (is_null(auth('admin')->user())) {
+            return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
+        }
+        // get sport module
+        $validationArray = [
+            'member_list' => 'nullable',
+        ];
+        $validator = Validator::make($request->all(),$validationArray);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $temp = $request->all();
+        DB::table($sportCode.'_'.$gameId.'_teams')->where('team_id', $id)->update($temp);
+        return response()->json(['status'=>'A01']);
+    }
     public function updateHeatLane(Request $request, $sportCode, $gameId)
     {
         if (is_null(auth('admin')->user())) {
