@@ -230,6 +230,7 @@ Route::group([
             Route::get('/by/event/{divisionId}/{eventCode}', [$ControllerClass, 'indexByEvent']);
             Route::get('/by/count/{unit}', [$ControllerClass, 'indexByCount']);
             Route::get('/by/count', [$ControllerClass, 'indexByCountFull']);
+            Route::patch('/update/team/{id}', [$ControllerClass, 'updateTeam']);
             Route::patch('/update/heat-lane', [$ControllerClass, 'updateHeatLane']);
             Route::patch('/update/result', [$ControllerClass, 'updateResult']);
         });
