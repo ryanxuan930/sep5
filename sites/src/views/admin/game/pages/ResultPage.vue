@@ -1,0 +1,53 @@
+<script setup lang="ts">
+  import { ref, provide } from 'vue';
+  import VueRequest from '@/vue-request';
+  import { useUserStore } from '@/stores/user';
+  import { useGameStore } from '@/stores/game';
+  import { useRoute } from 'vue-router';
+  import FullModal from '@/components/FullModal.vue';
+  import ScheduleList from '@/components/admin/game/common/ScheduleList.vue';
+
+  const store = useUserStore();
+  const gameStore = useGameStore();
+  const vr = new VueRequest(store.token);
+  const displayModal = ref(0);
+  const gameData: any = ref(gameStore.data);
+  const route = useRoute();
+  const sportCode = route.params.sportCode;
+  const gameId = route.params.gameId;
+  provide('gameData', gameData);
+</script>
+
+<template>
+  <div v-if="gameData != null" class="flex flex-col h-full gap-5">
+    <div class="section-box flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-4">
+      <div class="col-span-4 text-2xl">選手編配</div>
+      <hr class="col-span-4">
+      <button class="round-full-button blue" @click="displayModal = 1">場次總覽</button>
+      <button v-if="gameData.module == 'ln'" class="round-full-button blue">電動計時系統</button>
+    </div>
+    <div class="section-box flex-grow h-full flex flex-col gap-4 overflow-hidden">
+      <div class="col-span-4 text-2xl">賽程列表</div>
+      <hr class="col-span-4">
+      <div class="flex-grow h-full overflow-hidden">
+        <ScheduleList :displayMode="'input'"></ScheduleList>
+      </div>
+    </div>
+  </div>
+  <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
+    <template v-slot:title>
+      <div class="text-2xl">
+        <div v-if="displayModal == 1">場次總覽</div>
+      </div>
+    </template>
+    <template v-slot:content>
+      <div class="overflow-auto h-full">
+        <ScheduleList v-if="displayModal == 1" :displayMode="'result'"></ScheduleList>
+      </div>
+    </template>
+  </FullModal>
+</template>
+
+<style scoped lang="scss">
+    
+</style>

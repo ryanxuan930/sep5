@@ -61,7 +61,6 @@ async function exportData(input: any) {
       data.push(['#', '', '', '', '']);
     }
   }
-  console.log(data);
   exportCsv(data, `${input.division_ch}_${input.event_ch}_${lanePhaseToString(input.round, 'zh-TW')}`, null);
 }
 </script>
@@ -83,8 +82,9 @@ async function exportData(input: any) {
           <td>
             <div class="flex gap-2 items-center flex-wrap" v-if="item.division_id != null && item.event_ch != null">
               <button class="general-button blue" @click="openEvent(item, 1)">查看</button>
-              <button v-if="gameData.module == 'ln' || gameData.module == 'rd' && item.status < 2" class="general-button blue" @click="openEvent(item, 2)">檢錄</button>
-              <button v-if="gameData.module == 'ln'" class="general-button blue" @click="exportData(item)">電計下載</button>
+              <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status < 2 && (props.displayMode == 'management' || props.displayMode == 'call')" class="general-button blue" @click="openEvent(item, 2)">檢錄</button>
+              <button v-if="gameData.module == 'ln' && (props.displayMode == 'management' || props.displayMode == 'call')" class="general-button blue" @click="exportData(item)">電計下載</button>
+              <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 1 && item.status < 4 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="openEvent(item, 3)">成績</button>
             </div>
           </td>
         </tr>
@@ -97,12 +97,13 @@ async function exportData(input: any) {
       <div class="text-2xl">
         <div v-if="displayModal == 1">查看</div>
         <div v-if="displayModal == 2">檢錄</div>
+        <div v-if="displayModal == 3">成績</div>
       </div>
     </template>
     <template v-slot:content>
       <div class="overflow-auto h-full">
         <AthleteList v-if="displayModal == 1" :input-data="selectedEvent" display-mode="view"></AthleteList>
-        <AthleteList v-if="displayModal == 2" :input-data="selectedEvent" display-mode="call"></AthleteList>
+        <AthleteList v-if="displayModal == 2" :input-data="selectedEvent" display-mode="call" @close-modal="displayModal = 0" @refresh-page="getData()"></AthleteList>
       </div>
     </template>
   </FullModal>
@@ -110,7 +111,7 @@ async function exportData(input: any) {
 
 <style scoped lang="scss">
 .data-table {
-  @apply w-[768px] md:w-full h-full;
+  @apply w-[768px] md:w-full;
   td, th {
     @apply p-2 border-y-[1px] text-left;
   }

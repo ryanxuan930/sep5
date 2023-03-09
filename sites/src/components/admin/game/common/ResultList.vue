@@ -4,8 +4,7 @@ import VueRequest from '@/vue-request';
 import { useUserStore } from '@/stores/user';
 import { useRoute } from 'vue-router';
 import { lanePhaseToString } from '@/components/library/functions';
-import SmallModal from '@/components/SmallModal.vue';
-import LegsList from '@/components/admin/game/management/LegsList.vue';
+import FullModal from '@/components/FullModal.vue';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
@@ -36,8 +35,8 @@ async function submitAll() {
         event_code: item.event_code,
         phase: `r${props.inputData.round}`,
         result: item[`r${props.inputData.round}_result`],
-        ranking: 0,
-        options: {},
+        ranking: item[`r${props.inputData.round}_ranking`],
+        options: item[`r${props.inputData.round}_options`],
       });
     });
     res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/update/result`, dataset, null, true, true);
@@ -49,8 +48,8 @@ async function submitAll() {
         event_code: item.event_code,
         phase: `r${props.inputData.round}`,
         result: item[`r${props.inputData.round}_result`],
-        ranking: 0,
-        options: {},
+        ranking: item[`r${props.inputData.round}_ranking`],
+        options: item[`r${props.inputData.round}_options`],
       });
     });
     res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/group/update/result`, dataset, null, true, true);
@@ -66,25 +65,7 @@ async function submitAll() {
     alert('儲存失敗');
   }
 }
-const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
-const close = () => {
-  emit('refreshPage');
-  emit('closeModal');
-}
-async function sendNext() {
-  const r: any = await vr.Post(`game/${route.params.sportCode}/${route.params.gameId}/common/schedule/update/${props.inputData.schedule_id}`, {status: 2}, null, true, true);
-  if (r.status == 'A01') {
-    alert('已送出');
-    close();
-  } else {
-    alert('操作失敗');
-  }
-}
 const selectedData: any = ref([]);
-function setLegs(input: any) {
-  selectedData.value = input;
-  displayModal.value = 1;
-}
 </script>
 
 <template>
@@ -103,8 +84,6 @@ function setLegs(input: any) {
           <th>組別</th>
           <th>道次</th>
         </template>
-        <th v-if="props.displayMode == 'call'">檢錄</th>
-        <th v-if="gameData.module == 'ln' && props.inputData.multiple == 1 && props.displayMode == 'call'">棒次</th>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
         <tr>
@@ -116,42 +95,24 @@ function setLegs(input: any) {
             <td>{{ item[`r${props.inputData.round}_heat`] }}</td>
             <td>{{ item[`r${props.inputData.round}_lane`] }}</td>
           </template>
-          <td v-if="props.displayMode == 'call'">
-            <div class="select-box">
-              <div :class="{'item': true, 'active': item[`r${props.inputData.round}_result`] == '0'}" @click="item[`r${props.inputData.round}_result`] = '0'">
-                <div>正常<br>出賽</div>
-              </div>
-              <div :class="{'item': true, 'active': item[`r${props.inputData.round}_result`] == 'DNS'}" @click="item[`r${props.inputData.round}_result`] = 'DNS'">
-                <div>事前<br>請假</div>
-              </div>
-              <div :class="{'item': true, 'active': item[`r${props.inputData.round}_result`] == 'DQ'}" @click="item[`r${props.inputData.round}_result`] = 'DQ'">
-                <div>無故<br>棄賽</div>
-              </div>
-            </div>
-          </td>
-          <td v-if="gameData.module == 'ln' && props.inputData.multiple == 1 && props.displayMode == 'call'">
-            <button class="general-button blue" @click="setLegs(item)">設定</button>
-          </td>
         </tr>
       </template>
     </table>
-    <div class="py-3 flex flex-col gap-3">
+    <div class="py-3">
       <button class="round-full-button blue" @click="submitAll">儲存</button>
-      <button class="round-full-button blue" @click="sendNext">送出</button>
     </div>
   </div>
-  <SmallModal v-show="displayModal > 0" @closeModal="displayModal = 0">
+  <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
     <template v-slot:title>
       <div class="text-2xl">
-        <div v-if="displayModal == 1">棒次</div>
+        <div v-if="displayModal == 1">詳細紀錄</div>
       </div>
     </template>
     <template v-slot:content>
       <div class="overflow-auto h-full">
-        <LegsList v-if="displayModal == 1" :input-data="selectedData" :player-num="props.inputData.player_num" @closeModal="displayModal = 0" @returnData="(res: any) => selectedData.member_list = res"></LegsList>
       </div>
     </template>
-  </SmallModal>
+  </FullModal>
 </template>
 
 <style scoped lang="scss">

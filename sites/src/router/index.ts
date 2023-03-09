@@ -167,6 +167,11 @@ const router = createRouter({
               name: 'adminGameManagementPage',
               component: () => import('../views/admin/game/pages/ManagementPage.vue'),
             },
+            {
+              path: 'results',
+              name: 'adminGameResultPage',
+              component: () => import('../views/admin/game/pages/ResultPage.vue'),
+            },
           ]
         },
       ],
