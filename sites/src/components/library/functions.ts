@@ -91,11 +91,11 @@ export function stringToMilliseconds(str: string) {
 }
 
 export function lanePhaseToString(phase: number, locale: string) {
-  const ch = ['第一輪', '預賽', '準決賽', '決賽'];
-  const en = ['Round I', 'Preliminary', 'Semi-finals', 'Finals'];
+  const ch = ['其他', '第一輪', '預賽', '準決賽', '決賽'];
+  const en = ['Others', 'Round I', 'Preliminary', 'Semi-finals', 'Finals'];
   if (locale == 'zh-TW') {
-    return ch[phase - 1];
+    return ch[phase];
   } else {
-    return en[phase - 1];
+    return en[phase];
   }
 }

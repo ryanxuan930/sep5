@@ -3,7 +3,6 @@
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import { useRoute } from 'vue-router';
-  import FullModal from '@/components/FullModal.vue';
   import LaneMode from '@/components/admin/game/schedule/qualify/LaneMode.vue';
 
   const store = useUserStore();

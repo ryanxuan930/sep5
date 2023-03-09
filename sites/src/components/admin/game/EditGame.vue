@@ -2,6 +2,7 @@
   import { ref, reactive } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
+  import { useGameStore } from '@/stores/game';
   import Toggle from '@vueform/toggle';
   import { QuillEditor } from '@vueup/vue-quill'
   import '@vueup/vue-quill/dist/vue-quill.snow.css';
@@ -10,7 +11,8 @@
   import GameTagSelector from '@/components/admin/module/GameTagSelector.vue';
   import OrgSelector from '@/components/admin/module/OrgSelector.vue';
 
-  const store = useUserStore()
+  const store = useUserStore();
+  const gameStore = useGameStore();
   const vr = new VueRequest(store.token);
   const props: any = defineProps(['gameData']);
   const displayModal = ref(0);
@@ -115,7 +117,10 @@
     } else {
       vr.Patch(`${store.userInfo.admin_org_id}/game/${props.gameData.game_id}`, temp, null, true, true).then( (res: any) => {
         if (res.status == 'A01') {
-          close();
+          (async () => {
+            await gameStore.fetch(store.userInfo.admin_org_id, props.gameData.game_id);
+            location.reload();
+          })()
           return;
         } else {
           alert('無法儲存');

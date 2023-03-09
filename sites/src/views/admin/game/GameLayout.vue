@@ -2,6 +2,17 @@
 import GameNav from '@/components/admin/console/GameNav.vue';
 import AccountBtn from '@/components/admin/console/AccountBtn.vue';
 import LogoSection from '@/components/admin/console/LogoSection.vue';
+import { useGameStore } from '@/stores/game';
+import { useUserStore } from '@/stores/user';
+import { useRoute } from 'vue-router';
+
+const store = useUserStore();
+const gameStore = useGameStore();
+const route = useRoute();
+const gameId = route.params.gameId;
+if (gameStore.data == null) {
+  gameStore.data = JSON.parse(String(localStorage.getItem('gameData')));
+}
 </script>
 
 <template>

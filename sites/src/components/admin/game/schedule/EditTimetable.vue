@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
-  import type { Ref } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import { useRoute } from 'vue-router';

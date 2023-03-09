@@ -215,6 +215,7 @@ Route::group([
             Route::get('/by/count/{unit}', [$ControllerClass, 'indexByCount']);
             Route::get('/by/count', [$ControllerClass, 'indexByCountFull']);
             Route::patch('/update/heat-lane', [$ControllerClass, 'updateHeatLane']);
+            Route::patch('/update/result', [$ControllerClass, 'updateResult']);
         });
         Route::apiResource('group', GameGroupController::class);
         Route::group([
@@ -228,6 +229,7 @@ Route::group([
             Route::get('/by/count/{unit}', [$ControllerClass, 'indexByCount']);
             Route::get('/by/count', [$ControllerClass, 'indexByCountFull']);
             Route::patch('/update/heat-lane', [$ControllerClass, 'updateHeatLane']);
+            Route::patch('/update/result', [$ControllerClass, 'updateResult']);
         });
         Route::apiResource('temp', GameTempController::class);
         Route::get('athlete/list', [GameAthleteController::class, 'index']);
@@ -238,7 +240,7 @@ Route::group([
             Route::get('', [$ControllerClass, 'getters']);
             Route::get('/full', [$ControllerClass, 'gettersFull']);
             Route::post('', [$ControllerClass, 'setters']);
-            Route::post('/update', [$ControllerClass, 'patcher']);
+            Route::post('/update/{id}', [$ControllerClass, 'patcher']);
         });
     });
 });

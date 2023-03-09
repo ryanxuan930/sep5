@@ -14,8 +14,8 @@ const navList = ref([
   {title: '報名系統', link: `/admin/game/${sportCode}/${gameId}/registration`, permission: 0},
   {title: '賽程編排', link: `/admin/game/${sportCode}/${gameId}/schedule`, permission: 0},
   {title: '競賽管理', link: `/admin/game/${sportCode}/${gameId}/management`, permission: 0},
-  {title: '成績處理', link: `/admin/game/${sportCode}/${gameId}/management`, permission: 0},
-  {title: '獎狀處理', link: `/admin/game/${sportCode}/${gameId}/management`, permission: 0},
+  {title: '成績處理', link: `/admin/game/${sportCode}/${gameId}/results`, permission: 0},
+  {title: '獎狀處理', link: `/admin/game/${sportCode}/${gameId}/awards`, permission: 0},
 ]);
 </script>
 

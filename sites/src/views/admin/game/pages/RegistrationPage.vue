@@ -2,6 +2,7 @@
   import { ref } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
+  import { useGameStore } from '@/stores/game';
   import { useRoute } from 'vue-router';
   import FullModal from '@/components/FullModal.vue';
   import RegistrationConfig from '@/components/admin/game/registration/RegistrationConfig.vue';
@@ -14,25 +15,21 @@
   import DownloadData from '@/components/admin/game/registration/DownloadData.vue';
 
   const store = useUserStore();
+  const gameStore = useGameStore();
   const vr = new VueRequest(store.token);
   const displayModal = ref(0);
-  const gameData: any = ref(null);
+  const gameData: any = ref(gameStore.data);
   const route = useRoute();
   const sportCode = route.params.sportCode;
   const gameId = route.params.gameId;
-
-  async function getGameData() {
-    vr.Get(`${store.userInfo.org_id}/game/${gameId}`, gameData, true, true);
-  };
-  getGameData();
 
 </script>
 
 <template>
   <div>
-    <div class="section-box grid grid-cols-1 md:grid-cols-4 gap-x-3 gap-y-4">
-      <div class="col-span-4 text-2xl">報名系統</div>
-      <hr class="col-span-4">
+    <div class="section-box grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-4">
+      <div class="md:col-span-2 lg:col-span-4 text-2xl">報名系統</div>
+      <hr class="md:col-span-2 lg:col-span-4">
       <button class="round-full-button blue" @click="displayModal = 1">報名系統設定</button>
       <button class="round-full-button blue" @click="displayModal = 2">依項目別統計</button>
       <button class="round-full-button blue" @click="displayModal = 3">個人報名資訊</button>
