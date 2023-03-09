@@ -32,6 +32,10 @@ class ParamsController extends Controller
     {
         return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->select($sportCode.'_'.$gameId.'_divisions.*', 'events.*')->get());
     }
+    public function gettersByEvent($sportCode, $gameId, $divisionId, $eventCode)
+    {
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_divisions.*', 'events.*')->where('division_id', $divisionId)->where('event_code', $eventCode)->get());
+    }
     /**
      * Set a series of resource in storage.
      *
