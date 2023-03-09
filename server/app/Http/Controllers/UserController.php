@@ -202,7 +202,7 @@ class UserController extends Controller
         }
         return response()->json($query->get());
     }
-    public function getUserFromList()
+    public function getUserFromList(Request $request)
     {
         $validator = Validator::make($request->all(),[
             'data' => 'required',
