@@ -53,7 +53,6 @@ async function exportData(input: any) {
   for (let i = 0; i < maxHeat; i++) {
     data.push([`${input.division_ch}_${input.event_ch}_${lanePhaseToString(input.round, 'zh-TW')}`, i + 1, input.round, input.schedule_id, '']);
     for (let j = 0; j < res.length; j++) {
-      console.log(res[j][`r${[input.round]}_heat`], i+1);
       if (res[j][`r${[input.round]}_heat`] == i + 1) {
         data.push([res[j].u_id, res[j][`r${[input.round]}_lane`], res[j].first_name_ch, res[j].last_name_ch, res[j].org_name_ch]);
       }
@@ -62,6 +61,7 @@ async function exportData(input: any) {
       data.push(['#', '', '', '', '']);
     }
   }
+  console.log(data);
   exportCsv(data, `${input.division_ch}_${input.event_ch}_${lanePhaseToString(input.round, 'zh-TW')}`, null);
 }
 </script>
