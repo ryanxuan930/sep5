@@ -47,9 +47,9 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
         <div class="text-base text-blue-500">{{ params.division_en }} {{ params.event_en }} [{{ lanePhaseToString(Number($route.params.round), 'en-US') }}]</div>
       </div>
       <div class="flex-grow"></div>
-      <div>
+      <div class="text-right">
         <div>總人數 Total：{{ dataList.length }}</div>
-        <div>Q：{{ params[`r${$route.params.round}_aq`] }} q：{{ params[`r${$route.params.round}_sq`] }}</div>
+        <div>Q：{{ params[`r${$route.params.round}_aq`] }} / q：{{ params[`r${$route.params.round}_sq`] }}</div>
       </div>
     </div>
     <LaneLayout v-if="params.remarks == 'ts' || params.remarks == 'tr' || params.remarks == 'rr'" :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple"></LaneLayout>
