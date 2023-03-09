@@ -235,6 +235,7 @@ Route::group([
         });
         Route::apiResource('temp', GameTempController::class);
         Route::get('athlete/list', [GameAthleteController::class, 'index']);
+        Route::get('athlete/find/{uid}', [GameAthleteController::class, 'find']);
         Route::group([
             'prefix' => 'schedule'
         ], function () {
