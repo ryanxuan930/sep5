@@ -21,13 +21,8 @@ const laneList: any = ref([]);
 const params: any = ref({});
 (async () => {
   isLoading.value = true;
-  const paramList = await vr.Get(`game/${gameData.value.sport_code}/${gameId}/main/params/full`);
+  await vr.Get(`game/${gameData.value.sport_code}/${gameId}/main/params/${divisionId}/${eventCode}`, params);
   await vr.Get(`game/${gameData.value.sport_code}/${gameId}/main/lane`, laneList);
-  paramList.forEach((element: any) => {
-    if (element.division_id == divisionId && element.event_code == eventCode) {
-      params.value = element;
-    }
-  });
   if (params.value.multiple == 0){
     await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/individual/by/event/${divisionId}/${eventCode}`, dataList);
   } else {
@@ -46,6 +41,17 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
 
 <template>
   <div v-if="isLoading == false">
+    <div class="p-2 flex gap-2 mb-3 items-stretch">
+      <div>
+        <div class="text-xl text-blue-500">{{ params.division_ch }} {{ params.event_ch }} [{{ lanePhaseToString(Number($route.params.round), 'zh-TW') }}]</div>
+        <div class="text-base text-blue-500">{{ params.division_en }} {{ params.event_en }} [{{ lanePhaseToString(Number($route.params.round), 'en-US') }}]</div>
+      </div>
+      <div class="flex-grow"></div>
+      <div>
+        <div>總人數 Total：{{ dataList.length }}</div>
+        <div>Q：{{ params[`r${$route.params.round}_aq`] }} q：{{ params[`r${$route.params.round}_sq`] }}</div>
+      </div>
+    </div>
     <LaneLayout v-if="params.remarks == 'ts' || params.remarks == 'tr' || params.remarks == 'rr'" :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple"></LaneLayout>
     <OrderLayout v-else :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple"></OrderLayout>
   </div>
