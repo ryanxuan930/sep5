@@ -26,11 +26,11 @@ class ScheduleController extends Controller
      */
     public function getters($sportCode, $gameId)
     {
-        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->get());
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->orderBy('schedule_id', 'asc')->get());
     }
     public function gettersFull($sportCode, $gameId)
     {
-        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_divisions.*', 'events.*')->get());
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_divisions.*', 'events.*')->orderBy('schedule_id', 'asc')->get());
     }
     /**
      * Set a series of resource in storage.
