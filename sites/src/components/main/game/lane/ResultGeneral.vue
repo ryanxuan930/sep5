@@ -8,7 +8,7 @@
   function getData() {
     dataList.value = [];
     dataList.value = props.inputData;
-    dataList.value.sort((a: any, b: any) => a[`r${[props.phaseNum]}_heat`] - b[`r${[props.phaseNum]}_heat`] || a[`r${[props.phaseNum]}_lane`] - b[`r${[props.phaseNum]}_lane`]);
+    dataList.value.sort((a: any, b: any) => a[`r${[props.phaseNum]}_heat`] - b[`r${[props.phaseNum]}_heat`] | a[`r${[props.phaseNum]}_lane`] - b[`r${[props.phaseNum]}_lane`]);
     if (dataList.value.length == 0) {
       noData.value = true;
     } else {
