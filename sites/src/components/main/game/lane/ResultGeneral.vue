@@ -55,8 +55,10 @@
         </th>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
-        <tr>
-          <td>{{ item[`r${[props.phaseNum]}_ranking`] }}</td>
+        <tr v-if="item[`r${[props.phaseNum]}_heat`] > 0 && item[`r${[props.phaseNum]}_lane`] > 0">
+          <td>
+            <div v-if="item[`r${[props.phaseNum]}_ranking`] > 0">{{ item[`r${[props.phaseNum]}_ranking`] }}</div>
+          </td>
           <td>
             <div>{{ item.org_name_full_ch }}</div>
             <div class="text-sm">{{ item.org_name_en }}</div>
