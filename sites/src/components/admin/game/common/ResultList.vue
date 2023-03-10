@@ -47,7 +47,6 @@ async function submitAll() {
   let res: any = null;
   const dataset: any = [];
   const timeEvents = ['ts', 'tr', 'tn', 'rr'];
-  const distanceEvents = ['fj', 'ft'];
   const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
   // result to temp (milliseconds or centimeters)
   for (let i = 0; i < dataList.value.length; i++){

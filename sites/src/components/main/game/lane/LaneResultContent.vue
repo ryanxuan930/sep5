@@ -4,8 +4,8 @@ import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n'
 import { lanePhaseToString } from '@/components/library/functions';
-import LaneLayout from '@/components/main/game/lane/LaneLayout.vue';
-import OrderLayout from '@/components/main/game/lane/OrderLayout.vue';
+import ResultGeneral from '@/components/main/game/lane/ResultGeneral.vue';
+import ResultHeat from '@/components/main/game/lane/ResultHeat.vue';
 
 const route = useRoute();
 const vr = new VueRequest();
@@ -50,8 +50,8 @@ const { t, locale } = useI18n({
         <div>Q：{{ params[`r${$route.params.round}_aq`] }} / q：{{ params[`r${$route.params.round}_sq`] }}</div>
       </div>
     </div>
-    <LaneLayout v-if="params.remarks == 'ts' || params.remarks == 'tr' || params.remarks == 'rr'" :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></LaneLayout>
-    <OrderLayout v-else :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></OrderLayout>
+    <ResultGeneral v-if="$route.params.displayType == 'general'" :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></ResultGeneral>
+    <ResultHeat v-else-if="$route.params.displayType == 'heat'" :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></ResultHeat>
   </div>
 </template>
 

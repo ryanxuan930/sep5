@@ -1,29 +1,56 @@
 <script setup lang="ts">
-  import { ref, watch } from 'vue';
+  import { stringToMilliseconds } from '@/components/library/functions';
+import { ref } from 'vue';
   
   const props = defineProps(['inputData', 'phaseNum']);
   const dataList: any = ref([]);
-  const temp1: any = [];
-  const temp2: any = [];
+  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
   props.inputData.forEach((element: any) => {
     element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
-    if (element[`r${[props.phaseNum]}_ranking`] > 0) {
-      temp1.push(element);
+    if (!notAcceptResult.includes(element[`r${props.inputData.round}_result`])) {
+      element.temp = stringToMilliseconds(element[`r${props.inputData.round}_result`]);
     } else {
-      temp2.push(element);
+     element.temp = 0;
     }
+    dataList.value.push(element);
   });
-  temp1.sort((a: any, b: any) => a[`r${[props.phaseNum]}_ranking`]- b[`r${[props.phaseNum]}_ranking`]);
-  dataList.value = temp1.concat(temp2);
+  /*
+  let temp = 0;
+  let tempResult = -1;
+  let place = 1;
+  for(let i = 0; i < dataList.value.length; i++) {
+    if (temp != dataList.value[i][`r${[props.phaseNum]}_heat`]) {
+      temp = dataList.value[i][`r${[props.phaseNum]}_heat`];
+      place = 1;
+    }
+    if (tempResult == dataList.value[i].temp) {
+      dataList.value[i].pih = dataList.value[i-1].pih;
+    } else {
+      dataList.value[i].pih = place;
+      place++;
+    }
+    tempResult = dataList.value[i].temp;
+  }*/
+  dataList.value.sort((a: any, b: any) => a[`r${[props.phaseNum]}_heat`]- b[`r${[props.phaseNum]}_heat`] || a.temp - b.temp);
 </script>
 
 <template>
   <div>
     <table>
       <tr>
+        <!--
         <th>
-          <div>名次</div>
-          <div class="text-sm">Place</div>
+          <div>分組排名</div>
+          <div class="text-xs">Pla. in heat</div>
+        </th>
+        -->
+        <th>
+          <div>組別</div>
+          <div class="text-sm">Heat</div>
+        </th>
+        <th>
+          <div>道次</div>
+          <div class="text-sm">Lane</div>
         </th>
         <th>
           <div>組織單位</div>
@@ -38,14 +65,6 @@
           <div class="text-sm">Name</div>
         </th>
         <th>
-          <div>組別</div>
-          <div class="text-sm">Heat</div>
-        </th>
-        <th>
-          <div>道次</div>
-          <div class="text-sm">Lane</div>
-        </th>
-        <th>
           <div>成績</div>
           <div class="text-sm">Result</div>
         </th>
@@ -56,7 +75,11 @@
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
         <tr>
-          <td>{{ item[`r${[props.phaseNum]}_ranking`] }}</td>
+          <!--
+          <td>{{ item.pih }}</td>
+          -->
+          <td>{{ item[`r${[props.phaseNum]}_heat`] }}</td>
+          <td>{{ item[`r${[props.phaseNum]}_lane`] }}</td>
           <td>
             <div>{{ item.org_name_full_ch }}</div>
             <div class="text-sm">{{ item.org_name_en }}</div>
@@ -66,8 +89,6 @@
             <div class="text-sm">{{ item.dept_name_en }}</div>
           </td>
           <td>{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
-          <td>{{ item[`r${[props.phaseNum]}_heat`] }}</td>
-          <td>{{ item[`r${[props.phaseNum]}_lane`] }}</td>
           <td>{{ item[`r${[props.phaseNum]}_result`] }}</td>
           <td>
             <div v-if="item[`r${[props.phaseNum]}_options`].qualified != undefined">{{ item[`r${[props.phaseNum]}_options`].qualified }}</div>
@@ -89,8 +110,9 @@ table {
   th {
     @apply bg-blue-100;
   }
+  /*
   td:first-child {
     @apply bg-blue-50;
-  }
+  }*/
 }
 </style>
