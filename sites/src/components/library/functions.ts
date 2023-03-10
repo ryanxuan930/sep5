@@ -1,3 +1,5 @@
+import console from "console";
+
 export function getUrlParams(url: string, params:string|string[]) {
   try {
     var urlParams = new URL(url).searchParams;
@@ -36,6 +38,17 @@ export function csvToArray(str: string, delimiter = ',') {
     }, {});
     return el;
   });
+  return arr;
+}
+
+// convert csv to array of arrays
+export function csvToArrayTable(str: string, delimiter = ',', skipColumns = 0) {
+  const rows = str.slice(str.indexOf('\r\n') + 1).split(/\r\n|\n|\r/);
+  const arr = rows.map((row) => {
+    const values = row.split(delimiter);
+    return values;
+  });
+  arr.splice(0, skipColumns);
   return arr;
 }
 
@@ -99,5 +112,38 @@ export function lanePhaseToString(phase: number, locale: string) {
     return ch[phase];
   } else {
     return en[phase];
+  }
+}
+
+export function getTargetPhase(currentPhase: number, params: any) {
+  switch(currentPhase) {
+    case 1:
+      return 0;
+    case 2:
+      if (params.r1 == 0) {
+        return 0;
+      } else {
+        return 1;
+      }
+    case 3:
+      if (params.r1 == 0 && params.r2 == 0) {
+        return 0
+      } else if (params.r1 == 1 && params.r2 == 0) {
+        return 1
+      } else if (params.r1 == 1 && params.r2 == 1) {
+        return 2
+      }
+    case 4:
+      if (params.r1 == 0 && params.r2 == 0 && params.r3 == 0) {
+        return 0
+      } else if (params.r1 == 1 && params.r2 == 0 && params.r3 == 0) {
+        return 1
+      } else if (params.r1 == 1 && params.r2 == 1 && params.r3 == 0) {
+        return 2
+      } else if (params.r1 == 1 && params.r2 == 1 && params.r3 == 1) {
+        return 3
+      }
+    default:
+      return 0;
   }
 }

@@ -1,10 +1,15 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
+  import { getTargetPhase } from '@/components/library/functions';
   
-  const props = defineProps(['inputData', 'phaseNum', 'trackData', 'isMultiple']);
+  const props = defineProps(['inputData', 'phaseNum', 'trackData', 'isMultiple', 'paramData']);
+  const phaseList = ['ref', 'r1', 'r2', 'r3', 'r4'];
   const dataList: any = ref([]);
   const noData = ref(false);
   const displayData: any = ref([]);
+  const targetPhase = getTargetPhase(props.phaseNum, props.paramData);
+  console.log(phaseList[targetPhase]);
+
   function getData() {
     dataList.value = [];
     dataList.value = props.inputData;
@@ -43,7 +48,6 @@
   }
   getData();
   watch(props.phaseNum, () => {
-    console.log(1);
     displayData.value = [];
     getData();
   });
@@ -63,11 +67,13 @@
                 <div>{{ lane.last_name_ch }}{{ lane.first_name_ch }}</div>
                 <div class="text-sm">{{ lane.org_name_ch }}</div>
                 <div class="text-xs w-16 m-auto">{{ lane.dept_name_ch }} <span v-if="lane.num_in_dept > 0">{{ lane.num_in_dept.toString().padStart(2, '0') }}</span></div>
+                <div class="text-sm">({{ lane[`${phaseList[targetPhase]}_result`] }})</div>
               </td>
               <td v-else>
                 <div>{{ lane.team_name }}</div>
                 <div class="text-sm">{{ lane.org_name_ch }}</div>
                 <div class="text-xs w-16 m-auto">{{ lane.dept_name_ch }}</div>
+                <div class="text-sm">({{ lane[`${phaseList[targetPhase]}_result`] }})</div>
               </td>
             </template>
             <td v-else></td>

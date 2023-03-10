@@ -22,7 +22,12 @@ const isLoading = ref(false);
   } else {
     await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/event/${props.inputData.division_id}/${props.inputData.event_code}`, dataList);
   }
-  dataList.value.sort((a: any, b: any) => a[`r${[props.inputData.round]}_heat`] - b[`r${[props.inputData.round]}_heat`] || a[`r${[props.inputData.round]}_lane`] - b[`r${[props.inputData.round]}_lane`]);
+  if (gameData.value.module == 'ln') {
+    dataList.value.sort((a: any, b: any) => a[`r${[props.inputData.round]}_heat`] - b[`r${[props.inputData.round]}_heat`] || a[`r${[props.inputData.round]}_lane`] - b[`r${[props.inputData.round]}_lane`]);
+    for (let i = 0; i < dataList.value.length; i++) {
+      dataList.value[i][`r${[props.inputData.round]}_options`] = JSON.parse(dataList.value[i][`r${[props.inputData.round]}_options`]);
+    }
+  }
   isLoading.value = false;
 })();
 async function submitAll() {
@@ -37,7 +42,7 @@ async function submitAll() {
         phase: `r${props.inputData.round}`,
         result: item[`r${props.inputData.round}_result`],
         ranking: 0,
-        options: {},
+        options: JSON.stringify({}),
       });
     });
     res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/update/result`, dataset, null, true, true);
@@ -50,7 +55,7 @@ async function submitAll() {
         phase: `r${props.inputData.round}`,
         result: item[`r${props.inputData.round}_result`],
         ranking: 0,
-        options: {},
+        options: JSON.stringify({}),
       });
     });
     res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/group/update/result`, dataset, null, true, true);
@@ -105,6 +110,11 @@ function setLegs(input: any) {
         </template>
         <th v-if="props.displayMode == 'call'">檢錄</th>
         <th v-if="gameData.module == 'ln' && props.inputData.multiple == 1 && props.displayMode == 'call'">棒次</th>
+        <template v-if="(gameData.module == 'ln' || gameData.module == 'rd') && props.displayMode == 'view'">
+          <th>成績</th>
+          <th>排名</th>
+          <th>備註</th>
+        </template>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
         <tr>
@@ -132,10 +142,19 @@ function setLegs(input: any) {
           <td v-if="gameData.module == 'ln' && props.inputData.multiple == 1 && props.displayMode == 'call'">
             <button class="general-button blue" @click="setLegs(item)">設定</button>
           </td>
+          <template v-if="(gameData.module == 'ln' || gameData.module == 'rd') && props.displayMode == 'view'">
+            <td>{{ item[`r${props.inputData.round}_result`] }}</td>
+            <td>{{ item[`r${props.inputData.round}_ranking`] }}</td>
+            <td v-if="gameData.module == 'ln'">
+              <div v-if="item[`r${props.inputData.round}_options`].qualified != undefined">{{ item[`r${props.inputData.round}_options`].qualified }}</div>
+              <div v-if="item[`r${props.inputData.round}_options`].windspeed != undefined">WS: {{ item[`r${props.inputData.round}_options`].windspeed }}</div>
+              <div v-if="item[`r${props.inputData.round}_options`].rt != undefined">RT: {{ item[`r${props.inputData.round}_options`].rt }}</div>
+            </td>
+          </template>
         </tr>
       </template>
     </table>
-    <div class="py-3 flex flex-col gap-3">
+    <div class="py-3 flex flex-col gap-3" v-if="props.displayMode == 'call'">
       <button class="round-full-button blue" @click="submitAll">儲存</button>
       <button class="round-full-button blue" @click="sendNext">送出</button>
     </div>

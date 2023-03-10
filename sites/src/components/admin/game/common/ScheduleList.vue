@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router';
 import SmallLoader from '@/components/SmallLoader.vue';
 import FullModal from '@/components/FullModal.vue';
 import AthleteList from '@/components/admin/game/common/AthleteList.vue';
+import ResultList from '@/components/admin/game/common/ResultList.vue';
 import { exportCsv, lanePhaseToString } from '@/components/library/functions';
 
 const store = useUserStore();
@@ -54,7 +55,11 @@ async function exportData(input: any) {
     data.push([`${input.division_ch}_${input.event_ch}_${lanePhaseToString(input.round, 'zh-TW')}`, i + 1, input.round, input.schedule_id, '']);
     for (let j = 0; j < res.length; j++) {
       if (res[j][`r${[input.round]}_heat`] == i + 1) {
-        data.push([res[j].u_id, res[j][`r${[input.round]}_lane`], res[j].first_name_ch, res[j].last_name_ch, res[j].org_name_ch]);
+        if (input.multiple == 0) {
+          data.push([res[j].u_id, res[j][`r${[input.round]}_lane`], res[j].first_name_ch, res[j].last_name_ch, res[j].org_name_ch]);
+        } else {
+          data.push([res[j].team_id, res[j][`r${[input.round]}_lane`], res[j].team_name, '', res[j].org_name_ch]);
+        }
       }
     }
     if (i < maxHeat - 1) {
@@ -62,6 +67,18 @@ async function exportData(input: any) {
     }
   }
   exportCsv(data, `${input.division_ch}_${input.event_ch}_${lanePhaseToString(input.round, 'zh-TW')}`, null);
+}
+async function sendResult(id: number) {
+  if (!confirm('確定送出成績? 送出後即無法修改')) {
+    return;
+  }
+  const r: any = await vr.Post(`game/${route.params.sportCode}/${route.params.gameId}/common/schedule/update/${id}`, {status: 4}, null, true, true);
+  if (r.status == 'A01') {
+    alert('已送出');
+    getData();
+  } else {
+    alert('操作失敗');
+  }
 }
 </script>
 
@@ -83,8 +100,9 @@ async function exportData(input: any) {
             <div class="flex gap-2 items-center flex-wrap" v-if="item.division_id != null && item.event_ch != null">
               <button class="general-button blue" @click="openEvent(item, 1)">查看</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status < 2 && (props.displayMode == 'management' || props.displayMode == 'call')" class="general-button blue" @click="openEvent(item, 2)">檢錄</button>
-              <button v-if="gameData.module == 'ln' && (props.displayMode == 'management' || props.displayMode == 'call')" class="general-button blue" @click="exportData(item)">電計下載</button>
+              <button v-if="gameData.module == 'ln'" class="general-button blue" @click="exportData(item)">電計下載</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 1 && item.status < 4 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="openEvent(item, 3)">成績</button>
+              <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status == 3 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="sendResult(item.schedule_id)">送出</button>
             </div>
           </td>
         </tr>
@@ -104,6 +122,7 @@ async function exportData(input: any) {
       <div class="overflow-auto h-full">
         <AthleteList v-if="displayModal == 1" :input-data="selectedEvent" display-mode="view"></AthleteList>
         <AthleteList v-if="displayModal == 2" :input-data="selectedEvent" display-mode="call" @close-modal="displayModal = 0" @refresh-page="getData()"></AthleteList>
+        <ResultList v-if="displayModal == 3" :input-data="selectedEvent" display-mode="input" @close-modal="displayModal = 0" @refresh-page="getData()"></ResultList>
       </div>
     </template>
   </FullModal>

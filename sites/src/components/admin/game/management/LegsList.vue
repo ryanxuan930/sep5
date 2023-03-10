@@ -45,11 +45,14 @@ async function searchName() {
 }
 const emit = defineEmits<{(e: 'returnData', value: string): void, (e: 'closeModal'): void}>();
 async function submitAll() {
+  for(let i = 0; i < idList.value.length; i++) {
+    idList.value[i] = Number(idList.value[i]);
+  }
   const data = JSON.stringify(idList.value);
   const res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/group/update/team/${props.inputData.team_id}`, {member_list: data}, null, true, true);
   if (res.status == 'A01') {
     alert('已儲存');
-    emit('returnData', JSON.stringify(idList.value));
+    emit('returnData', data);
     emit('closeModal');
   } else {
     alert('儲存失敗');

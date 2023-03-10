@@ -174,13 +174,14 @@
     } else {
       for (let i = 0; i < data.length; i++) {
         const temp = JSON.parse(data[i][`${targetPhasePrefix}_options`]);
-        if (temp.aq || temp.sq) {
-          participants.push(data[i]);
+        if (temp.qualified == 'Q' || temp.qualified == 'q') {
+          participants.push(JSON.parse(JSON.stringify(data[i])));
         }
       }
     }
+    participants.sort((a: any, b: any) => b.temp - a.temp);
     if (currentParamsFull.remarks == 'ts' || currentParamsFull.remarks == 'tr' || currentParamsFull.remarks == 'rr') {
-      participants.sort((a: any, b: any) => a.temp - b.temp);
+      
       const heat = Math.ceil(participants.length / trackArray.length);
       const heatArray = new Array(heat).fill(0);
       let pointer = 0;
@@ -198,13 +199,14 @@
       pointer = 0;
       for(let i = 0; i < heat; i++){
         for(let j = 0; j < heatArray[i]; j++){
+          const tracks = trackArray.slice(0, heatArray[i]);
+          tracks.reverse();
           participants[pointer][`${currentPhasePrefix}_heat`] = i + 1;
-          participants[pointer][`${currentPhasePrefix}_lane`] = trackArray[j];
+          participants[pointer][`${currentPhasePrefix}_lane`] = tracks[j];
           pointer++;
         }
       }
     } else {
-      participants.sort((a: any, b: any) => b.temp - a.temp);
       const heat = groupNum.value;
       const heatArray = new Array(heat).fill(0);
       let pointer = 0;
