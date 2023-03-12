@@ -11,7 +11,6 @@ export function getUrlParams(url: string, params:string|string[]) {
     params.forEach(param => { data.push(urlParams.get(param)) });
     return data;
   } else {
-    console.log(url, urlParams.get(params))
     return urlParams.get(params);
   }
 }
