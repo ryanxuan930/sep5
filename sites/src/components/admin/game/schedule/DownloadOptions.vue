@@ -42,10 +42,12 @@ async function downloadSchedule() {
 
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+    <button class="round-full-button blue" @click="downloadSchedule">賽程表下載</button>
+    <!--
     <button class="round-full-button blue">組別道次下載</button>
     <button class="round-full-button blue">號碼布下載</button>
-    <button class="round-full-button blue" @click="downloadSchedule">賽程表下載</button>
     <button class="round-full-button blue">大會紀錄下載</button>
+    -->
   </div>
 </template>
 
