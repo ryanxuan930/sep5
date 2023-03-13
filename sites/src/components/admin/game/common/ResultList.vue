@@ -236,7 +236,7 @@ function importHandler(input: any) {
         <th>WS (m/s)</th>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
-        <tr>
+        <tr v-if="item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0">
           <td>{{ item.org_name_full_ch }}</td>
           <td>{{ item.dept_name_ch }}</td>
           <td v-if="props.inputData.multiple == 0">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>

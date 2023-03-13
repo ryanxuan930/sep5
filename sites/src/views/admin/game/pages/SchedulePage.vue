@@ -7,6 +7,7 @@
   import EditQualify from '@/components/admin/game/schedule/EditQualify.vue';
   import EditArrange from '@/components/admin/game/schedule/EditArrange.vue';
   import EditTimetable from '@/components/admin/game/schedule/EditTimetable.vue';
+  import DownloadOptions from '@/components/admin/game/schedule/DownloadOptions.vue';
 
   const store = useUserStore();
   const gameStore = useGameStore();
@@ -23,12 +24,13 @@
       <button class="round-full-button blue" @click="displayModal = 1">賽別賽制設定</button>
       <button v-if="gameData.module == 'ln' || gameData.module == 'rd'" class="round-full-button blue" @click="displayModal = 2">名次取數設定</button>
       <button v-if="gameData.module == 'ln'" class="round-full-button blue" @click="displayModal = 3">組別道次管理</button>
+      <button v-if="gameData.module == 'ln' || gameData.module == 'rd'" class="round-full-button blue" @click="displayModal = 6">號碼布管理</button>
     </div>
     <div class="section-box grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-4">
       <div class="md:col-span-2 lg:col-span-4 text-2xl">賽程管理</div>
       <hr class="md:col-span-2 lg:col-span-4">
       <button class="round-full-button blue" @click="displayModal = 4">賽程編排</button>
-      <button class="round-full-button blue">秩序冊資料</button>
+      <button class="round-full-button blue" @click="displayModal = 5">秩序冊資料</button>
     </div>
   </div>
   <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
@@ -38,6 +40,8 @@
         <div v-if="displayModal == 2">名次取數設定</div>
         <div v-if="displayModal == 3">組別道次管理</div>
         <div v-if="displayModal == 4">賽程編排</div>
+        <div v-if="displayModal == 5">秩序冊資料</div>
+        <div v-if="displayModal == 6">號碼布管理</div>
       </div>
     </template>
     <template v-slot:content>
@@ -46,6 +50,7 @@
         <EditQualify v-if="displayModal == 2"></EditQualify>
         <EditArrange v-if="displayModal == 3"></EditArrange>
         <EditTimetable v-if="displayModal == 4"></EditTimetable>
+        <DownloadOptions v-if="displayModal == 5"></DownloadOptions>
       </div>
     </template>
   </FullModal>

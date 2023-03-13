@@ -116,8 +116,8 @@ function setLegs(input: any) {
     <div class="flex gap-2 pb-3 items-center">
       <div>報表列印：</div>
       <button class="general-button blue">成績記錄表</button>
-      <button class="general-button blue">成績總表</button>
-      <button class="general-button blue">分組成績</button>
+      <button v-if="props.displayMode == 'view'" class="general-button blue">成績總表</button>
+      <button v-if="props.displayMode == 'view'" class="general-button blue">分組成績</button>
     </div>
     <table>
       <tr>

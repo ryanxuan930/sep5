@@ -1,46 +1,51 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import VueRequest from '@/vue-request';
+import type { Ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useRoute } from 'vue-router';
 import { lanePhaseToString } from '@/components/library/functions';
 
 const store = useUserStore();
-const vr = new VueRequest(store.token);
 const route = useRoute();
-const sportCode = route.params.sportCode;
-const gameId = route.params.gameId;
 
-const props = defineProps(['inputData']);
-const dataList: any = ref([]);
+const props = defineProps(['inputData', 'phaseNum']);
+const dataList: Ref<number[]> = ref([]);
+const phase: any = ref(props.phaseNum);
 
-const emit = defineEmits<{(e: 'returnData', index: number[]): void, (e: 'closeModal'): void}>();
-const close = () => {
-  emit('returnData', dataList.value);
-  emit('closeModal');
-}
+const emit = defineEmits<{(e: 'returnData', index: number[]): void, (e: 'returnPhase', index: number): void, (e: 'closeModal'): void}>();
 
 async function submitAll() {
+  console.log(dataList.value);
+  emit('returnData', dataList.value);
+  emit('returnPhase', phase.value);
+  emit('closeModal');
 }
 
 </script>
 
 <template>
   <div>
+    <div class="py-2 flex gap-2 items-center">
+      <div >賽別：</div>
+      <select class="border-2 rounded block flex-grow px-1 py-0.5" v-model="phase">
+        <option value="1">第一輪</option>
+        <option value="2">預賽</option>
+        <option value="3">準決賽</option>
+        <option value="4">決賽</option>
+      </select>
+    </div>
     <table>
       <tr>
-        <th></th>
+        <th>選取</th>
         <th>組別</th>
         <th>項目</th>
-        <th>階段</th>
       </tr>
       <template v-for="(item, index) in props.inputData">
         <tr>
           <td>
-            <input type="checkbox" :value="index">
+            <input type="checkbox" :value="index" v-model="dataList">
           </td>
           <td>{{ item.division_ch }}</td>
-          <td>{{ item.event_ch }}</td>
           <td>{{ item.event_ch }}</td>
         </tr>
       </template>
@@ -62,8 +67,8 @@ table {
       @apply bg-blue-100;
     }
   }
-  input {
-    @apply p-1 border-2 rounded w-16;
+  input[type=checkbox] {
+    @apply p-1 border-2 rounded w-6 h-6;
   }
 }
 </style>

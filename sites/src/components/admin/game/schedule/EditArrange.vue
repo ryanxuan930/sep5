@@ -10,6 +10,7 @@
   import OrderLayout from '@/components/admin/game/schedule/arrange/display/OrderLayout.vue';
   import SmallModal from '@/components/SmallModal.vue';
   import EditLane from '@/components/admin/game/schedule/arrange/EditLane.vue';
+  import EditEvent from '@/components/admin/game/schedule/arrange/EditEvent.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
@@ -286,6 +287,17 @@
   watch(selectedTab, (val) => {
     refreshData();
   });
+
+  async function multiArrange(input: number[]) {
+    for (let i = 0; i < input.length; i++) {
+      const index = input[i];
+      if(paramsList.value[index].multiple == 1){
+        await vr.Get(`game/${sportCode}/${gameId}/common/group/by/event/${paramsList.value[index].division_id}/${paramsList.value[index].event_code}`, dataList, true, true);
+      } else {
+        await vr.Get(`game/${sportCode}/${gameId}/common/individual/by/event/${paramsList.value[index].division_id}/${paramsList.value[index].event_code}`, dataList, true, true);
+      }
+    }
+  }
 </script>
 
 <template>
@@ -305,7 +317,7 @@
         <div class="flex gap-3 items-center">
           <button class="general-button blue" @click="autoArrange()">自動編排</button>
           <button class="general-button blue" @click="displayModal = 1">編輯</button>
-          <button class="general-button blue">聯合編排</button>
+          <button class="general-button blue" @click="displayModal = 2">聯合編排</button>
           <div>|</div>
           <span class="flex items-center gap-3">
             <div>全隨機排序</div>
@@ -342,6 +354,7 @@
       <template v-slot:content>
         <div class="overflow-auto h-full">
           <EditLane v-if="displayModal == 1" :input-data="dataList" :phase-num="selectedTab" :param-list="paramsList[selectedIndex]" @closeModal="displayModal = 0" @refreshPage="refreshData()"></EditLane>
+          <EditEvent v-if="displayModal == 2" :input-data="paramsList" :phase-num="selectedTab" @returnData="multiArrange" @returnPhase="(input: number) => {selectedTab = input;}" @closeModal="displayModal = 0" @refreshPage="refreshData()"></EditEvent>
         </div>
       </template>
     </SmallModal>

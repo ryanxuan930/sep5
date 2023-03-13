@@ -21,7 +21,7 @@
 <template>
   <div v-if="gameData != null" class="flex flex-col h-full gap-5">
     <div class="section-box flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-4">
-      <div class="col-span-4 text-2xl">選手編配</div>
+      <div class="col-span-4 text-2xl">功能選單</div>
       <hr class="col-span-4">
       <button class="round-full-button blue" @click="displayModal = 1">場次總覽</button>
       <button v-if="gameData.module == 'ln'" class="round-full-button blue">電動計時系統</button>

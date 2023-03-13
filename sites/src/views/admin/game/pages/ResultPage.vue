@@ -21,9 +21,11 @@
 <template>
   <div v-if="gameData != null" class="flex flex-col h-full gap-5">
     <div class="section-box flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-4">
-      <div class="col-span-4 text-2xl">選手編配</div>
+      <div class="col-span-4 text-2xl">功能選單</div>
       <hr class="col-span-4">
       <button class="round-full-button blue" @click="displayModal = 1">場次總覽</button>
+      <button class="round-full-button blue" @click="displayModal = 2">特殊成績處理</button>
+      <button class="round-full-button blue" @click="displayModal = 3">總錦標計算</button>
     </div>
     <div class="section-box flex-grow h-full flex flex-col gap-4 overflow-hidden">
       <div class="col-span-4 text-2xl">賽程列表</div>
@@ -37,6 +39,8 @@
     <template v-slot:title>
       <div class="text-2xl">
         <div v-if="displayModal == 1">場次總覽</div>
+        <div v-if="displayModal == 2">特殊成績處理</div>
+        <div v-if="displayModal == 3">總錦標計算</div>
       </div>
     </template>
     <template v-slot:content>

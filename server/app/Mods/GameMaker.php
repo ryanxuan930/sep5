@@ -197,6 +197,11 @@ class GameMaker {
             $table->integer('finished')->default(0);
             $table->text('options')->nullable();
         });
+        Schema::create($header.'bibs', function (Blueprint $table) {
+            $table->id('bib_id');
+            $table->bigInteger('u_id');
+            $table->string('bib',16)->nullable();
+        });
     }
 
     /*

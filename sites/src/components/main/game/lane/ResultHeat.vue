@@ -6,13 +6,15 @@ import { ref } from 'vue';
   const dataList: any = ref([]);
   const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
   props.inputData.forEach((element: any) => {
-    element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
-    if (!notAcceptResult.includes(element[`r${props.inputData.round}_result`])) {
-      element.temp = stringToMilliseconds(element[`r${props.inputData.round}_result`]);
-    } else {
-     element.temp = 0;
+    if (element[`r${[props.phaseNum]}_heat`] > 0 && element[`r${[props.phaseNum]}_result`] > 0) {
+      element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
+      if (!notAcceptResult.includes(element[`r${props.inputData.round}_result`])) {
+        element.temp = stringToMilliseconds(element[`r${props.inputData.round}_result`]);
+      } else {
+      element.temp = 0;
+      }
+      dataList.value.push(element);
     }
-    dataList.value.push(element);
   });
   /*
   let temp = 0;

@@ -6,6 +6,7 @@ import RegistrationView from '../views/registration/RegistrationView.vue';
 import AdminView from '../views/admin/AdminView.vue';
 import AdminHomeView from '../views/admin/console/ConsoleLayout.vue';
 import AdminGameView from '../views/admin/game/GameLayout.vue';
+import AdminGamePrintView from '../views/admin/game/PrintLayout.vue';
 import RegistrationHomeView from '../views/registration/ConsoleLayout.vue';
 import RegistrationGameView from '../views/registration/GameLayout.vue';
 
@@ -176,6 +177,19 @@ const router = createRouter({
               path: 'results',
               name: 'adminGameResultPage',
               component: () => import('../views/admin/game/pages/ResultPage.vue'),
+            },
+          ]
+        },
+        {
+          path: 'game/:sportCode/:gameId/print',
+          name: 'adminGamePrintLayout',
+          component: AdminGamePrintView,
+          children: [
+            // lane
+            {
+              path: '/lane/:divisionId/:eventCode/:multiple/:round?',
+              name: 'adminGameLanePage',
+              component: () => import('../components/admin/game/common/print/lane/ResultTable.vue'),
             },
           ]
         },
