@@ -40,6 +40,9 @@ const crossUser = ref('');
 const crossUserData: any = ref(null);
 const crossUserList: any = ref([]);
 
+const sportList: any = ref([]);
+const selectedSport = ref(0);
+vr.Get('sport', sportList, true, true);
 const paramList: any = inject('paramList');
 const regConfig: any = inject('regConfig');
 const divisionList: any = inject('divisionList');
@@ -319,24 +322,38 @@ function acceptUser(): boolean{
               </template>
             </select>
           </label>
-          <label class="round-input-label md:col-span-2">
-            <div class="title">{{ t('name') }}</div>
-            <div class="flex items-center gap-5">
-              <select class="select flex-grow" v-model="selectedUser">
-                <template v-for="(item, index) in userList" :key="index">
-                  <option :value="item.u_id" v-if="item.sex == divisionSex || divisionSex == 0">
-                    <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }}</template>
-                    <template v-else>{{ item.first_name_en }} {{ item.last_name_en }}</template>
-                    <span v-if="Config.deptAsClass"> ({{ item.dept_name_ch }}{{ item.num_in_dept.toString().padStart(2, '0') }})</span>
-                    <span v-else> ({{ item.athlete_id }})</span>
+          <div class="md:col-span-2 grid grid-cols-6 gap-5 items-end">
+            <label class="round-input-label col-span-3">
+              <div class="title">{{ t('name') }}</div>
+              <div class="flex items-center gap-5">
+                <select class="select flex-grow" v-model="selectedUser">
+                  <template v-for="(item, index) in userList" :key="index">
+                    <option :value="item.u_id" v-if="(item.sex == divisionSex || divisionSex == 0) && (item.sport_list.includes(selectedSport) || selectedSport == 0)">
+                      <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }}</template>
+                      <template v-else>{{ item.first_name_en }} {{ item.last_name_en }}</template>
+                      <span v-if="Config.deptAsClass"> ({{ item.dept_name_ch }}{{ item.num_in_dept.toString().padStart(2, '0') }})</span>
+                      <span v-else> ({{ item.athlete_id }})</span>
+                    </option>
+                  </template>
+                </select>
+              </div>
+            </label>
+            <label class="round-input-label col-span-2">
+              <div class="title">{{ t('sports') }}</div>
+              <select class="select" v-model="selectedSport">
+                <option :value="0">全選</option>
+                <template v-for="(item, index) in sportList" :key="index">
+                  <option :value="item.sport_id">
+                    <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.sport_name_ch }}</template>
+                    <template v-else>{{ item.sport_name_en }}</template>
                   </option>
                 </template>
               </select>
-              <div class="flex-shrink-0">
-                <button class="round-full-button blue" @click="addUser(selectedUser)">{{ t('add') }}</button>
-              </div>
+            </label>
+            <div class="flex-shrink-0 basis-1/6">
+              <button class="round-full-button blue" @click="addUser(selectedUser)">{{ t('add') }}</button>
             </div>
-          </label>
+          </div>
           <template v-if="(regConfig.options.common.allow_grouping == true && store.userInfo.permission == 0) || store.userInfo.permission > 0">
             <label class="round-input-label md:col-span-2">
               <div class="title">{{ t('cross-athlete') }}</div>
@@ -507,6 +524,7 @@ table {
     not-found: 'Athlete Not Found'
     view: 'View'
     class: 'Class'
+    sports: 'Sport'
   zh-TW:
     individual-event: '個人項目'
     group-event: '團體項目'
@@ -533,4 +551,5 @@ table {
     not-found: '找不到符合的資料'
     view: '查看'
     class: '班級'
+    sports: '專長項目'
 </i18n>

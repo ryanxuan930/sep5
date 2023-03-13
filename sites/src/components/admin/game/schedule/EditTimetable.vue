@@ -72,7 +72,7 @@
     const paramList = await vr.Get(`game/${sportCode}/${gameId}/main/params`, null, true, true);
     const dateArray = await vr.Get(`game/${sportCode}/${gameId}/main/date`, null, true, true);
     const fullList = await vr.Get(`game/${sportCode}/${gameId}/main/params/full`, null, true, true);
-    const phaseArray = ['r1', 'r2', 'r3', 'r4']
+    const phaseArray = ['r1', 'r2', 'r3', 'r4'];
     dateArray.forEach((d: any) => {
       dateList.value.push({
         id: d.date_id,

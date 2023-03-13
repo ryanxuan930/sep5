@@ -21,6 +21,9 @@ const data = reactive({
 
 const paramList: any = inject('paramList');
 const regConfig: any = inject('regConfig');
+const sportList: any = ref([]);
+const selectedSport = ref(0);
+vr.Get('sport', sportList, true, true);
 const divisionList: any = inject('divisionList');
 const userList: any = inject('userList');
 const divisionSex = ref(1);
@@ -177,19 +180,33 @@ const { t, locale } = useI18n({
               </template>
             </select>
           </label>
-          <label :class="{'round-input-label': true, 'md:col-span-2': gameData.module == 'ge'}">
-            <div class="title">{{ t('name') }}</div>
-            <select class="select" v-model="data.u_id">
-              <template v-for="(item, index) in userList" :key="index">
-                <option :value="item.u_id" v-if="item.sex == divisionSex || divisionSex == 0">
-                  <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }}</template>
-                  <template v-else>{{ item.first_name_en }} {{ item.last_name_en }}</template>
-                  <span v-if="Config.deptAsClass"> ({{ item.dept_name_ch }}{{ item.num_in_dept.toString().padStart(2, '0') }})</span>
-                  <span v-else> ({{ item.athlete_id }})</span>
-                </option>
-              </template>
-            </select>
-          </label>
+          <div :class="{'md:col-span-2': gameData.module == 'ge', 'flex items-end gap-5': true}">
+            <label class="round-input-label flex-grow basis-2/3">
+              <div class="title">{{ t('name') }}</div>
+              <select class="select" v-model="data.u_id">
+                <template v-for="(item, index) in userList" :key="index">
+                  <option :value="item.u_id" v-if="(item.sex == divisionSex || divisionSex == 0) && (item.sport_list.includes(selectedSport) || selectedSport == 0)">
+                    <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.last_name_ch }}{{ item.first_name_ch }}</template>
+                    <template v-else>{{ item.first_name_en }} {{ item.last_name_en }}</template>
+                    <span v-if="Config.deptAsClass"> ({{ item.dept_name_ch }}{{ item.num_in_dept.toString().padStart(2, '0') }})</span>
+                    <span v-else> ({{ item.athlete_id }})</span>
+                  </option>
+                </template>
+              </select>
+            </label>
+            <label class="round-input-label basis-1/3">
+              <div class="title">{{ t('sports') }}</div>
+              <select class="select" v-model="selectedSport">
+                <option :value="0">全選</option>
+                <template v-for="(item, index) in sportList" :key="index">
+                  <option :value="item.sport_id">
+                    <template v-if="locale == 'zh-TW' || item.first_name_en == null || item.last_name_en == null">{{ item.sport_name_ch }}</template>
+                    <template v-else>{{ item.sport_name_en }}</template>
+                  </option>
+                </template>
+              </select>
+            </label>
+          </div>
           <label class="round-input-label" v-if="gameData.module != 'ge'">
             <div class="title">{{ t('ref-result') }}</div>
             <input class="input" type="text" v-model="data.ref_result">
@@ -299,6 +316,7 @@ table {
     female: 'F'
     others: 'X'
     class: 'Class'
+    sports: 'Sports'
   zh-TW:
     individual-event: '個人項目'
     group-event: '團體項目'
@@ -317,4 +335,5 @@ table {
     female: '女'
     others: '其他'
     class: '班級'
+    sports: '專長項目'
 </i18n>
