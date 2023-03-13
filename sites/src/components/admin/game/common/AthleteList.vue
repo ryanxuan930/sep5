@@ -33,8 +33,12 @@ const isLoading = ref(false);
 async function submitAll() {
   let res: any = null;
   const dataset: any = [];
+  let flag = false;
   if (props.inputData.multiple == 0){
     dataList.value.forEach((item: any) => {
+      if (item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0 && item[`r${props.inputData.round}_result`] == 0) {
+        flag = true;
+      }
       dataset.push({
         u_id: item.u_id,
         division_id: item.division_id,
@@ -45,9 +49,16 @@ async function submitAll() {
         options: JSON.stringify({}),
       });
     });
+    if (flag) {
+      alert('所有選手皆需選擇出賽狀況');
+      return;
+    }
     res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/update/result`, dataset, null, true, true);
   } else {
     dataList.value.forEach((item: any) => {
+      if (item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0 && item[`r${props.inputData.round}_result`] == 0) {
+        flag = true;
+      }
       dataset.push({
         team_id: item.team_id,
         division_id: item.division_id,
@@ -58,6 +69,10 @@ async function submitAll() {
         options: JSON.stringify({}),
       });
     });
+    if (flag) {
+      alert('所有選手皆需選擇出賽狀況');
+      return;
+    }
     res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/group/update/result`, dataset, null, true, true);
   }
   if (res.status == 'A01') {
@@ -98,6 +113,12 @@ function setLegs(input: any) {
       <span>{{ props.inputData.timestamp }} {{ props.inputData.division_ch }}-{{ props.inputData.event_ch }}</span>
       <span v-if="gameData.module == 'ln'"> [{{ lanePhaseToString(props.inputData.round, 'zh-TW') }}]</span>
     </div>
+    <div class="flex gap-2 pb-3 items-center">
+      <div>報表列印：</div>
+      <button class="general-button blue">成績記錄表</button>
+      <button class="general-button blue">成績總表</button>
+      <button class="general-button blue">分組成績</button>
+    </div>
     <table>
       <tr>
         <th>組織單位</th>
@@ -117,7 +138,7 @@ function setLegs(input: any) {
         </template>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
-        <tr>
+        <tr v-if="item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`]">
           <td>{{ item.org_name_full_ch }}</td>
           <td>{{ item.dept_name_ch }}</td>
           <td v-if="props.inputData.multiple == 0">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
@@ -129,6 +150,9 @@ function setLegs(input: any) {
           <td v-if="props.displayMode == 'call'">
             <div class="select-box">
               <div :class="{'item': true, 'active': item[`r${props.inputData.round}_result`] == '0'}" @click="item[`r${props.inputData.round}_result`] = '0'">
+                <div>尚未<br>選擇</div>
+              </div>
+              <div :class="{'item': true, 'active': item[`r${props.inputData.round}_result`] == 'OK'}" @click="item[`r${props.inputData.round}_result`] = 'OK'">
                 <div>正常<br>出賽</div>
               </div>
               <div :class="{'item': true, 'active': item[`r${props.inputData.round}_result`] == 'DNS'}" @click="item[`r${props.inputData.round}_result`] = 'DNS'">
@@ -143,7 +167,11 @@ function setLegs(input: any) {
             <button class="general-button blue" @click="setLegs(item)">設定</button>
           </td>
           <template v-if="(gameData.module == 'ln' || gameData.module == 'rd') && props.displayMode == 'view'">
-            <td>{{ item[`r${props.inputData.round}_result`] }}</td>
+            <td>
+              <div v-if="item[`r${props.inputData.round}_result`] == '0'">尚未處理</div>
+              <div v-else-if="item[`r${props.inputData.round}_result`] == 'OK'">完成檢錄</div>
+              <div v-else>{{ item[`r${props.inputData.round}_result`] }}</div>
+            </td>
             <td>{{ item[`r${props.inputData.round}_ranking`] }}</td>
             <td v-if="gameData.module == 'ln'">
               <div v-if="item[`r${props.inputData.round}_options`].qualified != undefined">{{ item[`r${props.inputData.round}_options`].qualified }}</div>
@@ -187,9 +215,9 @@ table {
   }
 }
 .select-box {
-  @apply grid grid-cols-3 items-stretch text-center;
+  @apply grid grid-cols-4 items-stretch text-center;
   .item {
-    @apply p-1 bg-gray-100 hover:bg-blue-400 hover:text-white cursor-pointer duration-150;
+    @apply py-1 px-0.5 bg-gray-100 hover:bg-blue-400 hover:text-white cursor-pointer duration-150;
     &.active {
       @apply bg-blue-500 text-white shadow;
     }

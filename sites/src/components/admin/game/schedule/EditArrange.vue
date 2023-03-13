@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, inject, watch } from 'vue';
+  import { ref,  watch } from 'vue';
   import type { Ref } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
@@ -121,10 +121,8 @@
     const targetPhaseIndex = getTargetPhase(selectedTab.value, params.value[selectedIndex.value]);
     const targetPhasePrefix = phaseArray[targetPhaseIndex];
     const currentPhasePrefix = phaseArray[selectedTab.value];
-    const currentParams = params.value[selectedIndex.value];
     const currentParamsFull = paramsList.value[selectedIndex.value];
     const timeEvent = ['ts', 'tn', 'tr', 'rr'];
-    const distanceEvent = ['fj', 'ft'];
     const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
     const data: any = JSON.parse(JSON.stringify(dataList.value));
     const trackArray: number[] = [];

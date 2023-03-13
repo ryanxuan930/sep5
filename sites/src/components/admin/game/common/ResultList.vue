@@ -26,6 +26,9 @@ const isLoading = ref(false);
   }
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/params/${props.inputData.division_id}/${props.inputData.event_code}`, paramsList, true, true);
   for (let i = 0; i < dataList.value.length; i++){
+    if (dataList.value[i][`r${props.inputData.round}_result`] == 'OK') {
+      dataList.value[i][`r${props.inputData.round}_result`] = '';
+    }
     dataList.value[i][`r${props.inputData.round}_options`] = JSON.parse(dataList.value[i][`r${props.inputData.round}_options`]);
     if (dataList.value[i][`r${props.inputData.round}_options`].rt == undefined) {
       dataList.value[i][`r${props.inputData.round}_options`].rt = 0;
@@ -264,6 +267,7 @@ function importHandler(input: any) {
       <div class="text-2xl">
         <div v-if="displayModal == 1">電計成績匯入</div>
         <div v-if="displayModal == 2">詳細紀錄</div>
+        <div v-if="displayModal == 3">棒次</div>
       </div>
     </template>
     <template v-slot:content>

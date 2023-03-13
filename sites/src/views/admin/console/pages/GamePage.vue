@@ -8,10 +8,11 @@
   import Toggle from '@vueform/toggle';
   import FullModal from '@/components/FullModal.vue';
   import EditGame from '@/components/admin/game/EditGame.vue';
+  import { useGameStore } from '@/stores/game';
 
-  const message: Ref<string|null> = ref(null);
   const router = useRouter();
   const store = useUserStore();
+  const gameStore = useGameStore();
   const vr = new VueRequest(store.token);
   const displayModal = ref(false);
 
@@ -65,6 +66,11 @@
     }
     displayModal.value = true;
   }
+
+  async function openGame(input: any) {
+    await gameStore.fetch(store.userInfo.admin_org_id, Number(input.game_id));
+    router.push(`/admin/game/${input.sport_code}/${input.game_id}`);
+  }
 </script>
 
 <template>
@@ -96,7 +102,7 @@
             </td>
             <td>{{ item.event_start }}</td>
             <td>
-              <router-link class="hyperlink blue" :to="`/admin/game/${item.sport_code}/${item.game_id}`">開啟</router-link>
+              <a class="hyperlink blue" @click="openGame(item)">開啟</a>
             </td>
           </tr>
         </template>

@@ -7,7 +7,7 @@ export const useGameStore = defineStore('game', () => {
   async function fetch(adminOrgId: number, gameId: number) {
     const vr = new VueRequest();
     await vr.Get(`${adminOrgId}/game/${gameId}`, data, true, true);
-    localStorage.gameData = JSON.stringify(data.value);
+    localStorage.setItem('gameData', JSON.stringify(data.value));
   }
   return { data, fetch };
 });
