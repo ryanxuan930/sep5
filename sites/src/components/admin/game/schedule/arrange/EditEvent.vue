@@ -8,7 +8,7 @@ import { lanePhaseToString } from '@/components/library/functions';
 const store = useUserStore();
 const route = useRoute();
 
-const props = defineProps(['inputData', 'phaseNum']);
+const props = defineProps(['inputData', 'phaseNum', 'currentEvent']);
 const dataList: Ref<number[]> = ref([]);
 const phase: any = ref(props.phaseNum);
 
@@ -41,7 +41,7 @@ async function submitAll() {
         <th>項目</th>
       </tr>
       <template v-for="(item, index) in props.inputData">
-        <tr>
+        <tr v-if="item.event_code == props.currentEvent.event_code">
           <td>
             <input type="checkbox" :value="index" v-model="dataList">
           </td>
@@ -51,7 +51,7 @@ async function submitAll() {
       </template>
     </table>
     <div class="pt-5">
-      <button class="round-full-button blue" @click="submitAll">儲存</button>
+      <button v-if="dataList.length > 0" class="round-full-button blue" @click="submitAll">儲存</button>
     </div>
   </div>
 </template>
