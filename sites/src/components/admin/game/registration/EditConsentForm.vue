@@ -22,7 +22,7 @@
     Object.keys(data).forEach((index: string) => {
       data[index] = props.inputData[index];
     });
-    formId.value = props.inputData.reg_form_id;
+    formId.value = props.inputData.consent_form_id;
   }
 
   const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
