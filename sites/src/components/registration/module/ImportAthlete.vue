@@ -41,6 +41,13 @@ function check() {
     if (store.userInfo.permission == 1, store.userInfo.org_code.substring(0, 1) == 'O') {
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     }
+    const tempAccount = store.userInfo.org_name_en + Date.now();
+    if (uploadData.value[i].account == null || uploadData.value[i].account == '') {
+      uploadData.value[i].account = tempAccount;
+    }
+    if (uploadData.value[i].password == null || uploadData.value[i].password == '') {
+      uploadData.value[i].password = tempAccount;
+    }
     if (uploadData.value[i].is_student != 1) {
       uploadData.value[i].is_student = 0;
     }
