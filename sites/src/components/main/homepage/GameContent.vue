@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n'
 
 const vr = new VueRequest();
-const pageData: IPageData = inject('pageData');
+const pageData: any = inject('pageData');
 const data: any = ref(null);
 vr.Get(`${useRoute().params.adminOrgId}/game/${useRoute().params.gameId}`, data);
 const { t, locale } = useI18n({
@@ -58,8 +58,14 @@ vr.Get(`${useRoute().params.adminOrgId}/game-tag`, gameTagList);
           <a v-else :href="data.site_url" target="_blank" class="hyperlink blue">{{ data.site_url }}</a>
         </td>
       </tr>
+      <tr v-if="data.options.regulationUrl != undefined && data.options.regulationUrl != ''">
+        <td class="head">{{ t('regulation') }}</td>
+        <td>
+          <a :href="data.options.regulationUrl" class="hyperlink blue">{{ t('click-me') }}</a>
+        </td>
+      </tr>
     </table>
-    <div v-if="data.game_info != null" class="my-5 p-5 border-[1px] rounded text-base font-normal">
+    <div v-if="data.game_info != null || data.reg_info != ''" class="my-5 p-5 border-[1px] rounded text-base font-normal">
       <div v-html="data.game_info"></div>
     </div>
   </div>
@@ -88,11 +94,13 @@ vr.Get(`${useRoute().params.adminOrgId}/game-tag`, gameTagList);
     registration: 'Registration System'
     website: 'Official Website'
     click-me: 'Click me'
+    regulation: 'Regulations'
   zh-TW:
     back: '回上一頁'
     sport: '運動項目'
     start: '開始日期'
     registration: '報名系統'
     website: '賽事官網'
-    click-me: '點我前往'
+    click-me: '點我開啟'
+    regulation: '競賽規程'
 </i18n>
