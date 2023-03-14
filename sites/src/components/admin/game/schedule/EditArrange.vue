@@ -119,6 +119,7 @@
       return;
     }
     // set phase
+    console.log(dataList.value);
     const targetPhaseIndex = getTargetPhase(selectedTab.value, params.value[selectedIndex.value]);
     const targetPhasePrefix = phaseArray[targetPhaseIndex];
     const currentPhasePrefix = phaseArray[selectedTab.value];
@@ -180,7 +181,6 @@
     }
     participants.sort((a: any, b: any) => b.temp - a.temp);
     if (currentParamsFull.remarks == 'ts' || currentParamsFull.remarks == 'tr' || currentParamsFull.remarks == 'rr') {
-      
       const heat = Math.ceil(participants.length / trackArray.length);
       const heatArray = new Array(heat).fill(0);
       let pointer = 0;
@@ -289,14 +289,18 @@
   });
 
   async function multiArrange(input: number[]) {
+    dataList.value = [];
     for (let i = 0; i < input.length; i++) {
       const index = input[i];
+      let temp: any = null;
       if(paramsList.value[index].multiple == 1){
-        await vr.Get(`game/${sportCode}/${gameId}/common/group/by/event/${paramsList.value[index].division_id}/${paramsList.value[index].event_code}`, dataList, true, true);
+        temp = await vr.Get(`game/${sportCode}/${gameId}/common/group/by/event/${paramsList.value[index].division_id}/${paramsList.value[index].event_code}`, null, true, true);
       } else {
-        await vr.Get(`game/${sportCode}/${gameId}/common/individual/by/event/${paramsList.value[index].division_id}/${paramsList.value[index].event_code}`, dataList, true, true);
+        temp = await vr.Get(`game/${sportCode}/${gameId}/common/individual/by/event/${paramsList.value[index].division_id}/${paramsList.value[index].event_code}`, null, true, true);
       }
+      dataList.value = dataList.value.concat(temp);
     }
+    autoArrange();
   }
 </script>
 
@@ -354,7 +358,7 @@
       <template v-slot:content>
         <div class="overflow-auto h-full">
           <EditLane v-if="displayModal == 1" :input-data="dataList" :phase-num="selectedTab" :param-list="paramsList[selectedIndex]" @closeModal="displayModal = 0" @refreshPage="refreshData()"></EditLane>
-          <EditEvent v-if="displayModal == 2" :input-data="paramsList" :phase-num="selectedTab" @returnData="multiArrange" @returnPhase="(input: number) => {selectedTab = input;}" @closeModal="displayModal = 0" @refreshPage="refreshData()"></EditEvent>
+          <EditEvent v-if="displayModal == 2" :input-data="paramsList" :current-event="paramsList[selectedIndex]" :phase-num="selectedTab" @returnData="multiArrange" @returnPhase="(input: number) => {selectedTab = input;}" @closeModal="displayModal = 0" @refreshPage="refreshData()"></EditEvent>
         </div>
       </template>
     </SmallModal>
