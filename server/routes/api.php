@@ -243,6 +243,7 @@ Route::group([
             $ControllerClass = GameScheduleController::class;
             Route::get('', [$ControllerClass, 'getters']);
             Route::get('/full', [$ControllerClass, 'gettersFull']);
+            Route::get('/{id}', [$ControllerClass, 'getter']);
             Route::post('', [$ControllerClass, 'setters']);
             Route::post('/update/{id}', [$ControllerClass, 'patcher']);
         });
