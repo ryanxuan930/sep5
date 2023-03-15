@@ -15,7 +15,7 @@ class ScheduleController extends Controller
     // construct
     public function __construct()
     {
-        $this->middleware('auth:admin', ['except' => ['getters', 'gettersFull', 'gatter']]);
+        $this->middleware('auth:admin', ['except' => ['getters', 'gettersFull', 'getter']]);
     }
     /**
      * Display a listing of the resource.
