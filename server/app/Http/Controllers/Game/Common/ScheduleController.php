@@ -15,7 +15,7 @@ class ScheduleController extends Controller
     // construct
     public function __construct()
     {
-        $this->middleware('auth:admin', ['except' => ['getters', 'gettersFull']]);
+        $this->middleware('auth:admin', ['except' => ['getters', 'gettersFull', 'gatter']]);
     }
     /**
      * Display a listing of the resource.
@@ -31,6 +31,10 @@ class ScheduleController extends Controller
     public function gettersFull($sportCode, $gameId)
     {
         return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_divisions.*', 'events.*')->orderBy('schedule_id', 'asc')->get());
+    }
+    public function getter($sportCode, $gameId, $id)
+    {
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_divisions.division_id', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.division_id')->leftJoin('events', 'events.event_code', '=', $sportCode.'_'.$gameId.'_'.$this->tableName.'.event_code')->select($sportCode.'_'.$gameId.'_'.$this->tableName.'.*', $sportCode.'_'.$gameId.'_divisions.*', 'events.*')->orderBy('schedule_id', 'asc')->where('schedule_id', $id)->first());
     }
     /**
      * Set a series of resource in storage.
