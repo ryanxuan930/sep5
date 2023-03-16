@@ -6,6 +6,7 @@
   const temp1: any = [];
   const temp2: any = [];
   props.inputData.forEach((element: any) => {
+    element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
     if (element[`r${[props.phaseNum]}_ranking`] > 0) {
       temp1.push(element);
     } else {
