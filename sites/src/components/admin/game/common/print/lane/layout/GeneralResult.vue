@@ -9,7 +9,18 @@ const gameStore = useGameStore();
 const dataList: any = ref(props.inputData);
 const round = Number(route.params.round);
 const multiple = Number(route.params.multiple);
-dataList.value.sort((a: any, b: any) => a[`r${[round]}_ranking`] - b[`r${[round]}_ranking`]);
+const temp1: any = [];
+const temp2: any = [];
+props.inputData.forEach((element: any) => {
+  element[`r${[round]}_options`] = JSON.parse(element[`r${[round]}_options`]);
+  if (element[`r${[round]}_ranking`] > 0) {
+    temp1.push(element);
+  } else {
+    temp2.push(element);
+  }
+});
+temp1.sort((a: any, b: any) => a[`r${[round]}_ranking`]- b[`r${[round]}_ranking`]);
+dataList.value = temp1.concat(temp2);
 </script>
 
 <template>
@@ -80,6 +91,9 @@ dataList.value.sort((a: any, b: any) => a[`r${[round]}_ranking`] - b[`r${[round]
       </template>
     </table>
     <div class="height2"></div>
+    <div class="font8">Q：分組錄取 q：全體擇優 DNS：未出賽 DNF：未完賽 DQ：犯規 NM：無成功試跳(擲)成績 CR：大會紀錄 NR：國家紀錄 WD：
+      風速 RT：反應時間
+    </div>
     <div class="grid grid-cols-2 gap-2">
       <div class="check-content">
         <div>紀錄組：</div>
