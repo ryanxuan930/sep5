@@ -160,3 +160,13 @@ function getTargetPhase(current: number, params: any) {
 </template>
 
 <style lang="scss" scoped src="@/components/admin/game/common/print/lane/page.scss"></style>
+<style lang="scss" scoped>
+@page {
+  margin: 1cm;
+  border: 0;
+  background-color: white !important;
+  -webkit-print-color-adjust:exact !important;
+  print-color-adjust:exact !important;
+  size: A4 landscape;
+}
+</style>
