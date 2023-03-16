@@ -18,7 +18,7 @@
 </script>
 
 <template>
-  <div>
+  <div class="w-full h-full overflow-auto">
     <table>
       <tr>
         <th>

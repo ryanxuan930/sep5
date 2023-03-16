@@ -33,10 +33,6 @@ for(const item of orginalData.value) {
       <table class="result-table">
         <tr>
           <th>
-            <div class="ch-content">檢錄</div>
-            <div class="en-content">Check in</div>
-          </th>
-          <th>
             <div class="ch-content">組別</div>
             <div class="en-content">Heat</div>
           </th>
@@ -75,12 +71,6 @@ for(const item of orginalData.value) {
         </tr>
         <template v-for="(item, index) in data.data" :key="index">
           <tr v-if="item[`r${[round]}_heat`] > 0 && item[`r${[round]}_lane`] > 0">
-            <td style="width: 8%">
-              <div v-if="item[`r${[round]}_result`] == 'DNS'">{{ item[`r${[round]}_result`] }}</div>
-              <div v-if="item[`r${[round]}_result`] == 'DNF'">{{ item[`r${[round]}_result`] }}</div>
-              <div v-if="item[`r${[round]}_result`] == 'DQ'">{{ item[`r${[round]}_result`] }}</div>
-              <div v-if="item[`r${[round]}_result`] == 'NM'">{{ item[`r${[round]}_result`] }}</div>
-            </td>
             <td style="width: 4%">{{ item[`r${[round]}_heat`] }}</td>
             <td style="width: 4%">{{ item[`r${[round]}_lane`] }}</td>
             <td style="width: 20%">
@@ -95,85 +85,28 @@ for(const item of orginalData.value) {
             </td>
             <td v-else>{{ item.team_name }}</td>
             <td style="width: 10%">{{ item[`${props.lastRound}_result`] }}</td>
-            <td style="width: 10%; padding: 0;" class="h-1">
-              <div class="flex items-stretch h-full">
-                <div class="inline-block pos-line basis-[15%]"></div>
-                <div class="inline-block pos-line basis-[15%]"></div>
-                <div class="inline-block pos-line basis-[5%]"></div>
-                <div class="inline-block pos-line basis-[15%]"></div>
-                <div class="inline-block pos-line basis-[15%]"></div>
-                <div class="inline-block pos-line basis-[5%]"></div>
-                <div class="inline-block pos-line basis-[15%]"></div>
-                <div class="inline-block pos-line basis-[15%]"></div>
-              </div>
+            <td style="width: 10%">{{ item[`r${round}_result`] }}</td>
+            <td style="width: 4%">{{ item[`r${round}_ranking`] }}</td>
+            <td style="width: 28%">
+              <div v-if="item[`r${round}_options`].qualified != undefined">{{ item[`r${round}_options`].qualified }}</div>
+              <div v-if="item[`r${round}_options`].windspeed != undefined">WS: {{ item[`r${round}_options`].windspeed }}</div>
+              <div v-if="item[`r${round}_options`].rt != undefined">RT: {{ item[`r${round}_options`].rt }}</div>
             </td>
-            <td style="width: 4%"></td>
-            <td style="width: 20%"></td>
           </tr>
         </template>
       </table>
     </template>
     <div class="height2"></div>
-      <div class="grid grid-cols-8 gap-2">
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>終點</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>發令</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>計時</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>司令台</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>檢查</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>檢錄</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>終點攝影</div>
-        </div>
-        <div class="check-content">
-          <div>備註：</div>
-        </div>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="check-content">
+        <div>紀錄組：</div>
+        <div class="flex-grow"></div>
       </div>
-      <div class="height2"></div>
-      <div class="grid grid-cols-3 gap-2">
-        <div class="check-content">
-          <div>檢錄員：</div>
-          <div class="flex-grow"></div>
-        </div>
-        <div class="check-content">
-          <div>檢錄主任：</div>
-          <div class="flex-grow"></div>
-        </div>
-        <div class="check-content">
-          <div>檢錄裁判長：</div>
-          <div class="flex-grow"></div>
-        </div>
-        <div class="check-content">
-          <div>終點紀錄：</div>
-          <div class="flex-grow"></div>
-        </div>
-        <div class="check-content">
-          <div>終點裁判長：</div>
-          <div class="flex-grow"></div>
-        </div>
-        <div class="check-content">
-          <div>競賽裁判長：</div>
-          <div class="flex-grow"></div>
-        </div>
+      <div class="check-content">
+        <div>製表時間：</div>
+        <div class="flex-grow"></div>
       </div>
+    </div>
   </div>
 </template>
 

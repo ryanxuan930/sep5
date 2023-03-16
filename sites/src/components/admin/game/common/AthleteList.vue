@@ -130,8 +130,8 @@ function setLegs(input: any) {
         </select>
       </div>
       <router-link class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/record/${printMode}`" target="_blank">成績記錄表</router-link>
-      <router-link class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result`" target="_blank">成績總表</router-link>
-      <router-link class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result/heat`" target="_blank">分組成績</router-link>
+      <router-link class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result/general`" target="_blank">成績總表</router-link>
+      <router-link v-if="['ts', 'tr', 'rr'].includes(props.inputData.remarks)" class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result/heat`" target="_blank">分組成績</router-link>
     </div>
     <table>
       <tr>

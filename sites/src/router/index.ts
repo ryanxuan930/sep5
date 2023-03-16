@@ -189,6 +189,11 @@ const router = createRouter({
             {
               path: 'lane/:scheduleId/:divisionId/:eventCode/:multiple/:round/record/:printMode',
               name: 'adminGameLaneRecordPage',
+              component: () => import('../components/admin/game/common/print/lane/CallTable.vue'),
+            },
+            {
+              path: 'lane/:scheduleId/:divisionId/:eventCode/:multiple/:round/result/:printMode',
+              name: 'adminGameLaneResultPage',
               component: () => import('../components/admin/game/common/print/lane/ResultTable.vue'),
             },
           ]

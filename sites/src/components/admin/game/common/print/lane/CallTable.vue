@@ -5,8 +5,14 @@ import { useUserStore } from '@/stores/user';
 import { useGameStore } from '@/stores/game';
 import { useRoute } from 'vue-router';
 import { lanePhaseToString } from '@/components/library/functions';
-import GeneralResult from '@/components/admin/game/common/print/lane/layout/GeneralResult.vue';
-import HeatResult from '@/components/admin/game/common/print/lane/layout/HeatResult.vue';
+import HeatLayout from '@/components/admin/game/common/print/lane/layout/HeatLayout.vue';
+import FieldLayout from '@/components/admin/game/common/print/lane/layout/FieldLayout.vue';
+import HeightLayout from '@/components/admin/game/common/print/lane/layout/HeightLayout.vue';
+import T800Layout from '@/components/admin/game/common/print/lane/layout/T800Layout.vue';
+import T1500Layout from '@/components/admin/game/common/print/lane/layout/T1500Layout.vue';
+import T3000Layout from '@/components/admin/game/common/print/lane/layout/T3000Layout.vue';
+import T5000Layout from '@/components/admin/game/common/print/lane/layout/T5000Layout.vue';
+import T10000Layout from '@/components/admin/game/common/print/lane/layout/T10000Layout.vue';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
@@ -39,7 +45,7 @@ const isLoading = ref(false);
       dataList.value[i][`r${[round]}_options`] = JSON.parse(dataList.value[i][`r${[round]}_options`]);
     }
   }
-  document.title = gameStore.data.game_name_ch + '_' + eventData.value.division_ch + '_' + eventData.value.event_ch + '_' + lanePhaseToString(round, 'zh-TW') + '_' + '成績公告單';
+  document.title = gameStore.data.game_name_ch + '_' +paramList.value.division_ch + '_' +paramList.value.event_ch + '_' + lanePhaseToString(round, 'zh-TW') + '_' + '檢錄暨成績紀錄單';
   isLoading.value = false;
 })();
 
@@ -82,8 +88,8 @@ function getTargetPhase(current: number, params: any) {
     <div class="page">
       <div class="text-center font20 font-semibold">{{ gameStore.data.game_name_ch }}</div>
       <div class="text-center font14 font-semibold">{{ gameStore.data.game_name_en }}</div>
-      <div class="text-center font16 font-medium">成績公告單</div>
-      <div class="text-center font12 font-medium">Official Result</div>
+      <div class="text-center font16 font-medium">檢錄暨成績紀錄單</div>
+      <div class="text-center font12 font-medium">Start List and Result Table</div>
       <div class="height1"></div>
       <div class="grid grid-cols-4 header-table">
         <div class="content-box">
@@ -139,8 +145,14 @@ function getTargetPhase(current: number, params: any) {
         </div>
       </div>
       <div class="height1"></div>
-      <GeneralResult v-if="printMode == 'general'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></GeneralResult>
-      <HeatResult v-if="printMode == 'heat'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></HeatResult>
+      <HeatLayout v-if="printMode == 'heat'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></HeatLayout>
+      <FieldLayout v-if="printMode == 'field'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></FieldLayout>
+      <HeightLayout v-if="printMode == 'height'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></HeightLayout>
+      <T800Layout v-if="printMode == '800m'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></T800Layout>
+      <T1500Layout v-if="printMode == '1500m'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></T1500Layout>
+      <T3000Layout v-if="printMode == '3000m'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></T3000Layout>
+      <T5000Layout v-if="printMode == '5000m'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></T5000Layout>
+      <T10000Layout v-if="printMode == '10000m'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></T10000Layout>
       <div class="height2"></div>
       <div class="text-center font9">{{ $route.params.sportCode.toString().toUpperCase() }}_{{ $route.params.gameId }}_{{ divisionId }}_{{ eventCode.toString().toUpperCase() }}_{{ phaseArray[round].toUpperCase() }} {{ new Date().toLocaleString('zh-TW', { hour12: false}) }}</div>
     </div>
