@@ -20,7 +20,7 @@ if (gameStore.data == null) {
 </script>
 
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:h-screen">
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:h-screen bg-blue-50">
     <div class="common-box left-box">
       <div>
         <LogoSection></LogoSection>

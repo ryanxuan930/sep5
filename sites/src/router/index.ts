@@ -187,8 +187,8 @@ const router = createRouter({
           children: [
             // lane
             {
-              path: '/lane/:divisionId/:eventCode/:multiple/:round?',
-              name: 'adminGameLanePage',
+              path: 'lane/:scheduleId/:divisionId/:eventCode/:multiple/:round/record/:printMode',
+              name: 'adminGameLaneRecordPage',
               component: () => import('../components/admin/game/common/print/lane/ResultTable.vue'),
             },
           ]

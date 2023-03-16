@@ -47,7 +47,7 @@
 </script>
 
 <template>
-  <div class="h-screen flex flex-col overflow-auto">
+  <div class="h-screen flex flex-col overflow-auto bg-blue-50">
     <div class="flex-grow"></div>
     <div class="bg-white sm:shadow p-5 w-full h-screen sm:w-2/3 md:w-96 sm:h-fit mx-auto">
       <div class="text-2xl text-gray-500">管理員登入</div>

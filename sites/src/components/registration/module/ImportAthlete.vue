@@ -17,6 +17,8 @@ const countryList: any = ref(null);
 vr.Get('country', countryList);
 const cityList: any = ref(null);
 vr.Get('city', cityList);
+const sportList: any = ref(null);
+vr.Get('sport', sportList);
 
 const deptList: any = ref([]);
 async function getDeptList() {
@@ -41,7 +43,7 @@ function check() {
     if (store.userInfo.permission == 1, store.userInfo.org_code.substring(0, 1) == 'O') {
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     }
-    const tempAccount = store.userInfo.org_name_en + Date.now();
+    const tempAccount = `${store.userInfo.org_code}${Date.now()}`;
     if (uploadData.value[i].account == null || uploadData.value[i].account == '') {
       uploadData.value[i].account = tempAccount;
     }
@@ -51,7 +53,10 @@ function check() {
     if (uploadData.value[i].is_student != 1) {
       uploadData.value[i].is_student = 0;
     }
-    if (uploadData.value[i].nationality.length == 0) {
+    if (uploadData.value[i].dept_id = null || uploadData.value[i].dept_id == 0 || isNaN(uploadData.value[i].dept_id)) {
+      uploadData.value[i].dept_id = store.userInfo.dept_id;
+    }
+    if (uploadData.value[i].nationality == '' || uploadData.value[i].nationality == null) {
       uploadData.value[i].nationality = 'TW';
     }
     if (!Number.isInteger(uploadData.value[i].grade)) {
@@ -91,6 +96,20 @@ function check() {
     }
     if (!Number.isInteger(uploadData.value[i].num_in_dept)) {
       uploadData.value[i].num_in_dept = 0;
+    }
+    if (uploadData.value[i].sport != null || uploadData.value[i].sport != '') {
+      let flag = true;
+      uploadData.value[i].sport_list = [];
+      for(let j = 0; j < sportList.value.length; j++) {
+        if (uploadData.value[i].sports == sportList.value[j].sport_name_ch) {
+          flag = false;
+          uploadData.value[i].sport_list.push(sportList.value[j].sport_id);
+        }
+      }
+      if (flag) {
+        uploadData.value[i].sport_list = [];
+      }
+      uploadData.value[i].sport_list = JSON.stringify(uploadData.value[i].sport_list);
     }
   }
 }
@@ -173,6 +192,8 @@ const { t, locale } = useI18n({
           <th>{{ t('address') }}</th>
           <th>{{ t('emergency-contact') }}</th>
           <th>{{ t('emergency-phone') }}</th>
+          <th>{{ t('num-in-dept') }}</th>
+          <th>{{ t('sport') }}</th>
         </tr>
         <template v-for="(item, index) in uploadData" :key="index">
           <tr>
@@ -267,6 +288,16 @@ const { t, locale } = useI18n({
             <td :style="{'width': `${boxWidth*0.1}px`}">
               <div>{{ item.emergency_phone }}</div>
             </td>
+            <td :style="{'width': `${boxWidth*0.1}px`}">
+              <div>{{ item.num_in_dept }}</div>
+            </td>
+            <td :style="{'width': `${boxWidth*0.1}px`}">
+              <template v-for="(sport, index) in sportList" :key="index">
+                <div v-if="JSON.parse(item.sport_list).includes(sport.sport_id)">
+                  <div>{{ sport.sport_name_ch }}</div>
+                </div>
+              </template>
+            </td>
           </tr>
         </template>
       </table>
@@ -346,6 +377,8 @@ table {
     save: 'Save'
     select: 'Select'
     password: 'Password'
+    num-in-dept: 'No.'
+    sport: 'Sports'
   zh-TW:
     setting: '設定'
     language: '語言'
@@ -398,4 +431,6 @@ table {
     save: '儲存'
     select: '選擇'
     password: '密碼'
+    num-in-dept: '座號'
+    sport: '專長項目'
 </i18n>

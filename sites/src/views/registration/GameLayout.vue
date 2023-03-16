@@ -201,7 +201,7 @@ async function check(){
 
 <template>
   <SpinnerLoading v-show="!loadingStatus"></SpinnerLoading>
-  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 h-full md:h-screen" v-if="loadingStatus">
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 h-full md:h-screen bg-blue-50" v-if="loadingStatus">
     <div class="common-box left-box">
       <div>
         <LogoSection></LogoSection>

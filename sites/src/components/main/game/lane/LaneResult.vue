@@ -51,9 +51,9 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
         <th></th>
       </tr>
       <template v-for="(item, index) in scheduleList" :key="index">
-        <tr v-if="item.status > 3">
+        <tr>
           <td>{{ item.timestamp.substring(5, 7) }}/{{ item.timestamp.substring(8, 10) }} {{ item.timestamp.substring(10, 16) }}</td>
-          <td colspan="3" v-if="item.division_id == null && item.event_code == null">{{ JSON.parse(item.options).title }}</td>
+          <td colspan="4" v-if="item.division_id == null && item.event_code == null">{{ JSON.parse(item.options).title }}</td>
           <template v-else>
             <td>
               <span v-if="locale == 'zh-TW'">{{ item.division_ch }}</span>
@@ -64,13 +64,14 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
               <span v-else>{{ item.event_en }}</span>
             </td>
             <td>{{ lanePhaseToString(item.round, String(locale)) }}</td>
+            <td>
+              <div class="flex gap-2 items-center" v-if="item.status > 3">
+                <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/general/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list') }}</router-link>
+                <router-link v-if="item.division_id != null && item.event_code != null && (item.remarks == 'ts' || item.remarks == 'tr' || item.remarks == 'rr')" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/heat/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list-heat') }}</router-link>
+              </div>
+              <div v-else>{{ t('not-available') }}</div>
+            </td>
           </template>
-          <td>
-            <div class="flex gap-2 items-center">
-              <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/general/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list') }}</router-link>
-              <router-link v-if="item.division_id != null && item.event_code != null && (item.remarks == 'ts' || item.remarks == 'tr' || item.remarks == 'rr')" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/heat/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list-heat') }}</router-link>
-            </div>
-          </td>
         </tr>
       </template>
     </table>
@@ -111,6 +112,7 @@ table {
     round: 'Round'
     result-title: 'Results'
     update-in-second: 'Updated in {second} sec.'
+    not-available: 'Not Available'
   zh-TW:
     list: '成績總表'
     list-heat: '分組成績'
@@ -120,4 +122,5 @@ table {
     round: '賽別'
     result-title: '成績公告'
     update-in-second: '{second} 秒後更新'
+    not-available: '尚未公告'
   </i18n>

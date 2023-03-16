@@ -1,0 +1,91 @@
+@page {
+    margin: 1cm;
+    border: 0;
+    background-color: white !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+    size: landscape;
+}
+.page {
+    background-color: white !important;
+    page-break-after: always;
+    min-height: 100vh;
+    }
+.font20 {
+    font-size: 20pt;
+}
+.font16 {
+    font-size: 16pt;
+}
+.font14 {
+    font-size: 14pt;
+}
+.font12 {
+    font-size: 12pt;
+}
+.font10 {
+    font-size: 10pt;
+}
+.font9 {
+    font-size: 9pt;
+}
+.font8 {
+    font-size: 8pt;
+}
+.font7 {
+    font-size: 7pt;
+}
+.height1 {
+        height: 0.25cm;
+}
+.height2 {
+height: 0.5cm;
+}
+.height4 {
+height: 1cm;
+}
+.header-table {
+    @apply p-2 bg-gray-100;
+    .content-box {
+        @apply flex items-center font12;
+        .title {
+            @apply w-16;
+        }
+    }
+}
+.ch-content {
+    @apply font12;
+}
+.en-content {
+    @apply font10;
+}
+tr, td {
+    break-inside: avoid !important;
+}
+.check-content {
+    @apply flex gap-3 items-center;
+    .check-box {
+        @apply w-4 h-4 border-[1px] border-gray-500;
+    }
+}
+.result-table {
+    @apply w-full text-left border-collapse mb-[0.5cm];
+    th, td {
+        @apply p-1 break-words whitespace-pre-wrap border-[1px] border-gray-300;
+    }
+    td {
+        height: 36px;
+        .pos-line:last-child {
+            @apply border-r-0;
+        }
+    }
+    th {
+        @apply bg-gray-100;
+    }
+} 
+tr, td {
+    break-inside: avoid !important;
+}
+.pos-line {
+    @apply border-r-[0.5px] border-gray-100;
+}
