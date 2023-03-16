@@ -45,7 +45,7 @@ const isLoading = ref(false);
       dataList.value[i][`r${[round]}_options`] = JSON.parse(dataList.value[i][`r${[round]}_options`]);
     }
   }
-  document.title = gameStore.data.game_name_ch;
+  document.title = gameStore.data.game_name_ch + '_' + eventData.value.division_ch + '_' + eventData.value.event_ch + '_' + lanePhaseToString(round, 'zh-TW') + '_' + '檢錄暨成績紀錄單';
   isLoading.value = false;
 })();
 
