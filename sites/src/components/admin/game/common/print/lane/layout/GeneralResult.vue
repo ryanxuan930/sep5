@@ -17,6 +17,10 @@ dataList.value.sort((a: any, b: any) => a[`r${[round]}_ranking`] - b[`r${[round]
     <table class="result-table">
       <tr>
         <th>
+          <div class="ch-content">排名</div>
+          <div class="en-content">Place</div>
+        </th>
+        <th>
           <div class="ch-content">組別</div>
           <div class="en-content">Heat</div>
         </th>
@@ -43,10 +47,6 @@ dataList.value.sort((a: any, b: any) => a[`r${[round]}_ranking`] - b[`r${[round]
         <th>
           <div class="ch-content">比賽成績</div>
           <div class="en-content">Result</div>
-        </th>
-        <th>
-          <div class="ch-content">排名</div>
-          <div class="en-content">Place</div>
         </th>
         <th>
           <div class="ch-content">備註</div>
