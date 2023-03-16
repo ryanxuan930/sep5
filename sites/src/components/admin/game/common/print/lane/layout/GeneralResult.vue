@@ -12,7 +12,6 @@ const multiple = Number(route.params.multiple);
 const temp1: any = [];
 const temp2: any = [];
 props.inputData.forEach((element: any) => {
-  element[`r${[round]}_options`] = JSON.parse(element[`r${[round]}_options`]);
   if (element[`r${[round]}_ranking`] > 0) {
     temp1.push(element);
   } else {
