@@ -127,7 +127,7 @@ function getTargetPhase(current: number, params: any) {
           </div>
           <div>
             <div class="ch-content">每組(Q)取 {{ paramList[`r${[round]}_aq`] }}，另擇優(q)取 {{ paramList[`r${[round]}_sq`] }}</div>
-            <div class="en-content">First {{ paramList[`r${[round]}_aq`] }} of each heat (Q) + {{ paramList[`r${[round]}_sq`] }} fastest times (q) are qualified</div>
+            <div class="font8">First {{ paramList[`r${[round]}_aq`] }} of each heat (Q) + {{ paramList[`r${[round]}_sq`] }} fastest times (q) are qualified</div>
           </div>
         </div>
         <div class="content-box">
