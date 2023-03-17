@@ -98,7 +98,7 @@ function check() {
       uploadData.value[i].num_in_dept = 0;
     }
     uploadData.value[i].sport_list = [];
-    if (uploadData.value[i].sports != null || uploadData.value[i].sports != '') {
+    if (uploadData.value[i].sports != null || uploadData.value[i].sport != '') {
       let flag = true;
       uploadData.value[i].sport_list = [];
       for(let j = 0; j < sportList.value.length; j++) {
@@ -110,7 +110,6 @@ function check() {
       uploadData.value[i].sport_list = JSON.stringify(uploadData.value[i].sport_list);
       
     }
-    delete uploadData.value[i].sports;
   }
 }
 
@@ -134,6 +133,9 @@ const close = () => {
 
 async function submitAll() {
   isLoading.value = true;
+  for(let i = 0; i < uploadData.value.length; i++) {
+    delete uploadData.value[i].sports;
+  }
   check();
   const res: any = await vr.Post('user-upload', uploadData.value, null, true, true);
   isLoading.value = false;
