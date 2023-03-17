@@ -100,18 +100,20 @@ async function submitAll() {
   } else {
     dataList.value.sort((a: any, b: any) => b.temp - a.temp);
   }
-  /**
-   * Put Record handler here
-   */
+  
+  // record handler
+  let flag = false;
   for(let i = 0; i < dataList.value.length; i++){
     if (timeEvents.includes(props.inputData.remarks)) {
       console.log(stringToMilliseconds(recordList.value.result), dataList.value[i].temp);
-      if (stringToMilliseconds(recordList.value.result) > dataList.value[i].temp) {
+      if (stringToMilliseconds(recordList.value.result) > dataList.value[i].temp && flag == false) {
         dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
+        flag = true;
       }
     } else {
-      if (Number(recordList.value.result) < dataList.value[i].temp) {
+      if (Number(recordList.value.result) < dataList.value[i].temp && flag == false) {
         dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
+        flag = true;
       }
     }
   }
