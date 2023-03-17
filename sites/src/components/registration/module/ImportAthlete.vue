@@ -98,7 +98,7 @@ function check() {
       uploadData.value[i].num_in_dept = 0;
     }
     uploadData.value[i].sport_list = [];
-    if (uploadData.value[i].sport != null || uploadData.value[i].sport != '') {
+    if (uploadData.value[i].sports != null || uploadData.value[i].sports != '') {
       let flag = true;
       uploadData.value[i].sport_list = [];
       for(let j = 0; j < sportList.value.length; j++) {
@@ -110,7 +110,7 @@ function check() {
       uploadData.value[i].sport_list = JSON.stringify(uploadData.value[i].sport_list);
       
     }
-    delete uploadData.value[i].sport;
+    delete uploadData.value[i].sports;
   }
 }
 
