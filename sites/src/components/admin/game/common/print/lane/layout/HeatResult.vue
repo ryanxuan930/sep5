@@ -99,12 +99,12 @@ for(const item of orginalData.value) {
     <div class="height2"></div>
     <div class="grid grid-cols-2 gap-2">
       <div class="check-content">
-        <div>紀錄組：</div>
+        <div>紀錄：</div>
         <div class="flex-grow"></div>
       </div>
       <div class="check-content">
         <div>製表時間：</div>
-        <div class="flex-grow"></div>
+        <div class="flex-grow">{{ new Date().toLocaleString('zh-TW', { hour12: false}) }}</div>
       </div>
     </div>
   </div>

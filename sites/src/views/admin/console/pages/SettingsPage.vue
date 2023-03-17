@@ -19,7 +19,7 @@
     <div class="section-box flex flex-col gap-5">
       <div class="flex-grow text-3xl font-medium">系統管理</div>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-        <button class="round-full-button blue" @click="displayModal = 1">頁面設定</button>
+        <button class="round-full-button blue" @click="displayModal = 1" v-if="store.userInfo.permission > 2">頁面設定</button>
         <button class="round-full-button blue" @click="displayModal = 2">項目設定</button>
       </div>
     </div>
