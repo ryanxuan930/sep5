@@ -110,6 +110,7 @@ function check() {
         uploadData.value[i].sport_list = [];
       }
       uploadData.value[i].sport_list = JSON.stringify(uploadData.value[i].sport_list);
+      delete uploadData.value[i].sport;
     }
   }
 }
