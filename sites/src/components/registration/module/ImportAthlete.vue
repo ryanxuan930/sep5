@@ -97,6 +97,7 @@ function check() {
     if (!Number.isInteger(uploadData.value[i].num_in_dept)) {
       uploadData.value[i].num_in_dept = 0;
     }
+    uploadData.value[i].sport_list = [];
     if (uploadData.value[i].sport != null || uploadData.value[i].sport != '') {
       let flag = true;
       uploadData.value[i].sport_list = [];
@@ -106,12 +107,10 @@ function check() {
           uploadData.value[i].sport_list.push(sportList.value[j].sport_id);
         }
       }
-      if (flag) {
-        uploadData.value[i].sport_list = [];
-      }
       uploadData.value[i].sport_list = JSON.stringify(uploadData.value[i].sport_list);
-      delete uploadData.value[i].sport;
+      
     }
+    delete uploadData.value[i].sport;
   }
 }
 
