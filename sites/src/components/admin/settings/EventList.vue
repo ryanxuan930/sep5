@@ -9,12 +9,18 @@
   const vr = new VueRequest(store.token);
   const displayModal = ref(false);
   const isLoading = ref(false);
-
   const eventList: any = ref(null);
-  function getEventList() {
-    vr.Get('event', eventList);
+  async function getEventList() {
+    await vr.Get('event', eventList);
   }
-  getEventList();
+
+  const userData: any = ref(null);
+  (async () => {
+    isLoading.value = true;
+    await vr.Get('auth/admin/info', userData, true, true);
+    await getEventList();
+    isLoading.value = false;
+  })();
 
   const selectedData = ref(null);
   function open(input: any) {
@@ -24,8 +30,8 @@
 </script>
 
 <template>
-  <div class="h-full overflow-auto">
-    <table v-if="eventList != null">
+  <div class="h-full overflow-auto" v-if="isLoading == false">
+    <table>
       <tr>
         <th>運動類型</th>
         <th>項目名稱</th>
@@ -39,7 +45,7 @@
         </th>
       </tr>
       <template v-for="(item, index) in eventList">
-        <tr>
+        <tr v-if="store.userInfo.permission > 2 || JSON.parse(userData.sport_management_list).includes(item.sport_id)">
           <td>{{ item.sport_name_ch }}</td>
           <td>{{ item.event_ch }}</td>
           <td>{{ item.event_code }}</td>
