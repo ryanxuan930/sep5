@@ -10,7 +10,7 @@ const navList = reactive([
   {title: '公告列表', link: '/admin/bulletin', permission: 0},
   {title: '帳號管理', link: '/admin/account', permission: 1},
   {title: '文檔管理', link: '/admin/files', permission: 1},
-  {title: '系統管理', link: '/admin/settings', permission: 3},
+  {title: '系統管理', link: '/admin/settings', permission: 2},
 ]);
 </script>
 
