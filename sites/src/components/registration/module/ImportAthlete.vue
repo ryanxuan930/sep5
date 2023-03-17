@@ -97,19 +97,15 @@ function check() {
     if (!Number.isInteger(uploadData.value[i].num_in_dept)) {
       uploadData.value[i].num_in_dept = 0;
     }
-    uploadData.value[i].sport_list = [];
+    const sportTemp = [];
     if (uploadData.value[i].sports != null || uploadData.value[i].sport != '') {
-      let flag = true;
-      uploadData.value[i].sport_list = [];
       for(let j = 0; j < sportList.value.length; j++) {
         if (uploadData.value[i].sports == sportList.value[j].sport_name_ch) {
-          flag = false;
-          uploadData.value[i].sport_list.push(sportList.value[j].sport_id);
+          sportTemp.push(sportList.value[j].sport_id);
         }
       }
-      uploadData.value[i].sport_list = JSON.stringify(uploadData.value[i].sport_list);
-      
     }
+    uploadData.value[i].sport_list = JSON.stringify(sportTemp);
   }
 }
 
@@ -134,9 +130,8 @@ const close = () => {
 async function submitAll() {
   isLoading.value = true;
   for(let i = 0; i < uploadData.value.length; i++) {
-    delete uploadData.value[i].sports;
+    delete uploadData.value[i].sports
   }
-  check();
   const res: any = await vr.Post('user-upload', uploadData.value, null, true, true);
   isLoading.value = false;
   if (res.status == 'A01') {
