@@ -113,9 +113,11 @@ async function submitAll() {
         flag = true;
       }
     } else {
-      if (recordList.value.result == 0 && flag == false) {
-        dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
-        flag = true;
+      if (recordList.value.result == 0) {
+        if (flag == false) {
+          dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
+          flag = true;
+        }
       } else if (Number(recordList.value.result) < dataList.value[i].temp) {
         dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
       }
