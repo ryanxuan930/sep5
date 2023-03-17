@@ -102,18 +102,15 @@ async function submitAll() {
   }
   
   // record handler
-  let flag = false;
   for(let i = 0; i < dataList.value.length; i++){
     if (timeEvents.includes(props.inputData.remarks)) {
       console.log(stringToMilliseconds(recordList.value.result), dataList.value[i].temp);
-      if (stringToMilliseconds(recordList.value.result) > dataList.value[i].temp && flag == false) {
+      if (stringToMilliseconds(recordList.value.result) > dataList.value[i].temp) {
         dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
-        flag = true;
       }
     } else {
-      if (Number(recordList.value.result) < dataList.value[i].temp && flag == false) {
+      if (Number(recordList.value.result) < dataList.value[i].temp) {
         dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
-        flag = true;
       }
     }
   }
