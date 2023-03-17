@@ -16,6 +16,7 @@ const props = defineProps(['inputData', 'displayMode']);
 const gameData: any = inject('gameData');
 const dataList: any = ref([]);
 const paramsList: any = ref({});
+const recordList: any = ref({});
 const isLoading = ref(false);
 (async () => {
   isLoading.value = true;
@@ -24,6 +25,13 @@ const isLoading = ref(false);
   } else {
     await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/event/${props.inputData.division_id}/${props.inputData.event_code}`, dataList);
   }
+  const temp = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/temp/gameRecords`);
+  const records = JSON.parse(temp.temp_data);
+  records.forEach((item: any) => {
+    if (item.division_id == props.inputData.division_id && item.event_code == props.inputData.event_code) {
+      recordList.value = item;
+    }
+  });
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/params/${props.inputData.division_id}/${props.inputData.event_code}`, paramsList, true, true);
   for (let i = 0; i < dataList.value.length; i++){
     if (dataList.value[i][`r${props.inputData.round}_result`] == 'OK') {
@@ -95,10 +103,18 @@ async function submitAll() {
   /**
    * Put Record handler here
    */
-
-  /**
-   * 
-   */
+  for(let i = 0; i < dataList.value.length; i++){
+    if (timeEvents.includes(props.inputData.remarks)) {
+      console.log(stringToMilliseconds(recordList.value.result), dataList.value[i].temp);
+      if (stringToMilliseconds(recordList.value.result) > dataList.value[i].temp) {
+        dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
+      }
+    } else {
+      if (Number(recordList.value.result) < dataList.value[i].temp) {
+        dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
+      }
+    }
+  }
 
   // q, break record and ranking
   let ranking = 1;

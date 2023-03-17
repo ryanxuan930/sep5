@@ -82,7 +82,12 @@ dataList.value = temp1.concat(temp2);
           <td style="width: 12%">{{ item[`${props.lastRound}_result`] }}</td>
           <td style="width: 10%">{{ item[`r${round}_result`] }}</td>
           <td style="width: 15%">
-            <div v-if="item[`r${round}_options`].qualified != undefined">{{ item[`r${round}_options`].qualified }}</div>
+            <div class="flex items-center gap-3">
+              <template v-if="item[`r${round}_options`].break != undefined">
+                <div class="px-2 py-0.5 bg-gray-500 text-white inline-block" v-if="item[`r${round}_options`].break != 'no'">{{ item[`r${round}_options`].break }}</div>
+              </template>
+              <div v-if="item[`r${round}_options`].qualified != undefined">{{ item[`r${round}_options`].qualified }}</div>
+            </div>
             <div v-if="item[`r${round}_options`].windspeed != undefined">WS: {{ item[`r${round}_options`].windspeed }}</div>
             <div v-if="item[`r${round}_options`].rt != undefined">RT: {{ item[`r${round}_options`].rt }}</div>
           </td>

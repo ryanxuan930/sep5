@@ -191,6 +191,7 @@ function setLegs(input: any) {
               <div v-if="item[`r${props.inputData.round}_options`].qualified != undefined">{{ item[`r${props.inputData.round}_options`].qualified }}</div>
               <div v-if="item[`r${props.inputData.round}_options`].windspeed != undefined">WS: {{ item[`r${props.inputData.round}_options`].windspeed }}</div>
               <div v-if="item[`r${props.inputData.round}_options`].rt != undefined">RT: {{ item[`r${props.inputData.round}_options`].rt }}</div>
+              <div v-if="item[`r${props.inputData.round}_options`].break != undefined">{{ item[`r${props.inputData.round}_options`].break == 'no'? '':item[`r${props.inputData.round}_options`].break }}</div>
             </td>
           </template>
         </tr>

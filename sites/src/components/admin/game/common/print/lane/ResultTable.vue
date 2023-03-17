@@ -23,6 +23,7 @@ const phaseArray = ['ref', 'r1', 'r2', 'r3', 'r4'];
 const dataList: any = ref([]);
 const paramList: any = ref([]);
 const eventData: any = ref({});
+const recordList: any = ref({});
 const isLoading = ref(false);
 (async () => {
   isLoading.value = true;
@@ -33,6 +34,13 @@ const isLoading = ref(false);
   } else {
     await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/event/${divisionId}/${eventCode}`, dataList);
   }
+  const temp = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/temp/gameRecords`);
+  const records = JSON.parse(temp.temp_data);
+  records.forEach((item: any) => {
+    if (item.division_id == divisionId && item.event_code == eventCode) {
+      recordList.value = item;
+    }
+  });
   if (gameStore.data.module == 'ln') {
     dataList.value.sort((a: any, b: any) => a[`r${[round]}_heat`] - b[`r${[round]}_heat`] || a[`r${[round]}_lane`] - b[`r${[round]}_lane`]);
     for (let i = 0; i < dataList.value.length; i++) {
@@ -109,9 +117,13 @@ function getTargetPhase(current: number, params: any) {
         <div class="content-box">
           <div class="title">
             <div class="ch-content">大會紀錄</div>
-            <div class="en-content">GR</div>
+            <div class="en-content">CR</div>
           </div>
-          <div></div>
+          <div>
+            <div class="font7">{{ recordList.unit_name_ch }}</div>
+            <div class="font10">{{ recordList.last_name_ch }}{{ recordList.first_name_ch }} {{ recordList.result }}</div>
+            <div class="font7">{{ recordList.set_date }}</div>
+          </div>
         </div>
         <div class="content-box">
           <div class="title">

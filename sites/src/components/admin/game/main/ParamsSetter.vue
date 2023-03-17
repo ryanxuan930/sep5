@@ -109,12 +109,12 @@
         </tr>
       </template>
     </table>
-    <div class="my-3">
-      <button class="round-full-button blue" @click="submitAll">儲存</button>
-    </div>
-    <div class="my-3">
-      <button class="round-full-button red" @click="clearAll">全部清除</button>
-    </div>
+  </div>
+  <div class="my-3">
+    <button class="round-full-button blue" @click="submitAll">儲存</button>
+  </div>
+  <div class="my-3">
+    <button class="round-full-button red" @click="clearAll">全部清除</button>
   </div>
   <SmallLoader v-show="displayArray == null"></SmallLoader>
 </template>
