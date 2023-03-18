@@ -107,6 +107,7 @@ async function submitAll() {
   let flag = false;
   for(let i = 0; i < dataList.value.length; i++){
     if (timeEvents.includes(props.inputData.remarks)) {
+      console.log(1);
       if (stringToMilliseconds(recordList.value.result) > dataList.value[i].temp) {
         dataList.value[i][`r${props.inputData.round}_options`].break = '破大會紀錄';
         if (flag == false) {
@@ -127,6 +128,7 @@ async function submitAll() {
           flag = true;
         }
       } else if (Number(recordList.value.result) < dataList.value[i].temp) {
+        console.log(Number(recordList.value.result), dataList.value[i].temp);
         dataList.value[i][`r${props.inputData.round}_options`].break = '破大會紀錄';
         if (flag == false) {
           dataList.value[i][`r${props.inputData.round}_options`].cr = true;
