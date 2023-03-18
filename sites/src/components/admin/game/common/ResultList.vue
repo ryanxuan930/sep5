@@ -106,31 +106,33 @@ async function submitAll() {
   // record handler
   let flag = false;
   for(let i = 0; i < dataList.value.length; i++){
-    if (timeEvents.includes(props.inputData.remarks)) {
-      if (stringToMilliseconds(recordList.value.result) > dataList.value[i].temp) {
-        dataList.value[i][`r${props.inputData.round}_options`].break = '破大會紀錄';
-        if (flag == false) {
-          dataList.value[i][`r${props.inputData.round}_options`].cr = true;
-          flag = true;
+    if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
+      if (timeEvents.includes(props.inputData.remarks)) {
+        if (stringToMilliseconds(recordList.value.result) > dataList.value[i].temp) {
+          dataList.value[i][`r${props.inputData.round}_options`].break = '破大會紀錄';
+          if (flag == false) {
+            dataList.value[i][`r${props.inputData.round}_options`].cr = true;
+            flag = true;
+          }
         }
-      }
-      if (recordList.value.result == 0 && flag == false) {
-        dataList.value[i][`r${props.inputData.round}_options`].break = '創大會紀錄';
-        dataList.value[i][`r${props.inputData.round}_options`].cr = true;
-        flag = true;
-      }
-    } else {
-      if (recordList.value.result == 0) {
-        if (flag == false) {
+        if (recordList.value.result == 0 && flag == false) {
           dataList.value[i][`r${props.inputData.round}_options`].break = '創大會紀錄';
           dataList.value[i][`r${props.inputData.round}_options`].cr = true;
           flag = true;
         }
-      } else if (Number(recordList.value.result)*100 < dataList.value[i].temp) {
-        dataList.value[i][`r${props.inputData.round}_options`].break = '破大會紀錄';
-        if (flag == false) {
-          dataList.value[i][`r${props.inputData.round}_options`].cr = true;
-          flag = true;
+      } else {
+        if (recordList.value.result == 0) {
+          if (flag == false) {
+            dataList.value[i][`r${props.inputData.round}_options`].break = '創大會紀錄';
+            dataList.value[i][`r${props.inputData.round}_options`].cr = true;
+            flag = true;
+          }
+        } else if (Number(recordList.value.result)*100 < dataList.value[i].temp) {
+          dataList.value[i][`r${props.inputData.round}_options`].break = '破大會紀錄';
+          if (flag == false) {
+            dataList.value[i][`r${props.inputData.round}_options`].cr = true;
+            flag = true;
+          }
         }
       }
     }
