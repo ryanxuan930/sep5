@@ -26,7 +26,9 @@ export default class VueRequest {
   private ErrHdl(error: any) {
     if (error.response) {
       if (error.response.data.message === 'Unauthenticated.') {
-        //this.router.push('/login');
+        alert('請重新登入');
+      } else if (error.response.data.message === 'Too Many Attempts.') {
+        alert('由於伺服器負載過重，請稍後再試');
       }
       // this.LogError(JSON.stringify(error.response));
       // The request was made and the server responded with a status code

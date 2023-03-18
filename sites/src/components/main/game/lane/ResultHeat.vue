@@ -93,9 +93,20 @@ import { ref } from 'vue';
           <td>{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
           <td>{{ item[`r${[props.phaseNum]}_result`] }}</td>
           <td>
-            <div v-if="item[`r${[props.phaseNum]}_options`].qualified != undefined">{{ item[`r${[props.phaseNum]}_options`].qualified }}</div>
+            <div class="flex items-center gap-3">
+              <template v-if="item[`r${props.phaseNum}_options`].cr != undefined">
+                <div class="px-2 py-0.5 bg-blue-400 rounded text-white inline-block" v-if="item[`r${props.phaseNum}_options`].cr">CR</div>
+              </template>
+              <template v-if="item[`r${props.phaseNum}_options`].nr != undefined">
+                <div class="px-2 py-0.5 bg-blue-500 rounded text-white inline-block" v-if="item[`r${props.phaseNum}_options`].nr">NR</div>
+              </template>
+              <div v-if="item[`r${[props.phaseNum]}_options`].qualified != undefined">{{ item[`r${[props.phaseNum]}_options`].qualified }}</div>
+            </div>
             <div v-if="item[`r${[props.phaseNum]}_options`].windspeed != undefined">WS：{{ item[`r${[props.phaseNum]}_options`].windspeed }}</div>
             <div v-if="item[`r${[props.phaseNum]}_options`].rt != undefined">RT：{{ item[`r${[props.phaseNum]}_options`].rt }}</div>
+            <template v-if="item[`r${props.phaseNum}_options`].break != undefined">
+              <div v-if="item[`r${props.phaseNum}_options`].break != null">{{ item[`r${props.phaseNum}_options`].break }}</div>
+            </template>
           </td>
         </tr>
       </template>
