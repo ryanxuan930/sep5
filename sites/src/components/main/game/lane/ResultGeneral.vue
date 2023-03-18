@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
   
-  const props = defineProps(['inputData', 'phaseNum']);
+  const props = defineProps(['inputData', 'phaseNum', 'isMultiple']);
   const dataList: any = ref([]);
   const temp1: any = [];
   const temp2: any = [];
@@ -33,9 +33,13 @@
           <div>分部/系所</div>
           <div class="text-sm">Department</div>
         </th>
-        <th>
+        <th v-if="props.isMultiple == 0">
           <div>姓名</div>
           <div class="text-sm">Name</div>
+        </th>
+        <th v-else>
+          <div>隊名</div>
+          <div class="text-sm">Team</div>
         </th>
         <th>
           <div>組別</div>
@@ -67,7 +71,8 @@
             <div>{{ item.dept_name_ch }}</div>
             <div class="text-sm">{{ item.dept_name_en }}</div>
           </td>
-          <td>{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
+          <td v-if="props.isMultiple == 0">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
+          <td v-else>{{ item.team_name }}</td>
           <td>{{ item[`r${[props.phaseNum]}_heat`] }}</td>
           <td>{{ item[`r${[props.phaseNum]}_lane`] }}</td>
           <td>{{ item[`r${[props.phaseNum]}_result`] }}</td>
