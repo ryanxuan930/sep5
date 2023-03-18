@@ -89,29 +89,24 @@ for(const item of orginalData.value) {
             <td style="width: 5%">{{ item[`r${round}_ranking`] }}</td>
             <td style="width: 15%">
               <div class="flex items-center gap-3">
-                <template v-if="item[`r${round}_options`].break != undefined">
-                  <div class="px-2 py-0.5 bg-gray-500 text-white inline-block" v-if="item[`r${round}_options`].break != 'no'">{{ item[`r${round}_options`].break }}</div>
+                <template v-if="item[`r${round}_options`].cr != undefined">
+                  <div class="px-2 py-0.5 bg-gray-500 text-white inline-block" v-if="item[`r${round}_options`].cr">CR</div>
+                </template>
+                <template v-if="item[`r${round}_options`].nr != undefined">
+                  <div class="px-2 py-0.5 bg-gray-500 text-white inline-block" v-if="item[`r${round}_options`].nr">NR</div>
                 </template>
                 <div v-if="item[`r${round}_options`].qualified != undefined">{{ item[`r${round}_options`].qualified }}</div>
               </div>
-              <div v-if="item[`r${round}_options`].windspeed != undefined">WS: {{ item[`r${round}_options`].windspeed }}</div>
+              <div v-if="item[`r${round}_options`].windspeed != undefined">W: {{ item[`r${round}_options`].windspeed }}</div>
               <div v-if="item[`r${round}_options`].rt != undefined">RT: {{ item[`r${round}_options`].rt }}</div>
+              <template v-if="item[`r${round}_options`].break != undefined">
+                <div v-if="item[`r${round}_options`].break != null">{{ item[`r${round}_options`].break }}</div>
+              </template>
             </td>
           </tr>
         </template>
       </table>
     </template>
-    <div class="height2"></div>
-    <div class="grid grid-cols-2 gap-2">
-      <div class="check-content">
-        <div>紀錄：</div>
-        <div class="flex-grow"></div>
-      </div>
-      <div class="check-content">
-        <div>製表時間：</div>
-        <div class="flex-grow">{{ new Date().toLocaleString('zh-TW', { hour12: false}) }}</div>
-      </div>
-    </div>
   </div>
 </template>
 

@@ -73,7 +73,9 @@ async function submitAll() {
     dataList.value[i][`r${props.inputData.round}_options`].qualified = '*';
     dataList.value[i][`r${props.inputData.round}_options`].windspeed = 0;
     dataList.value[i][`r${props.inputData.round}_options`].rt = 0;
-    dataList.value[i][`r${props.inputData.round}_options`].break = 'no';
+    dataList.value[i][`r${props.inputData.round}_options`].break = null;
+    dataList.value[i][`r${props.inputData.round}_options`].cr = false;
+    dataList.value[i][`r${props.inputData.round}_options`].nr = false;
   }
   // sort by heat and temp
   if (timeEvents.includes(props.inputData.remarks)) {
@@ -106,20 +108,30 @@ async function submitAll() {
   for(let i = 0; i < dataList.value.length; i++){
     if (timeEvents.includes(props.inputData.remarks)) {
       if (stringToMilliseconds(recordList.value.result) > dataList.value[i].temp) {
-        dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
+        dataList.value[i][`r${props.inputData.round}_options`].break = '破大會紀錄';
+        if (flag == false) {
+          dataList.value[i][`r${props.inputData.round}_options`].cr = true;
+          flag = true;
+        }
       }
       if (recordList.value.result == 0 && flag == false) {
-        dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
+        dataList.value[i][`r${props.inputData.round}_options`].break = '創大會紀錄';
+        dataList.value[i][`r${props.inputData.round}_options`].cr = true;
         flag = true;
       }
     } else {
       if (recordList.value.result == 0) {
         if (flag == false) {
-          dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
+          dataList.value[i][`r${props.inputData.round}_options`].break = '創大會紀錄';
+          dataList.value[i][`r${props.inputData.round}_options`].cr = true;
           flag = true;
         }
       } else if (Number(recordList.value.result) < dataList.value[i].temp) {
-        dataList.value[i][`r${props.inputData.round}_options`].break = 'CR';
+        dataList.value[i][`r${props.inputData.round}_options`].break = '破大會紀錄';
+        if (flag == false) {
+          dataList.value[i][`r${props.inputData.round}_options`].cr = true;
+          flag = true;
+        }
       }
     }
   }
