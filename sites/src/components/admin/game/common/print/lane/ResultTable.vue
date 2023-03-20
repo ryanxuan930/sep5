@@ -35,7 +35,12 @@ const isLoading = ref(false);
     await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/event/${divisionId}/${eventCode}`, dataList);
   }
   const temp = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/temp/gameRecords`);
-  const records = JSON.parse(temp.temp_data);
+  let records: any = {};
+  if (Object.keys(temp).length == 0 && temp.constructor === Object) {
+    records = [];
+  } else {
+    records = JSON.parse(temp.temp_data);
+  }
   records.forEach((item: any) => {
     if (item.division_id == divisionId && item.event_code == eventCode) {
       recordList.value = item;
