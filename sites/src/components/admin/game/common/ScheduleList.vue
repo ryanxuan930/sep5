@@ -100,7 +100,7 @@ async function sendResult(id: number) {
             <div class="flex gap-2 items-center flex-wrap" v-if="item.division_id != null && item.event_ch != null">
               <button class="general-button blue" @click="openEvent(item, 1)">查看</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status < 2 && (props.displayMode == 'management' || props.displayMode == 'call')" class="general-button blue" @click="openEvent(item, 2)">檢錄</button>
-              <button v-if="gameData.module == 'ln'" class="general-button blue" @click="exportData(item)">電計下載</button>
+              <button v-if="gameData.module == 'ln'" class="general-button blue" @click="exportData(item)">名單下載</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 1 && item.status < 4 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="openEvent(item, 3)">成績</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status == 3 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="sendResult(item.schedule_id)">送出</button>
             </div>
