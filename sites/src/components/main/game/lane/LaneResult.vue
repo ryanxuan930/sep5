@@ -12,6 +12,7 @@ const gameId = route.params.gameId;
 const pageData: any = inject('pageData');
 const gameData: any = inject('gameData');
 const scheduleList: any = ref([]);
+const selectedTab = ref(0);
 const counter = ref(0);
 async function getData() {
   await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/schedule/full`, scheduleList);
@@ -41,7 +42,13 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
 <template>
   <div class="text-2xl font-medium text-left mb-2">{{ t('result-title') }}</div>
   <div class="text-sm text-left mb-2">{{ t('update-in-second', {second: counter}) }}</div>
-  <div class="bg-gray-50">
+  <div class="bookmark">
+    <button :class="{'item': true, 'active': selectedTab == 0}" @click="selectedTab = 0">賽程成績</button>
+    <button :class="{'item': true, 'active': selectedTab == 1}" @click="selectedTab = 1">名次統計</button>
+    <button :class="{'item': true, 'active': selectedTab == 2}" @click="selectedTab = 2">成績總表</button>
+    <button :class="{'item': true, 'active': selectedTab == 3}" @click="selectedTab = 3">總錦標</button>
+  </div>
+  <div class="bg-gray-50" v-if="selectedTab == 0">
     <table>
       <tr>
         <th>{{ t('time') }}</th>
@@ -97,6 +104,15 @@ table {
       100%{
         @apply bg-gray-50;
       }
+    }
+  }
+}
+.bookmark {
+  @apply flex gap-[1px] items-center;
+  .item {
+    @apply bg-gray-100 text-lg py-2 px-4 font-medium rounded-t hover:bg-gray-400 hover:text-white duration-150;
+    &.active {
+      @apply bg-gray-400 text-white;
     }
   }
 }
