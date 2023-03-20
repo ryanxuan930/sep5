@@ -29,8 +29,79 @@ for(const item of orginalData.value) {
 
 <template>
   <div>
+    <div class="height2"></div>
+    <div class="grid grid-cols-8 gap-2">
+      <div class="check-content">
+        <div class="check-box"></div>
+        <div>終點</div>
+      </div>
+      <div class="check-content">
+        <div class="check-box"></div>
+        <div>發令</div>
+      </div>
+      <div class="check-content">
+        <div class="check-box"></div>
+        <div>計時</div>
+      </div>
+      <div class="check-content">
+        <div class="check-box"></div>
+        <div>司令台</div>
+      </div>
+      <div class="check-content">
+        <div class="check-box"></div>
+        <div>檢查</div>
+      </div>
+      <div class="check-content">
+        <div class="check-box"></div>
+        <div>檢錄</div>
+      </div>
+      <div class="check-content">
+        <div class="check-box"></div>
+        <div>終點攝影</div>
+      </div>
+      <div class="check-content">
+        <div>備註：</div>
+      </div>
+    </div>
+    <div class="height2"></div>
+    <div class="grid grid-cols-3 gap-2">
+      <div class="check-content">
+        <div>檢錄員：</div>
+        <div class="flex-grow"></div>
+      </div>
+      <div class="check-content">
+        <div>檢錄主任：</div>
+        <div class="flex-grow"></div>
+      </div>
+      <div class="check-content">
+        <div>檢錄裁判長：</div>
+        <div class="flex-grow"></div>
+      </div>
+      <div class="check-content">
+        <div>終點紀錄：</div>
+        <div class="flex-grow"></div>
+      </div>
+      <div class="check-content">
+        <div>終點裁判長：</div>
+        <div class="flex-grow"></div>
+      </div>
+      <div class="check-content">
+        <div>競賽裁判長：</div>
+        <div class="flex-grow"></div>
+      </div>
+    </div>
+    <div class="height2"></div>
+    <div class="break-after-page text-center text-lg font-medium">==檢錄單見下一頁==</div>
     <template v-for="(data, index) in dataList" :key="index">
-      <table class="result-table">
+      <div class="flex items-end">
+        <div class="text-xl font-medium">
+          <span>第 {{ data.heat }} 組 Heat {{ data.heat }}</span>
+        </div>
+        <div class="flex-grow"></div>
+        <div>第{{ index + 1 }}頁 / 共 {{ dataList.length }} 頁</div>
+      </div>
+      <div class="height1"></div>
+      <table :class="{'result-table': true, 'break-after-page': index < dataList.length - 1}">
         <tr>
           <th>
             <div class="ch-content">檢錄</div>
@@ -112,68 +183,8 @@ for(const item of orginalData.value) {
           </tr>
         </template>
       </table>
+      <div class="height1"></div>
     </template>
-    <div class="height2"></div>
-      <div class="grid grid-cols-8 gap-2">
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>終點</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>發令</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>計時</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>司令台</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>檢查</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>檢錄</div>
-        </div>
-        <div class="check-content">
-          <div class="check-box"></div>
-          <div>終點攝影</div>
-        </div>
-        <div class="check-content">
-          <div>備註：</div>
-        </div>
-      </div>
-      <div class="height2"></div>
-      <div class="grid grid-cols-3 gap-2">
-        <div class="check-content">
-          <div>檢錄員：</div>
-          <div class="flex-grow"></div>
-        </div>
-        <div class="check-content">
-          <div>檢錄主任：</div>
-          <div class="flex-grow"></div>
-        </div>
-        <div class="check-content">
-          <div>檢錄裁判長：</div>
-          <div class="flex-grow"></div>
-        </div>
-        <div class="check-content">
-          <div>終點紀錄：</div>
-          <div class="flex-grow"></div>
-        </div>
-        <div class="check-content">
-          <div>終點裁判長：</div>
-          <div class="flex-grow"></div>
-        </div>
-        <div class="check-content">
-          <div>競賽裁判長：</div>
-          <div class="flex-grow"></div>
-        </div>
-      </div>
   </div>
 </template>
 

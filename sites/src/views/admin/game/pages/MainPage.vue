@@ -10,6 +10,7 @@
   import EventSetter from '@/components/admin/game/main/EventSetter.vue';
   import ParamsSetter from '@/components/admin/game/main/ParamsSetter.vue';
   import LaneSetter from '@/components/admin/game/main/LaneSetter.vue';
+  import ChampionSetter from '@/components/admin/game/main/ChampionSetter.vue';
   import RecordSetter from '@/components/admin/game/main/RecordSetter.vue';
 
   const store = useUserStore();
@@ -30,7 +31,7 @@
       <button class="round-full-button blue" @click="displayModal = 4">競賽項目管理</button>
       <button class="round-full-button blue" @click="displayModal = 5">分組項目設定</button>
       <button class="round-full-button blue" @click="displayModal = 6">大會紀錄管理</button>
-      <button class="round-full-button blue">錦標積分設定</button>
+      <button class="round-full-button blue" @click="displayModal = 7">錦標積分設定</button>
       <button class="round-full-button blue" @click="displayModal = 8" v-if="gameData.module == 'ln'">賽道編排設定</button>
       <button class="round-full-button blue" @click="displayModal = 9" v-if="gameData.sport_code == 'athl'">全能項目設定</button>
     </div>
@@ -44,7 +45,9 @@
           <div v-if="displayModal == 4">競賽項目管理</div>
           <div v-if="displayModal == 5">分組項目設定</div>
           <div v-if="displayModal == 6">大會紀錄管理</div>
+          <div v-if="displayModal == 7">錦標積分設定</div>
           <div v-if="displayModal == 8">賽道編排設定</div>
+          <div v-if="displayModal == 9">全能項目設定</div>
         </div>
       </template>
       <template v-slot:content>
@@ -55,6 +58,7 @@
           <EventSetter v-if="displayModal == 4" :input-data="gameData" @closeModal="displayModal = 0"></EventSetter>
           <ParamsSetter v-if="displayModal == 5" :input-data="gameData" @closeModal="displayModal = 0"></ParamsSetter>
           <RecordSetter v-if="displayModal == 6" :input-data="gameData" @closeModal="displayModal = 0"></RecordSetter>
+          <ChampionSetter v-if="displayModal == 7" :input-data="gameData" @closeModal="displayModal = 0"></ChampionSetter>
           <LaneSetter v-if="displayModal == 8" :input-data="gameData" @closeModal="displayModal = 0"></LaneSetter>
         </div>
       </template>
