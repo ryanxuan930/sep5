@@ -53,6 +53,7 @@ function check() {
     if (uploadData.value[i].is_student != 1) {
       uploadData.value[i].is_student = 0;
     }
+    console.log(uploadData.value[i].dept_id);
     if (Number.isInteger(Number(uploadData.value[i].dept_id)) || uploadData.value[i].dept_id == null) {
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     } else {
