@@ -38,9 +38,9 @@ const uploadData: any = ref([]);
 function check() {
   console.log(uploadData.value);
   for(let i = 0; i < uploadData.value.length; i++) {
-    console.log(uploadData.value[i]);
     uploadData.value[i].org_code = store.userInfo.org_code;
     if (store.userInfo.permission == 1 || store.userInfo.org_code.substring(0, 1) == 'O') {
+      console.log(1);
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     }
     const tempAccount = `${store.userInfo.org_code}${Date.now()}`;
@@ -54,12 +54,14 @@ function check() {
       uploadData.value[i].is_student = 0;
     }
     if (!Number.isInteger(uploadData.value[i].dept_id)) {
+      console.log(2);
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     }
     if (uploadData.value[i].nationality == '' || uploadData.value[i].nationality == null) {
       uploadData.value[i].nationality = 'TW';
     }
     if (!Number.isInteger(uploadData.value[i].grade)) {
+      console.log(3);
       let flag = true;
       for(let j = 0; j < Grade.length; j++) {
         if (uploadData.value[i].grade == Grade[j].grade) {
