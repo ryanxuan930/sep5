@@ -53,7 +53,7 @@ function check() {
     if (uploadData.value[i].is_student != 1) {
       uploadData.value[i].is_student = 0;
     }
-    if (Number.isInteger(uploadData.value[i].dept_id) == false) {
+    if (!Number.isInteger(uploadData.value[i].dept_id)) {
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     }
     if (uploadData.value[i].nationality == '' || uploadData.value[i].nationality == null) {
@@ -80,9 +80,6 @@ function check() {
       } else {
         uploadData.value[i].sex = 1;
       }
-    }
-    if (!Number.isInteger(uploadData.value[i].dept_id)) {
-      uploadData.value[i].dept_id = 0;
     }
     if (!isNaN(uploadData.value[i].height)) {
       uploadData.value[i].height *= 100;
