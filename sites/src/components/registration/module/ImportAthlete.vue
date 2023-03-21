@@ -40,7 +40,7 @@ function check() {
   for(let i = 0; i < uploadData.value.length; i++) {
     console.log(uploadData.value[i]);
     uploadData.value[i].org_code = store.userInfo.org_code;
-    if (store.userInfo.permission == 1, store.userInfo.org_code.substring(0, 1) == 'O') {
+    if (store.userInfo.permission == 1 || store.userInfo.org_code.substring(0, 1) == 'O') {
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     }
     const tempAccount = `${store.userInfo.org_code}${Date.now()}`;
