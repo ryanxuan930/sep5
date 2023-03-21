@@ -54,7 +54,7 @@ function check() {
       uploadData.value[i].is_student = 0;
     }
     console.log(uploadData.value[i].dept_id);
-    if (Number.isInteger(Number(uploadData.value[i].dept_id)) || uploadData.value[i].dept_id == null) {
+    if (isNaN(uploadData.value[i].dept_id)) {
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     } else {
       uploadData.value[i].dept_id = Number(uploadData.value[i].dept_id);
