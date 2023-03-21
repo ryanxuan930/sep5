@@ -53,7 +53,7 @@ function check() {
     if (uploadData.value[i].is_student != 1) {
       uploadData.value[i].is_student = 0;
     }
-    if (uploadData.value[i].dept_id = null || uploadData.value[i].dept_id == 0 || isNaN(uploadData.value[i].dept_id)) {
+    if (uploadData.value[i].dept_id == null || uploadData.value[i].dept_id == 0 || isNaN(uploadData.value[i].dept_id)) {
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     }
     if (uploadData.value[i].nationality == '' || uploadData.value[i].nationality == null) {
