@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router';
 import SmallLoader from '@/components/SmallLoader.vue';
 import { csvToArray, openWindow } from '@/components/library/functions';
 import Grade from '@/assets/grade.json';
+import { number } from '@intlify/core-base';
 
 const store = useUserStore();
 const route = useRoute();
@@ -52,7 +53,7 @@ function check() {
     if (uploadData.value[i].is_student != 1) {
       uploadData.value[i].is_student = 0;
     }
-    if (Number.isInteger(Number(uploadData.value[i].dept_id)) == false || uploadData.value[i].dept_id == null) {
+    if (Number.isInteger(Number(uploadData.value[i].dept_id)) == false ||  isNaN(Number(uploadData.value[i].dept_id))) {
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     }
     if (uploadData.value[i].nationality == '' || uploadData.value[i].nationality == null) {
