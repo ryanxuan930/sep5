@@ -52,7 +52,7 @@ function check() {
     if (uploadData.value[i].is_student != 1) {
       uploadData.value[i].is_student = 0;
     }
-    if (Number.isInteger(Number(uploadData.value[i].dept_id)) == false) {
+    if (Number.isInteger(Number(uploadData.value[i].dept_id)) == false || uploadData.value[i].dept_id == null) {
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     }
     if (uploadData.value[i].nationality == '' || uploadData.value[i].nationality == null) {
