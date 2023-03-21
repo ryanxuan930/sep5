@@ -53,7 +53,7 @@ function check() {
     if (uploadData.value[i].is_student != 1) {
       uploadData.value[i].is_student = 0;
     }
-    if (!Number.isInteger(uploadData.value[i].dept_id)) {
+    if (!Number.isInteger(Number(uploadData.value[i].dept_id))) {
       console.log(2);
       uploadData.value[i].dept_id = store.userInfo.dept_id;
     }
@@ -61,7 +61,6 @@ function check() {
       uploadData.value[i].nationality = 'TW';
     }
     if (!Number.isInteger(uploadData.value[i].grade)) {
-      console.log(3);
       let flag = true;
       for(let j = 0; j < Grade.length; j++) {
         if (uploadData.value[i].grade == Grade[j].grade) {
