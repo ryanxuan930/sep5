@@ -205,6 +205,34 @@ class GameMaker {
     }
 
     /*
+    For Others
+    */
+    public static function otherSchema(string $header){
+        Schema::create($header.'individuals', function(Blueprint $table){
+            $table->id('ind_id');
+            $table->bigInteger('u_id');
+            $table->integer('division_id');
+            $table->char('event_code', 8);
+            $table->json('options')->nullable();
+        });
+        Schema::create($header.'groups', function(Blueprint $table){
+            $table->id('grp_id');
+            $table->integer('team_id')->default(0);
+            $table->integer('division_id')->default(0);
+            $table->char('event_code', 8);
+            $table->json('options')->nullable();
+        });
+        Schema::create($header.'schedules', function(Blueprint $table){
+            $table->id('schedule_id');
+            $table->datetime('timestamp');
+            $table->integer('division_id');
+            $table->char('event_code', 8);
+            $table->tinyInteger('status')->default(0);
+            $table->json('options')->nullable();
+        });
+    }
+
+    /*
     For specified sport
     */
     public static function customSchema($header, $sportsCode) {
@@ -221,6 +249,9 @@ class GameMaker {
         }
         if ($module == 'rd') {
             GameMaker::roadSchema($header);
+        }
+        if ($module == 'ot') {
+            GameMaker::otherSchema($header);
         }
         GameMaker::customSchema($header, $sportCode);
     }

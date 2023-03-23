@@ -46,7 +46,7 @@ const { t, locale } = useI18n({
       </div>
       <div class="flex-grow"></div>
       <div class="text-right">
-        <div>總人數 Total：{{ dataList.length }}</div>
+        <div>總數 Total：{{ dataList.length }}</div>
         <div>Q：{{ params[`r${$route.params.round}_aq`] }} / q：{{ params[`r${$route.params.round}_sq`] }}</div>
       </div>
     </div>

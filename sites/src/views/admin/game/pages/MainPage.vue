@@ -30,7 +30,7 @@
       <button class="round-full-button blue" @click="displayModal = 3">競賽分組管理</button>
       <button class="round-full-button blue" @click="displayModal = 4">競賽項目管理</button>
       <button class="round-full-button blue" @click="displayModal = 5">分組項目設定</button>
-      <button class="round-full-button blue" @click="displayModal = 6">大會紀錄管理</button>
+      <button class="round-full-button blue" @click="displayModal = 6" v-if="gameData.module == 'ln'">大會紀錄管理</button>
       <button class="round-full-button blue" @click="displayModal = 7">錦標積分設定</button>
       <button class="round-full-button blue" @click="displayModal = 8" v-if="gameData.module == 'ln'">賽道編排設定</button>
       <button class="round-full-button blue" @click="displayModal = 9" v-if="gameData.sport_code == 'athl'">全能項目設定</button>
