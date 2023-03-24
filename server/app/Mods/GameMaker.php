@@ -230,6 +230,12 @@ class GameMaker {
             $table->tinyInteger('status')->default(0);
             $table->json('options')->nullable();
         });
+        Schema::create($header.'params', function(Blueprint $table){
+            $table->id('param_id');
+            $table->integer('division_id');
+            $table->char('event_code', 8);
+            $table->json('options')->nullable();
+        });
     }
 
     /*
