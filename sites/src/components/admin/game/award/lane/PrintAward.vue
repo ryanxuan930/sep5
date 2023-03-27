@@ -33,12 +33,17 @@
     await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/main/params/${divisionId}/${eventCode}`, paramList);
     for (let i = 0; i < temp.length; i++) {
       if (temp[i][`${phaseArray[round]}_ranking`] > 0 && temp[i][`${phaseArray[round]}_ranking`] < paramList.value[`${phaseArray[round]}_sq`]) {
-        temp[i].result = temp[i][`${phaseArray[round]}_result`];
-        temp[i].ranking = temp[i][`${phaseArray[round]}_ranking`];
-        if (multiple == 1) {
-          temp[i].memberNum = JSON.parse(temp[i].member_list).length;
+        if (multiple == 0) {
+          temp[i].result = temp[i][`${phaseArray[round]}_result`];
+          temp[i].ranking = temp[i][`${phaseArray[round]}_ranking`];
+          dataList.value.push(temp[i]);
+        } else {
+          const members: any = await vr.Post('user-from-list', {data: temp[i].member_list}, null, true, true);
+          for(const member of members) {
+            dataList.value.push({...temp[i], ...member, result: temp[i][`${phaseArray[round]}_result`], ranking: temp[i][`${phaseArray[round]}_ranking`], memberNum: JSON.parse(temp[i].member_list).length});
+          }
         }
-        dataList.value.push(temp[i]);
+        
       }
     }
     dataList.value.sort((a: any, b: any) => a.ranking - b.ranking);
