@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Game\Common;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Validator;
+use Illuminate\Support\Facades\DB;
 
 class ResultController extends Controller
 {
