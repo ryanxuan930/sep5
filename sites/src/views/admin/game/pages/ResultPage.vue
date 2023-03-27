@@ -24,14 +24,14 @@
       <div class="col-span-4 text-2xl">功能選單</div>
       <hr class="col-span-4">
       <button class="round-full-button blue" @click="displayModal = 1">場次總覽</button>
-      <button class="round-full-button blue" @click="displayModal = 2">特殊成績處理</button>
-      <button class="round-full-button blue" @click="displayModal = 3">總錦標計算</button>
+      <button v-if="gameData.module == 'ln'" class="round-full-button blue" @click="displayModal = 2">特殊成績處理</button>
+      <button v-if="gameData.module == 'ln'" class="round-full-button blue" @click="displayModal = 3">總錦標計算</button>
     </div>
     <div class="section-box flex-grow h-full flex flex-col gap-4 overflow-hidden">
       <div class="col-span-4 text-2xl">賽程列表</div>
       <hr class="col-span-4">
       <div class="flex-grow h-full overflow-hidden">
-        <ScheduleList :displayMode="'input'"></ScheduleList>
+        <ScheduleList v-if="gameData.module == 'ln'" :displayMode="'input'"></ScheduleList>
       </div>
     </div>
   </div>

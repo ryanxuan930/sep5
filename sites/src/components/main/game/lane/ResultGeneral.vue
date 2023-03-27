@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
+  import Config from '@/assets/config.json'
   
   const props = defineProps(['inputData', 'phaseNum', 'isMultiple']);
   const dataList: any = ref([]);
@@ -29,9 +30,17 @@
           <div>組織單位</div>
           <div class="text-sm">Organization</div>
         </th>
-        <th>
+        <th v-if="Config.deptAsClass">
+          <div>班級</div>
+          <div class="text-sm">Class</div>
+        </th>
+        <th v-else>
           <div>分部/系所</div>
           <div class="text-sm">Department</div>
+        </th>
+        <th v-if="Config.deptAsClass">
+          <div>座號</div>
+          <div class="text-sm">No.</div>
         </th>
         <th v-if="props.isMultiple == 0">
           <div>姓名</div>

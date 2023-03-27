@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import { stringToMilliseconds } from '@/components/library/functions';
-import { ref } from 'vue';
+  import { ref } from 'vue';
+  import Config from '@/assets/config.json'
   
-  const props = defineProps(['inputData', 'phaseNum']);
+  const props = defineProps(['inputData', 'phaseNum', 'isMultiple']);
   const dataList: any = ref([]);
   const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
   props.inputData.forEach((element: any) => {
@@ -58,13 +59,25 @@ import { ref } from 'vue';
           <div>組織單位</div>
           <div class="text-sm">Organization</div>
         </th>
-        <th>
+        <th v-if="Config.deptAsClass">
+          <div>班級</div>
+          <div class="text-sm">Class</div>
+        </th>
+        <th v-else>
           <div>分部/系所</div>
           <div class="text-sm">Department</div>
         </th>
-        <th>
+        <th v-if="Config.deptAsClass">
+          <div>座號</div>
+          <div class="text-sm">No.</div>
+        </th>
+        <th v-if="props.isMultiple == 0">
           <div>姓名</div>
           <div class="text-sm">Name</div>
+        </th>
+        <th v-else>
+          <div>隊名</div>
+          <div class="text-sm">Team</div>
         </th>
         <th>
           <div>成績</div>
@@ -90,7 +103,9 @@ import { ref } from 'vue';
             <div>{{ item.dept_name_ch }}</div>
             <div class="text-sm">{{ item.dept_name_en }}</div>
           </td>
-          <td>{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
+          <td v-if="Config.deptAsClass">{{ item.num_in_dept }}</td>
+          <td v-if="props.isMultiple == 0">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
+          <td v-else>{{ item.team_name }}</td>
           <td>{{ item[`r${[props.phaseNum]}_result`] }}</td>
           <td>
             <div class="flex items-center gap-3">
