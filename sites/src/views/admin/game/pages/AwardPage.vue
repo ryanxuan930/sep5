@@ -17,6 +17,10 @@
   const sportCode = route.params.sportCode;
   const gameId = route.params.gameId;
   provide('gameData', gameData);
+  function refreshModule() {
+    gameData.value =null;
+    gameData.value = gameStore.data;
+  }
 </script>
 
 <template>
@@ -45,7 +49,7 @@
     <template v-slot:content>
       <div class="overflow-auto h-full">
         <ScheduleList v-if="displayModal == 1" :displayMode="'award'"></ScheduleList>
-        <EditAwardFormat v-if="displayModal == 2"></EditAwardFormat>
+        <EditAwardFormat v-if="displayModal == 2" @close-modal="displayModal = 0" @refresh-page="refreshModule"></EditAwardFormat>
       </div>
     </template>
   </FullModal>
