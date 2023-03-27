@@ -23,7 +23,7 @@ class ResultController extends Controller
                 }
             }
         }
-        $tempArray = array_merge($tempIndividual->toArray(), $tempGroup->toArray());
+        $tempArray = array_merge(json_decode(json_encode($tempIndividual), true), json_decode(json_encode($tempGroup), true));
         return response()->json($userArray);
     }
 }
