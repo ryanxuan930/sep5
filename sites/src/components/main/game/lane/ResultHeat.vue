@@ -67,7 +67,7 @@
           <div>分部/系所</div>
           <div class="text-sm">Department</div>
         </th>
-        <th v-if="Config.deptAsClass">
+        <th v-if="Config.deptAsClass && props.isMultiple == 0">
           <div>座號</div>
           <div class="text-sm">No.</div>
         </th>
@@ -103,7 +103,7 @@
             <div>{{ item.dept_name_ch }}</div>
             <div class="text-sm">{{ item.dept_name_en }}</div>
           </td>
-          <td v-if="Config.deptAsClass">{{ item.num_in_dept }}</td>
+          <td v-if="Config.deptAsClass && props.isMultiple == 0">{{ item.num_in_dept }}</td>
           <td v-if="props.isMultiple == 0">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
           <td v-else>{{ item.team_name }}</td>
           <td>{{ item[`r${[props.phaseNum]}_result`] }}</td>
