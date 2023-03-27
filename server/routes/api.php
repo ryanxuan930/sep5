@@ -35,6 +35,7 @@ use App\Http\Controllers\Game\Registration\GroupController as GameGroupControlle
 use App\Http\Controllers\Game\Common\TempController as GameTempController;
 use App\Http\Controllers\Game\Common\AthleteController as GameAthleteController;
 use App\Http\Controllers\Game\Common\ScheduleController as GameScheduleController;
+use App\Http\Controllers\Game\Common\ResultController as GameResultController;
 
 /*
 |--------------------------------------------------------------------------
@@ -237,6 +238,7 @@ Route::group([
         Route::apiResource('temp', GameTempController::class);
         Route::get('athlete/list', [GameAthleteController::class, 'index']);
         Route::get('athlete/find/{uid}', [GameAthleteController::class, 'find']);
+        Route::get('result/ranking', [GameResultController::class, 'ranking']);
         Route::group([
             'prefix' => 'schedule'
         ], function () {
