@@ -16,6 +16,7 @@ const selectedTab = ref(0);
 const counter = ref(0);
 async function getData() {
   await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/schedule/full`, scheduleList);
+  await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/result/ranking`);
   scheduleList.value.sort((a: any, b: any) => {
     const t1 = new Date(a.timestamp);
     const t2 = new Date(b.timestamp);
@@ -82,6 +83,8 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
         </tr>
       </template>
     </table>
+  </div>
+  <div v-if="selectedTab == 1">
   </div>
 </template>
 
