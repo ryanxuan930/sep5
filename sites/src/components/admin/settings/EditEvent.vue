@@ -142,7 +142,7 @@
     <label class="round-input-label">
       <div class="title">運動類型</div>
       <select class="select" v-model="data.sport_id" :disabled="data.built_in == 1">
-        <template v-for="(item, index) in sportList">
+        <template v-for="(item, index) in sportList" :key="index">
           <option :disabled="!deptData.sport_management_list.includes(item.sport_id)" :value="item.sport_id">{{ item.sport_name_ch }}</option>
         </template>
       </select>
@@ -159,7 +159,7 @@
       <div class="flex items-center gap-5">
         <button class="general-button blue block flex-shrink-0" @click="displayModal = true">選取</button>
         <div class="flex-grow flex overflow-auto gap-3 p-1 bg-gray-50">
-          <template v-for="(item, index) in eventList">
+          <template v-for="(item, index) in eventList" :key="index">
             <div class="flex-shrink-0 py-0.5 px-2 border-2 rounded bg-white" v-if="data.combined_list.includes(item.event_code)">{{ item.event_ch }}</div>
           </template>
         </div>

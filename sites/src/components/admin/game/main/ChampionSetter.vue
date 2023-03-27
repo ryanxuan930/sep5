@@ -2,67 +2,42 @@
   import { ref } from 'vue';
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
+  import FullModal from '@/components/FullModal.vue';
+  import EditChampion from '@/components/admin/game/main/module/EditChampion.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
+  const displayModal = ref(0);
   const props = defineProps(['inputData']);
   const isLoading = ref(false);
   const sportCode = props.inputData.sport_code;
   const gameId = props.inputData.game_id;
-  const paramsList: any = ref([]);
+  const divisionList: any = ref([]);
+  const championData: any = ref({});
+  const selectedData: any = ref(null);
 
+  const championPrototype = {
+    isRelease: false,
+    content: [],
+  };
+  const contentPrototype = {
+    type: 'ranking', // ranking, grade
+    divisionName: '',
+    formula: {},
+    payload: {},
+  }
   const dataList:any = ref([]);
   async function getData() {
     isLoading.value = true;
-    const params = await vr.Get(`game/${sportCode}/${gameId}/main/params/full`, paramsList);
-    const temp = await vr.Get(`game/${sportCode}/${gameId}/common/temp/gameRecords`);
+    const divisions = await vr.Get(`game/${sportCode}/${gameId}/main/division`, divisionList);
+    const temp = await vr.Get(`game/${sportCode}/${gameId}/common/temp/gameChampion`);
     if (temp.temp_id == undefined) {
-      const res = await vr.Post(`game/${sportCode}/${gameId}/common/temp`, {temp_key: 'gameRecords', temp_data: JSON.stringify([])}, null, true, true);
+      const res = await vr.Post(`game/${sportCode}/${gameId}/common/temp`, {temp_key: 'gameChampion', temp_data: JSON.stringify(championPrototype)}, null, true, true);
       if (res.status != 'A01') {
         alert('建立參數失敗');
       }
-      params.forEach((item: any) => {
-        dataList.value.push({
-          division_id: item.division_id,
-          event_code: item.event_code,
-          unit_name_ch: '',
-          unit_name_en: '',
-          last_name_ch: '',
-          first_name_ch: '',
-          last_name_en: '',
-          first_name_en: '',
-          result: '',
-          set_date: '',
-        });
-      });
     } else {
-      const resultData = JSON.parse(temp.temp_data);
-      for(let i = 0; i < params.length; i++) {
-        dataList.value[i] = {
-          division_id: params[i].division_id,
-          event_code: params[i].event_code,
-          unit_name_ch: '',
-          unit_name_en: '',
-          last_name_ch: '',
-          first_name_ch: '',
-          last_name_en: '',
-          first_name_en: '',
-          result: '',
-          set_date: '',
-        };
-        for (let j = 0; j < resultData.length; j++) {
-          if (params[i].division_id == resultData[j].division_id && params[i].event_code == resultData[j].event_code) {
-            dataList.value[i].unit_name_ch = resultData[j].unit_name_ch;
-            dataList.value[i].unit_name_en = resultData[j].unit_name_en;
-            dataList.value[i].last_name_ch = resultData[j].last_name_ch;
-            dataList.value[i].first_name_ch = resultData[j].first_name_ch;
-            dataList.value[i].last_name_en = resultData[j].last_name_en;
-            dataList.value[i].first_name_en = resultData[j].first_name_en;
-            dataList.value[i].result = resultData[j].result;
-            dataList.value[i].set_date = resultData[j].set_date;
-          }
-        }
-      }
+      championData.value = JSON.parse(temp.temp_data);
     }
     isLoading.value = false;
   };
@@ -84,58 +59,44 @@
       alert('已清除');
     }
   }
+  function openModal(type: string, input: any = null) {
+    if (type == 'add') {
+      selectedData.value = JSON.parse(JSON.stringify(contentPrototype));
+    } else {
+      selectedData.value = input;
+    }
+    displayModal.value = 1;
+  }
 </script>
 
 <template>
-  <div class="overflow-auto w-full">
-    <table class="config-table">
-      <tr>
-        <th>組別</th>
-        <th>項目</th>
-        <th>所屬單位中文</th>
-        <th>所屬單位英文</th>
-        <th>中文姓氏</th>
-        <th>中文名字</th>
-        <th>英文姓氏</th>
-        <th>英文名字</th>
-        <th>成績</th>
-        <th>設立日期</th>
-      </tr>
-      <template v-for="(item, index) in dataList" :key="index">
+  <div class="flex flex-col gap-3">
+    <div>
+      <button class="general-button blue">公告總錦標</button>
+    </div>
+    <div class="flex-grow overflow-auto config-table">
+      <table>
         <tr>
-          <template v-for="event in paramsList">
-            <template v-if="item.division_id == event.division_id && item.event_code == event.event_code">
-              <td class="w-36">{{ event.division_ch }}</td>
-              <td class="w-36">{{ event.event_ch }}</td>
-            </template>
-          </template>
-          <td>
-            <input class="round-input" type="text" v-model="item.unit_name_ch">
-          </td>
-          <td>
-            <input class="round-input" type="text" v-model="item.unit_name_en">
-          </td>
-          <td>
-            <input class="round-input" type="text" v-model="item.last_name_ch">
-          </td>
-          <td>
-            <input class="round-input" type="text" v-model="item.first_name_ch">
-          </td>
-          <td>
-            <input class="round-input" type="text" v-model="item.last_name_en">
-          </td>
-          <td>
-            <input class="round-input" type="text" v-model="item.first_name_en">
-          </td>
-          <td>
-            <input class="round-input" type="text" v-model="item.result">
-          </td>
-          <td>
-            <input class="round-input" type="date" v-model="item.set_date">
-          </td>
+          <th>組別</th>
+          <th>計算方式</th>
+          <th>
+            <a class="hyperlink blue" @click="openModal('add', null)">新增</a>
+          </th>
         </tr>
-      </template>
-    </table>
+        <template v-for="(item, index) in championData.content" :key="index">
+          <tr>
+            <td>{{ item.divisionName }}</td>
+            <td>
+              <span v-if="item.type == 'ranking'">排名計算</span>
+              <span v-if="item.type == 'grade'">級分計算</span>
+            </td>
+            <td>
+              <a class="hyperlink blue">查看</a>
+            </td>
+          </tr>
+        </template>
+      </table>
+    </div>
   </div>
   <div v-if="dataList.length > 0" class="my-3">
     <button class="round-full-button blue" @click="submitAll">儲存</button>
@@ -143,10 +104,26 @@
   <div v-if="dataList.length > 0" class="my-3">
     <button class="round-full-button red" @click="clearAll">全部清除</button>
   </div>
+  <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
+    <template v-slot:title>
+      <div class="text-2xl">
+        <div v-if="displayModal == 1">新增總錦標設定</div>
+        <div v-if="displayModal == 2">編輯總錦標設定</div>
+      </div>
+    </template>
+    <template v-slot:content>
+      <div class="overflow-auto h-full">
+        <EditChampion v-if="displayModal == 1" :input-data="selectedData" :input-status="'add'"></EditChampion>
+        <EditChampion v-if="displayModal == 2" :input-data="selectedData" :input-status="'edit'"></EditChampion>
+      </div>
+    </template>
+  </FullModal>
 </template>
 
 <style scoped lang="scss">
 .config-table {
-  @apply w-[1920px] 3xl:w-full;
-}  
+  table {
+    @apply w-full;
+  }
+}
 </style>

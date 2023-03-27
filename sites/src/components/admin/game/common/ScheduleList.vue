@@ -5,6 +5,7 @@ import { useUserStore } from '@/stores/user';
 import { useRoute } from 'vue-router';
 import SmallLoader from '@/components/SmallLoader.vue';
 import FullModal from '@/components/FullModal.vue';
+import SmallModal from '@/components/SmallModal.vue';
 import AthleteList from '@/components/admin/game/common/AthleteList.vue';
 import ResultList from '@/components/admin/game/common/ResultList.vue';
 import { exportCsv, lanePhaseToString } from '@/components/library/functions';
@@ -20,11 +21,20 @@ const props = defineProps(['displayMode']);
 const gameData: any = inject('gameData');
 const counter = ref(0);
 const selectedEvent: any = ref({});
+const awardFormat: any = ref([]);
 
 const scheduleList: any = ref([]);
 async function getData() {
   isLoading.value = true;
   await vr.Get(`game/${sportCode}/${gameId}/common/schedule/full`, scheduleList, true, true);
+  if (props.displayMode == 'print' || props.displayMode == 'award') {
+    const temp = await vr.Get(`game/${sportCode}/${gameId}/common/temp/awardFormat`);
+    if (temp.temp_id == undefined) {
+      alert('尚未建立獎狀格式');
+    } else {
+      awardFormat.value = JSON.parse(temp.temp_data);
+    }
+  }
   isLoading.value = false;
 }
 
@@ -80,13 +90,14 @@ async function sendResult(id: number) {
     alert('操作失敗');
   }
 }
+const printFormat = ref(0);
 </script>
 
 <template>
   <div class="h-full w-full overflow-auto">
     <table class="data-table">
       <template v-for="(item, index) in scheduleList" :key="index">
-        <tr v-if="props.displayMode == 'management' || props.displayMode == 'result' || (props.displayMode == 'call' && item.status <= 1) || (props.displayMode == 'input' && item.status > 1 && item.status < 4)">
+        <tr v-if="props.displayMode == 'management' || props.displayMode == 'result'  || props.displayMode == 'award' || (props.displayMode == 'call' && item.status <= 1) || (props.displayMode == 'print' && item.status >= 4) || (props.displayMode == 'input' && item.status > 1 && item.status < 4)">
           <td>{{ item.timestamp.substring(5,7) }}/{{ item.timestamp.substring(8,10) }} {{ item.timestamp.substring(11,16) }}</td>
           <template v-if="item.division_id != null && item.event_ch != null">
             <td>{{ item.division_ch }}</td>
@@ -103,6 +114,7 @@ async function sendResult(id: number) {
               <button v-if="gameData.module == 'ln'" class="general-button blue" @click="exportData(item)">名單下載</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 1 && item.status < 4 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="openEvent(item, 3)">成績</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status == 3 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="sendResult(item.schedule_id)">送出</button>
+              <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 3 && (props.displayMode == 'print' || props.displayMode == 'award') && item.round == 4" class="general-button blue" @click="openEvent(item, 4)">獎狀列印</button>
             </div>
           </td>
         </tr>
@@ -110,7 +122,7 @@ async function sendResult(id: number) {
     </table>
     <SmallLoader v-show="isLoading"></SmallLoader>
   </div>
-  <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
+  <FullModal v-show="displayModal > 0 && displayModal != 4" @closeModal="displayModal = 0">
     <template v-slot:title>
       <div class="text-2xl">
         <div v-if="displayModal == 1">查看</div>
@@ -126,6 +138,29 @@ async function sendResult(id: number) {
       </div>
     </template>
   </FullModal>
+  <SmallModal v-show="displayModal == 4" @closeModal="displayModal = 0">
+    <template v-slot:title>
+      <div class="text-2xl">
+        <div v-if="displayModal == 4">選擇列印模式</div>
+      </div>
+    </template>
+    <template v-slot:content>
+      <div class="overflow-auto h-full">
+        <div class="flex flex-col gap-3">
+          <label class="round-input-label">
+            <div class="title">選擇列印格式</div>
+            <select class="select" v-model="printFormat">
+              <template v-for="(item, index) in awardFormat" :key="index">
+                <option :value="index">{{ item.title }}</option>
+              </template>
+              <option v-if="awardFormat.length == 0" value="NaN" disabled>尚未建立格式</option>
+            </select>
+          </label>
+          <router-link class="round-full-button blue block text-center" :to="`/admin/game/${sportCode}/${gameId}/print/lane/${selectedEvent.schedule_id}/${selectedEvent.division_id}/${selectedEvent.event_code}/${selectedEvent.multiple}/${selectedEvent.round}/award/${printFormat}`" target="_blank">列印</router-link>
+        </div>
+      </div>
+    </template>
+  </SmallModal>
 </template>
 
 <style scoped lang="scss">

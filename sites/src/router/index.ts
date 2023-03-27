@@ -178,6 +178,11 @@ const router = createRouter({
               name: 'adminGameResultPage',
               component: () => import('../views/admin/game/pages/ResultPage.vue'),
             },
+            {
+              path: 'awards',
+              name: 'adminGameAwardPage',
+              component: () => import('../views/admin/game/pages/AwardPage.vue'),
+            },
           ]
         },
         {
@@ -186,6 +191,7 @@ const router = createRouter({
           component: AdminGamePrintView,
           children: [
             // lane
+            // result
             {
               path: 'lane/:scheduleId/:divisionId/:eventCode/:multiple/:round/record/:printMode',
               name: 'adminGameLaneRecordPage',
@@ -195,6 +201,12 @@ const router = createRouter({
               path: 'lane/:scheduleId/:divisionId/:eventCode/:multiple/:round/result/:printMode',
               name: 'adminGameLaneResultPage',
               component: () => import('../components/admin/game/common/print/lane/ResultTable.vue'),
+            },
+            // award
+            {
+              path: 'lane/:scheduleId/:divisionId/:eventCode/:multiple/:round/award/:printFormat',
+              name: 'adminGameLaneAwardPage',
+              component: () => import('../components/admin/game/award/lane/PrintAward.vue'),
             },
           ]
         },
