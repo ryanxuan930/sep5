@@ -32,7 +32,7 @@
     }
     await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/main/params/${divisionId}/${eventCode}`, paramList);
     for (let i = 0; i < temp.length; i++) {
-      if (temp[i][`${phaseArray[round]}_ranking`] > 0 && temp[i][`${phaseArray[round]}_ranking`] < paramList.value[`${phaseArray[round]}_sq`]) {
+      if (temp[i][`${phaseArray[round]}_ranking`] > 0 && temp[i][`${phaseArray[round]}_ranking`] <= paramList.value[`${phaseArray[round]}_sq`]) {
         if (multiple == 0) {
           temp[i].result = temp[i][`${phaseArray[round]}_result`];
           temp[i].ranking = temp[i][`${phaseArray[round]}_ranking`];
