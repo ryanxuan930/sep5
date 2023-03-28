@@ -59,6 +59,7 @@ async function getData() {
     dataList.sort((a: any, b: any) => {
       a.division_id - b.division_id || a.event_code.toUpperCase() - b.event_code.toUpperCase() || a.r4_ranking - b.r4_ranking;
     });
+    console.log(dataList);
     for (const data of dataList) {
       if (data.event_code != eventCode || data.division_id != divisionId) {
         index++;
