@@ -96,8 +96,10 @@
               </template>
               <div v-if="item[`r${[props.phaseNum]}_options`].qualified != undefined">{{ item[`r${[props.phaseNum]}_options`].qualified }}</div>
             </div>
-            <div v-if="item[`r${[props.phaseNum]}_options`].windspeed != undefined">WS：{{ item[`r${[props.phaseNum]}_options`].windspeed }}</div>
+            <!--
+            <div v-if="item[`r${[props.phaseNum]}_options`].windspeed != undefined && ">WS：{{ item[`r${[props.phaseNum]}_options`].windspeed }}</div>
             <div v-if="item[`r${[props.phaseNum]}_options`].rt != undefined">RT：{{ item[`r${[props.phaseNum]}_options`].rt }}</div>
+            -->
             <template v-if="item[`r${props.phaseNum}_options`].break != undefined">
               <div v-if="item[`r${props.phaseNum}_options`].break != null">{{ item[`r${props.phaseNum}_options`].break }}</div>
             </template>
