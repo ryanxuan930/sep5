@@ -16,17 +16,17 @@ class ResultController extends Controller
         $tempIndividual = json_decode(json_encode($tempIndividual), true, 512, JSON_BIGINT_AS_STRING);
         $tempGroup = DB::table($sportCode.'_'.$gameId.'_groups')->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_groups.team_id', '=', $sportCode.'_'.$gameId.'_teams.team_id')->leftJoin('organizations', 'organizations.org_id', '=', $sportCode.'_'.$gameId.'_teams.org_id')->leftJoin('departments', 'departments.dept_id', '=', $sportCode.'_'.$gameId.'_teams.dept_id')->select($sportCode.'_'.$gameId.'_teams.org_id', $sportCode.'_'.$gameId.'_teams.dept_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', $sportCode.'_'.$gameId.'_groups.r4_ranking', DB::raw('count(*) as count'))->where($sportCode.'_'.$gameId.'_groups.r4_ranking', '<=', 8)->where($sportCode.'_'.$gameId.'_groups.r4_ranking', '>', 0)->groupBy($sportCode.'_'.$gameId.'_teams.org_id', $sportCode.'_'.$gameId.'_teams.dept_id', $sportCode.'_'.$gameId.'_groups.r4_ranking')->get();
         $tempGroup = json_decode(json_encode($tempGroup), true, 512, JSON_BIGINT_AS_STRING);
+        $groups = [];
         for ($i = 0; $i < count($tempIndividual); $i++) {
-            $groups = count($tempGroup);
-            for ($j = 0; $j < $groups; $j++) {
+            for ($j = 0; $j < count($tempGroups); $j++) {
                 if ($tempGroup[$i]['org_code'] == $tempGroup[$j]['org_code'] && $tempIndividual[$i]['dept_id'] == $tempGroup[$j]['dept_id'] && $tempIndividual[$i]['r4_ranking'] == $tempGroup[$j]['r4_ranking']) {
                     $tempIndividual[$i]['count'] += $tempGroup[$j]['count'];
-                    array_splice($tempGroup, $j, 1);
                     break;
                 }
+                array_push($groups, $tempGroup[$j]);
             }
         }
-        $userArray = array_merge($tempIndividual, $tempGroup);
+        $userArray = array_merge($tempIndividual, $groups);
         $col1 = array_column($userArray, 'org_code');
         $col2 = array_column($userArray, 'dept_id');
         $col3 = array_column($userArray, 'r4_ranking');
