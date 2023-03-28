@@ -239,6 +239,7 @@ Route::group([
         Route::get('athlete/list', [GameAthleteController::class, 'index']);
         Route::get('athlete/find/{uid}', [GameAthleteController::class, 'find']);
         Route::get('result/ranking', [GameResultController::class, 'ranking']);
+        Route::get('result/all', [GameResultController::class, 'result']);
         Route::group([
             'prefix' => 'schedule'
         ], function () {
