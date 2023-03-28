@@ -239,10 +239,10 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
                       <template v-if="athlete.r4_options.nr != undefined">
                         <div class="px-2 py-0.5 bg-blue-500 rounded text-white inline-block" v-if="athlete.r4_options.nr">NR</div>
                       </template>
-                      <template v-if="athlete.r4_options.break != undefined">
-                        <div v-if="athlete.r4_options.break != null">{{ athlete.r4_options.break }}</div>
-                      </template>
                     </div>
+                    <template v-if="athlete.r4_options.break != undefined">
+                      <div v-if="athlete.r4_options.break != null">{{ athlete.r4_options.break }}</div>
+                    </template>
                   </div>
                 </template>
               </div>
