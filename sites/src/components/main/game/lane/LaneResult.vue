@@ -106,21 +106,107 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
     <button :class="{'item': true, 'active': selectedTab == 2}" @click="selectedTab = 2">{{ t('overall-result') }}</button>
     <button :class="{'item': true, 'active': selectedTab == 3}" @click="selectedTab = 3">{{ t('champion') }}</button>
   </div>
-  <div class="w-[480px] xs:w-full">
-    <div class="bg-gray-50" v-if="selectedTab == 0">
-      <table>
-        <tr>
-          <th>{{ t('time') }}</th>
-          <th>{{ t('division') }}</th>
-          <th>{{ t('event') }}</th>
-          <th>{{ t('round') }}</th>
-          <th></th>
-        </tr>
-        <template v-for="(item, index) in scheduleList" :key="index">
+  <div class="overflow-auto">
+    <div class="w-[480px] xs:w-full">
+      <div class="bg-gray-50" v-if="selectedTab == 0">
+        <table>
           <tr>
-            <td>{{ item.timestamp.substring(5, 7) }}/{{ item.timestamp.substring(8, 10) }} {{ item.timestamp.substring(10, 16) }}</td>
-            <td colspan="4" v-if="item.division_id == null && item.event_code == null">{{ JSON.parse(item.options).title }}</td>
-            <template v-else>
+            <th>{{ t('time') }}</th>
+            <th>{{ t('division') }}</th>
+            <th>{{ t('event') }}</th>
+            <th>{{ t('round') }}</th>
+            <th></th>
+          </tr>
+          <template v-for="(item, index) in scheduleList" :key="index">
+            <tr>
+              <td>{{ item.timestamp.substring(5, 7) }}/{{ item.timestamp.substring(8, 10) }} {{ item.timestamp.substring(10, 16) }}</td>
+              <td colspan="4" v-if="item.division_id == null && item.event_code == null">{{ JSON.parse(item.options).title }}</td>
+              <template v-else>
+                <td>
+                  <span v-if="locale == 'zh-TW'">{{ item.division_ch }}</span>
+                  <span v-else>{{ item.division_en }}</span>
+                </td>
+                <td>
+                  <span v-if="locale == 'zh-TW'">{{ item.event_ch }}</span>
+                  <span v-else>{{ item.event_en }}</span>
+                </td>
+                <td>{{ lanePhaseToString(item.round, String(locale)) }}</td>
+                <td>
+                  <div class="flex gap-2 items-center" v-if="item.status > 3">
+                    <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/general/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list') }}</router-link>
+                    <router-link v-if="item.division_id != null && item.event_code != null && (item.remarks == 'ts' || item.remarks == 'tr' || item.remarks == 'rr')" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/heat/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list-heat') }}</router-link>
+                  </div>
+                  <div v-else>{{ t('not-available') }}</div>
+                </td>
+              </template>
+            </tr>
+          </template>
+        </table>
+      </div>
+      <div v-if="selectedTab == 1">
+        <table>
+          <tr>
+            <th v-if="!Config.deptAsClass">{{ t('organization') }}</th>
+            <template v-if="gameData.options.regUnit == 1">
+              <th v-if="Config.deptAsClass">{{ t('class') }}</th>
+              <th v-else>{{ t('department') }}</th>
+            </template>
+            <th class=text-center>
+              <span class="block w-5 h-5 rounded-full m-auto bg-amber-400"></span>
+            </th>
+            <th class=text-center>
+              <span class="block w-5 h-5 rounded-full m-auto bg-gray-300"></span>
+            </th>
+            <th class=text-center>
+              <span class="block w-5 h-5 rounded-full m-auto bg-amber-700"></span>
+            </th>
+            <th class=text-center>4</th>
+            <th class=text-center>5</th>
+            <th class=text-center>6</th>
+            <th class=text-center>7</th>
+            <th class=text-center>8</th>
+          </tr>
+          <template v-for="(item, index) in scheduleList" :key="index">
+            <tr>
+              <td v-if="!Config.deptAsClass">
+                <div v-if="locale == 'en-US' && (item.org_name_full_en != null || item.org_name_full_en != '')">{{ item.org_name_full_en }}</div>
+                <div v-else>{{ item.org_name_full_ch }}</div>
+              </td>
+              <td v-if="gameData.options.regUnit == 1">
+                <div v-if="locale == 'en-US' && (item.dept_name_en != null || item.dept_name_en != '')">{{ item.dept_name_en }}</div>
+                <div v-else>{{ item.dept_name_ch }}</div>
+              </td>
+              <template v-for="(place, index) in item.ranking" :key="index">
+                <td class="text-center">
+                  <template v-if="place > 0">{{ place }}</template>
+                </td>
+              </template>
+            </tr>
+          </template>
+        </table>
+      </div>
+      <div v-if="selectedTab == 2">
+        <table>
+          <tr>
+            <th>{{ t('division') }}</th>
+            <th>{{ t('event') }}</th>
+            <th class=text-center>
+              <span class="block w-5 h-5 rounded-full m-auto bg-amber-400"></span>
+            </th>
+            <th class=text-center>
+              <span class="block w-5 h-5 rounded-full m-auto bg-gray-300"></span>
+            </th>
+            <th class=text-center>
+              <span class="block w-5 h-5 rounded-full m-auto bg-amber-700"></span>
+            </th>
+            <th class=text-center>4</th>
+            <th class=text-center>5</th>
+            <th class=text-center>6</th>
+            <th class=text-center>7</th>
+            <th class=text-center>8</th>
+          </tr>
+          <template v-for="(item, index) in scheduleList" :key="index">
+            <tr>
               <td>
                 <span v-if="locale == 'zh-TW'">{{ item.division_ch }}</span>
                 <span v-else>{{ item.division_en }}</span>
@@ -129,128 +215,44 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
                 <span v-if="locale == 'zh-TW'">{{ item.event_ch }}</span>
                 <span v-else>{{ item.event_en }}</span>
               </td>
-              <td>{{ lanePhaseToString(item.round, String(locale)) }}</td>
-              <td>
-                <div class="flex gap-2 items-center" v-if="item.status > 3">
-                  <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/general/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list') }}</router-link>
-                  <router-link v-if="item.division_id != null && item.event_code != null && (item.remarks == 'ts' || item.remarks == 'tr' || item.remarks == 'rr')" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/heat/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list-heat') }}</router-link>
-                </div>
-                <div v-else>{{ t('not-available') }}</div>
-              </td>
-            </template>
-          </tr>
-        </template>
-      </table>
-    </div>
-    <div v-if="selectedTab == 1">
-      <table>
-        <tr>
-          <th v-if="!Config.deptAsClass">{{ t('organization') }}</th>
-          <template v-if="gameData.options.regUnit == 1">
-            <th v-if="Config.deptAsClass">{{ t('class') }}</th>
-            <th v-else>{{ t('department') }}</th>
-          </template>
-          <th class=text-center>
-            <span class="block w-5 h-5 rounded-full m-auto bg-amber-400"></span>
-          </th>
-          <th class=text-center>
-            <span class="block w-5 h-5 rounded-full m-auto bg-gray-300"></span>
-          </th>
-          <th class=text-center>
-            <span class="block w-5 h-5 rounded-full m-auto bg-amber-700"></span>
-          </th>
-          <th class=text-center>4</th>
-          <th class=text-center>5</th>
-          <th class=text-center>6</th>
-          <th class=text-center>7</th>
-          <th class=text-center>8</th>
-        </tr>
-        <template v-for="(item, index) in scheduleList" :key="index">
-          <tr>
-            <td v-if="!Config.deptAsClass">
-              <div v-if="locale == 'en-US' && (item.org_name_full_en != null || item.org_name_full_en != '')">{{ item.org_name_full_en }}</div>
-              <div v-else>{{ item.org_name_full_ch }}</div>
-            </td>
-            <td v-if="gameData.options.regUnit == 1">
-              <div v-if="locale == 'en-US' && (item.dept_name_en != null || item.dept_name_en != '')">{{ item.dept_name_en }}</div>
-              <div v-else>{{ item.dept_name_ch }}</div>
-            </td>
-            <template v-for="(place, index) in item.ranking" :key="index">
-              <td class="text-center">
-                <template v-if="place > 0">{{ place }}</template>
-              </td>
-            </template>
-          </tr>
-        </template>
-      </table>
-    </div>
-    <div v-if="selectedTab == 2">
-      <table>
-        <tr>
-          <th>{{ t('division') }}</th>
-          <th>{{ t('event') }}</th>
-          <th class=text-center>
-            <span class="block w-5 h-5 rounded-full m-auto bg-amber-400"></span>
-          </th>
-          <th class=text-center>
-            <span class="block w-5 h-5 rounded-full m-auto bg-gray-300"></span>
-          </th>
-          <th class=text-center>
-            <span class="block w-5 h-5 rounded-full m-auto bg-amber-700"></span>
-          </th>
-          <th class=text-center>4</th>
-          <th class=text-center>5</th>
-          <th class=text-center>6</th>
-          <th class=text-center>7</th>
-          <th class=text-center>8</th>
-        </tr>
-        <template v-for="(item, index) in scheduleList" :key="index">
-          <tr>
-            <td>
-              <span v-if="locale == 'zh-TW'">{{ item.division_ch }}</span>
-              <span v-else>{{ item.division_en }}</span>
-            </td>
-            <td>
-              <span v-if="locale == 'zh-TW'">{{ item.event_ch }}</span>
-              <span v-else>{{ item.event_en }}</span>
-            </td>
-            <template v-for="(place, index) in item.ranking" :key="index">
-              <td class="text-center">
-                <div class="flex flex-col gap-2">
-                  <template v-for="(athlete, index) in place" :key="index">
-                    <div>
-                      <div class="text-sm" v-if="!Config.deptAsClass">
-                        <div v-if="locale == 'en-US' && (athlete.org_name_en != null || athlete.org_name_en != '')">{{ athlete.org_name_en }}</div>
-                        <div v-else>{{ athlete.org_name_ch }}</div>
-                      </div>
-                      <div class="text-sm" v-if="gameData.options.regUnit == 1">
-                        <div v-if="locale == 'en-US' && (athlete.dept_name_en != null || athlete.dept_name_en != '')">{{ athlete.dept_name_en }}</div>
-                        <div v-else>{{ athlete.dept_name_ch }}</div>
-                      </div>
+              <template v-for="(place, index) in item.ranking" :key="index">
+                <td class="text-center">
+                  <div class="flex flex-col gap-2">
+                    <template v-for="(athlete, index) in place" :key="index">
                       <div>
-                        <div v-if="locale == 'en-US' && (athlete.last_name_en != null || athlete.last_name_en != '')">{{ athlete.first_name_en }} {{ athlete.last_name_en }}</div>
-                        <div v-else>{{ athlete.last_name_ch }}{{ athlete.first_name_ch }}</div>
-                      </div>
-                      <div>{{ athlete.r4_result }}</div>
-                      <div class="flex gap-3 justify-center">
-                        <template v-if="athlete.r4_options.cr != undefined">
-                          <div class="px-2 py-0.5 bg-blue-400 rounded text-white inline-block" v-if="athlete.r4_options.cr">CR</div>
+                        <div class="text-sm" v-if="!Config.deptAsClass">
+                          <div v-if="locale == 'en-US' && (athlete.org_name_en != null || athlete.org_name_en != '')">{{ athlete.org_name_en }}</div>
+                          <div v-else>{{ athlete.org_name_ch }}</div>
+                        </div>
+                        <div class="text-sm" v-if="gameData.options.regUnit == 1">
+                          <div v-if="locale == 'en-US' && (athlete.dept_name_en != null || athlete.dept_name_en != '')">{{ athlete.dept_name_en }}</div>
+                          <div v-else>{{ athlete.dept_name_ch }}</div>
+                        </div>
+                        <div>
+                          <div v-if="locale == 'en-US' && (athlete.last_name_en != null || athlete.last_name_en != '')">{{ athlete.first_name_en }} {{ athlete.last_name_en }}</div>
+                          <div v-else>{{ athlete.last_name_ch }}{{ athlete.first_name_ch }}</div>
+                        </div>
+                        <div>{{ athlete.r4_result }}</div>
+                        <div class="flex gap-3 justify-center">
+                          <template v-if="athlete.r4_options.cr != undefined">
+                            <div class="px-2 py-0.5 bg-blue-400 rounded text-white inline-block" v-if="athlete.r4_options.cr">CR</div>
+                          </template>
+                          <template v-if="athlete.r4_options.nr != undefined">
+                            <div class="px-2 py-0.5 bg-blue-500 rounded text-white inline-block" v-if="athlete.r4_options.nr">NR</div>
+                          </template>
+                        </div>
+                        <template v-if="athlete.r4_options.break != undefined">
+                          <div v-if="athlete.r4_options.break != null">{{ athlete.r4_options.break }}</div>
                         </template>
-                        <template v-if="athlete.r4_options.nr != undefined">
-                          <div class="px-2 py-0.5 bg-blue-500 rounded text-white inline-block" v-if="athlete.r4_options.nr">NR</div>
-                        </template>
                       </div>
-                      <template v-if="athlete.r4_options.break != undefined">
-                        <div v-if="athlete.r4_options.break != null">{{ athlete.r4_options.break }}</div>
-                      </template>
-                    </div>
-                  </template>
-                </div>
-              </td>
-            </template>
-          </tr>
-        </template>
-      </table>
+                    </template>
+                  </div>
+                </td>
+              </template>
+            </tr>
+          </template>
+        </table>
+      </div>
     </div>
   </div>
 
