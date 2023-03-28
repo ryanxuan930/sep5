@@ -98,15 +98,15 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
 </script>
 
 <template>
-  <div class="w-[320px] xs:w-full">
-    <div class="text-2xl font-medium text-left mb-2">{{ t('result-title') }}</div>
-    <div class="text-sm text-left mb-2">{{ t('update-in-second', {second: counter}) }}</div>
-    <div class="bookmark">
-      <button :class="{'item': true, 'active': selectedTab == 0}" @click="selectedTab = 0">{{ t('timetable') }}</button>
-      <button :class="{'item': true, 'active': selectedTab == 1}" @click="selectedTab = 1">{{ t('placing-table') }}</button>
-      <button :class="{'item': true, 'active': selectedTab == 2}" @click="selectedTab = 2">{{ t('overall-result') }}</button>
-      <button :class="{'item': true, 'active': selectedTab == 3}" @click="selectedTab = 3">{{ t('champion') }}</button>
-    </div>
+  <div class="text-2xl font-medium text-left mb-2">{{ t('result-title') }}</div>
+  <div class="text-sm text-left mb-2">{{ t('update-in-second', {second: counter}) }}</div>
+  <div class="bookmark">
+    <button :class="{'item': true, 'active': selectedTab == 0}" @click="selectedTab = 0">{{ t('timetable') }}</button>
+    <button :class="{'item': true, 'active': selectedTab == 1}" @click="selectedTab = 1">{{ t('placing-table') }}</button>
+    <button :class="{'item': true, 'active': selectedTab == 2}" @click="selectedTab = 2">{{ t('overall-result') }}</button>
+    <button :class="{'item': true, 'active': selectedTab == 3}" @click="selectedTab = 3">{{ t('champion') }}</button>
+  </div>
+  <div class="w-[480px] xs:w-full">
     <div class="bg-gray-50" v-if="selectedTab == 0">
       <table>
         <tr>
