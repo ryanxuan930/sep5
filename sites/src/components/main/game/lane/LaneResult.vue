@@ -98,7 +98,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
 </script>
 
 <template>
-  <div class="w-[640px] sm:w-full">
+  <div class="w-[320px] xs:w-full">
     <div class="text-2xl font-medium text-left mb-2">{{ t('result-title') }}</div>
     <div class="text-sm text-left mb-2">{{ t('update-in-second', {second: counter}) }}</div>
     <div class="bookmark">
