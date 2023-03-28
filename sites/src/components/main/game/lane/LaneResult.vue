@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { ref, inject, watch } from 'vue';
 import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n'
 import { lanePhaseToString } from '@/components/library/functions';
+import Config from '@/assets/config.json';
 
 const route = useRoute();
 const vr = new VueRequest();
@@ -15,14 +16,44 @@ const scheduleList: any = ref([]);
 const selectedTab = ref(0);
 const counter = ref(0);
 async function getData() {
-  await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/schedule/full`, scheduleList);
-  await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/result/ranking`);
-  scheduleList.value.sort((a: any, b: any) => {
-    const t1 = new Date(a.timestamp);
-    const t2 = new Date(b.timestamp);
-    return t1.getTime() - t2.getTime();
-  });
+  if (selectedTab.value == 0) {
+    await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/schedule/full`, scheduleList);
+    scheduleList.value.sort((a: any, b: any) => {
+      const t1 = new Date(a.timestamp);
+      const t2 = new Date(b.timestamp);
+      return t1.getTime() - t2.getTime();
+    });
+  }
+  if (selectedTab.value == 1) {
+    let orgCode = '';
+    let deptId = NaN;
+    let index = -1;
+    scheduleList.value = [];
+    const dataList = await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/result/ranking`);
+    for (const data of dataList) {
+      if (data.org_code != orgCode || data.dept_id != deptId) {
+        index++;
+        orgCode = data.org_code;
+        deptId = data.dept_id;
+        scheduleList.value[index] = {
+          org_code: data.org_code,
+          dept_id: data.dept_id,
+          org_name_full_ch: data.org_name_full_ch,
+          org_name_full_en: data.org_name_full_en,
+          org_name_ch: data.org_name_ch,
+          org_name_en: data.org_name_en,
+          dept_name_ch: data.dept_name_ch,
+          dept_name_en: data.dept_name_en,
+          ranking: [0, 0, 0, 0, 0, 0, 0, 0],
+        }
+      }
+      scheduleList.value[index].ranking[data.r4_ranking - 1] = data.count;
+    }
+  }
 };
+watch(selectedTab, () => {
+  getData();
+});
 setInterval(() => {
   if (counter.value == 0){
     getData();
@@ -44,10 +75,10 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
   <div class="text-2xl font-medium text-left mb-2">{{ t('result-title') }}</div>
   <div class="text-sm text-left mb-2">{{ t('update-in-second', {second: counter}) }}</div>
   <div class="bookmark">
-    <button :class="{'item': true, 'active': selectedTab == 0}" @click="selectedTab = 0">賽程成績</button>
-    <button :class="{'item': true, 'active': selectedTab == 1}" @click="selectedTab = 1">名次統計</button>
-    <button :class="{'item': true, 'active': selectedTab == 2}" @click="selectedTab = 2">成績總表</button>
-    <button :class="{'item': true, 'active': selectedTab == 3}" @click="selectedTab = 3">總錦標</button>
+    <button :class="{'item': true, 'active': selectedTab == 0}" @click="selectedTab = 0">{{ t('timetable') }}</button>
+    <button :class="{'item': true, 'active': selectedTab == 1}" @click="selectedTab = 1">{{ t('placing-table') }}</button>
+    <button :class="{'item': true, 'active': selectedTab == 2}" @click="selectedTab = 2">{{ t('overall-result') }}</button>
+    <button :class="{'item': true, 'active': selectedTab == 3}" @click="selectedTab = 3">{{ t('champion') }}</button>
   </div>
   <div class="bg-gray-50" v-if="selectedTab == 0">
     <table>
@@ -85,6 +116,42 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
     </table>
   </div>
   <div v-if="selectedTab == 1">
+    <table>
+      <tr>
+        <th v-if="!Config.deptAsClass">{{ t('organization') }}</th>
+        <th v-if="Config.deptAsClass">{{ t('class') }}</th>
+        <th v-else>{{ t('department') }}</th>
+        <th class=text-center>
+          <span class="block w-5 h-5 rounded-full m-auto bg-amber-400"></span>
+        </th>
+        <th class=text-center>
+          <span class="block w-5 h-5 rounded-full m-auto bg-gray-300"></span>
+        </th>
+        <th class=text-center>
+          <span class="block w-5 h-5 rounded-full m-auto bg-amber-700"></span>
+        </th>
+        <th class=text-center>4</th>
+        <th class=text-center>5</th>
+        <th class=text-center>6</th>
+        <th class=text-center>7</th>
+        <th class=text-center>8</th>
+      </tr>
+      <template v-for="(item, index) in scheduleList" :key="index">
+        <tr>
+          <td>
+            <div v-if="locale == 'en-US' && (item.org_name_full_en != null || item.org_name_full_en != '')">{{ item.org_name_full_en }}</div>
+            <div v-else>{{ item.org_name_full_ch }}</div>
+          </td>
+          <td>
+            <div v-if="locale == 'en-US' && (item.dept_name_en != null || item.dept_name_en != '')">{{ item.dept_name_en }}</div>
+            <div v-else>{{ item.dept_name_ch }}</div>
+          </td>
+          <template v-for="(place, index) in item.ranking" :key="index">
+            <td class="text-center">{{ place }}</td>
+          </template>
+        </tr>
+      </template>
+    </table>
   </div>
 </template>
 
@@ -92,7 +159,10 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
 table {
   @apply w-full;
   td, th {
-    @apply p-2 border-y-[1px] text-left;
+    @apply p-2 border-y-[1px] text-left break-words;
+  }
+  .text-center {
+    text-align: center;
   }
   tr.active {
     animation: blink 4s linear infinite;
@@ -132,6 +202,13 @@ table {
     result-title: 'Results'
     update-in-second: 'Updated in {second} sec.'
     not-available: 'Not Available'
+    timetable: 'Timetable'
+    placing-table: 'Placing Table'
+    overall-result: 'Overall Result'
+    champion: 'Champion'
+    organization: 'Organization'
+    department: 'Department'
+    class: 'Class'
   zh-TW:
     list: '成績總表'
     list-heat: '分組成績'
@@ -142,4 +219,11 @@ table {
     result-title: '成績公告'
     update-in-second: '{second} 秒後更新'
     not-available: '尚未公告'
+    timetable: '賽程成績'
+    placing-table: '名次統計'
+    overall-result: '成績總表'
+    champion: '總錦標'
+    organization: '組織單位'
+    department: '分部/系所'
+    class: '班級'
   </i18n>
