@@ -138,7 +138,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
       </tr>
       <template v-for="(item, index) in scheduleList" :key="index">
         <tr>
-          <td>
+          <td v-if="!Config.deptAsClass">
             <div v-if="locale == 'en-US' && (item.org_name_full_en != null || item.org_name_full_en != '')">{{ item.org_name_full_en }}</div>
             <div v-else>{{ item.org_name_full_ch }}</div>
           </td>
