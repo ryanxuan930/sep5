@@ -24,6 +24,10 @@ class ResultController extends Controller
             }
         }
         $userArray = array_merge(json_decode(json_encode($tempIndividual), true), json_decode(json_encode($tempGroup), true));
+        $col1 = array_column($userArray, 'org_code');
+        $col2 = array_column($userArray, 'dept_id');
+        $col3 = array_column($userArray, 'r4_ranking');
+        array_multisort($userArray, SORT_ASC, $col1, SORT_ASC, $col2, SORT_ASC, $col3, SORT_ASC);
         return response()->json($userArray);
     }
 }
