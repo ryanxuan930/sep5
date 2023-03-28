@@ -57,7 +57,7 @@ async function getData() {
     scheduleList.value = [];
     const dataList = await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/result/all`);
     dataList.sort((a: any, b: any) => {
-      a.division_id - b.division_id || a.event_id - b.event_id;
+      return a.division_id - b.division_id || a.event_id - b.event_id;
     });
     console.log(dataList);
     for (const data of dataList) {
