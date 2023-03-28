@@ -21,7 +21,7 @@ class ResultController extends Controller
         print_r($tempGroup);
         for ($i = 0; $i < count($tempIndividual); $i++) {
             for ($j = 0; $j < count($tempGroup); $j++) {
-                echo $tempIndividual[$i]['r4_ranking'].' '.$tempGroup[$i]['r4_ranking'].', ';
+                echo $tempIndividual[$i]['r4_ranking'].' '.$tempGroup[$j]['r4_ranking'].', ';
                 if ($tempGroup[$i]['org_code'] == $tempGroup[$j]['org_code'] && $tempIndividual[$i]['dept_id'] == $tempGroup[$j]['dept_id'] && $tempIndividual[$i]['r4_ranking'] == $tempGroup[$j]['r4_ranking']) {
                     $tempIndividual[$i]['count'] += $tempGroup[$j]['count'];
                     break;
