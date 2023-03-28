@@ -51,23 +51,21 @@ async function getData() {
     }
   }
   if (selectedTab.value == 2) {
-    let eventCode = '';
+    let eventId = NaN;
     let divisionId = NaN;
     let index = -1;
     scheduleList.value = [];
     const dataList = await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/result/all`);
     dataList.sort((a: any, b: any) => {
-      a.division_id - b.division_id || a.event_id - b.event_id|| a.r4_ranking - b.r4_ranking;
+      a.division_id - b.division_id || a.event_id - b.event_id;
     });
     console.log(dataList);
     for (const data of dataList) {
-      if (data.division_id != divisionId || data.event_code != eventCode) {
+      if (data.division_id != divisionId || data.event_id != eventId) {
         index++;
-        eventCode = data.event_code;
+        eventId = data.event_id;
         divisionId = data.division_id;
         scheduleList.value[index] = {
-          event_code: data.event_code,
-          division_id: data.division_id,
           event_ch: data.event_ch,
           event_en: data.event_en,
           division_ch: data.division_ch,
