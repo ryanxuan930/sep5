@@ -18,6 +18,7 @@ class ResultController extends Controller
         $tempGroup = json_decode(json_encode($tempGroup), true, 512, JSON_BIGINT_AS_STRING);
         $groups = [];
         echo $tempIndividual[4]['r4_ranking'].' '.$tempGroup[0]['r4_ranking'].', ';
+        echo count($tempGroup);
         for ($i = 0; $i < count($tempIndividual); $i++) {
             for ($j = 0; $j < count($tempGroup); $j++) {
                 if ($tempGroup[$i]['org_code'] == $tempGroup[$j]['org_code'] && $tempIndividual[$i]['dept_id'] == $tempGroup[$j]['dept_id'] && $tempIndividual[$i]['r4_ranking'] == $tempGroup[$j]['r4_ranking']) {
