@@ -70,17 +70,13 @@
           <table class="config-table h-full">
             <tr>
               <th>時間</th>
-              <th>組別</th>
-              <th>項目</th>
-              <th>賽別</th>
+              <th>賽程</th>
               <th>狀態</th>
             </tr>
             <template v-for="(item, index) in scheduleList" :key="index">
-              <tr :class="{'active': item.status == 1 || item.status == 2}">
+              <tr v-id="item.round > 0" :class="{'active': item.status == 1 || item.status == 2}">
                 <td>{{ item.timestamp.substring(5,7) }}/{{ item.timestamp.substring(8,10) }} {{ item.timestamp.substring(11,16) }}</td>
-                <td>{{ item.division_ch }}</td>
-                <td>{{ item.event_ch }}</td>
-                <td>{{ lanePhaseToString(item.round, 'zh-TW') }}</td>
+                <td>{{ item.division_ch }}{{ item.event_ch }}[{{ lanePhaseToString(item.round, 'zh-TW') }}]</td>
                 <td>{{ statusCh[item.status] }}</td>
               </tr>
             </template>
