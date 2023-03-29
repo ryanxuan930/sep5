@@ -4,6 +4,7 @@ import type { Ref } from 'vue';
 import VueRequest from '@/vue-request';
 import { useUserStore } from '@/stores/user';
 import { useRoute } from 'vue-router';
+import Config from '@/assets/config.json';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
@@ -106,7 +107,7 @@ async function submitAll() {
           <td>
             <input class="border-2 p-1 rounded w-16" v-model="idList[index]" @change="inputHandler(index)" type="text" maxlength="8">
           </td>
-          <td v-if="item != null">[{{ item.org_name_ch }}] {{ item.last_name_ch }}{{ item.first_name_ch }} ({{ item.sex == 1? '男':'女' }})</td>
+          <td v-if="item != null">[{{ item.org_name_ch }}<span v-if="Config.deptAsClass">{{ item.dept_name_ch }}</span>] {{ item.last_name_ch }}{{ item.first_name_ch }} ({{ item.sex == 1? '男':'女' }})</td>
           <td v-else></td>
         </tr>
       </template>
