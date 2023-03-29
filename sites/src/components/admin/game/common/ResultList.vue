@@ -47,7 +47,7 @@ const isLoading = ref(false);
       dataList.value[i][`r${props.inputData.round}_options`].rt = 0;
     }
     if (dataList.value[i][`r${props.inputData.round}_options`].windspeed == undefined) {
-      dataList.value[i][`r${props.inputData.round}_options`].windspeed = 0;
+      dataList.value[i][`r${props.inputData.round}_options`].windspeed = 'NWI';
     }
   }
   dataList.value.sort((a: any, b: any) => a[`r${[props.inputData.round]}_heat`] - b[`r${[props.inputData.round]}_heat`] || a[`r${[props.inputData.round]}_lane`] - b[`r${[props.inputData.round]}_lane`]);
