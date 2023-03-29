@@ -57,7 +57,7 @@
   function openModal(type: string, input: any = null) {
     openType.value = type;
     if (input == null) {
-      selectedData.value = contentPrototype;
+      selectedData.value = JSON.parse(JSON.stringify(contentPrototype));
     } else {
       selectedData.value = input;
     }
