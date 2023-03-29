@@ -18,18 +18,20 @@
 
   const championPrototype = {
     isRelease: false,
+    hasChampion: false,
     content: [],
   };
   const contentPrototype = {
     type: 'ranking', // ranking, grade
     divisionName: '',
+    divisionList: [],
     formula: {},
     payload: {},
   }
   const dataList:any = ref([]);
   async function getData() {
     isLoading.value = true;
-    const divisions = await vr.Get(`game/${sportCode}/${gameId}/main/division`, divisionList);
+    await vr.Get(`game/${sportCode}/${gameId}/main/division`, divisionList);
     const temp = await vr.Get(`game/${sportCode}/${gameId}/common/temp/gameChampion`);
     if (temp.temp_id == undefined) {
       const res = await vr.Post(`game/${sportCode}/${gameId}/common/temp`, {temp_key: 'gameChampion', temp_data: JSON.stringify(championPrototype)}, null, true, true);
@@ -43,7 +45,7 @@
   };
   getData();
   async function submitAll() {
-    const res = await vr.Patch(`game/${sportCode}/${gameId}/common/temp/gameRecords`, { temp_data: JSON.stringify(dataList.value)}, null, true, true);
+    const res = await vr.Patch(`game/${sportCode}/${gameId}/common/temp/gameChampion`, { temp_data: JSON.stringify(championData.value)}, null, true, true);
     if (res.status != 'A01') {
       alert('儲存失敗');
       return;
@@ -51,28 +53,31 @@
     getData();
     alert('已儲存');
   }
-  async function clearAll() {
-    const r = confirm('確定清除全部資料？');
-    if (r) {
-      await vr.Delete(`game/${sportCode}/${gameId}/common/temp/gameRecords`, null, true, true);
-      getData();
-      alert('已清除');
-    }
-  }
+  const openType = ref('add');
   function openModal(type: string, input: any = null) {
-    if (type == 'add') {
-      selectedData.value = JSON.parse(JSON.stringify(contentPrototype));
+    openType.value = type;
+    if (input == null) {
+      selectedData.value = contentPrototype;
     } else {
       selectedData.value = input;
     }
     displayModal.value = 1;
   }
+  function remove(index: number) {
+    if(confirm('確定刪除？')){
+      championData.content.splice(index, 1);
+    }
+  }
 </script>
 
 <template>
   <div class="flex flex-col gap-3">
-    <div>
-      <button class="general-button blue">公告總錦標</button>
+    <div class="flex items-center gap-3">
+      <div>有無總錦標：</div>
+      <select class="py-1 px-2 rounded border-2" v-model="championData.hasChampion">
+        <option :value="true">有</option>
+        <option :value="false">無</option>
+      </select>
     </div>
     <div class="flex-grow overflow-auto config-table">
       <table>
@@ -91,30 +96,28 @@
               <span v-if="item.type == 'grade'">級分計算</span>
             </td>
             <td>
-              <a class="hyperlink blue">查看</a>
+              <div class="flex gap-2">
+                <a class="hyperlink blue" @click="openModal('edit', item)">查看</a>
+                <a class="hyperlink red" @click="remove(index)">刪除</a>
+              </div>
             </td>
           </tr>
         </template>
       </table>
     </div>
   </div>
-  <div v-if="dataList.length > 0" class="my-3">
+  <div class="my-3">
     <button class="round-full-button blue" @click="submitAll">儲存</button>
-  </div>
-  <div v-if="dataList.length > 0" class="my-3">
-    <button class="round-full-button red" @click="clearAll">全部清除</button>
   </div>
   <FullModal v-show="displayModal > 0" @closeModal="displayModal = 0">
     <template v-slot:title>
       <div class="text-2xl">
-        <div v-if="displayModal == 1">新增總錦標設定</div>
-        <div v-if="displayModal == 2">編輯總錦標設定</div>
+        <div v-if="displayModal == 1">編輯總錦標設定</div>
       </div>
     </template>
     <template v-slot:content>
       <div class="overflow-auto h-full">
-        <EditChampion v-if="displayModal == 1" :input-data="selectedData" :input-status="'add'"></EditChampion>
-        <EditChampion v-if="displayModal == 2" :input-data="selectedData" :input-status="'edit'"></EditChampion>
+        <EditChampion v-if="displayModal == 1" :input-data="selectedData" :input-status="openType" @close-modal="displayModal = 0" @return-data="(input: any) => { if (openType == 'add') {championData.content.push(input); } else { selectedData = input; }}"></EditChampion>
       </div>
     </template>
   </FullModal>

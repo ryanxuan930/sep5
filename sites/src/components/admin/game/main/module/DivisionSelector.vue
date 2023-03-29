@@ -3,18 +3,20 @@
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import type { Ref } from 'vue';
+  import { useGameStore } from '@/stores/game';
 
   const store = useUserStore();
+  const gameStore = useGameStore();
   const vr = new VueRequest(store.token);
-  const props = defineProps(['selectedData', 'inputData']);
+  const props = defineProps(['inputData']);
 
   const divisionList: any = ref(null);
   function getGameTagList() {
-    vr.Get(`game/${props.inputData.sport_code}/${props.inputData.game_id}/main/division`, divisionList, true, true);
+    vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/main/division`, divisionList, true, true);
   }
   getGameTagList();
   
-  const selectedData: Ref<number[]> = ref(props.selectedData);
+  const selectedData: Ref<number[]> = ref(props.inputData);
   const emit = defineEmits<{(e: 'returnData', value: number[]): void, (e: 'closeModal'): void}>();
   const submit = () => {
     emit('returnData', selectedData.value);
@@ -34,7 +36,7 @@
           <td>
             <input :value="item.division_id" type="checkbox" v-model="selectedData">
           </td>
-          <td>{{ item.division_name_ch }}</td>
+          <td>{{ item.division_ch }}</td>
         </tr>
       </template>
     </table>

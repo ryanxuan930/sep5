@@ -6,6 +6,7 @@
   import { useRoute } from 'vue-router';
   import FullModal from '@/components/FullModal.vue';
   import ScheduleList from '@/components/admin/game/common/ScheduleList.vue';
+  import CalculateChampion from '@/components/admin/game/result/lane/CalculateChampion.vue';
 
   const store = useUserStore();
   const gameStore = useGameStore();
@@ -46,6 +47,7 @@
     <template v-slot:content>
       <div class="overflow-auto h-full">
         <ScheduleList v-if="displayModal == 1" :displayMode="'result'"></ScheduleList>
+        <CalculateChampion v-if="displayModal == 3"></CalculateChampion>
       </div>
     </template>
   </FullModal>
