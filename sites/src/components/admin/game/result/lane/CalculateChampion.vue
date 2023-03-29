@@ -103,7 +103,7 @@
           </tr>
           <template v-for="(item, index) in resultList" :key="index">
             <tr>
-              <td :class="{'text-blue-400': index + 1 < championData.content[selectedTab].qualified}">{{ index + 1 }}</td>
+              <td :class="{'text-blue-400': index + 1 <= championData.content[selectedTab].qualified}">{{ index + 1 }}</td>
               <td>{{ item.org_name_full_ch }}</td>
               <td>{{ item.dept_name_ch }}</td>
               <template v-for="point in item.points">
