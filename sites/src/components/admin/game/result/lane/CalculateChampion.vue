@@ -57,10 +57,10 @@
   }
   (async () => {
     await getData();
-    if (championData.value == null) {
-      return;
-    } else {
-      calculateChampion(championData.value.content[0].type, championData.value.content[0].formula);
+    if (championData.value != null) {
+      if (championData.value.content.length > 0) {
+        calculateChampion(championData.value.content[0].type, championData.value.content[0].formula);
+      }
     }
   })();
   watch(selectedTab, (val) => {
