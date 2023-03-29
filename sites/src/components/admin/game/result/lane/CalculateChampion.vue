@@ -57,7 +57,9 @@
   }
   (async () => {
     await getData();
-    if (championData.value != null) {
+    if (championData.value == null) {
+      return;
+    } else {
       calculateChampion(championData.value.content[0].type, championData.value.content[0].formula);
     }
   })();
