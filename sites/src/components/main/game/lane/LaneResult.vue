@@ -142,6 +142,9 @@ async function calculateChampion(type: string, formula: any, divisionList: numbe
 watch(selectedTab, () => {
   getData();
 });
+watch(championIndex, (val) => {
+  calculateChampion(championData.value.content[val].type, championData.value.content[val].formula, championData.value.content[val].divisionList);
+})
 setInterval(() => {
   if (counter.value == 0){
     getData();
