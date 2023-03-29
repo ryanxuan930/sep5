@@ -24,6 +24,7 @@
   const contentPrototype = {
     type: 'ranking', // ranking, grade
     divisionName: '',
+    qualified: 1,
     divisionList: [],
     formula: {},
     payload: {},
@@ -65,7 +66,7 @@
   }
   function remove(index: number) {
     if(confirm('確定刪除？')){
-      championData.content.splice(index, 1);
+      championData.value.content.splice(index, 1);
     }
   }
 </script>

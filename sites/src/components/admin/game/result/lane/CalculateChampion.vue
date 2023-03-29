@@ -21,7 +21,7 @@
       championData.value = JSON.parse(temp.temp_data);
     }
   }
-  async function calculateChampion(type: string, formula: any) {
+  async function calculateChampion(type: string, formula: any, divisionList: number[]) {
     if (type == 'ranking') {
       let orgCode = '';
       let deptId = NaN;
@@ -33,38 +33,46 @@
       }
       const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/ranking/${formula.length}`);
       for (const data of dataList) {
-        if (data.org_code != orgCode || data.dept_id != deptId) {
-          index++;
-          orgCode = data.org_code;
-          deptId = data.dept_id;
-          resultList.value[index] = {
-            org_code: data.org_code,
-            dept_id: data.dept_id,
-            org_name_full_ch: data.org_name_full_ch,
-            org_name_full_en: data.org_name_full_en,
-            org_name_ch: data.org_name_ch,
-            org_name_en: data.org_name_en,
-            dept_name_ch: data.dept_name_ch,
-            dept_name_en: data.dept_name_en,
-            ranking: new Array(formula.length).fill(0),
-            points: new Array(formula.length).fill(0),
+        if (divisionList.includes(data.division_id)) {
+          if (data.org_code != orgCode || data.dept_id != deptId) {
+            index++;
+            orgCode = data.org_code;
+            deptId = data.dept_id;
+            resultList.value[index] = {
+              org_code: data.org_code,
+              dept_id: data.dept_id,
+              org_name_full_ch: data.org_name_full_ch,
+              org_name_full_en: data.org_name_full_en,
+              org_name_ch: data.org_name_ch,
+              org_name_en: data.org_name_en,
+              dept_name_ch: data.dept_name_ch,
+              dept_name_en: data.dept_name_en,
+              ranking: new Array(formula.length).fill(0),
+              points: new Array(formula.length).fill(0),
+            }
           }
-        }
         resultList.value[index].ranking[data.r4_ranking - 1] = data.count;
         resultList.value[index].points[data.r4_ranking - 1] = data.count * formula[data.r4_ranking - 1];
+        } else {
+          break;
+        }
       }
+      resultList.value.forEach((item: any) => {
+        item.sum = item.points.reduce((a: number, b: number) => a + b, 0);
+      });
+      resultList.value.sort((a: any, b: any) => b.sum - a.sum || b.ranking.join('') - a.ranking.join(''));
     }
   }
   (async () => {
     await getData();
     if (championData.value != null) {
       if (championData.value.content.length > 0) {
-        calculateChampion(championData.value.content[0].type, championData.value.content[0].formula);
+        calculateChampion(championData.value.content[0].type, championData.value.content[0].formula, championData.value.content[0].divisionList);
       }
     }
   })();
   watch(selectedTab, (val) => {
-    calculateChampion(championData.value.content[val].type, championData.value.content[val].formula);
+    calculateChampion(championData.value.content[val].type, championData.value.content[val].formula, championData.value.content[val].divisionList);
   });
 </script>
 
@@ -84,6 +92,7 @@
       <div v-if="championData.content[selectedTab].type == 'ranking'">
         <table class="config-table">
           <tr>
+            <th>排名</th>
             <th>組織單位</th>
             <th>分部/系所</th>
             <template v-for="(item, index) in championData.content[selectedTab].formula" :key="index">
@@ -93,15 +102,17 @@
           </tr>
           <template v-for="(item, index) in resultList" :key="index">
             <tr>
+              <td :class="{'text-blue-400': index + 1 < championData.content[selectedTab].qualified}">{{ index + 1 }}</td>
               <td>{{ item.org_name_full_ch }}</td>
               <td>{{ item.dept_name_ch }}</td>
               <template v-for="point in item.points">
                 <td>{{ point }}</td>
               </template>
-              <td>{{ item.points.reduce((sum: number, num: number) => { return sum + num; }) }}</td>
+              <td>{{ item.sum }}</td>
             </tr>
           </template>
         </table>
+        <div class="p-2 text-center" v-if="resultList.length == 0">目前無資料</div>
       </div>
     </div>
   </div>

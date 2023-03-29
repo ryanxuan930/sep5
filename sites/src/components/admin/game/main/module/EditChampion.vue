@@ -29,7 +29,7 @@
 
 <template>
   <div>
-    <div class="grid grid-cols-4 gap-3">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
       <label class="round-input-label">
         <div class="title">計算方式</div>
         <select class="select" :disabled="props.inputStatus == 'edit'" v-model="data.type" @change="setType()">
@@ -41,9 +41,13 @@
         <div class="title">適用組別</div>
         <button class="round-full-button blue basis-20" @click="displayModal = 1">選擇</button>
       </label>
-      <label class="round-input-label col-span-2">
+      <label class="round-input-label">
         <div class="title">總錦標組別名稱</div>
         <input type="text" class="input" v-model="data.divisionName">
+      </label>
+      <label class="round-input-label">
+        <div class="title">名次取數</div>
+        <input type="number" class="input" v-model="data.qualified">
       </label>
     </div>
     <div v-if="data.type == 'ranking'">
