@@ -55,7 +55,7 @@
           <div>道次</div>
           <div class="text-sm">Lane</div>
         </th>
-        <th>
+        <th v-if="!Config.deptAsClass">
           <div>組織單位</div>
           <div class="text-sm">Organization</div>
         </th>
@@ -95,7 +95,7 @@
           -->
           <td>{{ item[`r${[props.phaseNum]}_heat`] }}</td>
           <td>{{ item[`r${[props.phaseNum]}_lane`] }}</td>
-          <td>
+          <td v-if="!Config.deptAsClass">
             <div>{{ item.org_name_full_ch }}</div>
             <div class="text-sm">{{ item.org_name_en }}</div>
           </td>

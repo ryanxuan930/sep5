@@ -26,7 +26,7 @@
           <div>名次</div>
           <div class="text-sm">Place</div>
         </th>
-        <th>
+        <th v-if="!Config.deptAsClass">
           <div>組織單位</div>
           <div class="text-sm">Organization</div>
         </th>
@@ -72,7 +72,7 @@
           <td>
             <div v-if="item[`r${[props.phaseNum]}_ranking`] > 0">{{ item[`r${[props.phaseNum]}_ranking`] }}</div>
           </td>
-          <td>
+          <td v-if="!Config.deptAsClass">
             <div>{{ item.org_name_full_ch }}</div>
             <div class="text-sm">{{ item.org_name_en }}</div>
           </td>
