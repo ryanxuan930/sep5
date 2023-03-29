@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import type { Ref } from 'vue';
-import { useUserStore } from '@/stores/user';
-import { useRoute } from 'vue-router';
-import { lanePhaseToString } from '@/components/library/functions';
-
-const store = useUserStore();
-const route = useRoute();
 
 const props = defineProps(['inputData', 'phaseNum', 'currentEvent']);
 const dataList: Ref<number[]> = ref([]);
@@ -15,7 +9,6 @@ const phase: any = ref(props.phaseNum);
 const emit = defineEmits<{(e: 'returnData', index: number[]): void, (e: 'returnPhase', index: number): void, (e: 'closeModal'): void}>();
 
 async function submitAll() {
-  console.log(dataList.value);
   emit('returnData', dataList.value);
   emit('returnPhase', phase.value);
   emit('closeModal');

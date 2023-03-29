@@ -8,14 +8,10 @@
   import ScheduleList from '@/components/admin/game/common/ScheduleList.vue';
   import CalculateChampion from '@/components/admin/game/result/lane/CalculateChampion.vue';
 
-  const store = useUserStore();
   const gameStore = useGameStore();
-  const vr = new VueRequest(store.token);
   const displayModal = ref(0);
   const gameData: any = ref(gameStore.data);
   const route = useRoute();
-  const sportCode = route.params.sportCode;
-  const gameId = route.params.gameId;
   provide('gameData', gameData);
 </script>
 
@@ -25,8 +21,7 @@
       <div class="col-span-4 text-2xl">功能選單</div>
       <hr class="col-span-4">
       <button class="round-full-button blue" @click="displayModal = 1">場次總覽</button>
-      <button v-if="gameData.module == 'ln'" class="round-full-button blue" @click="displayModal = 2">特殊成績處理</button>
-      <button v-if="gameData.module == 'ln'" class="round-full-button blue" @click="displayModal = 3">總錦標計算</button>
+      <button v-if="gameData.module == 'ln'" class="round-full-button blue" @click="displayModal = 2">總錦標計算</button>
     </div>
     <div class="section-box flex-grow h-full flex flex-col gap-4 overflow-hidden">
       <div class="col-span-4 text-2xl">賽程列表</div>
@@ -40,14 +35,13 @@
     <template v-slot:title>
       <div class="text-2xl">
         <div v-if="displayModal == 1">場次總覽</div>
-        <div v-if="displayModal == 2">特殊成績處理</div>
-        <div v-if="displayModal == 3">總錦標計算</div>
+        <div v-if="displayModal == 2">總錦標計算</div>
       </div>
     </template>
     <template v-slot:content>
       <div class="overflow-auto h-full">
         <ScheduleList v-if="displayModal == 1" :displayMode="'result'"></ScheduleList>
-        <CalculateChampion v-if="displayModal == 3"></CalculateChampion>
+        <CalculateChampion v-if="displayModal == 2"></CalculateChampion>
       </div>
     </template>
   </FullModal>

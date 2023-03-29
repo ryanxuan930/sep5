@@ -7,6 +7,7 @@ import { csvToArrayTable, lanePhaseToString, stringToMilliseconds } from '@/comp
 import FullModal from '@/components/FullModal.vue';
 import UploadPreview from '../result/lane/UploadPreview.vue';
 import SmallLoader from '@/components/SmallLoader.vue';
+import EditEvent from '../schedule/arrange/EditEvent.vue';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
@@ -16,6 +17,7 @@ const props = defineProps(['inputData', 'displayMode']);
 const gameData: any = inject('gameData');
 const dataList: any = ref([]);
 const paramsList: any = ref({});
+const paramsFullList: any = ref({});
 const recordList: any = ref({});
 const isLoading = ref(false);
 (async () => {
@@ -33,6 +35,7 @@ const isLoading = ref(false);
     }
   });
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/params/${props.inputData.division_id}/${props.inputData.event_code}`, paramsList, true, true);
+  await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/params/full`, paramsFullList, true, true);
   for (let i = 0; i < dataList.value.length; i++){
     if (dataList.value[i][`r${props.inputData.round}_result`] == 'OK') {
       dataList.value[i][`r${props.inputData.round}_result`] = '';
@@ -71,7 +74,7 @@ async function submitAll() {
       dataList.value[i].temp = 0;
     }
     dataList.value[i][`r${props.inputData.round}_options`].qualified = '*';
-    dataList.value[i][`r${props.inputData.round}_options`].windspeed = 0;
+    dataList.value[i][`r${props.inputData.round}_options`].windspeed = 'NWI';
     dataList.value[i][`r${props.inputData.round}_options`].rt = 0;
     dataList.value[i][`r${props.inputData.round}_options`].break = null;
     dataList.value[i][`r${props.inputData.round}_options`].cr = false;
@@ -205,6 +208,32 @@ async function submitAll() {
   }
 }
 
+async function multiRanking(input: number[]) {
+  dataList.value = [];
+  for (let i = 0; i < input.length; i++) {
+    const index = input[i];
+    let temp: any = null;
+    if(paramsFullList.value[index].multiple == 1){
+      temp = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group/by/event/${paramsFullList.value[index].division_id}/${paramsFullList.value[index].event_code}`, null, true, true);
+    } else {
+      temp = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/by/event/${paramsFullList.value[index].division_id}/${paramsFullList.value[index].event_code}`, null, true, true);
+    }
+    dataList.value = dataList.value.concat(temp);
+  }
+  for (let i = 0; i < dataList.value.length; i++){
+    if (dataList.value[i][`r${props.inputData.round}_result`] == 'OK') {
+      dataList.value[i][`r${props.inputData.round}_result`] = '';
+    }
+    dataList.value[i][`r${props.inputData.round}_options`] = JSON.parse(dataList.value[i][`r${props.inputData.round}_options`]);
+    if (dataList.value[i][`r${props.inputData.round}_options`].rt == undefined) {
+      dataList.value[i][`r${props.inputData.round}_options`].rt = 0;
+    }
+    if (dataList.value[i][`r${props.inputData.round}_options`].windspeed == undefined) {
+      dataList.value[i][`r${props.inputData.round}_options`].windspeed = 0;
+    }
+  }
+}
+
 const uploadEntity: any = ref(null);
 const fileName = ref('');
 const uploadData: any = ref([]);
@@ -253,6 +282,7 @@ function importHandler(input: any) {
         <input type="file" class="hidden" ref="uploadEntity" accept=".csv" @change="uploadFile">
       </label>
       <button class="general-button blue">詳細紀錄</button>
+      <button class="general-button blue" @click="displayModal = 4">成績聯合處理</button>
       <div class="flex-grow"></div>
       <div class="text-xs text-right">
         <div>成績「務必」以 hh:mm:ss, mm:ss.vvv, ss.vvv, MM.cc 格式輸入</div>
@@ -306,11 +336,13 @@ function importHandler(input: any) {
         <div v-if="displayModal == 1">電計成績匯入</div>
         <div v-if="displayModal == 2">詳細紀錄</div>
         <div v-if="displayModal == 3">棒次</div>
+        <div v-if="displayModal == 4">成績聯合處理</div>
       </div>
     </template>
     <template v-slot:content>
       <div class="overflow-auto h-full">
         <UploadPreview v-if="displayModal == 1" :input-data="uploadData" @closeModal="displayModal = 0" @returnData="(res: any) => {importHandler(res);}"></UploadPreview>
+        <EditEvent v-if="displayModal == 4" :input-data="paramsFullList" :current-event="paramsList" :phase-num="props.inputData.round" @returnData="multiRanking" @closeModal="displayModal = 0"></EditEvent>
       </div>
     </template>
   </FullModal>
