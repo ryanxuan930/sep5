@@ -51,4 +51,8 @@ class AthleteController extends Controller
             return response()->json(false);
         }
     }
+    public function findByBib($sportCode, $gameId, $bib)
+    {
+        return response()->json(DB::table($sportCode.'_'.$gameId.'_bibs')->leftJoin('users', $sportCode.'_'.$gameId.'_bibs.u_id', '=', 'users.u_id')->leftJoin('organizations', 'users.org_code', '=', 'organizations.org_code')->leftJoin('departments', 'users.dept_id', '=', 'departments.dept_id')->leftJoin('countries', 'users.nationality', '=', 'countries.country_code')->leftJoin('tribes', 'users.indigenous_tribe_id', '=', 'tribes.tribe_id')->leftJoin('sport_lists', 'users.gifited_sport_id', '=', 'sport_lists.sport_id')->leftJoin('cities', 'users.household_city_code', '=', 'cities.city_code')->select('users.*', 'organizations.*', 'departments.*', 'countries.*', 'tribes.*', 'sport_lists.*', 'cities.*')->where($sportCode.'_'.$gameId.'_bibs.bib', $bib)->first());
+    }
 }
