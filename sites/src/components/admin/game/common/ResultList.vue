@@ -8,6 +8,7 @@ import FullModal from '@/components/FullModal.vue';
 import UploadPreview from '../result/lane/UploadPreview.vue';
 import SmallLoader from '@/components/SmallLoader.vue';
 import EditEvent from '../schedule/arrange/EditEvent.vue';
+import LegsList from '@/components/admin/game/management/LegsList.vue';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
@@ -19,6 +20,7 @@ const dataList: any = ref([]);
 const paramsList: any = ref({});
 const paramsFullList: any = ref({});
 const recordList: any = ref({});
+const selectedData: any = ref({});
 const isLoading = ref(false);
 (async () => {
   isLoading.value = true;
@@ -302,6 +304,7 @@ function importHandler(input: any) {
         <th>成績</th>
         <th>RT (s)</th>
         <th>WS (m/s)</th>
+        <th v-if="props.inputData.multiple == 1">棒次</th>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
         <tr v-if="item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0">
@@ -321,6 +324,9 @@ function importHandler(input: any) {
           </td>
           <td>
             <input type="text" class="p-1 rounded border-2 w-16" v-model="item[`r${props.inputData.round}_options`].windspeed">
+          </td>
+          <td>
+            <button class="general-button blue" @click="() => { displayModal = 3; selectedData = item;}">棒次</button>
           </td>
         </tr>
       </template>
@@ -342,6 +348,7 @@ function importHandler(input: any) {
     <template v-slot:content>
       <div class="overflow-auto h-full">
         <UploadPreview v-if="displayModal == 1" :input-data="uploadData" @closeModal="displayModal = 0" @returnData="(res: any) => {importHandler(res);}"></UploadPreview>
+        <LegsList v-if="displayModal == 3" :input-data="selectedData" :player-num="props.inputData.player_num" @closeModal="displayModal = 0" @returnData="(res: any) => selectedData.member_list = res"></LegsList>
         <EditEvent v-if="displayModal == 4" :input-data="paramsFullList" :current-event="paramsList" :phase-num="props.inputData.round" @returnData="multiRanking" @closeModal="displayModal = 0"></EditEvent>
       </div>
     </template>
