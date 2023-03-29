@@ -91,6 +91,29 @@ async function sendResult(id: number) {
   }
 }
 const printFormat = ref(0);
+
+const realtimeGroup = ref(1);
+const realtimeResult = ref('');
+async function setRealtimeResult() {
+  const data = JSON.stringify({
+    data: selectedEvent.value,
+    group: realtimeGroup.value,
+    result: realtimeResult.value,
+  });
+  const temp = await vr.Get(`game/${sportCode}/${gameId}/common/temp/realtimeResult`);
+  let res: any = null;
+  if (temp.temp_id == undefined) {
+    res = await vr.Post(`game/${sportCode}/${gameId}/common/temp`, {temp_key: 'realtimeResult', temp_data: data}, null, true, true);
+  } else {
+    res = await vr.Patch(`game/${sportCode}/${gameId}/common/temp/realtimeResult`, { temp_data: data}, null, true, true);
+  }
+  if (res.status == 'A01') {
+    alert('已儲存');
+    displayModal.value = 0;
+  } else {
+    alert('操作失敗');
+  }
+}
 </script>
 
 <template>
@@ -113,6 +136,7 @@ const printFormat = ref(0);
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status < 2 && (props.displayMode == 'management' || props.displayMode == 'call')" class="general-button blue" @click="openEvent(item, 2)">檢錄</button>
               <button v-if="gameData.module == 'ln'" class="general-button blue" @click="exportData(item)">名單下載</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 1 && item.status < 4 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="openEvent(item, 3)">成績</button>
+              <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 1 && item.status < 4 && (props.displayMode == 'result' || props.displayMode == 'input') && (item.remarks == 'ts' || item.remarks == 'tr' || item.remarks == 'tn')" class="general-button blue" @click="openEvent(item, 5)">參考成績</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status == 3 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="sendResult(item.schedule_id)">送出</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 3 && (props.displayMode == 'print' || props.displayMode == 'award') && item.round == 4" class="general-button blue" @click="openEvent(item, 4)">獎狀列印</button>
             </div>
@@ -122,7 +146,7 @@ const printFormat = ref(0);
     </table>
     <SmallLoader v-show="isLoading"></SmallLoader>
   </div>
-  <FullModal v-show="displayModal > 0 && displayModal != 4" @closeModal="displayModal = 0">
+  <FullModal v-show="displayModal > 0 && displayModal < 4" @closeModal="displayModal = 0">
     <template v-slot:title>
       <div class="text-2xl">
         <div v-if="displayModal == 1">查看</div>
@@ -138,14 +162,15 @@ const printFormat = ref(0);
       </div>
     </template>
   </FullModal>
-  <SmallModal v-show="displayModal == 4" @closeModal="displayModal = 0">
+  <SmallModal v-show="displayModal == 4 || displayModal ==5" @closeModal="displayModal = 0">
     <template v-slot:title>
       <div class="text-2xl">
         <div v-if="displayModal == 4">選擇列印模式</div>
+        <div v-if="displayModal == 5">參考成績</div>
       </div>
     </template>
     <template v-slot:content>
-      <div class="overflow-auto h-full">
+      <div class="overflow-auto h-full" v-if="displayModal == 4">
         <div class="flex flex-col gap-3">
           <label class="round-input-label">
             <div class="title">選擇列印格式</div>
@@ -158,6 +183,17 @@ const printFormat = ref(0);
           </label>
           <router-link class="round-full-button blue block text-center" :to="`/admin/game/${sportCode}/${gameId}/print/lane/${selectedEvent.schedule_id}/${selectedEvent.division_id}/${selectedEvent.event_code}/${selectedEvent.multiple}/${selectedEvent.round}/award/${printFormat}`" target="_blank">列印</router-link>
         </div>
+      </div>
+      <div v-if="displayModal == 5">
+        <label class="round-input-label">
+          <div class="title">組別</div>
+          <input type="number" class="input" v-model="realtimeGroup">
+        </label>
+        <label class="round-input-label">
+          <div class="title">即時參考成績</div>
+          <input type="text" class="input" v-model="realtimeResult">
+        </label>
+        <button class="round-full-button blue mt-3" @click="setRealtimeResult">送出</button>
       </div>
     </template>
   </SmallModal>

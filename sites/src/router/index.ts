@@ -7,6 +7,7 @@ import AdminView from '../views/admin/AdminView.vue';
 import AdminHomeView from '../views/admin/console/ConsoleLayout.vue';
 import AdminGameView from '../views/admin/game/GameLayout.vue';
 import AdminGamePrintView from '../views/admin/game/PrintLayout.vue';
+import AdminGameRealtimeView from '../views/admin/game/RealtimeLayout.vue';
 import RegistrationHomeView from '../views/registration/ConsoleLayout.vue';
 import RegistrationGameView from '../views/registration/GameLayout.vue';
 
@@ -207,6 +208,20 @@ const router = createRouter({
               path: 'lane/:scheduleId/:divisionId/:eventCode/:multiple/:round/award/:printFormat',
               name: 'adminGameLaneAwardPage',
               component: () => import('../components/admin/game/award/lane/PrintAward.vue'),
+            },
+          ]
+        },
+        {
+          path: 'game/:sportCode/:gameId/realtime',
+          name: 'adminRealtimeLayout',
+          component: AdminGameRealtimeView,
+          children: [
+            // lane
+            // realtime
+            {
+              path: 'lane',
+              name: 'adminGameLaneRealtimePage',
+              component: () => import('../views/admin/game/pages/lane/RealtimePage.vue'),
             },
           ]
         },
