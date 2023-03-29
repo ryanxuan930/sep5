@@ -238,6 +238,7 @@ Route::group([
         Route::apiResource('temp', GameTempController::class);
         Route::get('athlete/list', [GameAthleteController::class, 'index']);
         Route::get('athlete/find/{uid}', [GameAthleteController::class, 'find']);
+        Route::get('athlete/bib/{bib}', [GameAthleteController::class, 'findByBib']);
         Route::get('result/ranking/{num?}', [GameResultController::class, 'ranking']);
         Route::get('result/all', [GameResultController::class, 'result']);
         Route::group([
