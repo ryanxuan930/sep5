@@ -318,7 +318,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
       <div v-if="selectedTab == 3">
         <div class="flex items-center bg-gray-50">
           <template v-for="(item, index) in championData.content" :key="index">
-            <div @click="championIndex = index" :class="{'py-2 px-4 hover:bg-gray-100 duration-150': true, 'bg-gray-400 text-white': index == championIndex}">{{ item.divisionName }}</div>
+            <div @click="championIndex = index" :class="{'py-2 px-4 hover:bg-gray-100 hover:text-gray-700 duration-150 text-gray-700 cursor-pointer': true, 'bg-gray-400 text-white': index == championIndex}">{{ item.divisionName }}</div>
           </template>
         </div>
         <table>
