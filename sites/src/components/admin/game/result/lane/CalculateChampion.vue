@@ -33,6 +33,7 @@
       }
       const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/ranking/${formula.length}`);
       dataList.sort((a: any, b: any) => a.division_id - b.division_id || a.org_code - b.org_code || a.dept_id - b.dept_id || a.r4_ranking - b.r4_ranking);
+      console.log(dataList);
       for (const data of dataList) {
         console.log(divisionList, data.division_id);
         if (divisionList.includes(data.division_id)) {
