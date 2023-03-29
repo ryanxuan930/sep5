@@ -13,6 +13,7 @@ const dataList: any = ref([]);
 const idList: Ref<number[]> = ref([]);
 const firstName: any = ref('');
 const lastName: any = ref('');
+const bib: any = ref('');
 const nextRef: any = ref(null);
 const searchResult: any = ref(null);
 (async () => {
@@ -43,6 +44,9 @@ async function searchName() {
     alert('請輸入全名');
   }
 }
+async function searchBib() {
+  await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/athlete/bib/${bib.value}`, searchResult, true, true);
+}
 const emit = defineEmits<{(e: 'returnData', value: string): void, (e: 'closeModal'): void}>();
 async function submitAll() {
   for(let i = 0; i < idList.value.length; i++) {
@@ -71,6 +75,12 @@ async function submitAll() {
       </label>
       <button class="round-full-button blue basis-1/5" @click="searchName">搜尋</button>
     </div>
+    <div class="py-3 flex gap-3">
+      <label class="round-input-label basis-4/5">
+        <input type="text" class="input" v-model="bib" placeholder="號碼布" @keyup.enter="searchBib">
+      </label>
+      <button class="round-full-button blue basis-1/5" @click="searchBib">搜尋</button>
+    </div>
     <div v-if="searchResult != null" class="bg-white bg-opacity-95 shadow-lg p-5 absolute rounded w-full text-lg border-[1px]">
       <div class="flex items-center">
         <div>搜尋結果</div>
@@ -85,6 +95,11 @@ async function submitAll() {
       <div>系所/分部：{{ searchResult.dept_name_ch }}</div>
     </div>
     <table>
+      <tr>
+        <th class="text-left p-2 bg-blue-100">棒次</th>
+        <th class="text-left p-2 bg-blue-100">系統代碼</th>
+        <th class="text-left p-2 bg-blue-100">選手</th>
+      </tr>
       <template v-for="(item, index) in dataList" :key="index">
         <tr>
           <td>第{{ index+1 }}棒</td>
