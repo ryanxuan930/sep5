@@ -49,6 +49,9 @@ const isLoading = ref(false);
     if (dataList.value[i][`r${props.inputData.round}_options`].windspeed == undefined) {
       dataList.value[i][`r${props.inputData.round}_options`].windspeed = 'NWI';
     }
+    if (dataList.value[i][`r${props.inputData.round}_options`].remark == undefined) {
+      dataList.value[i][`r${props.inputData.round}_options`].remark = '';
+    }
   }
   dataList.value.sort((a: any, b: any) => a[`r${[props.inputData.round]}_heat`] - b[`r${[props.inputData.round]}_heat`] || a[`r${[props.inputData.round]}_lane`] - b[`r${[props.inputData.round]}_lane`]);
   isLoading.value = false;
@@ -81,6 +84,7 @@ async function submitAll() {
     dataList.value[i][`r${props.inputData.round}_options`].break = null;
     dataList.value[i][`r${props.inputData.round}_options`].cr = false;
     dataList.value[i][`r${props.inputData.round}_options`].nr = false;
+    dataList.value[i][`r${props.inputData.round}_options`].remark = '';
   }
   // sort by heat and temp
   if (timeEvents.includes(props.inputData.remarks)) {
@@ -231,7 +235,10 @@ async function multiRanking(input: number[]) {
       dataList.value[i][`r${props.inputData.round}_options`].rt = 0;
     }
     if (dataList.value[i][`r${props.inputData.round}_options`].windspeed == undefined) {
-      dataList.value[i][`r${props.inputData.round}_options`].windspeed = 0;
+      dataList.value[i][`r${props.inputData.round}_options`].windspeed = 'NWI';
+    }
+    if (dataList.value[i][`r${props.inputData.round}_options`].remark == undefined) {
+      dataList.value[i][`r${props.inputData.round}_options`].remark = '';
     }
   }
 }
@@ -270,6 +277,46 @@ function importHandler(input: any) {
   uploadData.value = [];
   uploadEntity.value = null;
 }
+const resultRef: any = ref([]);
+const rtRef: any = ref([]);
+const wsRef: any = ref([]);
+const remarkRef: any = ref([]);
+function moveTo(index: number, key: string) {
+  if (key == 'down') {
+    if ((index + 1) < dataList.value.length) {
+      resultRef.value[index + 1].focus();
+    }
+  }
+  if (key == 'up') {
+    if ((index - 1) > 0) {
+      resultRef.value[index - 1].focus();
+    }
+  }
+}
+function autoFormatter(index: number) {
+  const val = resultRef.value[index].value;
+  if (val.length > 0 && !val.includes('.') && !val.includes(':')) {
+    if (paramsList.value.unit == 'T') {
+      if (val.length == 3) {
+        resultRef.value[index].value = val.substring(0, 1) + '.' + val.substring(1, 3);
+      } else if (val.length == 4) {
+        resultRef.value[index].value = val.substring(0, 2) + '.' + val.substring(2, 4);
+      } else if (val.length == 5) {
+        resultRef.value[index].value = val.substring(0, 1) + ':' + val.substring(1, 3) + '.' + val.substring(3, 5);
+      } else if (val.length == 6) {
+        resultRef.value[index].value = val.substring(0, 2) + ':' + val.substring(2, 4) + '.' + val.substring(4, 6);
+      }
+    } else if (paramsList.value.unit == 'D') {
+      if (val.length == 3) {
+        resultRef.value[index].value = val.substring(0, 1) + '.' + val.substring(1, 3);
+      } else if (val.length == 4) {
+        resultRef.value[index].value = val.substring(0, 2) + '.' + val.substring(2, 4);
+      }
+    } else {
+      alert('無法自動格式化');
+    }
+  }
+}
 </script>
 
 <template>
@@ -304,10 +351,11 @@ function importHandler(input: any) {
         <th>成績</th>
         <th>RT (s)</th>
         <th>WS (m/s)</th>
+        <th>備註</th>
         <th v-if="props.inputData.multiple == 1">棒次</th>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
-        <tr v-if="item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0">
+        <tr v-show="item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0">
           <td>{{ item.org_name_full_ch }}</td>
           <td>{{ item.dept_name_ch }}</td>
           <td v-if="props.inputData.multiple == 0">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
@@ -317,16 +365,19 @@ function importHandler(input: any) {
             <td>{{ item[`r${props.inputData.round}_lane`] }}</td>
           </template>
           <td>
-            <input type="text" class="p-1 rounded border-2" v-model="item[`r${props.inputData.round}_result`]">
+            <input type="text" class="p-1 rounded border-2" @keyup.down="moveTo(index, 'down')" @keyup.up="moveTo(index, 'up')" @keyup.enter="autoFormatter(index)" ref="resultRef" v-model="item[`r${props.inputData.round}_result`]">
           </td>
           <td>
-            <input type="text" class="p-1 rounded border-2 w-16" v-model="item[`r${props.inputData.round}_options`].rt">
+            <input type="text" class="p-1 rounded border-2 w-16" ref="rtRef" v-model="item[`r${props.inputData.round}_options`].rt">
           </td>
           <td>
-            <input type="text" class="p-1 rounded border-2 w-16" v-model="item[`r${props.inputData.round}_options`].windspeed">
+            <input type="text" class="p-1 rounded border-2 w-16" ref="wsRef" v-model="item[`r${props.inputData.round}_options`].windspeed">
           </td>
           <td>
-            <button class="general-button blue" v-if="props.inputData.multiple == 1" @click="() => { displayModal = 3; selectedData = item;}">棒次</button>
+            <input type="text" class="p-1 rounded border-2 w-16" ref="remarkRef" v-model="item[`r${props.inputData.round}_options`].remark">
+          </td>
+          <td v-if="props.inputData.multiple == 1">
+            <button class="general-button blue" @click="() => { displayModal = 3; selectedData = item;}">棒次</button>
           </td>
         </tr>
       </template>
