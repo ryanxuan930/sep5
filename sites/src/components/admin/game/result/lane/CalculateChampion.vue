@@ -3,9 +3,11 @@
   import VueRequest from '@/vue-request';
   import { useUserStore } from '@/stores/user';
   import { useGameStore } from '@/stores/game';
+  import FullModal from '@/components/FullModal.vue';
 
   const store = useUserStore();
   const gameStore = useGameStore();
+  const displayModal = ref(false);
   const vr = new VueRequest(store.token);
   const sportCode = gameStore.data.sport_code;
   const gameId = gameStore.data.game_id;
@@ -75,12 +77,37 @@
   watch(selectedTab, (val) => {
     calculateChampion(championData.value.content[val].type, championData.value.content[val].formula, championData.value.content[val].divisionList);
   });
+
+  async function submitAll() {
+    const res = await vr.Patch(`game/${sportCode}/${gameId}/common/temp/gameChampion`, { temp_data: JSON.stringify(championData.value)}, null, true, true);
+    if (res.status != 'A01') {
+      alert('儲存失敗');
+    } else {
+      alert('儲存成功');
+    }
+  }
+
+  function snapResult() {
+    championData.value.content[selectedTab.value].payload = resultList.value;
+    submitAll();
+  }
+
+  function saveResult() {
+    submitAll();
+    displayModal.value = false;
+  }
+
+  function release(status: boolean) {
+    if (confirm('確定公告總錦標結果？')) {
+      championData.value.isRelease = status;
+      submitAll();
+    }
+  }
 </script>
 
 <template>
   <div v-if="championData != null">
-    <hr>
-    <div class="my-3 text-xl">即時計算結果</div>
+    <hr class="my-2">
     <div class="bookmark">
       <template v-for="(item, index) in championData.content" :key="index">
         <div>
@@ -92,6 +119,9 @@
     <div>
       <div v-if="championData.content[selectedTab].type == 'ranking'">
         <table class="config-table">
+          <tr>
+            <th :colspan="championData.content[selectedTab].formula.length + 4">即時計算結果</th>
+          </tr>
           <tr>
             <th>排名</th>
             <th>組織單位</th>
@@ -114,9 +144,86 @@
           </template>
         </table>
         <div class="p-2 text-center" v-if="resultList.length == 0">目前無資料</div>
+        <div v-if="resultList.length > 0">
+          <button class="round-full-button blue" @click="snapResult">暫存</button>
+        </div>
+        <hr class="my-5">
+        <table class="config-table">
+          <tr>
+            <th :colspan="championData.content[selectedTab].formula.length + 4">暫存結果</th>
+          </tr>
+          <tr>
+            <th>排名</th>
+            <th>組織單位</th>
+            <th>分部/系所</th>
+            <template v-for="(item, index) in championData.content[selectedTab].formula" :key="index">
+              <th>{{ index + 1 }}</th>
+            </template>
+            <th>總計</th>
+          </tr>
+          <template v-for="(item, index) in championData.content[selectedTab].payload" :key="index">
+            <tr>
+              <td :class="{'text-blue-400': index + 1 <= championData.content[selectedTab].qualified}">{{ index + 1 }}</td>
+              <td>{{ item.org_name_full_ch }}</td>
+              <td>{{ item.dept_name_ch }}</td>
+              <template v-for="point in item.points">
+                <td>{{ point }}</td>
+              </template>
+              <td>{{ item.sum }}</td>
+            </tr>
+          </template>
+        </table>
+        <div class="p-2 text-center" v-if="Object.keys(championData.content[selectedTab].payload).length === 0">目前無資料</div>
+        <div v-if="resultList.length > 0">
+          <button class="round-full-button blue" @click="displayModal = true">編輯</button>
+        </div>
+        <hr class="my-5">
+        <button class="round-full-button blue" v-show="!championData.isRelease" @click="release(true)">顯示正式成績</button>
+        <button class="round-full-button blue" v-show="championData.isRelease" @click="release(false)">顯示即時成績</button>
+        <hr class="my-5">
+        <div>顯示即時成績：使用者端顯示即時統計資訊</div>
+        <div>顯示正式成績：顯示端顯示經大會處理過後之最終正式成績(暫存結果)</div>
       </div>
     </div>
   </div>
+  <FullModal v-show="displayModal" @closeModal="displayModal = false">
+    <template v-slot:title>
+      <div class="text-2xl">編輯總錦標資料</div>
+    </template>
+    <template v-slot:content>
+      <div class="overflow-auto">
+        <div class="w-[1024px] lg:w-full">
+          <table class="config-table" v-if="championData != null">
+            <tr>
+              <th>排名</th>
+              <th>組織單位</th>
+              <th>分部/系所</th>
+              <template v-for="(item, index) in championData.content[selectedTab].formula" :key="index">
+                <th>{{ index + 1 }}</th>
+              </template>
+              <th>總計</th>
+            </tr>
+            <template v-for="(item, index) in championData.content[selectedTab].payload" :key="index">
+              <tr>
+                <td :class="{'text-blue-400': index + 1 <= championData.content[selectedTab].qualified}">{{ index + 1 }}</td>
+                <td>{{ item.org_name_full_ch }}</td>
+                <td>{{ item.dept_name_ch }}</td>
+                <template v-for="(point, pindex) in item.points" :key="pindex">
+                  <td class="w-24">
+                    <input class="round-input" type="number" v-model="item.points[pindex]">
+                  </td>
+                </template>
+                <td class="w-32">
+                  <input class="round-input" type="number" v-model="item.sum">
+                </td>
+              </tr>
+            </template>
+          </table>
+          <button class="round-full-button blue" @click="saveResult">儲存</button>
+        </div>
+      </div>
+    </template>
+  </FullModal>
 </template>
 
 <style scoped lang="scss">

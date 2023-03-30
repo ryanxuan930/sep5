@@ -39,9 +39,9 @@ const pageData: IPageData = inject('pageData');
       <div class="hidden md:block h-12 sm:h-20 w-2 sm:w-6"></div>
     </div>
     <div ref="target">
-      <div class="h-8 block bg-gray-100 shadow-lg sm:top-20 md:hidden left-0 w-full z-10 cursor-pointer text-center" @click="mobileNav = ! mobileNav">
-        <span v-if="mobileNav==true" class="material-icons text-2xl text-gray-700">arrow_drop_up</span>
-        <span v-if="mobileNav==false" class="material-icons text-2xl text-gray-700">arrow_drop_down</span>
+      <div class="h-8 block bg-gray-200 shadow-lg sm:top-20 md:hidden left-0 w-full z-10 cursor-pointer text-center" @click="mobileNav = ! mobileNav">
+        <span v-if="mobileNav==true" class="material-icons text-3xl text-gray-700">arrow_drop_up</span>
+        <span v-if="mobileNav==false" class="material-icons text-3xl text-gray-700">arrow_drop_down</span>
       </div>
       <div :class="{'hidden': !mobileNav, 'block': mobileNav, 'md:block cursor-pointer': true}">
           <div id="second-nav" class="md:flex shadow absolute bg-white md:bg-opacity-75 top-20 sm:top-28 md:top-20 left-0 w-full z-10" >

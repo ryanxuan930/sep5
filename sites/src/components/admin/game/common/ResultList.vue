@@ -296,7 +296,15 @@ function moveTo(index: number, key: string) {
 function autoFormatter(index: number) {
   const val = resultRef.value[index].value;
   if (val.length > 0 && !val.includes('.') && !val.includes(':')) {
-    if (paramsList.value.unit == 'T') {
+    if (val.toUpperCase() == 'D' || val.toUpperCase() == 'S') {
+      resultRef.value[index].value = 'DNS';
+    } else if (val.toUpperCase() == 'F') {
+      resultRef.value[index].value = 'DNF';
+    } else if (val.toUpperCase() == 'Q') {
+      resultRef.value[index].value = 'DQ';
+    } else if (val.toUpperCase() == 'M') {
+      resultRef.value[index].value = 'NM';
+    } else if (paramsList.value.unit == 'T') {
       if (val.length == 3) {
         resultRef.value[index].value = val.substring(0, 1) + '.' + val.substring(1, 3);
       } else if (val.length == 4) {
@@ -335,7 +343,8 @@ function autoFormatter(index: number) {
       <div class="flex-grow"></div>
       <div class="text-xs text-right">
         <div>成績「務必」以 hh:mm:ss, mm:ss.vvv, ss.vvv, MM.cc 格式輸入</div>
-        <div>風速以 +/- 0.00 輸入 反應時間以 0.000 輸入</div>
+        <div>風速以 +/- 0.00 輸入，若無風速計則輸入NWI；反應時間以 0.000 輸入</div>
+        <div>輸入數字按Enter會自動格式化，輸入D、F、Q、M再按Enter會分別帶入DNS、DNF、DQ、NM</div>
       </div>
     </div>
     <table>

@@ -324,14 +324,42 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
             <div @click="championIndex = index" :class="{'py-2 px-4 hover:bg-gray-100 hover:text-gray-700 duration-150 cursor-pointer': true, 'bg-gray-400 text-white': index == championIndex}">{{ item.divisionName }}</div>
           </template>
         </div>
-        <table>
+        <table v-if="championData.isRelease">
           <tr>
             <th class="w-1/5" v-if="!Config.deptAsClass">{{ t('organization') }}</th>
             <template v-if="gameData.options.regUnit == 1">
               <th class="w-1/5" v-if="Config.deptAsClass">{{ t('class') }}</th>
               <th class="w-1/5" v-else>{{ t('department') }}</th>
             </template>
-            <th>{{ t('points') }}</th>
+            <th>{{ t('points') }} ({{ t('official-result') }})</th>
+          </tr>
+          <template v-for="(item, index) in championData.content[championIndex].payload" :key="index">
+            <tr>
+              <td v-if="!Config.deptAsClass">
+                <div v-if="locale == 'en-US' && (item.org_name_full_en != null || item.org_name_full_en != '')">{{ item.org_name_full_en }}</div>
+                <div v-else>{{ item.org_name_full_ch }}</div>
+              </td>
+              <td v-if="gameData.options.regUnit == 1">
+                <div v-if="locale == 'en-US' && (item.dept_name_en != null || item.dept_name_en != '')">{{ item.dept_name_en }}</div>
+                <div v-else>{{ item.dept_name_ch }}</div>
+              </td>
+              <td>
+                <div class="flex items-center gap-1">
+                  <div class="inline-block bg-blue-400 h-8 text-white text-right" :style="{width: +item.sum>100?'100%':item.sum+'%' }"></div>
+                  <div class="text-gray-500 font-medium">{{ item.sum }}</div>
+                </div>
+              </td>
+            </tr>
+          </template>
+        </table>
+        <table v-else>
+          <tr>
+            <th class="w-1/5" v-if="!Config.deptAsClass">{{ t('organization') }}</th>
+            <template v-if="gameData.options.regUnit == 1">
+              <th class="w-1/5" v-if="Config.deptAsClass">{{ t('class') }}</th>
+              <th class="w-1/5" v-else>{{ t('department') }}</th>
+            </template>
+            <th>{{ t('points') }} ({{ t('realtime-result') }})</th>
           </tr>
           <template v-for="(item, index) in scheduleList" :key="index">
             <tr>
@@ -413,6 +441,8 @@ table {
     department: 'Department'
     class: 'Class'
     points: 'Points'
+    realtime-result: 'Realtime Result, Reference Only'
+    official-result: 'Official Result'
   zh-TW:
     list: '成績總表'
     list-heat: '分組成績'
@@ -431,4 +461,6 @@ table {
     department: '分部/系所'
     class: '班級'
     points: '積分'
+    realtime-result: '即時成績僅供參考'
+    official-result: '正式成績'
   </i18n>
