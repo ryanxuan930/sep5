@@ -79,12 +79,24 @@ async function exportData(input: any) {
   exportCsv(data, `${input.division_ch}_${input.event_ch}_${lanePhaseToString(input.round, 'zh-TW')}`, null);
 }
 async function sendResult(id: number) {
-  if (!confirm('確定送出成績? 送出後即無法修改')) {
+  if (!confirm('確定送出成績? ')) {
     return;
   }
   const r: any = await vr.Post(`game/${route.params.sportCode}/${route.params.gameId}/common/schedule/update/${id}`, {status: 4}, null, true, true);
   if (r.status == 'A01') {
     alert('已送出');
+    getData();
+  } else {
+    alert('操作失敗');
+  }
+}
+async function retriveResult(id: number) {
+  if (!confirm('確定撤回成績?')) {
+    return;
+  }
+  const r: any = await vr.Post(`game/${route.params.sportCode}/${route.params.gameId}/common/schedule/update/${id}`, {status: 3}, null, true, true);
+  if (r.status == 'A01') {
+    alert('已撤回');
     getData();
   } else {
     alert('操作失敗');
@@ -138,6 +150,7 @@ async function setRealtimeResult() {
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 1 && item.status < 4 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="openEvent(item, 3)">成績</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 1 && item.status < 4 && (props.displayMode == 'result' || props.displayMode == 'input') && (item.remarks == 'ts' || item.remarks == 'tr' || item.remarks == 'tn' || item.remarks == 'rr')" class="general-button blue" @click="openEvent(item, 5)">參考成績</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status == 3 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="sendResult(item.schedule_id)">送出</button>
+              <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status == 4 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="retriveResult(item.schedule_id)">撤回</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 3 && (props.displayMode == 'print' || props.displayMode == 'award') && item.round == 4" class="general-button blue" @click="openEvent(item, 4)">獎狀列印</button>
             </div>
           </td>
