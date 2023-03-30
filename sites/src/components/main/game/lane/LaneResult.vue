@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n'
 import { lanePhaseToString } from '@/components/library/functions';
 import Config from '@/assets/config.json';
+import SmallLoader from '@/components/SmallLoader.vue';
 
 const route = useRoute();
 const vr = new VueRequest();
@@ -17,6 +18,8 @@ const scheduleList: any = ref([]);
 const selectedTab = ref(0);
 const counter = ref(0);
 const championData: any = ref(null);
+const isLoading = ref(false);
+
 (async () => {
   const temp = await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/temp/gameChampion`);
   if (temp.temp_id != undefined) {
@@ -24,6 +27,7 @@ const championData: any = ref(null);
   }
 })();
 async function getData() {
+  isLoading.value = true;
   if (selectedTab.value == 0) {
     await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/schedule/full`, scheduleList);
     scheduleList.value.sort((a: any, b: any) => {
@@ -91,6 +95,7 @@ async function getData() {
       }
     }
   }
+  isLoading.value = false;
 };
 
 const championIndex = ref(0);
@@ -172,7 +177,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
     <button v-if="championData != null && championData.hasChampion == true" :class="{'item': true, 'active': selectedTab == 3}" @click="selectedTab = 3">{{ t('champion') }}</button>
   </div>
   <div class="overflow-auto">
-    <div class="w-[480px] xs:w-full">
+    <div class="w-[480px] xs:w-full" v-if="isLoading == false">
       <div class="bg-gray-50" v-if="selectedTab == 0">
         <table>
           <tr>
@@ -382,6 +387,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
         </table>
       </div>
     </div>
+    <SmallLoader v-show="isLoading"></SmallLoader>
   </div>
 
 </template>
