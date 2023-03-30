@@ -326,7 +326,7 @@ function importHandler(input: any) {
             <input type="text" class="p-1 rounded border-2 w-16" v-model="item[`r${props.inputData.round}_options`].windspeed">
           </td>
           <td>
-            <button class="general-button blue" @click="() => { displayModal = 3; selectedData = item;}">棒次</button>
+            <button class="general-button blue" v-if="props.inputData.multiple == 1" @click="() => { displayModal = 3; selectedData = item;}">棒次</button>
           </td>
         </tr>
       </template>
