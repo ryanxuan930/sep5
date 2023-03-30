@@ -38,7 +38,7 @@
           <div>分部/系所</div>
           <div class="text-sm">Department</div>
         </th>
-        <th v-if="Config.deptAsClass">
+        <th v-if="Config.deptAsClass && props.isMultiple == 0">
           <div>座號</div>
           <div class="text-sm">No.</div>
         </th>
