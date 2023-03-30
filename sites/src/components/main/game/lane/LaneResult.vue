@@ -101,6 +101,7 @@ async function getData() {
 const championIndex = ref(0);
 
 async function calculateChampion(type: string, formula: any, divisionList: number[]) {
+  isLoading.value = true;
   if (type == 'ranking') {
     let orgCode = '';
     let deptId = NaN;
@@ -142,6 +143,7 @@ async function calculateChampion(type: string, formula: any, divisionList: numbe
     });
     scheduleList.value.sort((a: any, b: any) => b.sum - a.sum || b.ranking.join('') - a.ranking.join(''));
   }
+  isLoading.value = false;
 }
 
 watch(selectedTab, () => {
