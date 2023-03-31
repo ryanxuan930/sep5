@@ -64,7 +64,7 @@
         item.sum = item.points.reduce((a: number, b: number) => a + b, 0);
       });
       resultList.value.sort((a: any, b: any) => b.sum - a.sum || b.ranking.join('') - a.ranking.join(''));
-      console.log(resultList.value);
+      console.log(dataList.value, resultList.value);
     }
   }
   (async () => {
