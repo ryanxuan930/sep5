@@ -165,11 +165,13 @@ class ResultController extends Controller
         array_multisort($dataArray, SORT_ASC, $col1, SORT_ASC, $col2);
         $tempOrg = '';
         $tempDept = '';
+        $tempDivision = '';
         $tempArray = array();
         for ($i = 0; $i < count($dataArray); $i++) {
-            if ($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept) {
+            if ($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept || $dataArray[$i]['division_id'] != $tempDivision) {
                 $tempOrg = $dataArray[$i]['org_code'];
                 $tempDept = $dataArray[$i]['dept_id'];
+                $tempDivision = $dataArray[$i]['division_id'];
                 array_push($tempArray, $dataArray[$i]);
             }
         }
