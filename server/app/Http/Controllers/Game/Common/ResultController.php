@@ -39,13 +39,13 @@ class ResultController extends Controller
                 $flag = false;
                 for ($k = 0; $k < count($tempIndividual); $k++) {
                     if ($tempIndividual[$k]['org_code'] == $tempArray[$i]['org_code'] && $tempIndividual[$k]['dept_id'] == $tempArray[$i]['dept_id'] && $tempIndividual[$j]['r4_ranking'] == $j + 1) {
-                        $count += $tempIndividual[$j]['count'];
+                        $count += $tempIndividual[$k]['count'];
                         $flag = true;
                     }
                 }
                 for ($k = 0; $k < count($tempGroup); $k++) {
                     if ($tempGroup[$k]['org_code'] == $tempArray[$i]['org_code'] && $tempGroup[$k]['dept_id'] == $tempArray[$i]['dept_id'] && $tempGroup[$j]['r4_ranking'] == $j + 1) {
-                        $count += $tempGroup[$j]['count'];
+                        $count += $tempGroup[$k]['count'];
                         $flag = true;
                     }
                 }
