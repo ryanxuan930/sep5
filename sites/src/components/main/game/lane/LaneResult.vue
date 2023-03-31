@@ -114,7 +114,7 @@ async function calculateChampion(type: string, formula: any, divisionList: numbe
     const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/ranking/${formula.length}`);
     dataList.sort((a: any, b: any) => a.division_id - b.division_id || a.org_code - b.org_code || a.dept_id - b.dept_id || a.r4_ranking - b.r4_ranking);
     for (const data of dataList) {
-
+      if (divisionList.includes(data.division_id)) {
         if (data.org_code != orgCode || data.dept_id != deptId) {
           index++;
           orgCode = data.org_code;
@@ -134,6 +134,9 @@ async function calculateChampion(type: string, formula: any, divisionList: numbe
         }
       scheduleList.value[index].ranking[data.r4_ranking - 1] = data.count;
       scheduleList.value[index].points[data.r4_ranking - 1] = data.count * formula[data.r4_ranking - 1];
+      } else {
+        continue;
+      }
     }
     scheduleList.value.forEach((item: any) => {
       item.sum = item.points.reduce((a: number, b: number) => a + b, 0);
