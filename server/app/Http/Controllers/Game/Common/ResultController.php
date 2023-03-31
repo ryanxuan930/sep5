@@ -20,19 +20,18 @@ class ResultController extends Controller
         $dataArray = array_merge($tempIndividual, $tempGroup);
         $col1 = array_column($dataArray, 'org_code');
         $col2 = array_column($dataArray, 'dept_id');
-        sort($col2);
         array_multisort($dataArray, SORT_ASC, $col1, SORT_ASC, $col2);
         $tempOrg = '';
         $tempDept = '';
         $tempArray = array();
         for ($i = 0; $i < count($dataArray); $i++) {
+            echo $dataArray[$i]['org_code'].' '.$dataArray[$i]['dept_id']. '\n';
             if ($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept) {
                 $tempOrg = $dataArray[$i]['org_code'];
                 $tempDept = $dataArray[$i]['dept_id'];
                 array_push($tempArray, $dataArray[$i]);
             }
         }
-        array_unique($tempArray);
         $userArray = array();
         for ($i = 0; $i < count($tempArray); $i++) {
             for ($j = 0; $j < $num; $j++) {
