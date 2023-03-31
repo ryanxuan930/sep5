@@ -23,9 +23,10 @@ class ResultController extends Controller
                 if ($tempIndividual[$i]['org_code'] == $tempGroup[$j]['org_code'] && $tempIndividual[$i]['dept_id'] == $tempGroup[$j]['dept_id'] && $tempIndividual[$i]['r4_ranking'] == $tempGroup[$j]['r4_ranking']) {
                     $tempIndividual[$i]['count'] += $tempGroup[$j]['count'];
                     continue;
+                } else {
+                    array_push($groups, $tempGroup[$j]);
                 }
             }
-            array_push($groups, $tempGroup[$j]);
         }
         $userArray = array_merge($tempIndividual, $groups);
         $col1 = array_column($userArray, 'org_code');
