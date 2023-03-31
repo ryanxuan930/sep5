@@ -89,7 +89,7 @@ class ResultController extends Controller
         $index = -1;
         $userArray = array();
         for ($i = 0; $i < count($dataArray); $i++) {
-            if ($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept || $dataArray[$i]['r4_ranking'] != $tempRank) {
+            if (($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept) && $dataArray[$i]['r4_ranking'] != $tempRank) {
                 $index++;
                 $tempOrg = $dataArray[$i]['org_code'];
                 $tempDept = $dataArray[$i]['dept_id'];
