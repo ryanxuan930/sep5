@@ -166,10 +166,10 @@ class ResultController extends Controller
         array_multisort($dataArray, SORT_ASC, $col1, SORT_ASC, $col2, SORT_ASC, $col3);
         $tempOrg = '';
         $tempDept = '';
-        $tempDivision = '';
+        $tempDivision = 0;
         $tempArray = array();
         for ($i = 0; $i < count($dataArray); $i++) {
-            if ($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept || $dataArray[$i]['division_id'] != $tempDivision) {
+            if ($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept || intval($dataArray[$i]['division_id']) != $tempDivision) {
                 $tempOrg = $dataArray[$i]['org_code'];
                 $tempDept = $dataArray[$i]['dept_id'];
                 $tempDivision = $dataArray[$i]['division_id'];
