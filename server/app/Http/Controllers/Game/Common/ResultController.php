@@ -94,7 +94,7 @@ class ResultController extends Controller
                 $tempOrg = $dataArray[$i]['org_code'];
                 $tempDept = $dataArray[$i]['dept_id'];
                 $tempRank = $dataArray[$i]['r4_ranking'];
-                $userArray[$index] = $dataArray[$i];
+                array_push($userArray, $dataArray[$i]);
             }
             $userArray[$index]['count'] += $dataArray[$i]['count'];
         }
