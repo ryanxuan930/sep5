@@ -17,6 +17,7 @@ class ResultController extends Controller
         $tempIndividual = json_decode(json_encode($tempIndividual), true, 512, JSON_BIGINT_AS_STRING);
         $tempGroup = DB::table($sportCode.'_'.$gameId.'_groups')->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_groups.team_id', '=', $sportCode.'_'.$gameId.'_teams.team_id')->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_groups.division_id', '=', $sportCode.'_'.$gameId.'_divisions.division_id')->leftJoin('events', $sportCode.'_'.$gameId.'_groups.event_code', '=', 'events.event_code')->leftJoin('organizations', 'organizations.org_id', '=', $sportCode.'_'.$gameId.'_teams.org_id')->leftJoin('departments', 'departments.dept_id', '=', $sportCode.'_'.$gameId.'_teams.dept_id')->select($sportCode.'_'.$gameId.'_teams.org_id', $sportCode.'_'.$gameId.'_teams.dept_id', 'organizations.org_code', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', $sportCode.'_'.$gameId.'_divisions.division_ch', $sportCode.'_'.$gameId.'_divisions.division_en', $sportCode.'_'.$gameId.'_divisions.division_id', 'events.event_ch', 'events.event_en', 'events.event_code', 'events.event_id', $sportCode.'_'.$gameId.'_groups.r4_ranking', DB::raw('count(*) as count'))->where($sportCode.'_'.$gameId.'_groups.r4_ranking', '<=', $num)->where($sportCode.'_'.$gameId.'_groups.r4_ranking', '>', 0)->groupBy($sportCode.'_'.$gameId.'_teams.org_id', $sportCode.'_'.$gameId.'_teams.dept_id', $sportCode.'_'.$gameId.'_groups.r4_ranking')->get();
         $tempGroup = json_decode(json_encode($tempGroup), true, 512, JSON_BIGINT_AS_STRING);
+        /*
         $groups = [];
         for ($i = 0; $i < count($tempIndividual); $i++) {
             for ($j = 0; $j < count($tempGroup); $j++) {
@@ -36,7 +37,27 @@ class ResultController extends Controller
         $col1 = array_column($userArray, 'org_code');
         $col2 = array_column($userArray, 'dept_id');
         $col3 = array_column($userArray, 'r4_ranking');
-        array_multisort($userArray, SORT_ASC, $col1, SORT_ASC, $col2, SORT_ASC, $col3, SORT_ASC);
+        array_multisort($userArray, SORT_ASC, $col1, SORT_ASC, $col2, SORT_ASC, $col3, SORT_ASC);*/
+        $dataArray = array_merge($tempIndividual, $tempGroup);
+        $col1 = array_column($dataArray, 'org_code');
+        $col2 = array_column($dataArray, 'dept_id');
+        $col3 = array_column($userArray, 'r4_ranking');
+        array_multisort($dataArray, SORT_ASC, $col1, SORT_ASC, $col2, SORT_ASC, $col3, SORT_ASC);
+        $tempOrg = '';
+        $tempDept = '';
+        $tempRank = 0;
+        $index = -1;
+        $userArray = array();
+        for ($i = 0; $i < count($dataArray); $i++) {
+            if ($dataArray[$i]['org_code'] != $tempOrg && $dataArray[$i]['dept_id'] != $tempDept) {
+                $index++;
+                $tempOrg = $dataArray[$i]['org_code'];
+                $tempDept = $dataArray[$i]['dept_id'];
+                $tempRank = $dataArray[$i]['r4_ranking'];
+                $userArray[$index] = $dataArray[$i];
+            }
+            $userArray[$index]['count'] += $dataArray[$i]['count'];
+        }
         return response()->json($userArray);
     }
 
