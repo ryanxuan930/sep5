@@ -35,26 +35,28 @@
       resultList.value = [];
       const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/ranking/${formula.length}}`);
       for (const data of dataList) {
-        if (data.org_code != orgCode || data.dept_id != deptId) {
-          index++;
-          orgCode = data.org_code;
-          deptId = data.dept_id;
-          resultList.value[index] = {
-            org_code: data.org_code,
-            dept_id: data.dept_id,
-            org_name_full_ch: data.org_name_full_ch,
-            org_name_full_en: data.org_name_full_en,
-            org_name_ch: data.org_name_ch,
-            org_name_en: data.org_name_en,
-            dept_name_ch: data.dept_name_ch,
-            dept_name_en: data.dept_name_en,
-            ranking: new Array(formula.length).fill(0),
-            points: new Array(formula.length).fill(0),
+        if (divisionList.includes(data.division_id)) {
+          if (data.org_code != orgCode || data.dept_id != deptId) {
+            index++;
+            orgCode = data.org_code;
+            deptId = data.dept_id;
+            resultList.value[index] = {
+              org_code: data.org_code,
+              dept_id: data.dept_id,
+              org_name_full_ch: data.org_name_full_ch,
+              org_name_full_en: data.org_name_full_en,
+              org_name_ch: data.org_name_ch,
+              org_name_en: data.org_name_en,
+              dept_name_ch: data.dept_name_ch,
+              dept_name_en: data.dept_name_en,
+              ranking: new Array(formula.length).fill(0),
+              points: new Array(formula.length).fill(0),
+            }
           }
+          resultList.value[index].ranking[data.r4_ranking - 1] = data.count;
+          resultList.value[index].points[data.r4_ranking - 1] = data.count * formula[data.r4_ranking - 1];
+          resultList.value[index].sum = resultList.value[index].points.reduce((a: number, b: number) => a + b, 0);
         }
-        resultList.value[index].ranking[data.r4_ranking - 1] = data.count;
-        resultList.value[index].points[data.r4_ranking - 1] = data.count * formula[data.r4_ranking - 1];
-        resultList.value[index].sum = resultList.value[index].points.reduce((a: number, b: number) => a + b, 0);
       }
     }
   }
