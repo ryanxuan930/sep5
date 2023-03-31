@@ -54,10 +54,8 @@
               points: new Array(formula.length).fill(0),
             }
           }
-        resultList.value[index].ranking[data.r4_ranking - 1] = data.count;
-        resultList.value[index].points[data.r4_ranking - 1] = data.count * formula[data.r4_ranking - 1];
-        } else {
-          continue;
+          resultList.value[index].ranking[data.r4_ranking - 1] = data.count;
+          resultList.value[index].points[data.r4_ranking - 1] = data.count * formula[data.r4_ranking - 1];
         }
       }
       resultList.value.forEach((item: any) => {
