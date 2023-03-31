@@ -116,7 +116,6 @@ async function calculateChampion(type: string, formula: any, divisionList: numbe
     for (const data of dataList) {
       if (divisionList.includes(data.division_id)) {
         if (data.org_code != orgCode || data.dept_id != deptId) {
-          console.log(divisionList, data.division_id, data.dept_name_ch);
           index++;
           orgCode = data.org_code;
           deptId = data.dept_id;
