@@ -22,7 +22,7 @@ class ResultController extends Controller
             for ($j = 0; $j < count($tempGroup); $j++) {
                 if ($tempIndividual[$i]['org_code'] == $tempGroup[$j]['org_code'] && $tempIndividual[$i]['dept_id'] == $tempGroup[$j]['dept_id'] && $tempIndividual[$i]['r4_ranking'] == $tempGroup[$j]['r4_ranking']) {
                     $tempIndividual[$i]['count'] += $tempGroup[$j]['count'];
-                    break;
+                    continue;
                 }
                 array_push($groups, $tempGroup[$j]);
             }
