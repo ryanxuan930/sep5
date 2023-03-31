@@ -80,7 +80,7 @@ class ResultController extends Controller
                 'count' => $tempGroup[$i]['count'],
             ]);
         }*/
-        array_merge($tempIndividual, $tempGroup);
+        $dataArray = array_merge($tempIndividual, $tempGroup);
         $col1 = array_column($dataArray, 'org_code');
         $col2 = array_column($dataArray, 'dept_id');
         $col3 = array_column($dataArray, 'r4_ranking');
