@@ -24,8 +24,8 @@ class ResultController extends Controller
                     $tempIndividual[$i]['count'] += $tempGroup[$j]['count'];
                     continue;
                 }
-                array_push($groups, $tempGroup[$j]);
             }
+            array_push($groups, $tempGroup[$j]);
         }
         $userArray = array_merge($tempIndividual, $groups);
         $col1 = array_column($userArray, 'org_code');
