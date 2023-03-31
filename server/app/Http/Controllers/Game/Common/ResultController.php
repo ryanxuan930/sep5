@@ -33,6 +33,7 @@ class ResultController extends Controller
                 array_push($tempArray, $dataArray[$i]);
             }
         }
+        print_r($tempArray);
         for ($i = 0; $i < count($tempArray); $i++) {
             for ($j = 0; $j < $num; $j++) {
                 $count = 0;
