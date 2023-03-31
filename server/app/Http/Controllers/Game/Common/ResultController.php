@@ -65,8 +65,8 @@ class ResultController extends Controller
                     'count' => $count,
                 ]);
             }
-
         }
+        print_r($userArray);
         return response()->json($userArray);
     }
 
