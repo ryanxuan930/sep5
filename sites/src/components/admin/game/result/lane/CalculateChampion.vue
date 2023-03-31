@@ -36,6 +36,7 @@
       const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/ranking`);
       for (const data of dataList) {
         if (data.org_code != orgCode || data.dept_id != deptId) {
+          console.log(data);
           index++;
           orgCode = data.org_code;
           deptId = data.dept_id;
