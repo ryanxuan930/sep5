@@ -38,7 +38,47 @@ class ResultController extends Controller
         $col2 = array_column($userArray, 'dept_id');
         $col3 = array_column($userArray, 'r4_ranking');
         array_multisort($userArray, SORT_ASC, $col1, SORT_ASC, $col2, SORT_ASC, $col3, SORT_ASC);*/
-        $dataArray = array_merge($tempIndividual, $tempGroup);
+        $dataArray = array();
+        for ($i = 0; $i < count($tempIndividual); $i++) {
+            array_push($dataArray, [
+                'org_code' => $tempIndividual[$i]['org_code'],
+                'dept_id' => $tempIndividual[$i]['dept_id'],
+                'org_name_full_ch' => $tempIndividual[$i]['org_name_full_ch'],
+                'org_name_ch' => $tempIndividual[$i]['org_name_ch'],
+                'org_name_full_en' => $tempIndividual[$i]['org_name_full_en'],
+                'org_name_en' => $tempIndividual[$i]['org_name_en'],
+                'dept_name_ch' => $tempIndividual[$i]['dept_name_ch'],
+                'dept_name_en' => $tempIndividual[$i]['dept_name_en'],
+                'division_ch' => $tempIndividual[$i]['division_ch'],
+                'division_en' => $tempIndividual[$i]['division_en'],
+                'division_id' => $tempIndividual[$i]['division_id'],
+                'event_ch' => $tempIndividual[$i]['event_ch'],
+                'event_en' => $tempIndividual[$i]['event_en'],
+                'event_code' => $tempIndividual[$i]['event_code'],
+                'r4_ranking' => $tempIndividual[$i]['r4_ranking'],
+                'count' => $tempIndividual[$i]['count'],
+            ]);
+        }
+        for( $i = 0; $i < count($tempGroup); $i++ ) {
+            array_push($dataArray, [
+                'org_code' => $tempGroup[$i]['org_code'],
+                'dept_id' => $tempGroup[$i]['dept_id'],
+                'org_name_full_ch' => $tempGroup[$i]['org_name_full_ch'],
+                'org_name_ch' => $tempGroup[$i]['org_name_ch'],
+                'org_name_full_en' => $tempGroup[$i]['org_name_full_en'],
+                'org_name_en' => $tempGroup[$i]['org_name_en'],
+                'dept_name_ch' => $tempGroup[$i]['dept_name_ch'],
+                'dept_name_en' => $tempGroup[$i]['dept_name_en'],
+                'division_ch' => $tempGroup[$i]['division_ch'],
+                'division_en' => $tempGroup[$i]['division_en'],
+                'division_id' => $tempGroup[$i]['division_id'],
+                'event_ch' => $tempGroup[$i]['event_ch'],
+                'event_en' => $tempGroup[$i]['event_en'],
+                'event_code' => $tempGroup[$i]['event_code'],
+                'r4_ranking' => $tempGroup[$i]['r4_ranking'],
+                'count' => $tempGroup[$i]['count'],
+            ]);
+        }
         $col1 = array_column($dataArray, 'org_code');
         $col2 = array_column($dataArray, 'dept_id');
         $col3 = array_column($userArray, 'r4_ranking');
