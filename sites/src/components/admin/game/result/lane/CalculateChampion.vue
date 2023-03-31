@@ -25,44 +25,36 @@
   }
   async function calculateChampion(type: string, formula: any, divisionList: number[]) {
     if (type == 'ranking') {
-      let orgCode = '';
-      let deptId = NaN;
-      let index = -1;
-      resultList.value = [];
       if (formula.length == 0) {
         alert('尚未設定計算公式');
         return;
       }
+      let orgCode = '';
+      let deptId = NaN;
+      let index = -1;
+      resultList.value = [];
       const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/ranking`);
-      dataList.sort((a: any, b: any) => a.division_id - b.division_id || a.org_code - b.org_code || a.dept_id - b.dept_id || a.r4_ranking - b.r4_ranking);
       for (const data of dataList) {
-        if (divisionList.includes(data.division_id)) {
-          if (data.org_code != orgCode || data.dept_id != deptId) {
-            index++;
-            orgCode = data.org_code;
-            deptId = data.dept_id;
-            resultList.value[index] = {
-              org_code: data.org_code,
-              dept_id: data.dept_id,
-              org_name_full_ch: data.org_name_full_ch,
-              org_name_full_en: data.org_name_full_en,
-              org_name_ch: data.org_name_ch,
-              org_name_en: data.org_name_en,
-              dept_name_ch: data.dept_name_ch,
-              dept_name_en: data.dept_name_en,
-              ranking: new Array(formula.length).fill(0),
-              points: new Array(formula.length).fill(0),
-            }
+        if (data.org_code != orgCode || data.dept_id != deptId) {
+          index++;
+          orgCode = data.org_code;
+          deptId = data.dept_id;
+          resultList.value[index] = {
+            org_code: data.org_code,
+            dept_id: data.dept_id,
+            org_name_full_ch: data.org_name_full_ch,
+            org_name_full_en: data.org_name_full_en,
+            org_name_ch: data.org_name_ch,
+            org_name_en: data.org_name_en,
+            dept_name_ch: data.dept_name_ch,
+            dept_name_en: data.dept_name_en,
+            ranking: new Array(formula.length).fill(0),
+            points: new Array(formula.length).fill(0),
           }
-          resultList.value[index].ranking[data.r4_ranking - 1] = data.count;
-          resultList.value[index].points[data.r4_ranking - 1] = data.count * formula[data.r4_ranking - 1];
         }
+        resultList.value[index].ranking[data.r4_ranking - 1] = data.count;
+        resultList.value[index].points[data.r4_ranking - 1] = data.count * formula[data.r4_ranking - 1];
       }
-      resultList.value.forEach((item: any) => {
-        item.sum = item.points.reduce((a: number, b: number) => a + b, 0);
-      });
-      resultList.value.sort((a: any, b: any) => b.sum - a.sum || b.ranking.join('') - a.ranking.join(''));
-      console.log(dataList, resultList.value);
     }
   }
   (async () => {
