@@ -35,40 +35,35 @@ class ResultController extends Controller
         for ($i = 0; $i < count($tempArray); $i++) {
             for ($j = 0; $j < $num; $j++) {
                 $count = 0;
-                $flag = false;
                 for ($k = 0; $k < count($tempIndividual); $k++) {
                     if ($tempIndividual[$k]['org_code'] == $tempArray[$i]['org_code'] && $tempIndividual[$k]['dept_id'] == $tempArray[$i]['dept_id'] && $tempIndividual[$k]['r4_ranking'] == $j + 1) {
                         $count += $tempIndividual[$k]['count'];
-                        $flag = true;
                     }
                 }
                 for ($k = 0; $k < count($tempGroup); $k++) {
                     if ($tempGroup[$k]['org_code'] == $tempArray[$i]['org_code'] && $tempGroup[$k]['dept_id'] == $tempArray[$i]['dept_id'] && $tempGroup[$k]['r4_ranking'] == $j + 1) {
                         $count += $tempGroup[$k]['count'];
-                        $flag = true;
                     }
                 }
-                if ($flag) {
-                    array_push($userArray, [
-                        'org_code' => $tempArray[$i]['org_code'],
-                        'dept_id' => $tempArray[$i]['dept_id'],
-                        'org_name_full_ch' => $tempArray[$i]['org_name_full_ch'],
-                        'org_name_ch' => $tempArray[$i]['org_name_ch'],
-                        'org_name_full_en' => $tempArray[$i]['org_name_full_en'],
-                        'org_name_en' => $tempArray[$i]['org_name_en'],
-                        'dept_name_ch' => $tempArray[$i]['dept_name_ch'],
-                        'dept_name_en' => $tempArray[$i]['dept_name_en'],
-                        'division_ch' => $tempArray[$i]['division_ch'],
-                        'division_en' => $tempArray[$i]['division_en'],
-                        'division_id' => $tempArray[$i]['division_id'],
-                        'event_ch' => $tempArray[$i]['event_ch'],
-                        'event_en' => $tempArray[$i]['event_en'],
-                        'event_code' => $tempArray[$i]['event_code'],
-                        'event_id' => $tempArray[$i]['event_id'],
-                        'r4_ranking' => $j + 1,
-                        'count' => $count,
-                    ]);
-                }
+                array_push($userArray, [
+                    'org_code' => $tempArray[$i]['org_code'],
+                    'dept_id' => $tempArray[$i]['dept_id'],
+                    'org_name_full_ch' => $tempArray[$i]['org_name_full_ch'],
+                    'org_name_ch' => $tempArray[$i]['org_name_ch'],
+                    'org_name_full_en' => $tempArray[$i]['org_name_full_en'],
+                    'org_name_en' => $tempArray[$i]['org_name_en'],
+                    'dept_name_ch' => $tempArray[$i]['dept_name_ch'],
+                    'dept_name_en' => $tempArray[$i]['dept_name_en'],
+                    'division_ch' => $tempArray[$i]['division_ch'],
+                    'division_en' => $tempArray[$i]['division_en'],
+                    'division_id' => $tempArray[$i]['division_id'],
+                    'event_ch' => $tempArray[$i]['event_ch'],
+                    'event_en' => $tempArray[$i]['event_en'],
+                    'event_code' => $tempArray[$i]['event_code'],
+                    'event_id' => $tempArray[$i]['event_id'],
+                    'r4_ranking' => $j + 1,
+                    'count' => $count,
+                ]);
             }
 
         }
