@@ -88,6 +88,7 @@ class ResultController extends Controller
         $tempRank = 0;
         $index = -1;
         $userArray = array();
+        print_r($dataArray);
         for ($i = 0; $i < count($dataArray); $i++) {
             if ($dataArray[$i]['org_code'] != $tempOrg && $dataArray[$i]['dept_id'] != $tempDept) {
                 $index++;
