@@ -66,7 +66,6 @@ class ResultController extends Controller
                 ]);
             }
         }
-        print_r($userArray);
         return response()->json($userArray);
     }
 
