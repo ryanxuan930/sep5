@@ -111,7 +111,7 @@ async function calculateChampion(type: string, formula: any, divisionList: numbe
       alert('尚未設定計算公式');
       return;
     }
-    const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/champion/${formula.length}`);
+    const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/champion/${JSON.stringify(divisionList)}/${formula.length}`);
     dataList.sort((a: any, b: any) => a.division_id - b.division_id || a.org_code - b.org_code || a.dept_id - b.dept_id || a.r4_ranking - b.r4_ranking);
     for (const data of dataList) {
       if (divisionList.includes(data.division_id)) {

@@ -33,7 +33,7 @@
       let deptId = NaN;
       let index = -1;
       resultList.value = [];
-      const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/champion/${formula.length}`);
+      const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/champion/${JSON.stringify(divisionList)}/${formula.length}`);
       for (const data of dataList) {
         if (divisionList.includes(data.division_id)) {
           if (data.org_code != orgCode || data.dept_id != deptId) {
