@@ -163,17 +163,14 @@ class ResultController extends Controller
         }
         $col1 = array_column($dataArray, 'org_code');
         $col2 = array_column($dataArray, 'dept_id');
-        $col3 = array_column($dataArray, 'division_id');
-        array_multisort($dataArray, SORT_ASC, $col3, SORT_ASC, $col1, SORT_ASC, $col2);
+        array_multisort($dataArray, SORT_ASC, $col1, SORT_ASC, $col2);
         $tempOrg = '';
         $tempDept = '';
-        $tempDivision = 0;
         $tempArray = array();
         for ($i = 0; $i < count($dataArray); $i++) {
-            if ($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept || intval($dataArray[$i]['division_id']) != $tempDivision) {
+            if ($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept) {
                 $tempOrg = $dataArray[$i]['org_code'];
                 $tempDept = $dataArray[$i]['dept_id'];
-                $tempDivision = $dataArray[$i]['division_id'];
                 array_push($tempArray, $dataArray[$i]);
             }
         }
