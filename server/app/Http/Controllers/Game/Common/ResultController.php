@@ -33,7 +33,7 @@ class ResultController extends Controller
                 array_push($tempArray, $dataArray[$i]);
             }
         }
-        for ($i = 0; $i < count($userArray); $i++) {
+        for ($i = 0; $i < count($dataArray); $i++) {
             for ($j = 0; $j < $num; $j++) {
                 $count = 0;
                 $flag = false;
