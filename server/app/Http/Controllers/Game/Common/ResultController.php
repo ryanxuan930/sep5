@@ -20,7 +20,7 @@ class ResultController extends Controller
         $dataArray = array_merge($tempIndividual, $tempGroup);
         $col1 = array_column($dataArray, 'org_code');
         $col2 = array_column($dataArray, 'dept_id');
-        array_multisort($dataArray, SORT_ASC, $col1, SORT_ASC, $col2);
+        array_multisort($dataArray, SORT_ASC, $col1, SORT_ASC, array_unique($col2));
         $tempOrg = '';
         $tempDept = '';
         $tempArray = array();
