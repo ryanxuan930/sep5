@@ -163,7 +163,7 @@ class ResultController extends Controller
         $col1 = array_column($dataArray, 'org_code');
         $col2 = array_column($dataArray, 'dept_id');
         $col3 = array_column($dataArray, 'division_id');
-        array_multisort($dataArray, SORT_ASC, $col1, SORT_ASC, $col2, SORT_ASC, $col3);
+        array_multisort($dataArray, SORT_ASC, $col3, SORT_ASC, $col1, SORT_ASC, $col2);
         $tempOrg = '';
         $tempDept = '';
         $tempDivision = 0;
