@@ -179,12 +179,12 @@ class ResultController extends Controller
             for ($j = 0; $j < $num; $j++) {
                 $count = 0;
                 for ($k = 0; $k < count($tempIndividual); $k++) {
-                    if ($tempIndividual[$k]['org_code'] == $tempArray[$i]['org_code'] && $tempIndividual[$k]['dept_id'] == $tempArray[$i]['dept_id'] && $tempIndividual[$k]['division_id'] == $tempArray[$i]['division_id'] && $tempIndividual[$k]['r4_ranking'] == $j + 1) {
+                    if ($tempIndividual[$k]['org_code'] == $tempArray[$i]['org_code'] && $tempIndividual[$k]['dept_id'] == $tempArray[$i]['dept_id'] && $tempIndividual[$k]['r4_ranking'] == $j + 1) {
                         $count += $tempIndividual[$k]['count'];
                     }
                 }
                 for ($k = 0; $k < count($tempGroup); $k++) {
-                    if ($tempGroup[$k]['org_code'] == $tempArray[$i]['org_code'] && $tempGroup[$k]['dept_id'] == $tempArray[$i]['dept_id'] && $tempIndividual[$k]['division_id'] == $tempArray[$i]['division_id'] && $tempGroup[$k]['r4_ranking'] == $j + 1) {
+                    if ($tempGroup[$k]['org_code'] == $tempArray[$i]['org_code'] && $tempGroup[$k]['dept_id'] == $tempArray[$i]['dept_id'] && $tempGroup[$k]['r4_ranking'] == $j + 1) {
                         $count += $tempGroup[$k]['count'];
                     }
                 }
