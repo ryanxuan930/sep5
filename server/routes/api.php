@@ -240,7 +240,7 @@ Route::group([
         Route::get('athlete/find/{uid}', [GameAthleteController::class, 'find']);
         Route::get('athlete/bib/{bib}', [GameAthleteController::class, 'findByBib']);
         Route::get('result/ranking/{num?}', [GameResultController::class, 'ranking']);
-        Route::get('result/champion/{divisionList}/{num?}', [GameResultController::class, 'ranking']);
+        Route::post('result/champion/{num?}', [GameResultController::class, 'ranking']);
         Route::get('result/all', [GameResultController::class, 'result']);
         Route::group([
             'prefix' => 'schedule'
