@@ -39,6 +39,7 @@ class ResultController extends Controller
         $col3 = array_column($userArray, 'r4_ranking');
         array_multisort($userArray, SORT_ASC, $col1, SORT_ASC, $col2, SORT_ASC, $col3, SORT_ASC);*/
         $dataArray = array();
+        /*
         for ($i = 0; $i < count($tempIndividual); $i++) {
             array_push($dataArray, [
                 'org_code' => $tempIndividual[$i]['org_code'],
@@ -78,7 +79,8 @@ class ResultController extends Controller
                 'r4_ranking' => $tempGroup[$i]['r4_ranking'],
                 'count' => $tempGroup[$i]['count'],
             ]);
-        }
+        }*/
+        array_merge($tempIndividual, $tempGroup);
         $col1 = array_column($dataArray, 'org_code');
         $col2 = array_column($dataArray, 'dept_id');
         $col3 = array_column($dataArray, 'r4_ranking');
