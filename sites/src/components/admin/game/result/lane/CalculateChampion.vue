@@ -66,7 +66,7 @@
           return 0;
         }
         resultList.value.sort((a: any, b: any) => {
-          return a.sum - b.sum || sortFunction(a, b);
+          return b.sum - a.sum || sortFunction(a, b);
         })
       }
     }
