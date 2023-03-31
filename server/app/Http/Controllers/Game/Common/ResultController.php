@@ -20,7 +20,7 @@ class ResultController extends Controller
         $dataArray = array_merge($tempIndividual, $tempGroup);
         $col1 = array_column($dataArray, 'org_code');
         $col2 = array_column($dataArray, 'dept_id');
-        array_multisort($dataArray, SORT_ASC, $col1, SORT_ASC, $col2, SORT_ASC);
+        array_multisort($dataArray, SORT_ASC, $col1, SORT_ASC, $col2);
         $tempOrg = '';
         $tempDept = '';
         $tempArray = array();
@@ -31,7 +31,6 @@ class ResultController extends Controller
                 array_push($tempArray, $dataArray[$i]);
             }
         }
-        print_r($tempArray);
         $userArray = array();
         for ($i = 0; $i < count($tempArray); $i++) {
             for ($j = 0; $j < $num; $j++) {
