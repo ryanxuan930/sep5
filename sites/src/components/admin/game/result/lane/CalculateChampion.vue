@@ -57,6 +57,17 @@
           resultList.value[index].points[data.r4_ranking - 1] = data.count * formula[data.r4_ranking - 1];
           resultList.value[index].sum = resultList.value[index].points.reduce((a: number, b: number) => a + b, 0);
         }
+        function sortFunction(a:any , b:any) {
+          for (let i = 0; i < formula.length; i++) {
+            if (a.ranking[i] != b.ranking[i]) {
+              return b.ranking[i] - a.ranking[i];
+            }
+          }
+          return 0;
+        }
+        resultList.value.sort((a: any, b: any) => {
+          return a.sum - b.sum || sortFunction(a, b);
+        })
       }
     }
   }
