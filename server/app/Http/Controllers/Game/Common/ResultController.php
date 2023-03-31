@@ -25,7 +25,7 @@ class ResultController extends Controller
         $tempDept = '';
         $tempArray = array();
         for ($i = 0; $i < count($dataArray); $i++) {
-            echo $dataArray[$i]['org_code'].' '.$dataArray[$i]['dept_id']. '\n';
+            echo $dataArray[$i]['org_code'].' '.$dataArray[$i]['dept_id']. '|';
             if ($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept) {
                 $tempOrg = $dataArray[$i]['org_code'];
                 $tempDept = $dataArray[$i]['dept_id'];
