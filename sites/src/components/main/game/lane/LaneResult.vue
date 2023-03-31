@@ -114,6 +114,7 @@ async function calculateChampion(type: string, formula: any, divisionList: numbe
     const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/champion/${formula.length}`);
     dataList.sort((a: any, b: any) => a.division_id - b.division_id || a.org_code - b.org_code || a.dept_id - b.dept_id || a.r4_ranking - b.r4_ranking);
     for (const data of dataList) {
+      console.log(divisionList, data.division_id);
       if (divisionList.includes(data.division_id)) {
         if (data.org_code != orgCode || data.dept_id != deptId) {
           index++;
