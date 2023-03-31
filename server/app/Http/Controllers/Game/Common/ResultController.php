@@ -32,6 +32,7 @@ class ResultController extends Controller
                 array_push($tempArray, $dataArray[$i]);
             }
         }
+        array_unique($tempArray);
         $userArray = array();
         for ($i = 0; $i < count($tempArray); $i++) {
             for ($j = 0; $j < $num; $j++) {
