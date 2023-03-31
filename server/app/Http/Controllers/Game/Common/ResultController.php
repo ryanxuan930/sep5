@@ -89,7 +89,6 @@ class ResultController extends Controller
         $tempDept = '';
         $tempRank = 0;
         $index = -1;
-        print_r($dataArray);
         $userArray = array();
         for ($i = 0; $i < count($dataArray); $i++) {
             if ($dataArray[$i]['org_code'] != $tempOrg || $dataArray[$i]['dept_id'] != $tempDept || $dataArray[$i]['r4_ranking'] != $tempRank) {
