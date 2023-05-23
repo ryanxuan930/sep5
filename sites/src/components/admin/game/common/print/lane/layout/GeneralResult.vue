@@ -91,7 +91,7 @@ dataList.value = temp1.concat(temp2);
               </template>
               <div v-if="item[`r${round}_options`].qualified != undefined">{{ item[`r${round}_options`].qualified }}</div>
             </div>
-            <div v-if="item[`r${round}_options`].windspeed != undefined">W: {{ item[`r${round}_options`].windspeed }}</div>
+            <div v-if="item[`r${round}_options`].windspeed != undefined && item[`r${round}_options`].windspeed != 'NWI'">W: {{ item[`r${round}_options`].windspeed }}</div>
             <div v-if="item[`r${round}_options`].rt != undefined">RT: {{ item[`r${round}_options`].rt }}</div>
             <template v-if="item[`r${round}_options`].break != undefined">
               <div v-if="item[`r${round}_options`].break != null">{{ item[`r${round}_options`].break }}</div>

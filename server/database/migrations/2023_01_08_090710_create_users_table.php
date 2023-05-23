@@ -44,7 +44,7 @@ return new class extends Migration
             $table->boolean('is_school_team')->default(0);
             $table->json('school_team_id_list')->nullable();
             // physical info
-            $table->tinyInteger('sex')->default(0); // others 1 male 2 female
+            $table->tinyInteger('sex')->default(1); // others 1 male 2 female
             $table->smallInteger('height')->default(0);
             $table->smallInteger('weight')->default(0);
             $table->string('blood_type', 4)->nullable();

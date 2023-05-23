@@ -276,8 +276,6 @@ class GroupController extends Controller
             '*.division_id' => 'required|integer',
             '*.event_code' => 'required|size:8',
             '*.phase' => 'required|size:2',
-            '*.result' => 'required',
-            '*.ranking' => 'required',
             '*.options' => 'nullable',
         ];
         $validator = Validator::make($request->all(),$validationArray);

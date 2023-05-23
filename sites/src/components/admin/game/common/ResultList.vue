@@ -61,12 +61,113 @@ const close = () => {
   emit('refreshPage');
   emit('closeModal');
 }
+
+async function tempSave() {
+  let res: any = null;
+  const dataset: any = [];
+  const timeEvents = ['ts', 'tr', 'tn', 'rr'];
+  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
+  // result to temp (milliseconds or centimeters)
+  for (let i = 0; i < dataList.value.length; i++){
+    if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
+      if (timeEvents.includes(props.inputData.remarks)) {
+        dataList.value[i].temp = stringToMilliseconds(dataList.value[i][`r${props.inputData.round}_result`]);
+      } else {
+        dataList.value[i].temp = dataList.value[i][`r${props.inputData.round}_result`] * 100;
+      }
+    } else {
+      dataList.value[i].temp = 0;
+    }
+    dataList.value[i][`r${props.inputData.round}_ranking`] = 0;
+    dataList.value[i][`r${props.inputData.round}_options`].qualified = '*';
+    dataList.value[i][`r${props.inputData.round}_options`].windspeed = 'NWI';
+    dataList.value[i][`r${props.inputData.round}_options`].rt = 0;
+    dataList.value[i][`r${props.inputData.round}_options`].break = null;
+    dataList.value[i][`r${props.inputData.round}_options`].cr = false;
+    dataList.value[i][`r${props.inputData.round}_options`].nr = false;
+    dataList.value[i][`r${props.inputData.round}_options`].remark = '';
+  }
+
+  // record handler
+  let flag = false;
+  for(let i = 0; i < dataList.value.length; i++){
+    if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
+      if (timeEvents.includes(props.inputData.remarks)) {
+        if (stringToMilliseconds(recordList.value.result) > dataList.value[i].temp) {
+          dataList.value[i][`r${props.inputData.round}_options`].break = '破大會紀錄';
+          if (flag == false) {
+            dataList.value[i][`r${props.inputData.round}_options`].cr = true;
+            flag = true;
+          }
+        }
+        if (recordList.value.result == 0 && flag == false) {
+          dataList.value[i][`r${props.inputData.round}_options`].break = '創大會紀錄';
+          dataList.value[i][`r${props.inputData.round}_options`].cr = true;
+          flag = true;
+        }
+      } else {
+        if (recordList.value.result == 0) {
+          if (flag == false) {
+            dataList.value[i][`r${props.inputData.round}_options`].break = '創大會紀錄';
+            dataList.value[i][`r${props.inputData.round}_options`].cr = true;
+            flag = true;
+          }
+        } else if (Number(recordList.value.result)*100 < dataList.value[i].temp) {
+          dataList.value[i][`r${props.inputData.round}_options`].break = '破大會紀錄';
+          if (flag == false) {
+            dataList.value[i][`r${props.inputData.round}_options`].cr = true;
+            flag = true;
+          }
+        }
+      }
+    }
+  }
+
+  if (props.inputData.multiple == 0){
+    dataList.value.forEach((item: any) => {
+      dataset.push({
+        u_id: item.u_id,
+        division_id: item.division_id,
+        event_code: item.event_code,
+        phase: `r${props.inputData.round}`,
+        result: item[`r${props.inputData.round}_result`],
+        ranking: item[`r${props.inputData.round}_ranking`],
+        options: JSON.stringify(item[`r${props.inputData.round}_options`]),
+      });
+    });
+    res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/update/result`, dataset, null, true, true);
+  } else {
+    dataList.value.forEach((item: any) => {
+      dataset.push({
+        team_id: item.team_id,
+        division_id: item.division_id,
+        event_code: item.event_code,
+        phase: `r${props.inputData.round}`,
+        result: item[`r${props.inputData.round}_result`],
+        ranking: item[`r${props.inputData.round}_ranking`],
+        options: JSON.stringify(item[`r${props.inputData.round}_options`]),
+      });
+    });
+    res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/group/update/result`, dataset, null, true, true);
+  }
+  if (res.status == 'A01') {
+    const r: any = await vr.Post(`game/${route.params.sportCode}/${route.params.gameId}/common/schedule/update/${props.inputData.schedule_id}`, {status: 3}, null, true, true);
+    if (r.status == 'A01') {
+      alert('已暫存');
+    } else {
+      alert('暫存失敗');
+    }
+  } else {
+    alert('暫存失敗');
+  }
+}
+
 async function submitAll() {
   isLoading.value = true;
   let res: any = null;
   const dataset: any = [];
   const timeEvents = ['ts', 'tr', 'tn', 'rr'];
-  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
+  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined, ''];
   // result to temp (milliseconds or centimeters)
   for (let i = 0; i < dataList.value.length; i++){
     if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
@@ -340,6 +441,7 @@ function autoFormatter(index: number) {
       </label>
       <button class="general-button blue">詳細紀錄</button>
       <button class="general-button blue" @click="displayModal = 4">成績聯合處理</button>
+      <button class="general-button blue" @click="tempSave">暫存成績</button>
       <div class="flex-grow"></div>
       <div class="text-xs text-right">
         <div>成績「務必」以 hh:mm:ss, mm:ss.vvv, ss.vvv, MM.cc 格式輸入</div>

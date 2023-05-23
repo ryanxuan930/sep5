@@ -159,9 +159,9 @@ function getTargetPhase(current: number, params: any) {
       <GeneralResult v-if="printMode == 'general'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></GeneralResult>
       <HeatResult v-if="printMode == 'heat'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></HeatResult>
       <div class="height2"></div>
-      <div class="font8">Q：分組錄取 q：全體擇優 DNS：未出賽 DNF：未完賽 DQ：犯規 NM：無成功試跳(擲)成績 CR：大會紀錄 NR：國家紀錄 W：
-      風速 RT：反應時間
-      </div>
+      <div v-if="gameStore.data.sport_code=='athl'" class="font8">Q：分組錄取 q：全體擇優 DNS：未出賽 DNF：未完賽 DQ：犯規 NM：無成功試跳(擲)成績 CR：大會紀錄 NR：國家紀錄 W：
+      風速 RT：反應時間</div>
+      <div v-if="gameStore.data.sport_code=='swim'" class="font8">Q：分組錄取 q：全體擇優 DNS：未出賽 DNF：未完賽 DQ：犯規 CR：大會紀錄 NR：國家紀錄 RT：反應時間</div>
       <div class="height2"></div>
       <div class="grid grid-cols-2 gap-2">
         <div class="check-content">
