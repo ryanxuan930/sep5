@@ -89,6 +89,9 @@ export function shuffle(array: any[]) {
 
 // string format: 00:00:00 or 00:00.00 or 00.00 or 00:00.000 or 00.000
 export function stringToMilliseconds(str: string) {
+  if (str.length === 0) {
+    return 0;
+  }
   const arr = str.split(':');
   let ms = 0;
   if (arr.length === 3) {
