@@ -66,7 +66,7 @@ async function tempSave() {
   let res: any = null;
   const dataset: any = [];
   const timeEvents = ['ts', 'tr', 'tn', 'rr'];
-  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
+  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined, ''];
   // result to temp (milliseconds or centimeters)
   for (let i = 0; i < dataList.value.length; i++){
     if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
