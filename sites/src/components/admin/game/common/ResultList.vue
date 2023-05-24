@@ -71,7 +71,6 @@ async function tempSave() {
   for (let i = 0; i < dataList.value.length; i++){
     if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
       if (timeEvents.includes(props.inputData.remarks)) {
-        console.log(dataList.value[i][`r${props.inputData.round}_result`]);
         dataList.value[i].temp = stringToMilliseconds(dataList.value[i][`r${props.inputData.round}_result`]);
       } else {
         dataList.value[i].temp = dataList.value[i][`r${props.inputData.round}_result`] * 100;
@@ -173,7 +172,6 @@ async function submitAll() {
   for (let i = 0; i < dataList.value.length; i++){
     if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
       if (timeEvents.includes(props.inputData.remarks)) {
-        console.log(stringToMilliseconds(dataList.value[i][`r${props.inputData.round}_result`]));
         dataList.value[i].temp = stringToMilliseconds(dataList.value[i][`r${props.inputData.round}_result`]);
       } else {
         dataList.value[i].temp = dataList.value[i][`r${props.inputData.round}_result`] * 100;
