@@ -40,6 +40,16 @@
     }
     currentTime.value = new Date();
   }, 1000);
+
+  const eventData: any = ref(null);
+  
+  function openEvent(input: any) {
+    if (input.multiple) {
+      vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/group/by/event/${input.division_id}/${input.event_code}`, eventData, true, true);
+    } else {
+      vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/individual/by/event/${input.division_id}/${input.event_code}`, eventData, true, true);
+    }
+  }
 </script>
 
 <template>
@@ -74,7 +84,7 @@
               <th>狀態</th>
             </tr>
             <template v-for="(item, index) in scheduleList" :key="index">
-              <tr v-id="item.round > 0" :class="{'active': item.status == 1 || item.status == 2}">
+              <tr @click="openEvent(item)" v-id="item.round > 0" :class="{'cursor-pointer hover:bg-blue-50 duration-150': true, 'active': item.status == 1 || item.status == 2}">
                 <td>{{ item.timestamp.substring(5,7) }}/{{ item.timestamp.substring(8,10) }} {{ item.timestamp.substring(11,16) }}</td>
                 <td>{{ item.division_ch }}{{ item.event_ch }}[{{ lanePhaseToString(item.round, 'zh-TW') }}]</td>
                 <td>{{ statusCh[item.status] }}</td>

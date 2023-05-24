@@ -394,36 +394,39 @@ function moveTo(index: number, key: string) {
     }
   }
 }
-function autoFormatter(index: number) {
-  const val = resultRef.value[index].value;
+function autoFormatter(input: any, index: string) {
+
+  const val = input[index];
   if (val.length > 0 && !val.includes('.') && !val.includes(':')) {
     if (val.toUpperCase() == 'D' || val.toUpperCase() == 'S') {
-      resultRef.value[index].value = 'DNS';
+      input[index] = 'DNS';
     } else if (val.toUpperCase() == 'F') {
-      resultRef.value[index].value = 'DNF';
+      input[index] = 'DNF';
     } else if (val.toUpperCase() == 'Q') {
-      resultRef.value[index].value = 'DQ';
+      input[index] = 'DQ';
     } else if (val.toUpperCase() == 'M') {
-      resultRef.value[index].value = 'NM';
+      input[index] = 'NM';
     } else if (paramsList.value.unit == 'T') {
       if (val.length == 3) {
-        resultRef.value[index].value = val.substring(0, 1) + '.' + val.substring(1, 3);
+        input[index] = val.substring(0, 1) + '.' + val.substring(1, 3);
       } else if (val.length == 4) {
-        resultRef.value[index].value = val.substring(0, 2) + '.' + val.substring(2, 4);
+        input[index] = val.substring(0, 2) + '.' + val.substring(2, 4);
       } else if (val.length == 5) {
-        resultRef.value[index].value = val.substring(0, 1) + ':' + val.substring(1, 3) + '.' + val.substring(3, 5);
+        input[index] = val.substring(0, 1) + ':' + val.substring(1, 3) + '.' + val.substring(3, 5);
       } else if (val.length == 6) {
-        resultRef.value[index].value = val.substring(0, 2) + ':' + val.substring(2, 4) + '.' + val.substring(4, 6);
+        input[index] = val.substring(0, 2) + ':' + val.substring(2, 4) + '.' + val.substring(4, 6);
       }
     } else if (paramsList.value.unit == 'D') {
       if (val.length == 3) {
-        resultRef.value[index].value = val.substring(0, 1) + '.' + val.substring(1, 3);
+        input[index] = val.substring(0, 1) + '.' + val.substring(1, 3);
       } else if (val.length == 4) {
-        resultRef.value[index].value = val.substring(0, 2) + '.' + val.substring(2, 4);
+        input[index] = val.substring(0, 2) + '.' + val.substring(2, 4);
       }
     } else {
       alert('無法自動格式化');
     }
+    console.log(input[index]);
+    return;
   }
 }
 </script>
@@ -476,7 +479,7 @@ function autoFormatter(index: number) {
             <td>{{ item[`r${props.inputData.round}_lane`] }}</td>
           </template>
           <td>
-            <input type="text" class="p-1 rounded border-2" @keyup.down="moveTo(index, 'down')" @keyup.up="moveTo(index, 'up')" @keyup.enter="autoFormatter(index)" ref="resultRef" v-model="item[`r${props.inputData.round}_result`]">
+            <input type="text" class="p-1 rounded border-2" @keyup.down="moveTo(index, 'down')" @keyup.up="moveTo(index, 'up')" @keyup.enter="autoFormatter(item, `r${props.inputData.round}_result`)" ref="resultRef" v-model="item[`r${props.inputData.round}_result`]">
           </td>
           <td>
             <input type="text" class="p-1 rounded border-2 w-16" ref="rtRef" v-model="item[`r${props.inputData.round}_options`].rt">

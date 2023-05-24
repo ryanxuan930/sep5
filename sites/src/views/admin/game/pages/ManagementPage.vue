@@ -25,6 +25,7 @@
       <hr class="col-span-4">
       <button class="round-full-button blue" @click="displayModal = 1">場次總覽</button>
       <router-link v-if="gameData.module == 'ln'" class="round-full-button blue text-center" target="_blank" :to="`/admin/game/${sportCode}/${gameId}/realtime/lane`">即時資訊</router-link>
+      <router-link v-if="gameData.module == 'ln'" class="round-full-button blue text-center" target="_blank" :to="`/admin/game/${sportCode}/${gameId}/realtime/lane/display`">顯示看板</router-link>
     </div>
     <div class="section-box flex-grow h-full flex flex-col gap-4 overflow-hidden">
       <div class="col-span-4 text-2xl">賽程列表</div>

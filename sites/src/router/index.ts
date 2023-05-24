@@ -223,6 +223,11 @@ const router = createRouter({
               name: 'adminGameLaneRealtimePage',
               component: () => import('../views/admin/game/pages/lane/RealtimePage.vue'),
             },
+            {
+              path: 'lane/display',
+              name: 'adminGameLaneRealtimeDisplay',
+              component: () => import('../views/admin/game/pages/lane/RealtimeDisplay.vue'),
+            },
           ]
         },
       ],
