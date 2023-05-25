@@ -96,7 +96,7 @@
           return 0
         } else if (params.r1 == 1 && params.r2 == 0 && params.r3 == 0) {
           return 1
-        } else if (params.r1 == 1 && params.r2 == 1 && params.r3 == 0 || params.r1 == 0 && params.r2 == 1 && params.r3 == 0) {
+        } else if ((params.r1 == 1 && params.r2 == 1 && params.r3 == 0) || (params.r1 == 0 && params.r2 == 1 && params.r3 == 0)) {
           return 2
         } else if (params.r3 == 1) {
           return 3
