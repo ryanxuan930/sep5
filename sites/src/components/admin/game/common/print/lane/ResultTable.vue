@@ -163,6 +163,7 @@ function getTargetPhase(current: number, params: any) {
       風速 RT：反應時間</div>
       <div v-if="gameStore.data.sport_code=='swim'" class="font8">Q：分組錄取 q：全體擇優 DNS：未出賽 DNF：未完賽 DQ：犯規 CR：大會紀錄 NR：國家紀錄 RT：反應時間</div>
       <div class="height2"></div>
+      <!--
       <div class="grid grid-cols-2 gap-2">
         <div class="check-content">
           <div>紀錄：</div>
@@ -173,6 +174,7 @@ function getTargetPhase(current: number, params: any) {
           <div class="flex-grow">{{ new Date().toLocaleString('zh-TW', { hour12: false, hc: 'h23'}) }}</div>
         </div>
       </div>
+      -->
       <div class="height2"></div>
       <div class="text-center font9">{{ $route.params.sportCode.toString().toUpperCase() }}_{{ $route.params.gameId }}_{{ divisionId }}_{{ eventCode.toString().toUpperCase() }}_{{ phaseArray[round].toUpperCase() }}_{{ Date.now() }}</div>
     </div>
