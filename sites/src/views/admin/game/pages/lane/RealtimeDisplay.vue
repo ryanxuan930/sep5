@@ -17,6 +17,15 @@ const timerText = ref('00:00.00');
 const realtimeData: any = ref(null);
 const athleteList: any = ref([]);
 const displayList: any = ref([null, null, null, null, null, null, null, null, null, null]);
+let records: any = [];
+const gamerecords: any = ref({});
+
+(async () => {
+  const temp = await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/temp/gameRecords`);
+  if (temp.temp_key == 'gameRecords') {
+    records = JSON.parse(temp.temp_data);
+  }
+})();
 
 let counter = 60;
 let millis = 0;
@@ -25,6 +34,9 @@ let currentDivision = 0;
 let currentEvent = '';
 let params: any = {};
 let prePhase = 0;
+let refreshFlag = false;
+let multiplePage = 0;
+let pageTemp: any = [];
 
 function formatTime(milliseconds: number): string {
     let totalSeconds: number = Math.floor(milliseconds / 1000);
@@ -38,6 +50,15 @@ async function getStatusData() {
   const res = await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/temp/realtimeDisplay`, null, true, true);
   if (res.temp_key === 'realtimeDisplay') {
     realtimeData.value = JSON.parse(res.temp_data);
+  } else {
+    alert('請先建立即時成績資訊');
+    return;
+  }
+  if (realtimeData.value.hardRefresh) {
+    refreshFlag = true;
+  }
+  if (refreshFlag === true && realtimeData.value.hardRefresh === false) {
+    window.location.reload();
   }
   if (currentDivision != realtimeData.value.event.division_id && currentEvent != realtimeData.value.event.event_code) {
     currentDivision = realtimeData.value.event.division_id;
@@ -51,14 +72,43 @@ async function getStatusData() {
       item[`r${realtimeData.value.event.round}_options`] = JSON.parse(item[`r${realtimeData.value.event.round}_options`]);
     });
     params = await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/main/params/${realtimeData.value.event.division_id}/${realtimeData.value.event.event_code}`, null, true, true);
+    records.forEach((item: any) => {
+      if (item.division_id == realtimeData.value.event.division_id && item.event_code == realtimeData.value.event.event_code) {
+        gamerecords.value = item;
+      }
+    });
   }
   displayList.value = [null, null, null, null, null, null, null, null, null, null];
-  athleteList.value.forEach((item: any) => {
-    if (item[`r${realtimeData.value.event.round}_heat`] == realtimeData.value.selectedHeat) {
-      displayList.value[item[`r${realtimeData.value.event.round}_lane`] - 1] = item;
+  let tempList = [null, null, null, null, null, null, null, null, null, null];
+  if (realtimeData.value.displayMode == 3) {
+    tempList = athleteList.value;
+    tempList.sort((a: any, b: any) => {
+      if (a[`r${realtimeData.value.event.round}_ranking`] == 0) {
+        return 1;
+      } else if (b[`r${realtimeData.value.event.round}_ranking`] == 0) {
+        return -1;
+      } else {
+        return a[`r${realtimeData.value.event.round}_ranking`] - b[`r${realtimeData.value.event.round}_ranking`];
+      }
+    });
+  } else {
+    athleteList.value.forEach((item: any) => {
+      if (item[`r${realtimeData.value.event.round}_heat`] == realtimeData.value.selectedHeat) {
+        tempList[item[`r${realtimeData.value.event.round}_lane`] - 1] = item;
+      }
+    });
+  }
+  if (realtimeData.value.athleteNum > 10) {
+    multiplePage = Math.ceil(realtimeData.value.athleteNum / 10);
+    pageTemp = [];
+    for (let i = 0; i < multiplePage; i++) {
+      pageTemp.push(tempList.slice(i * 10, (i + 1) * 10));
     }
-  });
-  prePhase = getTargetPhase(realtimeData.value.event.round, params)
+    displayList.value = pageTemp[0];
+  } else {
+    displayList.value = tempList;
+  }
+  prePhase = getTargetPhase(realtimeData.value.event.round, params);
 }
 getStatusData();
 
@@ -76,6 +126,8 @@ setInterval(() => {
   }
 }, 1);
 
+let currentPage = 0;
+
 setInterval(() => {
   if (counter == 0) {
     counter = 60;
@@ -84,6 +136,16 @@ setInterval(() => {
   }
   if (counter % 6 === 0) {
     getStatusData();
+  }
+  if (counter % 10 === 0) {
+    if (multiplePage > 1) {
+      if (currentPage == multiplePage) {
+        currentPage = 0;
+      }
+      displayList.value = [];
+      displayList.value = pageTemp[currentPage];
+      currentPage ++;
+    }
   }
 }, 1000);
 
@@ -119,14 +181,14 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
 
 <template>
   <div class="h-screen bg-indigo-950 text-white font-medium px-5 py-1 flex flex-col gap-5" v-if="realtimeData !== null">
-    <div class="flex-grow"></div>
+    <div class="p-6"></div>
     <div class="flex items-end gap-5">
       <div>
         <div class="text-4xl font-bold">{{ realtimeData.event.division_ch }} {{ realtimeData.event.event_ch }} [{{ lanePhaseToString(realtimeData.event.round, 'zh-TW') }}]</div>
         <div class="text-xl font-bold">{{ realtimeData.event.division_en }} {{ realtimeData.event.event_en }} [{{ lanePhaseToString(realtimeData.event.round, 'en-US')  }}]</div>
       </div>
       <div class="flex-grow"></div>
-      <div class="flex items-end gap-3 bg-white text-indigo-950 px-5 pb-1">
+      <div class="flex items-end gap-3 bg-white text-indigo-950 px-5 pb-1" v-if="realtimeData.displayMode != 3">
         <div>
           <div class="text-3xl">組別</div>
           <div class="text-xl">Heat</div>
@@ -135,15 +197,23 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
           {{ realtimeData.selectedHeat }}
         </div>
       </div>
+      <div v-else class="bg-white text-indigo-950 px-5 py-2">
+        <div class="text-3xl">正式成績</div>
+        <div class="text-xl">Official Result</div>
+      </div>
       <div class="pb-1">
-        <div class="text-2xl">大會紀錄 CR：12:34.56</div>
+        <div class="text-2xl">大會紀錄 CR：{{ gamerecords.result }}</div>
         <div class="text-2xl">全國紀錄 NR：不適用</div>
       </div>
     </div>
     <table class="result-table">
       <tr>
         <th class="w-1/6">
-          <div>
+          <div v-if="realtimeData.displayMode == 3">
+            <div class="th-ch">名次</div>
+            <div class="th-en">Place</div>
+          </div>
+          <div v-else>
             <div class="th-ch">道次</div>
             <div class="th-en">Lane</div>
           </div>
@@ -169,7 +239,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
             <div class="th-ch">晉級成績</div>
             <div class="th-en">P. Result</div>
           </div>
-          <div v-if="realtimeData.displayMode == 2">
+          <div v-if="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">
             <div class="th-ch">成績</div>
             <div class="th-en">Result</div>
           </div>
@@ -185,7 +255,8 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         <template v-if="item !== null">
           <td>
             <div class="lane-box">
-              <div class="lane-box-text">{{ index + 1 }}</div>
+              <div class="lane-box-text" v-if="realtimeData.displayMode != 3">{{ item[`r${realtimeData.event.round}_lane`] }}</div>
+              <div class="lane-box-text" v-else>{{ item[`r${realtimeData.event.round}_ranking`] > 0 ? item[`r${realtimeData.event.round}_ranking`] : '-' }}</div>
             </div>
           </td>
           <td>
@@ -200,7 +271,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
           </td>
           <td>
             <div class="content-text" v-show="realtimeData.displayMode == 1">{{ item[`${roundList[prePhase]}_result`] }}</div>
-            <div class="content-text" v-show="realtimeData.displayMode == 2">{{ item[`r${realtimeData.event.round}_result`] }}</div>
+            <div class="content-text" v-show="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">{{ item[`r${realtimeData.event.round}_result`] }}</div>
           </td>
           <td>
             <div v-if="realtimeData.displayMode == 2">
@@ -211,7 +282,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         </template>
       </tr>
     </table>
-    <div class="flex items-center">
+    <div class="flex items-center" v-show="realtimeData.displayMode == 0">
       <div>
         <div class="py-2 px-10 rounded-xl bg-blue-600 text-center shadow">
           <div class="text-6xl font-semibold">{{ currentTime.getHours().toString().padStart(2,'0')  }} : {{ currentTime.getMinutes().toString().padStart(2,'0')  }} : {{ currentTime.getSeconds().toString().padStart(2,'0') }}</div>
@@ -219,7 +290,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         </div>
       </div>
       <div class="flex-grow"></div>
-      <div v-show="realtimeData.displayMode == 0" class="bg-blue-500 p-2 text-center">
+      <div class="bg-blue-500 p-2 text-center">
         <div class="pb-1 text-xl" style="font-family: Audiowide-Regular;">TechNSport</div>
         <div class="text-6xl 2xl:text-8xl bg-black py-2 px-10" style="font-family: Digital;">{{ timerText }}</div>
       </div>

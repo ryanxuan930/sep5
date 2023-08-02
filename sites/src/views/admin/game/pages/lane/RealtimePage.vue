@@ -47,6 +47,7 @@
   const heatNum = ref(0);
   const selectedHeat = ref(1);
   const displayMode = ref(0);
+  const hardRefresh = ref(false);
   
   async function openEvent(input: any) {
     selectedEvent.value = input;
@@ -70,6 +71,8 @@
       heatNum: heatNum.value,
       selectedHeat: selectedHeat.value,
       displayMode: displayMode.value,
+      athleteNum: displayMode.value == 3 ? eventData.value.length : eventData.value.reduce((acc: any, cur: any) => { return acc + (cur[`r${selectedEvent.value.round}_heat`] == selectedHeat.value ? 1 : 0) }, 0),
+      hardRefresh: hardRefresh.value,
     });
     const temp = await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/temp/realtimeDisplay`);
     let res: any = null;
@@ -111,15 +114,23 @@
             <div class="flex items-center gap-3 p-2">
               <label class="mode-selector">
                 <input type="radio" value="0" v-model="displayMode">
-                <div>顯示時鐘</div>
+                <div>計時頁面</div>
               </label>
               <label class="mode-selector">
                 <input type="radio" value="1" v-model="displayMode">
-                <div>顯示組別道次</div>
+                <div>組別道次</div>
               </label>
               <label class="mode-selector">
                 <input type="radio" value="2" v-model="displayMode">
-                <div>顯示成績結果</div>
+                <div>單組成績</div>
+              </label>
+              <label class="mode-selector">
+                <input type="radio" value="3" v-model="displayMode">
+                <div>輪播成績</div>
+              </label>
+              <label>
+                重整
+                <input type="checkbox" v-model="hardRefresh">
               </label>
               <button class="general-button blue" @click="submitDisplay">發送</button>
             </div>
