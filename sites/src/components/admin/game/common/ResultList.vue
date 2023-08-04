@@ -52,6 +52,9 @@ const isLoading = ref(false);
     if (dataList.value[i][`r${props.inputData.round}_options`].remark == undefined) {
       dataList.value[i][`r${props.inputData.round}_options`].remark = '';
     }
+    if (dataList.value[i][`r${props.inputData.round}_options`].performance == undefined) {
+      dataList.value[i][`r${props.inputData.round}_options`].performance = {};
+    }
   }
   dataList.value.sort((a: any, b: any) => a[`r${[props.inputData.round]}_heat`] - b[`r${[props.inputData.round]}_heat`] || a[`r${[props.inputData.round]}_lane`] - b[`r${[props.inputData.round]}_lane`]);
   isLoading.value = false;
