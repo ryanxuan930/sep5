@@ -39,7 +39,7 @@ const { t, locale } = useI18n({
       <hr>
     </template>
     <div class="py-4" v-if="data.links.length>0">
-        <div class="mb-3 text-xl">檔案連結</div>
+        <div class="mb-3 text-xl">{{ t('links') }}</div>
         <template v-for="(item, index) in data.links" :key="index">
             <div class="text-blue-400">
                 <a :href="item.url" target="_blank">{{item.title}}</a>
@@ -58,6 +58,8 @@ const { t, locale } = useI18n({
 <i18n lang="yaml">
   en-US:
     back: 'Back'
+    links: 'Links'
   zh-TW:
     back: '回上一頁'
+    links: '檔案連結'
 </i18n>
