@@ -86,7 +86,7 @@ for(const item of orginalData.value) {
         <div class="flex-grow"></div>
       </div>
       <div class="check-content">
-        <div>競賽裁判長：</div>
+        <div>徑賽裁判長：</div>
         <div class="flex-grow"></div>
       </div>
     </div>
