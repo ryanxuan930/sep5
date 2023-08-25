@@ -26,6 +26,7 @@
     navTextColor: '#374151',
     regulationUrl: '',
     manualUrl: '',
+    venueContent: '',
   }
   const currentTime = new Date();
   const data: any = reactive({
@@ -62,6 +63,12 @@
     }
     if (data.options === null) {
       data.options = optionsPrototype;
+    } else {
+      Object.keys(optionsPrototype).forEach((index: string) => {
+        if (data.options[index] === undefined) {
+          data.options[index] = optionsPrototype[index];
+        }
+      });
     }
     /*
     if (data.options !== null) {
@@ -184,6 +191,12 @@
       <div class="title">賽事簡介</div>
       <div class="title">
         <QuillEditor theme="snow" toolbar="full" v-model:content="data.game_info" :contentType="'html'"></QuillEditor>
+      </div>
+    </label>
+    <label class="round-input-label md:col-span-4">
+      <div class="title">場館資訊</div>
+      <div class="title">
+        <QuillEditor theme="snow" toolbar="full" v-model:content="data.options.venueContent" :contentType="'html'"></QuillEditor>
       </div>
     </label>
     <div class="round-input-label md:col-span-4">

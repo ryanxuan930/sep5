@@ -100,7 +100,7 @@ const router = createRouter({
             {
               path: 'venues',
               name: 'gameVenuesPage',
-              component: () => import('../views/main/homepage/games/TempPage.vue'),
+              component: () => import('../views/main/homepage/games/VenuePage.vue'),
             },
           ]
         },
