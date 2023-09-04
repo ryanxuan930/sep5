@@ -65,7 +65,7 @@ async function searchBib() {
 }
 
 function selectHandler(item: any) {
-  data.u_id = item.value.u_id;
+  data.u_id = item.u_id;
   athleteData.value = JSON.parse(JSON.stringify(item));
   searchResult.value = null; 
 }
