@@ -64,9 +64,9 @@ async function searchBib() {
   await vr.Get(`game/${props.sportCode}/${props.gameId}/common/athlete/bib/${bib.value}`, searchResult, true, true);
 }
 
-function selectHandler() {
-  data.u_id = searchResult.value.u_id;
-  athleteData.value = JSON.parse(JSON.stringify(searchResult.value));
+function selectHandler(item: any) {
+  data.u_id = item.value.u_id;
+  athleteData.value = JSON.parse(JSON.stringify(item));
   searchResult.value = null; 
 }
 
@@ -171,16 +171,16 @@ async function deleteItem(id: number) {
         <a class="hyperlink red" @click="searchResult = null">清除</a>
       </div>
       <hr class="my-1">
-      <div class="flex items-start">
+      <div class="flex items-start" v-for="(item, index) in searchResult" :key="index">
         <div class=flex-grow>
-          <div>編號：{{ searchResult.u_id }}</div>
-          <div>姓名：{{ searchResult.last_name_ch }}{{ searchResult.first_name_ch }}</div>
-          <div>性別：{{ searchResult.sex == 1 ? '男':'女' }}</div>
-          <div>組織單位：{{ searchResult.org_name_full_ch }}</div>
-          <div>系所/分部：{{ searchResult.dept_name_ch }}</div>
+          <div>編號：{{ item.u_id }}</div>
+          <div>姓名：{{ item.last_name_ch }}{{ searchResult.first_name_ch }}</div>
+          <div>性別：{{ item.sex == 1 ? '男':'女' }}</div>
+          <div>組織單位：{{ item.org_name_full_ch }}</div>
+          <div>系所/分部：{{ item.dept_name_ch }}</div>
         </div>
         <div>
-          <button class="hyperlink blue" @click="selectHandler">選擇</button>
+          <button class="hyperlink blue" @click="selectHandler(item)">選擇</button>
         </div>
       </div>
     </div>
