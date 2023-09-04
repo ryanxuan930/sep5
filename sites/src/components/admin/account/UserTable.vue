@@ -32,7 +32,8 @@
   // search
   const searchData = reactive({
     account: '',
-    name: '',
+    first_name: '',
+    last_name: '',
   });
   const resultList: any = ref(null);
   const isSearching = ref(false);
@@ -50,10 +51,16 @@
 </script>
 
 <template>
-  <div id="section-box" class="overflow-hidden flex flex-col h-full relative" ref="boxRef">
+  <div id="section-box" class="overflow-x-auto flex flex-col h-full relative" ref="boxRef">
     <div class="flex items-center p-2 gap-3 bg-blue-50">
       <label class="round-input-label">
         <input class="input" type="text" v-model="searchData.account" placeholder="帳號" @keyup.enter="getSearchResult">
+      </label>
+      <label class="round-input-label">
+        <input class="input" type="text" v-model="searchData.last_name" placeholder="姓氏" @keyup.enter="getSearchResult">
+      </label>
+      <label class="round-input-label">
+        <input class="input" type="text" v-model="searchData.first_name" placeholder="名字" @keyup.enter="getSearchResult">
       </label>
       <div>
         <button class="round-full-button blue" @click="getSearchResult">查詢</button>

@@ -14,18 +14,11 @@
 
   const scheduleList: any = ref([]);
   vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/schedule/full`, scheduleList, true, true);
-  
-  const realtimeResult: any = ref(null);
 
   let counter = 60;
   setInterval(() => {
-    if (counter%10 == 0) {
-      (async () => {
-        const temp: any = await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/temp/realtimeResult`);
-        if (temp.temp_id != undefined) {
-          realtimeResult.value = JSON.parse(temp.temp_data);
-        }
-      })()
+    if (counter % 15 == 0) {
+      openEvent(selectedEvent.value);
     }
     if (counter%30 == 0) {
       vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/schedule/full`, scheduleList, true, true).then(() => {
@@ -101,10 +94,8 @@
             <div class="text-2xl md:text-2xl lg:text-3xl xl:lg:text-4xl font-semibold">{{ currentTime.getHours().toString().padStart(2,'0')  }} : {{ currentTime.getMinutes().toString().padStart(2,'0')  }} : {{ currentTime.getSeconds().toString().padStart(2,'0') }}</div>
           </div>
           <div class="item">
-            <div class="title">即時成績資訊</div>
+            <div class="title">即時氣象資訊</div>
             <hr class="my-1">
-            <div class="text-lg" v-if="realtimeResult != null">{{ realtimeResult.data.division_ch }}{{ realtimeResult.data.event_ch }}-{{ lanePhaseToString(realtimeResult.data.round, 'zh-TW') }}</div>
-            <div class="text-xl" v-if="realtimeResult != null">[第 {{ realtimeResult.group}} 組] 參考成績：{{ realtimeResult.result }}</div>
           </div>
         </div>
         <div class="item flex-grow flex flex-col h-full overflow-hidden">
