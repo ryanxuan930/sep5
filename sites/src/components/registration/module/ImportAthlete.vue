@@ -94,7 +94,7 @@ function check() {
     } else {
       uploadData.value[i].weight = 0;
     }
-    if (!Number.isInteger(uploadData.value[i].num_in_dept)) {
+    if (!!isNaN(uploadData.value[i].num_in_dept)) {
       uploadData.value[i].num_in_dept = 0;
     }
     const sportTemp = [];
