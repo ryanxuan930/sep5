@@ -8,6 +8,7 @@ import GameNav from '@/components/registration/console/GameNav.vue';
 import AccountBtn from '@/components/registration/console/AccountBtn.vue';
 import LogoSection from '@/components/registration/console/LogoSection.vue';
 import SpinnerLoading from '@/components/SpinnerLoading.vue';
+import Config from '@/assets/config.json';
 
 const store = useUserStore();
 const route = useRoute();
@@ -18,7 +19,7 @@ const adminOrgId = route.params.adminOrgId;
 const systemConfig: any = ref(null);
 const paramList = ref(null);
 const currentTime = Date.now();
-const userList = ref(null);
+const userList: any = ref(null);
 const divisionList = ref(null);
 const gameData: any = ref(null);
 const userData: any = ref(null);
@@ -136,7 +137,17 @@ const regConfig: Ref<regConfig> = ref({
   await vr.Get(`auth/user/info`, userData, true, true);
   await vr.Get(`${adminOrgId}/game/${route.params.gameId}`, gameData);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/params/full`, paramList);
-  await vr.Get('user-partial', userList, true, true);
+  await vr.Get('user-partial',null ,true, true).then((res: any) => {
+    if (Array.isArray(res) && Config.deptAsClass == true) {
+      userList.value = res.filter((item: any) => {
+        console.log(item.is_student);
+        return item.is_student === 1;
+      });
+    } else {
+      userList.value = res;
+    }
+  });
+  console.log(userList.value);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/division`, divisionList);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/temp/consentForm`, consentConfig);
   if (consentConfig.value.temp_id == undefined) {
