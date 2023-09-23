@@ -275,7 +275,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
           </div>
         </th>
       </tr>
-      <template v-if="reMount">
+      <template>
         <tr v-for="(item, index) in displayList" :key="item.ind_id">
           <template v-if="item !== null">
             <td>
