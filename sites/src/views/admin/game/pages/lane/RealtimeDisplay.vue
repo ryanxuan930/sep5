@@ -203,8 +203,8 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         <div class="text-xl font-bold">{{ realtimeData.event.division_en }} {{ realtimeData.event.event_en }} [{{ lanePhaseToString(realtimeData.event.round, 'en-US')  }}]</div>
       </div>
       <div class="flex-grow"></div>
-      <div class="py-2 px-5 bg-white text-center shadow text-indigo-950">
-        <div class="text-3xl font-semibold">{{ currentTime.getHours().toString().padStart(2,'0')  }} : {{ currentTime.getMinutes().toString().padStart(2,'0')  }} : {{ currentTime.getSeconds().toString().padStart(2,'0') }}</div>
+      <div class="py-1.5 px-5 bg-white text-center shadow text-indigo-950">
+        <div class="text-4xl font-semibold" style="font-family: Digital;">{{ currentTime.getHours().toString().padStart(2,'0')  }} : {{ currentTime.getMinutes().toString().padStart(2,'0')  }} : {{ currentTime.getSeconds().toString().padStart(2,'0') }}</div>
         <div class="text-lg">大會時間 Official Time</div>
       </div>
       <div class="flex-grow"></div>
