@@ -117,8 +117,8 @@ async function getStatusData() {
     } else {
       displayList.value = tempList;
     }
-    console.log(tempList);
     setTimeout(() => {
+      console.log(displayList.value)
       reMount.value = true;
     }, 100);
   }
@@ -271,7 +271,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
           </div>
         </th>
       </tr>
-      <template v-if="reMount && displayList[0] != null">
+      <template v-if="reMount">
         <tr v-for="(item, index) in displayList" :key="index">
           <template v-if="item !== null">
             <td>
