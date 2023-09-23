@@ -19,6 +19,7 @@ const athleteList: any = ref([]);
 const displayList: any = ref([null, null, null, null, null, null, null, null, null, null]);
 let records: any = [];
 const gamerecords: any = ref({});
+const isLoaded = ref(false);
 
 (async () => {
   const temp = await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/temp/gameRecords`);
@@ -124,7 +125,10 @@ async function getStatusData() {
   }
   prePhase = getTargetPhase(realtimeData.value.event.round, params);
 }
-getStatusData();
+(async () => {
+  await getStatusData();
+  isLoaded.value = true;
+})();
 
 setInterval(() => {
   if (timerStatus.value) {
@@ -195,7 +199,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
 </script>
 
 <template>
-  <div class="h-screen bg-indigo-950 text-white font-medium px-5 py-1 flex flex-col gap-5" v-if="realtimeData !== null">
+  <div class="h-screen bg-indigo-950 text-white font-medium px-5 py-1 flex flex-col gap-5" v-if="realtimeData !== null && isLoaded == true">
     <div class="p-6"></div>
     <div class="flex items-end gap-5">
       <div>
