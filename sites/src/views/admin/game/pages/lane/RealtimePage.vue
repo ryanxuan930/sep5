@@ -5,6 +5,10 @@
   import { useGameStore } from '@/stores/game';
   import { lanePhaseToString } from '@/components/library/functions';
   import Config from '@/assets/config.json';
+  import StartSound from '@/assets/start.mp3';
+  import UpSound from '@/assets/up.mp3';
+  import DownSound from '@/assets/down.mp3';
+  import BellSound from '@/assets/bell.mp3';
 
   const currentTime: any = ref(new Date());
   const store = useUserStore();
@@ -80,11 +84,39 @@
       alert('操作失敗');
     }
   }
+
+  // sound
+
+  function playStart() {
+    const start = new Audio(StartSound);
+    start.play();
+  }
+  function playUp() {
+    const announceup = new Audio(UpSound);
+    announceup.play();
+  }
+  function playDown() {
+    const announcedown = new Audio(DownSound);
+    announcedown.play();
+  }
+  function playBell() {
+    const bell = new Audio(BellSound);
+    bell.play();
+  }
 </script>
 
 <template>
   <div class="p-5 bg-blue-100 h-screen flex flex-col gap-5 overflow-hidden">
-    <div class="text-2xl font-medium item">競賽即時資訊管理系統</div>
+    <div class="text-2xl font-medium item flex items-center">
+      <div>競賽即時資訊管理系統</div>
+      <div class="flex-grow"></div>
+      <div class="flex items-center gap-2">
+        <button class="general-button blue text-base" @click="playStart">開始比賽</button>
+        <button class="general-button blue text-base" @click="playUp">廣播開始</button>
+        <button class="general-button blue text-base" @click="playDown">廣播結束</button>
+        <button class="general-button blue text-base" @click="playBell">播放鈴聲</button>
+      </div>
+    </div>
     <div class="grid grid-cols-2 gap-5 flex-grow overflow-hidden">
       <div class="flex flex-col gap-5 h-full overflow-hidden">
         <div class="grid grid-cols-2 gap-5">
