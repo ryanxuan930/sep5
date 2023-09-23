@@ -120,7 +120,7 @@ async function getStatusData() {
     setTimeout(() => {
       console.log(displayList.value)
       reMount.value = true;
-    }, 100);
+    }, 1000);
   }
   prePhase = getTargetPhase(realtimeData.value.event.round, params);
 }
@@ -272,7 +272,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         </th>
       </tr>
       <template v-if="reMount">
-        <tr v-for="(item, index) in displayList" :key="index">
+        <tr v-for="(item, index) in displayList" :key="item.ind_id">
           <template v-if="item !== null">
             <td>
               <div class="lane-box">
