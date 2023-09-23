@@ -32,11 +32,13 @@ let millis = 0;
 let startTime = Date.now();
 let currentDivision = 0;
 let currentEvent = '';
+let currentMode = 0;
 let params: any = {};
 let prePhase = 0;
 let refreshFlag = false;
 let multiplePage = 0;
 let pageTemp: any = [];
+const reMount = ref(false);
 
 function formatTime(milliseconds: number): string {
     let totalSeconds: number = Math.floor(milliseconds / 1000);
@@ -60,9 +62,12 @@ async function getStatusData() {
   if (refreshFlag === true && realtimeData.value.hardRefresh === false) {
     window.location.reload();
   }
-  if (currentDivision != realtimeData.value.event.division_id && currentEvent != realtimeData.value.event.event_code) {
+  if (currentDivision != realtimeData.value.event.division_id || currentEvent != realtimeData.value.event.event_code || realtimeData.value.displayMode != currentMode) {
+    reMount.value = false;
+    displayList.value = [null, null, null, null, null, null, null, null, null, null];
     currentDivision = realtimeData.value.event.division_id;
     currentEvent = realtimeData.value.event.event_code;
+    currentMode = realtimeData.value.displayMode;
     if (realtimeData.value.event.multiple) {
       await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/group/by/event/${realtimeData.value.event.division_id}/${realtimeData.value.event.event_code}`, athleteList, true, true);
     } else {
@@ -77,36 +82,45 @@ async function getStatusData() {
         gamerecords.value = item;
       }
     });
-  }
-  displayList.value = [null, null, null, null, null, null, null, null, null, null];
-  let tempList = [null, null, null, null, null, null, null, null, null, null];
-  if (realtimeData.value.displayMode == 3) {
-    tempList = athleteList.value;
-    tempList.sort((a: any, b: any) => {
-      if (a[`r${realtimeData.value.event.round}_ranking`] == 0) {
-        return 1;
-      } else if (b[`r${realtimeData.value.event.round}_ranking`] == 0) {
-        return -1;
-      } else {
-        return a[`r${realtimeData.value.event.round}_ranking`] - b[`r${realtimeData.value.event.round}_ranking`];
-      }
-    });
-  } else {
-    athleteList.value.forEach((item: any) => {
-      if (item[`r${realtimeData.value.event.round}_heat`] == realtimeData.value.selectedHeat) {
-        tempList[item[`r${realtimeData.value.event.round}_lane`] - 1] = item;
-      }
-    });
-  }
-  if (realtimeData.value.athleteNum > 10) {
-    multiplePage = Math.ceil(realtimeData.value.athleteNum / 10);
-    pageTemp = [];
-    for (let i = 0; i < multiplePage; i++) {
-      pageTemp.push(tempList.slice(i * 10, (i + 1) * 10));
+    let tempList: any = [];
+    athleteList.value.sort((a: any, b: any) => { return a[`r${realtimeData.value.event.round}_heat`] - b[`r${realtimeData.value.event.round}_heat`] ||  a[`r${realtimeData.value.event.round}_lane`] - b[`r${realtimeData.value.event.round}_lane`] });
+    if (realtimeData.value.displayMode == 3) {
+      tempList = JSON.parse(JSON.stringify(athleteList.value));
+      tempList.sort((a: any, b: any) => {
+        if (a[`r${realtimeData.value.event.round}_ranking`] === 0 && b[`r${realtimeData.value.event.round}_ranking`] === 0) {
+          return 0;
+        } else if (a[`r${realtimeData.value.event.round}_ranking`] === 0) {
+          return 1;
+        } else if (b[`r${realtimeData.value.event.round}_ranking`] === 0) {
+          return -1;
+        } else {
+          return a[`r${realtimeData.value.event.round}_ranking`] - b[`r${realtimeData.value.event.round}_ranking`];
+        }
+      });
+    } else {
+      athleteList.value.forEach((item: any) => {
+        if (item[`r${realtimeData.value.event.round}_heat`] == realtimeData.value.selectedHeat) {
+          tempList[item[`r${realtimeData.value.event.round}_lane`] - 1] = item;
+        }
+      });
+      tempList.sort((a: any, b: any) => {
+        return a[`r${realtimeData.value.event.round}_heat`] - b[`r${realtimeData.value.event.round}_heat`] ||  a[`r${realtimeData.value.event.round}_lane`] - b[`r${realtimeData.value.event.round}_lane`];
+      });
     }
-    displayList.value = pageTemp[0];
-  } else {
-    displayList.value = tempList;
+    if (realtimeData.value.athleteNum > 10) {
+      multiplePage = Math.ceil(realtimeData.value.athleteNum / 10);
+      pageTemp = [];
+      for (let i = 0; i < multiplePage; i++) {
+        pageTemp.push(tempList.slice(i * 10, (i + 1) * 10));
+      }
+      displayList.value = pageTemp[0];
+    } else {
+      displayList.value = tempList;
+    }
+    console.log(tempList);
+    setTimeout(() => {
+      reMount.value = true;
+    }, 100);
   }
   prePhase = getTargetPhase(realtimeData.value.event.round, params);
 }
@@ -139,12 +153,13 @@ setInterval(() => {
   }
   if (counter % 10 === 0) {
     if (multiplePage > 1) {
-      if (currentPage == multiplePage) {
-        currentPage = 0;
-      }
       displayList.value = [];
       displayList.value = pageTemp[currentPage];
-      currentPage ++;
+      if (currentPage >= multiplePage - 1) {
+        currentPage = 0;
+      } else {
+        currentPage ++;
+      }
     }
   }
 }, 1000);
@@ -251,36 +266,38 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
           </div>
         </th>
       </tr>
-      <tr v-for="(item, index) in displayList" :key="index">
-        <template v-if="item !== null">
-          <td>
-            <div class="lane-box">
-              <div class="lane-box-text" v-if="realtimeData.displayMode != 3">{{ item[`r${realtimeData.event.round}_lane`] }}</div>
-              <div class="lane-box-text" v-else>{{ item[`r${realtimeData.event.round}_ranking`] > 0 ? item[`r${realtimeData.event.round}_ranking`] : '-' }}</div>
-            </div>
-          </td>
-          <td>
-            <div class="content-text">
-              <span v-if="Config.deptAsClass">{{ item.dept_name_ch }}</span>
-              <span v-else-if="Config.deptAsClass == false && gameStore.data.options.regUnit == 1">{{ item.org_name_ch }} {{ item.dept_name_ch }}</span>
-              <span v-else>{{ item.org_name_ch }}</span>
-            </div>
-          </td>
-          <td>
-            <div class="content-text">{{ item.last_name_ch }}{{ item.first_name_ch }}</div>
-          </td>
-          <td>
-            <div class="content-text" v-show="realtimeData.displayMode == 1">{{ item[`${roundList[prePhase]}_result`] }}</div>
-            <div class="content-text" v-show="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">{{ item[`r${realtimeData.event.round}_result`] }}</div>
-          </td>
-          <td>
-            <div v-if="realtimeData.displayMode == 2">
-              <span v-if="item[`r${realtimeData.event.round}_options`].qualified != undefined" class="px-1 py-0.5">{{ item[`r${realtimeData.event.round}_options`].qualified }}</span>
-              <span v-if="item[`r${realtimeData.event.round}_options`].break != null" class="px-1 py-0.5 bg-blue-600">{{ item[`r${realtimeData.event.round}_options`].break }}</span>
-            </div>
-          </td>
-        </template>
-      </tr>
+      <template v-if="reMount">
+        <tr v-for="(item, index) in displayList" :key="item.ind_id">
+          <template v-if="item !== null">
+            <td>
+              <div class="lane-box">
+                <div class="lane-box-text" v-if="realtimeData.displayMode != 3">{{ item[`r${realtimeData.event.round}_lane`] }}</div>
+                <div class="lane-box-text" v-else>{{ item[`r${realtimeData.event.round}_ranking`] > 0 ? item[`r${realtimeData.event.round}_ranking`] : '-' }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="content-text">
+                <span v-if="Config.deptAsClass">{{ item.dept_name_ch }}</span>
+                <span v-else-if="Config.deptAsClass == false && gameStore.data.options.regUnit == 1">{{ item.org_name_ch }} {{ item.dept_name_ch }}</span>
+                <span v-else>{{ item.org_name_ch }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="content-text">{{ item.last_name_ch }}{{ item.first_name_ch }}</div>
+            </td>
+            <td>
+              <div class="content-text" v-show="realtimeData.displayMode == 1">{{ item[`${roundList[prePhase]}_result`] }}</div>
+              <div class="content-text" v-show="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">{{ item[`r${realtimeData.event.round}_result`] }}</div>
+            </td>
+            <td>
+              <div v-if="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">
+                <span v-if="item[`r${realtimeData.event.round}_options`].qualified != undefined" class="px-1 py-0.5">{{ item[`r${realtimeData.event.round}_options`].qualified }}</span>
+                <span v-if="item[`r${realtimeData.event.round}_options`].break != null" class="px-1 py-0.5 bg-blue-600">{{ item[`r${realtimeData.event.round}_options`].break }}</span>
+              </div>
+            </td>
+          </template>
+        </tr>
+      </template>
     </table>
     <div class="flex items-center" v-show="realtimeData.displayMode == 0">
       <div>
