@@ -272,7 +272,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         </th>
       </tr>
       <template v-if="reMount && displayList[0] != null">
-        <tr v-for="(item, index) in displayList" :key="item.ind_id">
+        <tr v-for="(item, index) in displayList" :key="index">
           <template v-if="item !== null">
             <td>
               <div class="lane-box">
