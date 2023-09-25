@@ -173,17 +173,23 @@ class UserController extends Controller
         if ($temp['account'] != '') {
             $query->where('users.account', 'like', '%'.$temp['account'].'%');
         }
-        if ($temp['first_name'] != '') {
+        if ($temp['last_name'] == '') {
             $query->where('users.first_name_ch', 'like', '%'.$temp['first_name'].'%')->orWhere('users.first_name_en', 'like', '%'.$temp['first_name'].'%');
-        }
-        if ($temp['last_name'] != '') {
+        } else if ($temp['first_name'] == '') {
             $query->where('users.last_name_ch', 'like', '%'.$temp['last_name'].'%')->orWhere('users.last_name_en', 'like', '%'.$temp['last_name'].'%');
+        } else {
+            $query->where(function($query) {
+                $query->where('users.first_name_ch', 'like', '%'.$temp['first_name'].'%')->where('users.last_name_ch', 'like', '%'.$temp['last_name'].'%');
+            }
+            )->orWhere(function($query) {
+                $query->where('users.first_name_en', 'like', '%'.$temp['first_name'].'%')->where('users.last_name_en', 'like', '%'.$temp['last_name'].'%');
+            });
         }
         if (is_null($user = auth('user')->user()) && is_null($admin = auth('admin')->user())) {
             return response()->json(['status'=>'E04', 'message'=>'unauthenticated']);
         } else if (is_null($admin)) {
             $org_code = $user->org_code;
-            return response()->json($query->where('organizations.org_code', $org_code)->limit(20)->get());
+            return response()->json($query->where('organizations.org_code', $org_code)->limit(50)->get());
         } else {
             if ($admin->admin_org_id == 1) {
                 return response()->json($query->limit(20)->get());
