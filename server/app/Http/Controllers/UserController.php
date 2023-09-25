@@ -177,7 +177,7 @@ class UserController extends Controller
             $query->where('users.first_name_ch', 'like', '%'.$temp['first_name'].'%')->orWhere('users.first_name_en', 'like', '%'.$temp['first_name'].'%');
         } else if ($temp['first_name'] == '') {
             $query->where('users.last_name_ch', 'like', '%'.$temp['last_name'].'%')->orWhere('users.last_name_en', 'like', '%'.$temp['last_name'].'%');
-        } else {
+        } else if ($temp['first_name'] != '' && $temp['last_name'] != '') {
             $query->where(function($query) use ($temp) {
                 $query->where('users.first_name_ch', 'like', '%'.$temp['first_name'].'%')->where('users.last_name_ch', 'like', '%'.$temp['last_name'].'%');
             }
