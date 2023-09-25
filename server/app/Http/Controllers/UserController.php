@@ -178,10 +178,10 @@ class UserController extends Controller
         } else if ($temp['first_name'] == '') {
             $query->where('users.last_name_ch', 'like', '%'.$temp['last_name'].'%')->orWhere('users.last_name_en', 'like', '%'.$temp['last_name'].'%');
         } else {
-            $query->where(function($query) {
+            $query->where(function($query) use ($temp) {
                 $query->where('users.first_name_ch', 'like', '%'.$temp['first_name'].'%')->where('users.last_name_ch', 'like', '%'.$temp['last_name'].'%');
             }
-            )->orWhere(function($query) {
+            )->orWhere(function($query) use ($temp) {
                 $query->where('users.first_name_en', 'like', '%'.$temp['first_name'].'%')->where('users.last_name_en', 'like', '%'.$temp['last_name'].'%');
             });
         }
