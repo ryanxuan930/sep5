@@ -173,9 +173,9 @@ class UserController extends Controller
         if ($temp['account'] != '') {
             $query->where('users.account', $temp['account']);
         }
-        if ($temp['last_name'] == '') {
+        if ($temp['first_name'] != '' && $temp['last_name'] == '') {
             $query->where('users.first_name_ch', 'like', '%'.$temp['first_name'].'%')->orWhere('users.first_name_en', 'like', '%'.$temp['first_name'].'%');
-        } else if ($temp['first_name'] == '') {
+        } else if ($temp['last_name'] != '' && $temp['first_name'] == '') {
             $query->where('users.last_name_ch', 'like', '%'.$temp['last_name'].'%')->orWhere('users.last_name_en', 'like', '%'.$temp['last_name'].'%');
         } else if ($temp['first_name'] != '' && $temp['last_name'] != '') {
             $query->where(function($query) use ($temp) {
@@ -195,7 +195,7 @@ class UserController extends Controller
                 return response()->json($query->limit(20)->get());
             } else {
                 $orgData = AdminOrganization::leftJoin('organizations', 'organizations.org_id', '=', 'admin_organizations.related_user_org_id')->where('admin_org_id', $admin->admin_org_id)->first();
-                return response()->json($query->where('organizations.org_code', $orgData->org_code)->limit(20)->get());
+                return response()->json($query->where('organizations.org_code', $orgData->org_code)->limit(50)->get());
             }
         }
     }
