@@ -111,6 +111,7 @@ async function submitAll(input: any) {
       }
     }
   }
+  /*
   const athleteList = athleteData.value;
   for (var i = 0; i < athleteList.length; i++) {
     if (input.member_list.includes(athleteList[i].u_id)) {
@@ -150,7 +151,7 @@ async function submitAll(input: any) {
         }
       }
     }
-  }
+  }*/
   for (const data of props.regList) {
     if (data.division_id == input.division_id && data.event_code == input.event_code) {
       let count = 0;
