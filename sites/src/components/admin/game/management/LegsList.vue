@@ -105,7 +105,7 @@ async function submitAll() {
       <hr class="my-1">
       <template v-for="(item, index) in searchResult" :key="index">
         <div>編號：{{ item.u_id }}</div>
-        <div>姓名：{{ item.last_name_ch }}{{ searchResult.first_name_ch }}</div>
+        <div>姓名：{{ item.last_name_ch }}{{ item.first_name_ch }}</div>
         <div>性別：{{ item.sex == 1 ? '男':'女' }}</div>
         <div>組織單位：{{ item.org_name_full_ch }}</div>
         <div>系所/分部：{{ item.dept_name_ch }}</div>
