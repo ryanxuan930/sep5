@@ -140,14 +140,12 @@ const regConfig: Ref<regConfig> = ref({
   await vr.Get('user-partial',null ,true, true).then((res: any) => {
     if (Array.isArray(res) && Config.deptAsClass == true) {
       userList.value = res.filter((item: any) => {
-        console.log(item.is_student);
         return item.is_student === 1;
       });
     } else {
       userList.value = res;
     }
   });
-  console.log(userList.value);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/division`, divisionList);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/temp/consentForm`, consentConfig);
   if (consentConfig.value.temp_id == undefined) {

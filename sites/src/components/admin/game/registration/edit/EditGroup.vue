@@ -1,46 +1,55 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import VueRequest from '@/vue-request';
 import { useUserStore } from '@/stores/user';
+import SmallModal from '@/components/SmallModal.vue';
+import LegsList from '@/components/admin/game/management/LegsList.vue';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
+const displayModal = ref(0);
 const props = defineProps(['inputData', 'gameId', 'sportCode', 'regList', 'regConfig']);
 const data = reactive({
-  u_id: '',
+  team_id: '',
   event_code: '',
   division_id: 0,
   ref_result: '',
+  team_name: '',
+  member_list: [],
+  org_id: 0,
+  dept_id: 0,
 });
 
 if (props.inputData != null) {
-  data.u_id = props.inputData.u_id;
+  data.team_id = props.inputData.team_id;
   data.event_code = props.inputData.event_code;
   data.division_id = props.inputData.division_id;
   data.ref_result = props.inputData.ref_result;
+  data.team_name = props.inputData.team_name;
+  data.member_list = props.inputData.member_list;
+  data.org_id = props.inputData.org_id;
+  data.dept_id = props.inputData.dept_id;
 }
 
 const divisionList: any = ref([]);
 const paramList: any = ref([]);
 const athleteData: any = ref({});
+const orgList: any = ref([]);
+const deptList: any = ref([]);
 
 async function getData() {
   await vr.Get(`game/${props.sportCode}/${props.gameId}/main/division`, divisionList);
   await vr.Get(`game/${props.sportCode}/${props.gameId}/main/params/full`, paramList);
-}
-getData();
-
-async function inputHandler(index: number) {
-  if (index > 0) {
-    const res = await vr.Get(`user/${index}`, athleteData, true, true);
-    if (res.org_name_ch == undefined) {
-      alert('此選手不存在');
-      data.u_id = '';
-    } else {
-      athleteData.value = res;
-    }
+  if (props.inputData !== null && props.inputData.member_list == '[]') {
+    const res = await vr.Post(`user-from-list`, {data: props.inputData.member_list}, null, true, true);
+    athleteData.value = res;
+  }
+  await vr.Get(`organization`, orgList, true, true);
+  if (props.inputData !== null && props.inputData.org_id !== undefined && props.inputData.org_id != 0) {
+    await vr.Get(`department/org/${props.inputData.org_id}`, deptList, true, true);
   }
 }
+getData();
 
 const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
 const close = () => {
@@ -48,84 +57,122 @@ const close = () => {
   emit('closeModal');
 }
 
-const firstName: any = ref('');
-const lastName: any = ref('');
-const bib: any = ref('');
-const searchResult: any = ref(null);
-
-async function searchName() {
-  if (firstName.value.length > 0 && lastName.value.length > 0) {
-    await vr.Get(`user/name/${firstName.value}/${lastName.value}`, searchResult, true, true);
-  } else {
-    alert('請輸入全名');
-  }
-}
-async function searchBib() {
-  await vr.Get(`game/${props.sportCode}/${props.gameId}/common/athlete/bib/${bib.value}`, searchResult, true, true);
-}
-
-function selectHandler() {
-  data.u_id = searchResult.value.u_id;
-  athleteData.value = JSON.parse(JSON.stringify(searchResult.value));
-  searchResult.value = null; 
-}
-
 async function submitAll(input: any) {
-  if (input.u_id == '' || input.u_id == null) {
-    alert('請選擇選手 Please select an athlete');
-  }
   if (input.event_code == '' || input.event_code == null) {
     alert('請選擇項目 Please select an event');
     return;
   }
-  const athlete = athleteData.value;
-  for(const division of props.regConfig.options.division) {
-    if (division.division_id == input.division_id) {
-      if (division.prevent_sport_gifited == true && athlete.is_sport_gifited == 1) {
-        alert('體優生不得報名此組別 Sport gifited student is not allowed');
-        return;
+  for (let i = 0; i < paramList.value.length; i++) {
+    if (paramList.value[i].event_code == input.event_code) {
+      let preDefine = false;
+      if (props.regConfig.options.event[input.event_code].pre_define_member != undefined) {
+        preDefine = props.regConfig.options.event[input.event_code].pre_define_member;
       }
-      if (division.student_only == true && athlete.is_student == 0) {
-        alert('此組別僅限學生報名 This division is only for students');
+      if (input.member_list.length < paramList.value[i].player_num && preDefine == true) {
+        alert(`本項目需至少${paramList.value[i].player_num}位選手 This event requires at least ${paramList.value[i].player_num} athletes`);
         return;
-      }
-      if (!division.grade_list.includes(athlete.grade) && division.has_grade == true) {
-        alert('不是可報名此組別的年級 This grade is not allowed');
-        return;
+      } else {
+        for(const division of props.regConfig.options.division) {
+          if (division.division_id == input.division_id) {
+            if (division.prevent_sport_gifited == true && store.userInfo.is_sport_gifited == 1) {
+              alert('體優生不得報名此組別 Sport gifited student is not allowed');
+              return;
+            }
+            if (division.student_only == true && store.userInfo.is_student == 0) {
+              alert('此組別僅限學生報名 This division is only for students');
+              return;
+            }
+            if (!division.grade_list.includes(store.userInfo.grade) && division.has_grade == true) {
+              alert('不是可報名此組別的年級 This grade is not allowed');
+              return;
+            }
+          }
+        }
+        if (props.regConfig.options.event[input.event_code] != undefined) {
+          if (props.regConfig.options.event[input.event_code].prevent_sport_gifited && store.userInfo.is_sport_gifited == true) {
+            alert('體優生不得報名此項目 Sport gifited student is not allowed');
+            console.log(5);
+            return;
+          }
+          if (props.regConfig.options.event[input.event_code].student_only && store.userInfo.is_student == 0) {
+            alert('此組別僅限學生報名 This event is only for students');
+            console.log(6);
+            return;
+          }
+          if (!props.regConfig.options.event[input.event_code].grade_list.includes(store.userInfo.grade) && props.regConfig.options.event[input.event_code].has_grade == true) {
+            alert('不是可報名此項目的年級 This grade is not allowed');
+            return;
+          }
+        }
       }
     }
   }
-  if (props.regConfig.options.event[input.event_code] != undefined) {
-    if (props.regConfig.options.event[input.event_code].prevent_sport_gifited && athlete.is_sport_gifited == 1) {
-      alert('體優生不得報名此項目 Sport gifited student is not allowed');
-      return;
-    }
-    if (props.regConfig.options.event[input.event_code].student_only && athlete.is_student == 0) {
-      alert('此項目僅限學生報名 This event is only for students');
-      return;
-    }
-    if (!props.regConfig.options.event[input.event_code].grade_list.includes(athlete.grade) && props.regConfig.options.event[input.event_code].has_grade == true) {
-      alert('不是可報名此項目的年級 This grade is not allowed');
-      return;
+  const athleteList = athleteData.value;
+  for (var i = 0; i < athleteList.length; i++) {
+    if (input.member_list.includes(athleteList[i].u_id)) {
+      const athlete = athleteList[i];
+      for(const division of props.regConfig.options.division) {
+        if (division.division_id == input.division_id) {
+          if (division.prevent_sport_gifited == true && athlete.is_sport_gifited == 1) {
+            alert('體優生不得報名此組別 Sport gifited student is not allowed');
+            console.log(3);
+            return;
+          }
+          if (division.student_only == true && athlete.is_student == 0) {
+            alert('此組別僅限學生報名 This division is only for students');
+            console.log(4);
+            return;
+          }
+          if (!division.grade_list.includes(athlete.grade) && division.has_grade == true) {
+            alert('不是可報名此組別的年級 This grade is not allowed');
+            return;
+          }
+        }
+      }
+      if (props.regConfig.options.event[input.event_code] != undefined) {
+        if (props.regConfig.options.event[input.event_code].prevent_sport_gifited && athlete.is_sport_gifited == true) {
+          alert('體優生不得報名此項目 Sport gifited student is not allowed');
+          console.log(5);
+          return;
+        }
+        if (props.regConfig.options.event[input.event_code].student_only && athlete.is_student == 0) {
+          alert('此組別僅限學生報名 This event is only for students');
+          console.log(6);
+          return;
+        }
+        if (!props.regConfig.options.event[input.event_code].grade_list.includes(athlete.grade) && props.regConfig.options.event[input.event_code].has_grade == true) {
+          alert('不是可報名此項目的年級 This grade is not allowed');
+          return;
+        }
+      }
     }
   }
   for (const data of props.regList) {
-    if (data.division_id == input.division_id && data.event_code == input.event_code && data.u_id == input.u_id) {
-      alert('此選手已報名此項目 This athlete has already registerd for this event');
-      return;
+    if (data.division_id == input.division_id && data.event_code == input.event_code) {
+      let count = 0;
+      for (const item of JSON.parse(data.member_list)) {
+        if (input.member_list.includes(item)) {
+          count++;
+        }
+      }
+      if (count == input.member_list.length) {
+        alert('此隊伍已報名此項目 This team has already registerd for this event');
+        console.log(8);
+        return;
+      }
     }
   }
   if (data.ref_result == '') {
     data.ref_result = '0';
   }
   if (props.inputData == null) {
-    const response = await vr.Post(`game/${props.sportCode}/${props.gameId}/common/individual`, data, null, true, true);
+    const response = await vr.Post(`game/${props.sportCode}/${props.gameId}/common/group`, data, null, true, true);
     if (response.status == 'A01') {
       alert('已新增');
       close();
     }
   } else {
-    const response = await vr.Patch(`game/${props.sportCode}/${props.gameId}/common/individual/${props.inputData.ind_id}`, data, null, true, true);
+    const response = await vr.Patch(`game/${props.sportCode}/${props.gameId}/common/group/${props.inputData.ind_id}`, data, null, true, true);
     if (response.status == 'A01') {
       alert('已編輯');
       close();
@@ -144,47 +191,25 @@ async function deleteItem(id: number) {
 
 <template>
   <div class="relative">
-    <div class="p-3 bg-blue-50 flex flex-col gap-1">
-      <div class="text-xl">選手查詢</div>
-      <div class="flex items-center gap-2">
-        <div class="search-box">
-          <div>姓</div>
-          <input type="text" v-model="lastName">
-        </div>
-        <div class="search-box">
-          <div>名</div>
-          <input type="text" v-model="firstName">
-        </div>
-        <button class="general-button blue" @click="searchName">搜尋</button>
-        <div class="flex-grow"></div>
-        <div class="search-box">
-          <div>號碼布</div>
-          <input type="text" v-model="bib">
-        </div>
-        <button class="general-button blue" @click="searchBib">搜尋</button>
-      </div>
-    </div>
-    <div v-if="searchResult != null" class="bg-white bg-opacity-95 shadow-lg p-5 absolute rounded w-full text-lg border-[1px]">
-      <div class="flex items-center">
-        <div>搜尋結果</div>
-        <div class="flex-grow"></div>
-        <a class="hyperlink red" @click="searchResult = null">清除</a>
-      </div>
-      <hr class="my-1">
-      <div class="flex items-start">
-        <div class=flex-grow>
-          <div>編號：{{ searchResult.u_id }}</div>
-          <div>姓名：{{ searchResult.last_name_ch }}{{ searchResult.first_name_ch }}</div>
-          <div>性別：{{ searchResult.sex == 1 ? '男':'女' }}</div>
-          <div>組織單位：{{ searchResult.org_name_full_ch }}</div>
-          <div>系所/分部：{{ searchResult.dept_name_ch }}</div>
-        </div>
-        <div>
-          <button class="hyperlink blue" @click="selectHandler">選擇</button>
-        </div>
-      </div>
-    </div>
     <table>
+      <tr>
+        <td class="w-1/12">單位</td>
+        <td class="w-5/12">
+          <select v-model="data.org_id">
+            <option value="" disabled>請選擇單位</option>
+            <option v-for="item in orgList" :value="item.org_id">{{ item.org_name_ch }}</option>
+          </select>
+        </td>
+        <td class="w-1/12">分部</td>
+        <td class="w-5/12">
+          <select v-model="data.dept_id">
+            <option value="" disabled>請選擇分部</option>
+            <template v-for="(item, index) in deptList" :key="index">
+              <option :value="item.dept_id">{{ item.dept_name_ch }}</option>
+            </template>
+          </select>
+        </td>
+      </tr>
       <tr>
         <td>組別</td>
         <td>
@@ -198,23 +223,26 @@ async function deleteItem(id: number) {
           <select v-model="data.event_code">
             <option value="" disabled>請選擇項目</option>
             <template v-for="(item, index) in paramList" :key="index">
-              <option :value="item.event_code" v-if="item.division_id == data.division_id && item.multiple == 0">{{ item.event_ch }}</option>
+              <option :value="item.event_code" v-if="item.division_id == data.division_id && item.multiple == 1">{{ item.event_ch }}</option>
             </template>
           </select>
         </td>
       </tr>
       <tr>
-        <td>選手</td>
+        <td>隊名</td>
         <td>
           <div class="flex flex-col gap-1">
-            <input type="text" v-model.number="data.u_id" @change="inputHandler(Number(data.u_id))" />
-            <div v-if="athleteData.org_name_ch == undefined"></div>
-            <div v-else>選手：{{ athleteData.org_name_ch }} {{ athleteData.last_name_ch }}{{ athleteData.first_name_ch }}</div>
+            <input type="text" v-model="data.team_name" />
           </div>
         </td>
         <td>參考成績</td>
         <td>
           <input type="text" v-model="data.ref_result" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <button class="round-full-button blue" @click="displayModal = 1">編輯棒次</button>
         </td>
       </tr>
       <tr>
@@ -230,6 +258,16 @@ async function deleteItem(id: number) {
     </table>
     <div class="text-xs">*此處報名不會驗證是否超過報名人數限制與組別資格</div>
   </div>
+  <SmallModal v-show="displayModal" @closeModal="displayModal = 0">
+    <template v-slot:title>
+      <div class="text-2xl">
+        <div v-if="displayModal == 1">編輯棒次</div>
+      </div>
+    </template>
+    <template v-slot:content>
+      <LegsList v-if="paramList.length > 0 && data.event_code != ''" :inputData="data" :playerNum="paramList.filter((item: any) => item.division_id == data.division_id && item.event_code == data.event_code)[0].player_num" @returnData="(res: any) => data.member_list = res" />
+    </template>
+  </SmallModal>
 </template>
 
 <style scoped lang="scss">

@@ -190,12 +190,11 @@ class GroupController extends Controller
         // get original data
         $oldData = DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->first();
         $validationArray = [
+            'team_id' => 'required|integer',
             'division_id' => 'required|integer',
             'event_code' => 'required|size:8',
-            'member_list' => 'required',
-            'org_id' => 'required|integer',
-            'dept_id' => 'required|integer',
             'team_name' => 'nullable',
+            'member_list' => 'required',
         ];
         if ($sportData->module == 'ln' || $sportData->module == 'rd') {
             $validationArray['ref_result'] = 'required';
@@ -207,21 +206,7 @@ class GroupController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
-        $teamUpdate = [
-            'org_id' => $temp['org_id'],
-            'dept_id' => $temp['dept_id'],
-            'team_name' => $temp['team_name'],
-            'member_list' => $temp['member_list'],
-        ];
-        DB::table($sportCode.'_'.$gameId.'_teams')->where('team_id', $oldData->team_id)->update($teamUpdate);
-        $groupUpdate = [
-            'division_id' => $temp['division_id'],
-            'event_code' => $temp['event_code'],
-        ];
-        if ($sportData->module == 'ln' || $sportData->module == 'rd') {
-            $groupInsert['ref_result'] = $temp['ref_result'];
-        } 
-        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->update($groupUpdate);
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->update($temp);
         return response()->json(['status'=>'A01']);
     }
     public function updateTeam(Request $request, $sportCode, $gameId, $id)

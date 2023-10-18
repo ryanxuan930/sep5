@@ -91,10 +91,9 @@ check(paramList.value);
 async function addEvent(input: any) {
   if (input.event_code == '' || input.event_code == null) {
     alert('請選擇項目 Please select an event');
-    console.log(1);
     return;
   }
-  for (i = 0; i < paramList.value.length; i++) {
+  for (let i = 0; i < paramList.value.length; i++) {
     if (paramList.value[i].event_code == input.event_code) {
       let preDefine = false;
       if (regConfig.value.options.event[input.event_code].pre_define_member != undefined) {
@@ -102,19 +101,16 @@ async function addEvent(input: any) {
       }
       if (input.member_list.length < paramList.value[i].player_num && preDefine == true) {
         alert(`本項目需至少${paramList.value[i].player_num}位選手 This event requires at least ${paramList.value[i].player_num} athletes`);
-        console.log(2);
         return;
       } else {
         for(const division of regConfig.value.options.division) {
           if (division.division_id == input.division_id) {
             if (division.prevent_sport_gifited == true && store.userInfo.is_sport_gifited == 1) {
               alert('體優生不得報名此組別 Sport gifited student is not allowed');
-              console.log(3);
               return;
             }
             if (division.student_only == true && store.userInfo.is_student == 0) {
               alert('此組別僅限學生報名 This division is only for students');
-              console.log(4);
               return;
             }
             if (!division.grade_list.includes(store.userInfo.grade) && division.has_grade == true) {
@@ -144,7 +140,6 @@ async function addEvent(input: any) {
   }
   const athleteList = userList.value.concat(crossUserList.value);
   for (var i = 0; i < athleteList.length; i++) {
-    console.log(athleteList[i].u_id ,input.member_list.includes(athleteList[i].u_id))
     if (input.member_list.includes(athleteList[i].u_id)) {
       const athlete = athleteList[i];
       for(const division of regConfig.value.options.division) {

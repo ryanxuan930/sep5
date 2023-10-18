@@ -48,7 +48,7 @@ async function searchName() {
 async function searchBib() {
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/athlete/bib/${bib.value}`, searchResult, true, true);
 }
-const emit = defineEmits<{(e: 'returnData', value: string): void, (e: 'closeModal'): void}>();
+const emit = defineEmits<{(e: 'returnData', value: string): void, (e: 'closeModal'): void, (e: 'returnList', value: any): void}>();
 async function submitAll() {
   for(let i = 0; i < idList.value.length; i++) {
     idList.value[i] = Number(idList.value[i]);
@@ -58,6 +58,7 @@ async function submitAll() {
   if (res.status == 'A01') {
     alert('已儲存');
     emit('returnData', data);
+    emit('returnList', dataList.value);
     emit('closeModal');
   } else {
     alert('儲存失敗');
