@@ -16,7 +16,7 @@ const firstName: any = ref('');
 const lastName: any = ref('');
 const bib: any = ref('');
 const nextRef: any = ref(null);
-const searchResult: any = ref(null);
+const searchResult: any = ref([]);
 (async () => {
   if (props.inputData.member_list != null && props.inputData.member_list.length > 0) {
     const res = await vr.Post(`user-from-list`, {data: props.inputData.member_list}, null, true, true);
@@ -96,18 +96,20 @@ async function submitAll() {
       </label>
       <button class="round-full-button blue basis-1/5" @click="searchBib">搜尋</button>
     </div>
-    <div v-if="searchResult != null" class="bg-white bg-opacity-95 shadow-lg p-5 absolute rounded w-full text-lg border-[1px]">
+    <div v-if="searchResult.length > 0" class="bg-white bg-opacity-95 shadow-lg p-5 absolute rounded w-full text-lg border-[1px]">
       <div class="flex items-center">
         <div>搜尋結果</div>
         <div class="flex-grow"></div>
-        <a class="hyperlink blue" @click="searchResult = null">清除</a>
+        <a class="hyperlink blue" @click="searchResult = []">清除</a>
       </div>
       <hr class="my-1">
-      <div>編號：{{ searchResult.u_id }}</div>
-      <div>姓名：{{ searchResult.last_name_ch }}{{ searchResult.first_name_ch }}</div>
-      <div>性別：{{ searchResult.sex == 1 ? '男':'女' }}</div>
-      <div>組織單位：{{ searchResult.org_name_full_ch }}</div>
-      <div>系所/分部：{{ searchResult.dept_name_ch }}</div>
+      <template v-for="(item, index) in searchResult" :key="index">
+        <div>編號：{{ item.u_id }}</div>
+        <div>姓名：{{ item.last_name_ch }}{{ searchResult.first_name_ch }}</div>
+        <div>性別：{{ item.sex == 1 ? '男':'女' }}</div>
+        <div>組織單位：{{ item.org_name_full_ch }}</div>
+        <div>系所/分部：{{ item.dept_name_ch }}</div>
+      </template>
     </div>
     <table>
       <tr>
