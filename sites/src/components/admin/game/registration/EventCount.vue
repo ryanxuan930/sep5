@@ -8,6 +8,7 @@
   const route = useRoute();
   const vr = new VueRequest(store.token);
   const paramList: any = ref([]);
+  const sum = ref(0);
   async function getData() {
     await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/params/full`, paramList, true, true);
     const ind = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/by/count`, null, true, true);
@@ -24,6 +25,7 @@
       }
       if (flag) paramList.value[i].count = 0;
     }
+    sum.value = paramList.value.reduce((a: any, b: any) => a + b.count, 0);
   }
   getData();
 </script>
@@ -43,6 +45,10 @@
           <td>{{ item.count }}</td>
         </tr>
       </template>
+      <tr>
+        <td colspan="2">總計</td>
+        <td>{{ sum }}</td>
+      </tr>
     </table>
   </div>
 </template>
