@@ -9,6 +9,7 @@ import UploadPreview from '../result/lane/UploadPreview.vue';
 import SmallLoader from '@/components/SmallLoader.vue';
 import EditEvent from '../schedule/arrange/EditEvent.vue';
 import LegsList from '@/components/admin/game/management/LegsList.vue';
+import ResultContent from '../result/lane/ResultContent.vue';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
@@ -55,6 +56,10 @@ const isLoading = ref(false);
     if (dataList.value[i][`r${props.inputData.round}_options`].performance == undefined) {
       dataList.value[i][`r${props.inputData.round}_options`].performance = {};
     }
+    const data = sessionStorage.getItem(`${props.inputData.division_id}${props.inputData.event_code}${props.inputData.round}`);
+    if (data) {
+      dataList.value[i][`r${props.inputData.round}_options`].performance = JSON.parse(data).items.find((item: any) => item.u_id == dataList.value[i].u_id)[`r${props.inputData.round}_options`].performance;
+    }
   }
   dataList.value.sort((a: any, b: any) => a[`r${[props.inputData.round]}_heat`] - b[`r${[props.inputData.round]}_heat`] || a[`r${[props.inputData.round]}_lane`] - b[`r${[props.inputData.round]}_lane`]);
   isLoading.value = false;
@@ -82,7 +87,7 @@ async function tempSave() {
       dataList.value[i].temp = 0;
     }
     dataList.value[i][`r${props.inputData.round}_ranking`] = 0;
-    dataList.value[i][`r${props.inputData.round}_options`].qualified = '*';
+    dataList.value[i][`r${props.inputData.round}_options`].qualified = '';
     dataList.value[i][`r${props.inputData.round}_options`].windspeed = 'NWI';
     dataList.value[i][`r${props.inputData.round}_options`].rt = 0;
     dataList.value[i][`r${props.inputData.round}_options`].break = null;
@@ -165,7 +170,7 @@ async function tempSave() {
   }
 }
 
-async function submitAll() {
+async function submitAll(rank = true) {
   isLoading.value = true;
   let res: any = null;
   const dataset: any = [];
@@ -183,12 +188,9 @@ async function submitAll() {
       dataList.value[i].temp = 0;
     }
     dataList.value[i][`r${props.inputData.round}_options`].qualified = '*';
-    dataList.value[i][`r${props.inputData.round}_options`].windspeed = 'NWI';
-    dataList.value[i][`r${props.inputData.round}_options`].rt = 0;
     dataList.value[i][`r${props.inputData.round}_options`].break = null;
     dataList.value[i][`r${props.inputData.round}_options`].cr = false;
     dataList.value[i][`r${props.inputData.round}_options`].nr = false;
-    dataList.value[i][`r${props.inputData.round}_options`].remark = '';
   }
   // sort by heat and temp
   if (timeEvents.includes(props.inputData.remarks)) {
@@ -260,15 +262,17 @@ async function submitAll() {
       dataList.value[i][`r${props.inputData.round}_options`].qualified = 'q';
       counter++;
     }
-    if (dataList.value[i].temp == 0) {
-      dataList.value[i][`r${props.inputData.round}_ranking`] = 0;
-    } else {
-      if (dataList.value[i].temp == temp) {
-        dataList.value[i][`r${props.inputData.round}_ranking`] = dataList.value[i - 1][`r${props.inputData.round}_ranking`];
+    if (rank) {
+      if (dataList.value[i].temp == 0) {
+        dataList.value[i][`r${props.inputData.round}_ranking`] = 0;
       } else {
-        dataList.value[i][`r${props.inputData.round}_ranking`] = ranking;
+        if (dataList.value[i].temp == temp) {
+          dataList.value[i][`r${props.inputData.round}_ranking`] = dataList.value[i - 1][`r${props.inputData.round}_ranking`];
+        } else {
+          dataList.value[i][`r${props.inputData.round}_ranking`] = ranking;
+        }
+        ranking++;
       }
-      ranking++;
     }
     if (dataList.value[i][`r${props.inputData.round}_options`].qualified != 'Q' && dataList.value[i][`r${props.inputData.round}_options`].qualified != 'q') {
       dataList.value[i][`r${props.inputData.round}_options`].qualified = '*';
@@ -398,7 +402,6 @@ function moveTo(index: number, key: string) {
   }
 }
 function autoFormatter(input: any, index: string) {
-
   const val = input[index];
   if (val.length > 0 && !val.includes('.') && !val.includes(':')) {
     if (val.toUpperCase() == 'D' || val.toUpperCase() == 'S') {
@@ -428,8 +431,22 @@ function autoFormatter(input: any, index: string) {
     } else {
       alert('無法自動格式化');
     }
-    console.log(input[index]);
     return;
+  }
+}
+
+function resultContentHandler(val: any) {
+  if (val.type === 'distance') {
+    val.payload.map((item: any) => {
+      for (let i = 0; i < dataList.value.length; i++) {
+        if (dataList.value[i].ind_id == item.ind_id) {
+          dataList.value[i][`r${props.inputData.round}_result`] = item[`r${props.inputData.round}_options`].performance.final_result;
+          dataList.value[i][`r${props.inputData.round}_options`].windspeed = item[`r${props.inputData.round}_options`].performance.final_wind == null || item[`r${props.inputData.round}_options`].performance.final_wind == '' || item[`r${props.inputData.round}_options`].performance.final_wind == 'NWI' ? 'NWI' : item[`r${props.inputData.round}_options`].performance.final_wind;
+          dataList.value[i][`r${props.inputData.round}_ranking`] = item[`r${props.inputData.round}_options`].performance.final_rank;
+          dataList.value[i][`r${props.inputData.round}_options`].performance = item[`r${props.inputData.round}_options`].performance;
+        }
+      }
+    });
   }
 }
 </script>
@@ -445,7 +462,7 @@ function autoFormatter(input: any, index: string) {
         電計成績匯入
         <input type="file" class="hidden" ref="uploadEntity" accept=".csv" @change="uploadFile">
       </label>
-      <button class="general-button blue">詳細紀錄</button>
+      <button class="general-button blue" @click="displayModal = 2">詳細紀錄</button>
       <button class="general-button blue" @click="displayModal = 4">成績聯合處理</button>
       <button class="general-button blue" @click="tempSave">暫存成績</button>
       <div class="flex-grow"></div>
@@ -500,7 +517,8 @@ function autoFormatter(input: any, index: string) {
       </template>
     </table>
     <div class="py-3">
-      <button class="round-full-button blue" @click="submitAll">儲存</button>
+      <button class="round-full-button blue" @click="submitAll(true)">儲存</button>
+      <button class="round-full-button blue mt-2" @click="submitAll(false)">儲存(不排名)</button>
     </div>
   </div>
   <SmallLoader v-show="isLoading"></SmallLoader>
@@ -516,6 +534,7 @@ function autoFormatter(input: any, index: string) {
     <template v-slot:content>
       <div class="overflow-auto h-full">
         <UploadPreview v-if="displayModal == 1" :input-data="uploadData" @closeModal="displayModal = 0" @returnData="(res: any) => {importHandler(res);}"></UploadPreview>
+        <ResultContent v-if="displayModal == 2" :input-data="props.inputData" :athlete-data="dataList" :param-list="paramsList" @close-modal="displayModal = 0" @return-data="resultContentHandler"></ResultContent>
         <LegsList v-if="displayModal == 3" :input-data="selectedData" :player-num="props.inputData.player_num" @closeModal="displayModal = 0" @returnData="(res: any) => selectedData.member_list = res"></LegsList>
         <EditEvent v-if="displayModal == 4" :input-data="paramsFullList" :current-event="paramsList" :phase-num="props.inputData.round" @returnData="multiRanking" @closeModal="displayModal = 0"></EditEvent>
       </div>

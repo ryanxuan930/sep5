@@ -1,102 +1,91 @@
 <script setup lang="ts">
-  import { stringToMilliseconds } from '@/components/library/functions';
   import { ref } from 'vue';
   import Config from '@/assets/config.json'
   
   const props = defineProps(['inputData', 'phaseNum', 'isMultiple', 'gameData']);
   const dataList: any = ref([]);
-  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
+  const temp1: any = [];
+  const temp2: any = [];
   props.inputData.forEach((element: any) => {
-    if (element[`r${[props.phaseNum]}_heat`] > 0 && element[`r${[props.phaseNum]}_result`] > 0) {
-      element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
-      if (!notAcceptResult.includes(element[`r${props.inputData.round}_result`])) {
-        element.temp = stringToMilliseconds(element[`r${props.inputData.round}_result`]);
-      } else {
-      element.temp = 0;
-      }
-      dataList.value.push(element);
+    element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
+    if (element[`r${[props.phaseNum]}_ranking`] > 0) {
+      temp1.push(element);
+    } else {
+      temp2.push(element);
     }
   });
-  /*
-  let temp = 0;
-  let tempResult = -1;
-  let place = 1;
-  for(let i = 0; i < dataList.value.length; i++) {
-    if (temp != dataList.value[i][`r${[props.phaseNum]}_heat`]) {
-      temp = dataList.value[i][`r${[props.phaseNum]}_heat`];
-      place = 1;
-    }
-    if (tempResult == dataList.value[i].temp) {
-      dataList.value[i].pih = dataList.value[i-1].pih;
-    } else {
-      dataList.value[i].pih = place;
-      place++;
-    }
-    tempResult = dataList.value[i].temp;
-  }*/
-  dataList.value.sort((a: any, b: any) => a[`r${[props.phaseNum]}_heat`]- b[`r${[props.phaseNum]}_heat`] || a.temp - b.temp);
+  temp1.sort((a: any, b: any) => a[`r${[props.phaseNum]}_ranking`]- b[`r${[props.phaseNum]}_ranking`]);
+  dataList.value = temp1.concat(temp2);
 </script>
 
 <template>
   <div class="w-full h-full overflow-auto">
     <table>
       <tr>
-        <!--
-        <th>
-          <div>分組排名</div>
-          <div class="text-xs">Pla. in heat</div>
+        <th rowspan="2">
+          <div>名次</div>
+          <div class="text-sm">Place</div>
         </th>
-        -->
-        <th>
-          <div>組別</div>
-          <div class="text-sm">Heat</div>
-        </th>
-        <th>
-          <div>道次</div>
-          <div class="text-sm">Lane</div>
-        </th>
-        <th v-if="!Config.deptAsClass">
+        <th v-if="!Config.deptAsClass" rowspan="2">
           <div>組織單位</div>
           <div class="text-sm">Organization</div>
         </th>
         <template v-if="props.gameData.options.regUnit < 2">
-          <th v-if="Config.deptAsClass">
+          <th v-if="Config.deptAsClass" rowspan="2">
             <div>班級</div>
             <div class="text-sm">Class</div>
           </th>
-          <th v-else>
+          <th v-else rowspan="2">
             <div>分部/系所</div>
             <div class="text-sm">Department</div>
           </th>
         </template>
-        <th v-if="Config.deptAsClass && props.isMultiple == 0">
+        <th v-if="Config.deptAsClass && props.isMultiple == 0" rowspan="2">
           <div>座號</div>
           <div class="text-sm">No.</div>
         </th>
-        <th v-if="props.isMultiple == 0">
+        <th v-if="props.isMultiple == 0" rowspan="2">
           <div>姓名</div>
           <div class="text-sm">Name</div>
         </th>
-        <th v-else>
+        <th v-else rowspan="2">
           <div>隊名</div>
           <div class="text-sm">Team</div>
         </th>
-        <th>
-          <div>成績</div>
-          <div class="text-sm">Result</div>
+        <th rowspan="2">
+          <div>組別</div>
+          <div class="text-sm">Heat</div>
         </th>
-        <th>
+        <th rowspan="2">
+          <div>道次</div>
+          <div class="text-sm">Lane</div>
+        </th>
+        <th colspan="6">
+          <span>詳細記錄</span>
+          <span class="text-sm ml-2">Attempts</span>
+        </th>
+        <th rowspan="2">
+          <div>最終成績</div>
+          <div class="text-sm">Final Result</div>
+        </th>
+        <th rowspan="2">
           <div>備註</div>
           <div class="text-sm">Remarks</div>
         </th>
       </tr>
+      <tr>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+        <th>5</th>
+        <th>6</th>
+      </tr>
       <template v-for="(item, index) in dataList" :key="index">
-        <tr>
-          <!--
-          <td>{{ item.pih }}</td>
-          -->
-          <td>{{ item[`r${[props.phaseNum]}_heat`] }}</td>
-          <td>{{ item[`r${[props.phaseNum]}_lane`] }}</td>
+        <tr v-if="item[`r${[props.phaseNum]}_heat`] > 0 && item[`r${[props.phaseNum]}_lane`] > 0">
+          <td>
+            <div v-if="item[`r${[props.phaseNum]}_ranking`] > 0">{{ item[`r${[props.phaseNum]}_ranking`] }}</div>
+          </td>
           <td v-if="!Config.deptAsClass">
             <div>{{ item.org_name_full_ch }}</div>
             <div class="text-sm">{{ item.org_name_en }}</div>
@@ -108,6 +97,12 @@
           <td v-if="Config.deptAsClass && props.isMultiple == 0">{{ item.num_in_dept }}</td>
           <td v-if="props.isMultiple == 0">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
           <td v-else>{{ item.team_name }}</td>
+          <td>{{ item[`r${[props.phaseNum]}_heat`] }}</td>
+          <td>{{ item[`r${[props.phaseNum]}_lane`] }}</td>
+          <td v-for="(attempt, indexB) in item[`r${[props.phaseNum]}_options`].performance.attempt" :key="indexB">
+            <div>{{ attempt }}</div>
+            <div class="text-xs">{{ item[`r${[props.phaseNum]}_options`].performance.winds[indexB] }}</div>
+          </td>
           <td>{{ item[`r${[props.phaseNum]}_result`] }}</td>
           <td>
             <div class="flex items-center gap-3">
@@ -119,11 +114,10 @@
               </template>
               <div v-if="item[`r${[props.phaseNum]}_options`].qualified != undefined">{{ item[`r${[props.phaseNum]}_options`].qualified }}</div>
             </div>
-            <div v-if="item[`r${[props.phaseNum]}_options`].windspeed != undefined">WS：{{ item[`r${[props.phaseNum]}_options`].windspeed }}</div>
-            <div v-if="item[`r${[props.phaseNum]}_options`].rt != undefined">RT：{{ item[`r${[props.phaseNum]}_options`].rt }}</div>
             <template v-if="item[`r${props.phaseNum}_options`].break != undefined">
               <div v-if="item[`r${props.phaseNum}_options`].break != null">{{ item[`r${props.phaseNum}_options`].break }}</div>
             </template>
+            <div class="italic" v-if="item[`r${[props.phaseNum]}_options`].remark != undefined">{{ item[`r${[props.phaseNum]}_options`].remark }}</div>
           </td>
         </tr>
       </template>
@@ -140,9 +134,8 @@ table {
   th {
     @apply bg-blue-100;
   }
-  /*
   td:first-child {
     @apply bg-blue-50;
-  }*/
+  }
 }
 </style>

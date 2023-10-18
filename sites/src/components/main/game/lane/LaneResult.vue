@@ -207,6 +207,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
                   <div class="flex gap-2 items-center" v-if="item.status > 3">
                     <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/general/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list') }}</router-link>
                     <router-link v-if="item.division_id != null && item.event_code != null && (item.remarks == 'ts' || item.remarks == 'tr' || item.remarks == 'rr')" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/heat/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list-heat') }}</router-link>
+                    <router-link v-if="item.division_id != null && item.event_code != null && (item.remarks == 'ft' || item.remarks == 'fj')" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/distance/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list-more') }}</router-link>
                   </div>
                   <div v-else>{{ t('not-available') }}</div>
                 </td>
@@ -434,6 +435,7 @@ table {
   en-US:
     list: 'Results'
     list-heat: 'Results (Heats)'
+    list-more: 'More Info'
     time: 'Time'
     division: 'Division'
     event: 'Event'
@@ -454,6 +456,7 @@ table {
   zh-TW:
     list: '成績總表'
     list-heat: '分組成績'
+    list-more: '詳細記錄'
     time: '時間'
     division: '組別'
     event: '項目'

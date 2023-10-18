@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router';
 import { lanePhaseToString } from '@/components/library/functions';
 import GeneralResult from '@/components/admin/game/common/print/lane/layout/GeneralResult.vue';
 import HeatResult from '@/components/admin/game/common/print/lane/layout/HeatResult.vue';
+import DistanceResult from '@/components/admin/game/common/print/lane/layout/DistanceResult.vue';
 
 const store = useUserStore();
 const vr = new VueRequest(store.token);
@@ -95,8 +96,7 @@ function getTargetPhase(current: number, params: any) {
     <div class="page">
       <div class="text-center font20 font-semibold">{{ gameStore.data.game_name_ch }}</div>
       <div class="text-center font14 font-semibold">{{ gameStore.data.game_name_en }}</div>
-      <div class="text-center font16 font-medium">成績公告單</div>
-      <div class="text-center font12 font-medium">Official Result</div>
+      <div class="text-center font16 font-medium">成績公告單 Official Result</div>
       <div class="height1"></div>
       <div class="grid grid-cols-4 header-table">
         <div class="content-box">
@@ -158,25 +158,17 @@ function getTargetPhase(current: number, params: any) {
       <div class="height1"></div>
       <GeneralResult v-if="printMode == 'general'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></GeneralResult>
       <HeatResult v-if="printMode == 'heat'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></HeatResult>
-      <div class="height2"></div>
+      <DistanceResult v-if="printMode == 'distance'" :input-data="dataList" :last-round="phaseArray[getTargetPhase(round, paramList)]"></DistanceResult>
+      <div class="height1"></div>
       <div v-if="gameStore.data.sport_code=='athl'" class="font8">Q：分組錄取 q：全體擇優 DNS：未出賽 DNF：未完賽 DQ：犯規 NM：無成功試跳(擲)成績 CR：大會紀錄 NR：國家紀錄 W：
       風速 RT：反應時間</div>
       <div v-if="gameStore.data.sport_code=='swim'" class="font8">Q：分組錄取 q：全體擇優 DNS：未出賽 DNF：未完賽 DQ：犯規 CR：大會紀錄 NR：國家紀錄 RT：反應時間</div>
       <div class="height2"></div>
-      <!--
-      <div class="grid grid-cols-2 gap-2">
-        <div class="check-content">
-          <div>紀錄：</div>
-          <div class="flex-grow"></div>
+      <div class="text-center font8 grid grid-cols-3">
+        <div>Official Timekeeper : TechNSport</div>
+        <div>{{ $route.params.sportCode.toString().toUpperCase() }}_{{ $route.params.gameId }}_{{ divisionId }}_{{ eventCode.toString().toUpperCase() }}_{{ phaseArray[round].toUpperCase() }}_{{ Date.now() }}</div>
+        <div>Timestamp: {{ new Date().toLocaleString('zh-TW', { hour12: false, hc: 'h23'}) }}</div>
         </div>
-        <div class="check-content">
-          <div>製表時間：</div>
-          <div class="flex-grow">{{ new Date().toLocaleString('zh-TW', { hour12: false, hc: 'h23'}) }}</div>
-        </div>
-      </div>
-      -->
-      <div class="height2"></div>
-      <div class="text-center font9">{{ $route.params.sportCode.toString().toUpperCase() }}_{{ $route.params.gameId }}_{{ divisionId }}_{{ eventCode.toString().toUpperCase() }}_{{ phaseArray[round].toUpperCase() }}_{{ Date.now() }}</div>
     </div>
   </div>
 </template>

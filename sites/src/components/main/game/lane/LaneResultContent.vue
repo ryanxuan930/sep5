@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n'
 import { lanePhaseToString } from '@/components/library/functions';
 import ResultGeneral from '@/components/main/game/lane/ResultGeneral.vue';
 import ResultHeat from '@/components/main/game/lane/ResultHeat.vue';
+import ResultDistance from '@/components/main/game/lane/ResultDistance.vue';
 
 const route = useRoute();
 const vr = new VueRequest();
@@ -50,8 +51,9 @@ const { t, locale } = useI18n({
         <div>Q：{{ params[`r${$route.params.round}_aq`] }} / q：{{ params[`r${$route.params.round}_sq`] }}</div>
       </div>
     </div>
-    <ResultGeneral v-if="$route.params.displayType == 'general'" :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></ResultGeneral>
-    <ResultHeat v-else-if="$route.params.displayType == 'heat'" :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></ResultHeat>
+    <ResultGeneral v-if="$route.params.displayType == 'general'" :input-data="dataList" :game-data="gameData" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></ResultGeneral>
+    <ResultHeat v-else-if="$route.params.displayType == 'heat'" :input-data="dataList" :game-data="gameData" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></ResultHeat>
+    <ResultDistance v-else-if="$route.params.displayType == 'distance'" :input-data="dataList" :game-data="gameData" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></ResultDistance>
   </div>
 </template>
 

@@ -132,6 +132,7 @@ function setLegs(input: any) {
       <router-link class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/record/${printMode}`" target="_blank">成績記錄表</router-link>
       <router-link class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result/general`" target="_blank">成績總表</router-link>
       <router-link v-if="['ts', 'tr', 'rr'].includes(props.inputData.remarks)" class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result/heat`" target="_blank">分組成績</router-link>
+      <router-link v-if="['fj', 'ft'].includes(props.inputData.remarks)" class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result/distance`" target="_blank">詳細成績</router-link>
     </div>
     <table>
       <tr>
@@ -193,6 +194,7 @@ function setLegs(input: any) {
               <div v-if="item[`r${props.inputData.round}_options`].rt != undefined">RT: {{ item[`r${props.inputData.round}_options`].rt }}</div>
               <div v-if="item[`r${props.inputData.round}_options`].break != undefined">{{ item[`r${props.inputData.round}_options`].break == null? '':item[`r${props.inputData.round}_options`].break }}</div>
               <div v-if="item[`r${props.inputData.round}_options`].cr != undefined">{{ item[`r${props.inputData.round}_options`].cr ? 'CR':'' }}</div>
+              <div v-if="item[`r${props.inputData.round}_options`].cr != undefined" class="italic">{{ item[`r${props.inputData.round}_options`].remark }}</div>
             </td>
           </template>
         </tr>

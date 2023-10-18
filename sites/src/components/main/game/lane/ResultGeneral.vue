@@ -2,7 +2,7 @@
   import { ref, watch } from 'vue';
   import Config from '@/assets/config.json'
   
-  const props = defineProps(['inputData', 'phaseNum', 'isMultiple']);
+  const props = defineProps(['inputData', 'phaseNum', 'isMultiple', 'gameData']);
   const dataList: any = ref([]);
   const temp1: any = [];
   const temp2: any = [];
@@ -30,14 +30,16 @@
           <div>組織單位</div>
           <div class="text-sm">Organization</div>
         </th>
-        <th v-if="Config.deptAsClass">
-          <div>班級</div>
-          <div class="text-sm">Class</div>
-        </th>
-        <th v-else>
-          <div>分部/系所</div>
-          <div class="text-sm">Department</div>
-        </th>
+        <template v-if="props.gameData.options.regUnit < 2">
+          <th v-if="Config.deptAsClass">
+            <div>班級</div>
+            <div class="text-sm">Class</div>
+          </th>
+          <th v-else>
+            <div>分部/系所</div>
+            <div class="text-sm">Department</div>
+          </th>
+        </template>
         <th v-if="Config.deptAsClass && props.isMultiple == 0">
           <div>座號</div>
           <div class="text-sm">No.</div>
@@ -76,7 +78,7 @@
             <div>{{ item.org_name_full_ch }}</div>
             <div class="text-sm">{{ item.org_name_en }}</div>
           </td>
-          <td>
+          <td v-if="props.gameData.options.regUnit < 2">
             <div>{{ item.dept_name_ch }}</div>
             <div class="text-sm">{{ item.dept_name_en }}</div>
           </td>
