@@ -51,6 +51,10 @@ async function getData() {
 }
 getData();
 
+async function getDeptList(orgId: number) {
+  await vr.Get(`department/org/${orgId}`, deptList, true, true);
+}
+
 const emit = defineEmits<{(e: 'refreshPage'): void, (e: 'closeModal'): void}>();
 const close = () => {
   emit('refreshPage');
@@ -172,7 +176,7 @@ async function submitAll(input: any) {
       close();
     }
   } else {
-    const response = await vr.Patch(`game/${props.sportCode}/${props.gameId}/common/group/${props.inputData.ind_id}`, data, null, true, true);
+    const response = await vr.Patch(`game/${props.sportCode}/${props.gameId}/common/group/${props.inputData.grp_id}`, data, null, true, true);
     if (response.status == 'A01') {
       alert('已編輯');
       close();
@@ -183,7 +187,7 @@ async function submitAll(input: any) {
 async function deleteItem(id: number) {
   const r = confirm('確定刪除?');
   if (r) {
-    await vr.Delete(`game/${props.sportCode}/${props.gameId}/common/individual/${id}`, null, true, true);
+    await vr.Delete(`game/${props.sportCode}/${props.gameId}/common/group/${id}`, null, true, true);
     close();
   }
 }
@@ -195,7 +199,7 @@ async function deleteItem(id: number) {
       <tr>
         <td class="w-1/12">單位</td>
         <td class="w-5/12">
-          <select v-model="data.org_id">
+          <select v-model="data.org_id" @change="getDeptList(data.org_id)">
             <option value="" disabled>請選擇單位</option>
             <option v-for="item in orgList" :value="item.org_id">{{ item.org_name_ch }}</option>
           </select>
@@ -252,7 +256,7 @@ async function deleteItem(id: number) {
       </tr>
       <tr v-if="props.inputData != null">
         <td colspan="4">
-          <button class="round-full-button red" @click="deleteItem(props.inputData.ind_id)">刪除</button>
+          <button class="round-full-button red" @click="deleteItem(props.inputData.grp_id)">刪除</button>
         </td>
       </tr>
     </table>
@@ -265,7 +269,7 @@ async function deleteItem(id: number) {
       </div>
     </template>
     <template v-slot:content>
-      <LegsList v-if="paramList.length > 0 && data.event_code != ''" :inputData="data" :playerNum="paramList.filter((item: any) => item.division_id == data.division_id && item.event_code == data.event_code)[0].player_num" @returnData="(res: any) => data.member_list = res" />
+      <LegsList v-if="paramList.length > 0 && data.event_code != ''" :inputData="data" :playerNum="paramList.filter((item: any) => item.division_id == data.division_id && item.event_code == data.event_code)[0].player_num" @returnData="(res: any) => data.member_list = res" @closeModal="displayModal = 0" />
     </template>
   </SmallModal>
 </template>
