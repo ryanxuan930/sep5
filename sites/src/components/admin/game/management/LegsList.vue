@@ -18,12 +18,19 @@ const bib: any = ref('');
 const nextRef: any = ref(null);
 const searchResult: any = ref(null);
 (async () => {
-  const res = await vr.Post(`user-from-list`, {data: props.inputData.member_list}, null, true, true);
-  for (let i = 0; i < props.playerNum; i++) {
-    if (res[i] != undefined || res[i] != null) {
-      dataList.value.push(res[i]);
-      idList.value.push(res[i].u_id);
-    } else {
+  if (props.inputData.member_list != null && props.inputData.member_list.length > 0) {
+    const res = await vr.Post(`user-from-list`, {data: props.inputData.member_list}, null, true, true);
+    for (let i = 0; i < props.playerNum; i++) {
+      if (res[i] != undefined || res[i] != null) {
+        dataList.value.push(res[i]);
+        idList.value.push(res[i].u_id);
+      } else {
+        dataList.value.push(null);
+        idList.value.push(0);
+      }
+    }
+  } else {
+    for (let i = 0; i < props.playerNum; i++) {
       dataList.value.push(null);
       idList.value.push(0);
     }
@@ -54,14 +61,20 @@ async function submitAll() {
     idList.value[i] = Number(idList.value[i]);
   }
   const data = JSON.stringify(idList.value);
-  const res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/group/update/team/${props.inputData.team_id}`, {member_list: data}, null, true, true);
-  if (res.status == 'A01') {
-    alert('已儲存');
+  if (props.inputData.member_list != null && props.inputData.member_list.length > 0) {
+      const res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/group/update/team/${props.inputData.team_id}`, {member_list: data}, null, true, true);
+    if (res.status == 'A01') {
+      alert('已儲存');
+      emit('returnData', data);
+      emit('returnList', dataList.value);
+      emit('closeModal');
+    } else {
+      alert('儲存失敗');
+    }
+  } else {
     emit('returnData', data);
     emit('returnList', dataList.value);
     emit('closeModal');
-  } else {
-    alert('儲存失敗');
   }
 }
 </script>
