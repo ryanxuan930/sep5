@@ -206,7 +206,19 @@ class GroupController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $temp = $request->all();
-        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->update($temp);
+        $teamUpdate = [
+            'org_id' => $temp['org_id'],
+            'dept_id' => $temp['dept_id'],
+            'team_name' => $temp['team_name'],
+            'member_list' => $temp['member_list'],
+        ];
+        DB::table($sportCode.'_'.$gameId.'_teams')->where('team_id', $oldData->team_id)->update($teamUpdate);
+        $groupUpdate = [
+            'team_id' => $temp['team_id'],
+            'division_id' => $temp['division_id'],
+            'event_code' => $temp['event_code'],
+        ];
+        DB::table($sportCode.'_'.$gameId.'_'.$this->tableName)->where('grp_id', $id)->update($groupUpdate);
         return response()->json(['status'=>'A01']);
     }
     public function updateTeam(Request $request, $sportCode, $gameId, $id)
