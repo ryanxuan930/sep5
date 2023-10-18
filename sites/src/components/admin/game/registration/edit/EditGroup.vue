@@ -76,82 +76,49 @@ async function submitAll(input: any) {
         alert(`本項目需至少${paramList.value[i].player_num}位選手 This event requires at least ${paramList.value[i].player_num} athletes`);
         return;
       } else {
-        for(const division of props.regConfig.options.division) {
-          if (division.division_id == input.division_id) {
-            if (division.prevent_sport_gifited == true && store.userInfo.is_sport_gifited == 1) {
-              alert('體優生不得報名此組別 Sport gifited student is not allowed');
-              return;
+        const athleteList = athleteData.value;
+        for (let j = 0; j < athleteList.length; j++) {
+          if (input.member_list.includes(athleteList[j].u_id)) {
+            const athlete = athleteList[j];
+            for(const division of props.regConfig.options.division) {
+              if (division.division_id == input.division_id) {
+                if (division.prevent_sport_gifited == true && athlete.is_sport_gifited == 1) {
+                  alert('體優生不得報名此組別 Sport gifited student is not allowed');
+                  console.log(3);
+                  return;
+                }
+                if (division.student_only == true && athlete.is_student == 0) {
+                  alert('此組別僅限學生報名 This division is only for students');
+                  console.log(4);
+                  return;
+                }
+                if (!division.grade_list.includes(athlete.grade) && division.has_grade == true) {
+                  alert('不是可報名此組別的年級 This grade is not allowed');
+                  return;
+                }
+              }
             }
-            if (division.student_only == true && store.userInfo.is_student == 0) {
-              alert('此組別僅限學生報名 This division is only for students');
-              return;
+            if (props.regConfig.options.event[input.event_code] != undefined) {
+              if (props.regConfig.options.event[input.event_code].prevent_sport_gifited && athlete.is_sport_gifited == true) {
+                alert('體優生不得報名此項目 Sport gifited student is not allowed');
+                console.log(5);
+                return;
+              }
+              if (props.regConfig.options.event[input.event_code].student_only && athlete.is_student == 0) {
+                alert('此組別僅限學生報名 This event is only for students');
+                console.log(6);
+                return;
+              }
+              if (!props.regConfig.options.event[input.event_code].grade_list.includes(athlete.grade) && props.regConfig.options.event[input.event_code].has_grade == true) {
+                alert('不是可報名此項目的年級 This grade is not allowed');
+                return;
+              }
             }
-            if (!division.grade_list.includes(store.userInfo.grade) && division.has_grade == true) {
-              alert('不是可報名此組別的年級 This grade is not allowed');
-              return;
-            }
-          }
-        }
-        if (props.regConfig.options.event[input.event_code] != undefined) {
-          if (props.regConfig.options.event[input.event_code].prevent_sport_gifited && store.userInfo.is_sport_gifited == true) {
-            alert('體優生不得報名此項目 Sport gifited student is not allowed');
-            console.log(5);
-            return;
-          }
-          if (props.regConfig.options.event[input.event_code].student_only && store.userInfo.is_student == 0) {
-            alert('此組別僅限學生報名 This event is only for students');
-            console.log(6);
-            return;
-          }
-          if (!props.regConfig.options.event[input.event_code].grade_list.includes(store.userInfo.grade) && props.regConfig.options.event[input.event_code].has_grade == true) {
-            alert('不是可報名此項目的年級 This grade is not allowed');
-            return;
           }
         }
       }
     }
   }
-  /*
-  const athleteList = athleteData.value;
-  for (var i = 0; i < athleteList.length; i++) {
-    if (input.member_list.includes(athleteList[i].u_id)) {
-      const athlete = athleteList[i];
-      for(const division of props.regConfig.options.division) {
-        if (division.division_id == input.division_id) {
-          if (division.prevent_sport_gifited == true && athlete.is_sport_gifited == 1) {
-            alert('體優生不得報名此組別 Sport gifited student is not allowed');
-            console.log(3);
-            return;
-          }
-          if (division.student_only == true && athlete.is_student == 0) {
-            alert('此組別僅限學生報名 This division is only for students');
-            console.log(4);
-            return;
-          }
-          if (!division.grade_list.includes(athlete.grade) && division.has_grade == true) {
-            alert('不是可報名此組別的年級 This grade is not allowed');
-            return;
-          }
-        }
-      }
-      if (props.regConfig.options.event[input.event_code] != undefined) {
-        if (props.regConfig.options.event[input.event_code].prevent_sport_gifited && athlete.is_sport_gifited == true) {
-          alert('體優生不得報名此項目 Sport gifited student is not allowed');
-          console.log(5);
-          return;
-        }
-        if (props.regConfig.options.event[input.event_code].student_only && athlete.is_student == 0) {
-          alert('此組別僅限學生報名 This event is only for students');
-          console.log(6);
-          return;
-        }
-        if (!props.regConfig.options.event[input.event_code].grade_list.includes(athlete.grade) && props.regConfig.options.event[input.event_code].has_grade == true) {
-          alert('不是可報名此項目的年級 This grade is not allowed');
-          return;
-        }
-      }
-    }
-  }*/
   for (const data of props.regList) {
     if (data.division_id == input.division_id && data.event_code == input.event_code) {
       let count = 0;
