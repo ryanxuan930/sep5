@@ -9,7 +9,7 @@ import Config from '@/assets/config.json';
 const store = useUserStore();
 const vr = new VueRequest(store.token);
 const route = useRoute();
-const props = defineProps(['inputData', 'playerNum']);
+const props = defineProps(['inputData', 'playerNum', 'type']);
 const dataList: any = ref([]);
 const idList: Ref<number[]> = ref([]);
 const firstName: any = ref('');
@@ -38,7 +38,7 @@ const searchResult: any = ref([]);
 })();
 async function inputHandler(index: number) {
   const valid = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/athlete/find/${idList.value[index]}`, null, true, true);
-  if (valid) {
+  if (valid || props.type !== undefined) {
     const res = await vr.Get(`user/${idList.value[index]}`, null, true, true);
     dataList.value[index] = res;
   } else {
