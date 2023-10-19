@@ -237,7 +237,7 @@ async function deleteItem(id: number) {
       </div>
     </template>
     <template v-slot:content>
-      <LegsList v-if="paramList.length > 0 && data.event_code != ''" :inputData="data" :playerNum="paramList.filter((item: any) => item.division_id == data.division_id && item.event_code == data.event_code)[0].player_num" @returnData="(res: any) => data.member_list = res" @closeModal="displayModal = 0" />
+      <LegsList v-if="paramList.length > 0 && data.event_code != ''" :inputData="data" :playerNum="paramList.filter((item: any) => item.division_id == data.division_id && item.event_code == data.event_code)[0].player_num" :input-type="true" @returnData="(res: any) => data.member_list = res" @closeModal="displayModal = 0" />
     </template>
   </SmallModal>
 </template>
