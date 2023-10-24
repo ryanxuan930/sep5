@@ -41,6 +41,9 @@
       }
     } else {
       championData.value = JSON.parse(temp.temp_data);
+      if (championData.value.content == undefined) {
+        championData.value.content = [];
+      }
     }
     isLoading.value = false;
   };
