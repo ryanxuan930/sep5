@@ -74,10 +74,14 @@ for(const item of orginalData.value) {
             <td style="width: 6%">{{ item[`r${[round]}_heat`] }}</td>
             <td style="width: 5%">{{ item[`r${[round]}_lane`] }}</td>
             <td style="width: 20%">
-              <div class="ch-content">{{ item.org_name_ch }}</div>
-              <div v-if="gameStore.data.options.regUnit < 2">{{ item.dept_name_ch }}</div>
-              <div class="en-content">{{ item.org_name_en }}</div>
-              <div v-if="gameStore.data.options.regUnit < 2" class="font7">{{ item.dept_name_en }}</div>
+              <div class="ch-content flex items-center gap-2">
+                <div>{{ item.org_name_ch }}</div>
+                <div v-if="gameStore.data.options.regUnit < 2">{{ item.dept_name_ch }}</div>
+              </div>
+              <div class="en-content flex items-center gap-2">
+                <div>{{ item.org_name_en }}</div>
+                <div v-if="gameStore.data.options.regUnit < 2">{{ item.dept_name_en }}</div>
+              </div>
             </td>
             <td v-if="multiple == 0" style="width: 20%">
               <div class="ch-content">{{ item.last_name_ch }}{{ item.first_name_ch }}</div>

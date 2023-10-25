@@ -90,8 +90,10 @@ for(const item of orginalData.value) {
             <td rowspan="2" style="width: 20%">
               <div class="ch-content">{{ item.org_name_ch }}</div>
               <div v-if="gameStore.data.options.regUnit < 2" class="font9">{{ item.dept_name_ch }}</div>
+              <!--
               <div class="en-content">{{ item.org_name_en }}</div>
               <div v-if="gameStore.data.options.regUnit < 2" class="font7">{{ item.dept_name_en }}</div>
+              -->
             </td>
             <td rowspan="2" style="width: 10%">
               <div class="ch-content">{{ item.last_name_ch }}{{ item.first_name_ch }}</div>
