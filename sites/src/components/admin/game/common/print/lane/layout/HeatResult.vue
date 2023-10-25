@@ -99,6 +99,7 @@ for(const item of orginalData.value) {
               </div>
               <div v-if="item[`r${round}_options`].windspeed != undefined">W: {{ item[`r${round}_options`].windspeed }}</div>
               <div v-if="item[`r${round}_options`].rt != undefined">RT: {{ item[`r${round}_options`].rt }}</div>
+              <div v-if="item[`r${round}_options`].sameResult != undefined">({{ item[`r${round}_options`].sameResult }})</div>
               <template v-if="item[`r${round}_options`].break != undefined">
                 <div v-if="item[`r${round}_options`].break != null">{{ item[`r${round}_options`].break }}</div>
               </template>

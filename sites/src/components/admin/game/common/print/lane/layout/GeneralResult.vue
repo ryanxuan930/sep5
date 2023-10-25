@@ -79,7 +79,10 @@ dataList.value = temp1.concat(temp2);
             <div class="en-content" v-if="item.last_name_ch != item.last_name_en && item.first_name_ch != item.first_name_en && item.last_name_en != '' && item.first_name_en != ''"></div>
           </td>
           <td v-else>{{ item.team_name }}</td>
-          <td style="width: 12%">{{ item[`${props.lastRound}_result`] }}</td>
+          <td style="width: 12%">
+            {{ item[`${props.lastRound}_result`] }}
+            <span v-show="item[`r${round}_options`].sameResult != undefined">*</span>
+          </td>
           <td style="width: 10%">{{ item[`r${round}_result`] }}</td>
           <td style="width: 15%">
             <div class="flex items-center gap-3">
@@ -93,6 +96,7 @@ dataList.value = temp1.concat(temp2);
             </div>
             <div v-if="item[`r${round}_options`].windspeed != undefined && item[`r${round}_options`].windspeed != 'NWI'">W: {{ item[`r${round}_options`].windspeed }}</div>
             <div v-if="item[`r${round}_options`].rt != undefined && item[`r${round}_options`].rt != 0">RT: {{ item[`r${round}_options`].rt }}</div>
+            <div v-if="item[`r${round}_options`].sameResult != undefined">({{ item[`r${round}_options`].sameResult }})</div>
             <template v-if="item[`r${round}_options`].break != undefined">
               <div v-if="item[`r${round}_options`].break != null">{{ item[`r${round}_options`].break }}</div>
             </template>

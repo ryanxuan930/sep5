@@ -7,20 +7,38 @@ const store = useUserStore();
 const gameData: any = inject('gameData');
 const props: any = defineProps(['inputData', 'athleteData', 'paramList']);
 const items: any = ref(props.athleteData);
-const qualified: Ref<number> = ref(0);
+const qualified: Ref<number> = ref(8);
+
+let hasData = true;
 items.value.forEach((item:any ) => {
-  item[`r${props.inputData.round}_options`].performance = {
-    format: 'distance',
-    attempt: ['', '', '', '', '', ''],
-    winds: ['', '', '', '', '', ''],
-    first_result: '',
-    first_rank: 0,
-    final_order: 0,
-    final_result: '',
-    final_rank: 0,
-    final_wind: '',
+  if (item[`r${props.inputData.round}_options`].performance.format == undefined || item[`r${props.inputData.round}_options`].performance.format != 'distance') {
+    console.log(1);
+    item[`r${props.inputData.round}_options`].performance = {
+      format: 'distance',
+      attempt: ['', '', '', '', '', ''],
+      winds: ['', '', '', '', '', ''],
+      first_result: '',
+      first_rank: 0,
+      final_order: 0,
+      final_result: '',
+      final_rank: 0,
+      final_wind: '',
+    };
+    hasData = false;
   }
 });
+
+if ( hasData ) {
+  sessionStorage.setItem(`${props.inputData.division_id}${props.inputData.event_code}${props.inputData.round}`, JSON.stringify({items: items.value, qualified: qualified.value}));
+}
+const data = sessionStorage.getItem(`${props.inputData.division_id}${props.inputData.event_code}${props.inputData.round}`);
+if (data) {
+  items.value = JSON.parse(data).items;
+  qualified.value = JSON.parse(data).qualified;
+} else {
+  sessionStorage.setItem(`${props.inputData.division_id}${props.inputData.event_code}${props.inputData.round}`, JSON.stringify({items: items.value, qualified: qualified.value}));
+}
+
 function top3Handler(input: string[]) {
   const result = input.map((item: string) => {
     const num = Number(item);
@@ -107,7 +125,7 @@ function tempRank(num: number) {
     if (num == 3) {
       const athlete = items.value.find((athlete: any) => athlete.u_id == item.id);
       athlete[`r${props.inputData.round}_options`].performance.first_rank = Number(top3Handler(item.attempt)) == 0 ? 0 : index + 1;
-      athlete[`r${props.inputData.round}_options`].performance.final_order = athlete[`r${props.inputData.round}_options`].performance.first_rank <= qualified.value ? athlete[`r${props.inputData.round}_options`].performance.first_rank : '-';
+      athlete[`r${props.inputData.round}_options`].performance.final_order = athlete[`r${props.inputData.round}_options`].performance.first_rank <= qualified.value && athlete[`r${props.inputData.round}_options`].performance.first_rank != 0 ? athlete[`r${props.inputData.round}_options`].performance.first_rank : '-';
     } else {
       const athlete = items.value.find((athlete: any) => athlete.u_id == item.id);
       athlete[`r${props.inputData.round}_options`].performance.final_rank = Number(topHandler(item.attempt)) == 0 ? 0 : index + 1;
@@ -115,16 +133,6 @@ function tempRank(num: number) {
       athlete[`r${props.inputData.round}_options`].performance.final_wind = athlete[`r${props.inputData.round}_options`].performance.winds[item.attempt.indexOf(topHandler(item.attempt))] == '' ? 'NWI' : athlete[`r${props.inputData.round}_options`].performance.winds[item.attempt.indexOf(topHandler(item.attempt))];
     }
   });
-}
-
-// create a sessionStorage and name it by dividion_id+event_code+round
-// if sessionStorage is not null, load data from sessionStorage
-const data = sessionStorage.getItem(`${props.inputData.division_id}${props.inputData.event_code}${props.inputData.round}`);
-if (data) {
-  items.value = JSON.parse(data).items;
-  qualified.value = JSON.parse(data).qualified;
-} else {
-  sessionStorage.setItem(`${props.inputData.division_id}${props.inputData.event_code}${props.inputData.round}`, JSON.stringify({items: items.value, qualified: qualified.value}));
 }
 
 // watch items and save data to sessionStorage

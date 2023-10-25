@@ -86,8 +86,10 @@ for(const item of orginalData.value) {
             <td style="width: 10%">
               <div class="ch-content">{{ item.org_name_ch }}</div>
               <div v-if="gameStore.data.options.regUnit < 2" class="font9">{{ item.dept_name_ch }}</div>
+              <!--
               <div class="en-content">{{ item.org_name_en }}</div>
               <div v-if="gameStore.data.options.regUnit < 2" class="font7">{{ item.dept_name_en }}</div>
+              -->
             </td>
             <td style="width: 9%">
               <div class="ch-content">{{ item.last_name_ch }}{{ item.first_name_ch }}</div>
@@ -116,7 +118,6 @@ for(const item of orginalData.value) {
         </template>
       </table>
     </template>
-    <div class="height2"></div>
     <div class="grid grid-cols-4 gap-2">
       <div class="check-content">
         <div>檢錄員：</div>

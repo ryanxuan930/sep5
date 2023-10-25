@@ -192,6 +192,7 @@ function setLegs(input: any) {
               <div v-if="item[`r${props.inputData.round}_options`].qualified != undefined">{{ item[`r${props.inputData.round}_options`].qualified }}</div>
               <div v-if="item[`r${props.inputData.round}_options`].windspeed != undefined">WS: {{ item[`r${props.inputData.round}_options`].windspeed }}</div>
               <div v-if="item[`r${props.inputData.round}_options`].rt != undefined">RT: {{ item[`r${props.inputData.round}_options`].rt }}</div>
+              <div v-if="item[`r${props.inputData.round}_options`].sameResult != undefined">({{ item[`r${props.inputData.round}_options`].sameResult }})</div>
               <div v-if="item[`r${props.inputData.round}_options`].break != undefined">{{ item[`r${props.inputData.round}_options`].break == null? '':item[`r${props.inputData.round}_options`].break }}</div>
               <div v-if="item[`r${props.inputData.round}_options`].cr != undefined">{{ item[`r${props.inputData.round}_options`].cr ? 'CR':'' }}</div>
               <div v-if="item[`r${props.inputData.round}_options`].cr != undefined" class="italic">{{ item[`r${props.inputData.round}_options`].remark }}</div>

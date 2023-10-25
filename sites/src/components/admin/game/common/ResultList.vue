@@ -56,10 +56,14 @@ const isLoading = ref(false);
     if (dataList.value[i][`r${props.inputData.round}_options`].performance == undefined) {
       dataList.value[i][`r${props.inputData.round}_options`].performance = {};
     }
+    if (dataList.value[i][`r${props.inputData.round}_options`].sameResult !== undefined && dataList.value[i][`r${props.inputData.round}_result`] != 'OK') {
+      dataList.value[i][`r${props.inputData.round}_result`] = dataList.value[i][`r${props.inputData.round}_options`].sameResult;
+    }
+    /*
     const data = sessionStorage.getItem(`${props.inputData.division_id}${props.inputData.event_code}${props.inputData.round}`);
     if (data) {
       dataList.value[i][`r${props.inputData.round}_options`].performance = JSON.parse(data).items.find((item: any) => item.u_id == dataList.value[i].u_id)[`r${props.inputData.round}_options`].performance;
-    }
+    } */
   }
   dataList.value.sort((a: any, b: any) => a[`r${[props.inputData.round]}_heat`] - b[`r${[props.inputData.round]}_heat`] || a[`r${[props.inputData.round]}_lane`] - b[`r${[props.inputData.round]}_lane`]);
   isLoading.value = false;
@@ -178,9 +182,19 @@ async function submitAll(rank = true) {
   const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined, ''];
   // result to temp (milliseconds or centimeters)
   for (let i = 0; i < dataList.value.length; i++){
+    dataList.value[i][`r${props.inputData.round}_options`].sameResult = undefined;
     if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
       if (timeEvents.includes(props.inputData.remarks)) {
         dataList.value[i].temp = stringToMilliseconds(dataList.value[i][`r${props.inputData.round}_result`]);
+        if (dataList.value[i].temp % 10 !== 0) {
+          dataList.value[i][`r${props.inputData.round}_options`].sameResult = dataList.value[i][`r${props.inputData.round}_result`];
+          const temp = String(dataList.value[i][`r${props.inputData.round}_result`]).split(':');
+          if (temp.length == 2) {
+            dataList.value[i][`r${props.inputData.round}_result`] = temp[0] + ':' + Math.ceil(Number(temp[1])*100)/100;
+          } else {
+            dataList.value[i][`r${props.inputData.round}_result`] = Math.ceil(Number(temp[0])*100)/100;
+          }
+        }
       } else {
         dataList.value[i].temp = dataList.value[i][`r${props.inputData.round}_result`] * 100;
       }

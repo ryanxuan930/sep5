@@ -60,6 +60,9 @@ const isLoading = ref(false);
   }
   document.title = gameStore.data.game_name_ch + '_' +paramList.value.division_ch + '_' +paramList.value.event_ch + '_' + lanePhaseToString(round, 'zh-TW') + '_' + '檢錄暨成績紀錄單';
   isLoading.value = false;
+  setTimeout(() => {
+    window.print();
+  }, 100);
 })();
 
 function getTargetPhase(current: number, params: any) {
@@ -99,10 +102,8 @@ function getTargetPhase(current: number, params: any) {
 <template>
   <div v-if="isLoading == false">
     <div class="page">
-      <div class="text-center font20 font-semibold">{{ gameStore.data.game_name_ch }}</div>
-      <div class="text-center font14 font-semibold">{{ gameStore.data.game_name_en }}</div>
-      <div class="text-center font16 font-medium">檢錄暨成績紀錄單</div>
-      <div class="text-center font12 font-medium">Start List and Result Table</div>
+      <div class="text-center font20 font-semibold">{{ gameStore.data.game_name_ch }} {{ gameStore.data.game_name_en }}</div>
+      <div class="text-center font14 font-semibold">檢錄暨成績紀錄單 Start List and Result Table</div>
       <div class="height1"></div>
       <div class="grid grid-cols-4 header-table">
         <div class="content-box">

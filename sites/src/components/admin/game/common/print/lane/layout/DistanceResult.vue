@@ -112,7 +112,3 @@ dataList.value = temp1.concat(temp2);
 </template>
 
 <style lang="scss" scoped src="@/components/admin/game/common/print/lane/page.scss"></style>
-
-<style lang="scss" scoped media="print">
-  /*@page { size: landscape !important; }*/
-</style>

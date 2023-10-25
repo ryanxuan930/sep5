@@ -108,7 +108,10 @@
           <td v-if="Config.deptAsClass && props.isMultiple == 0">{{ item.num_in_dept }}</td>
           <td v-if="props.isMultiple == 0">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
           <td v-else>{{ item.team_name }}</td>
-          <td>{{ item[`r${[props.phaseNum]}_result`] }}</td>
+          <td>
+            {{ item[`r${[props.phaseNum]}_result`] }}
+            <span v-show="item[`r${props.phaseNum}_options`].sameResult !== undefined">*</span>
+          </td>
           <td>
             <div class="flex items-center gap-3">
               <template v-if="item[`r${props.phaseNum}_options`].cr != undefined">
@@ -121,6 +124,7 @@
             </div>
             <div v-if="item[`r${[props.phaseNum]}_options`].windspeed != undefined">WS：{{ item[`r${[props.phaseNum]}_options`].windspeed }}</div>
             <div v-if="item[`r${[props.phaseNum]}_options`].rt != undefined">RT：{{ item[`r${[props.phaseNum]}_options`].rt }}</div>
+            <div v-if="item[`r${props.phaseNum}_options`].sameResult != undefined">({{ item[`r${props.phaseNum}_options`].sameResult }})</div>
             <template v-if="item[`r${props.phaseNum}_options`].break != undefined">
               <div v-if="item[`r${props.phaseNum}_options`].break != null">{{ item[`r${props.phaseNum}_options`].break }}</div>
             </template>
