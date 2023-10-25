@@ -10,11 +10,9 @@ import ResultDistance from '@/components/main/game/lane/ResultDistance.vue';
 
 const route = useRoute();
 const vr = new VueRequest();
-const adminOrgId = useRoute().params.adminOrgId;
 const divisionId = useRoute().params.divisionId;
 const eventCode = useRoute().params.eventCode;
 const gameId = route.params.gameId;
-const pageData: any = inject('pageData');
 const gameData: any = inject('gameData');
 const isLoading = ref(false);
 const dataList: any = ref([]);
@@ -40,12 +38,16 @@ const { t, locale } = useI18n({
 
 <template>
   <div v-if="isLoading == false">
-    <div class="p-2 flex gap-2 mb-3 items-stretch">
+    <div class="p-2 flex gap-3 mb-3 items-stretch">
       <div>
         <div class="text-xl text-blue-500">{{ params.division_ch }} {{ params.event_ch }} [{{ lanePhaseToString(Number($route.params.round), 'zh-TW') }}]</div>
         <div class="text-base text-blue-500">{{ params.division_en }} {{ params.event_en }} [{{ lanePhaseToString(Number($route.params.round), 'en-US') }}]</div>
       </div>
       <div class="flex-grow"></div>
+      <div v-if="route.query.status == undefined || route.query.status != '4'" class="py-1 px-3 text-white bg-blue-500 rounded-md text-center font-medium animate-pulse">
+        <div class="text-lg">即時成績</div>
+        <div class="text-sm">Live Result</div>
+      </div>
       <div class="text-right">
         <div>總數 Total：{{ dataList.length }}</div>
         <div>Q：{{ params[`r${$route.params.round}_aq`] }} / q：{{ params[`r${$route.params.round}_sq`] }}</div>

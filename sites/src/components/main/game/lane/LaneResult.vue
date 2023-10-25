@@ -43,20 +43,35 @@ async function getData() {
     scheduleList.value = [];
     const dataList = await vr.Get(`game/${sportCode}/${gameId}/common/result/ranking`);
     for (const data of dataList) {
-      if (data.org_code != orgCode || data.dept_id != deptId) {
-        index++;
-        orgCode = data.org_code;
-        deptId = data.dept_id;
-        scheduleList.value[index] = {
-          org_code: data.org_code,
-          dept_id: data.dept_id,
-          org_name_full_ch: data.org_name_full_ch,
-          org_name_full_en: data.org_name_full_en,
-          org_name_ch: data.org_name_ch,
-          org_name_en: data.org_name_en,
-          dept_name_ch: data.dept_name_ch,
-          dept_name_en: data.dept_name_en,
-          ranking: [0, 0, 0, 0, 0, 0, 0, 0],
+      if (gameData.value.options.regUnit == 1) {
+        if (data.org_code != orgCode || data.dept_id != deptId) {
+          index++;
+          orgCode = data.org_code;
+          deptId = data.dept_id;
+          scheduleList.value[index] = {
+            org_code: data.org_code,
+            dept_id: data.dept_id,
+            org_name_full_ch: data.org_name_full_ch,
+            org_name_full_en: data.org_name_full_en,
+            org_name_ch: data.org_name_ch,
+            org_name_en: data.org_name_en,
+            dept_name_ch: data.dept_name_ch,
+            dept_name_en: data.dept_name_en,
+            ranking: [0, 0, 0, 0, 0, 0, 0, 0],
+          }
+        }
+      } else {
+        if (data.org_code != orgCode) {
+          index++;
+          orgCode = data.org_code;
+          scheduleList.value[index] = {
+            org_code: data.org_code,
+            org_name_full_ch: data.org_name_full_ch,
+            org_name_full_en: data.org_name_full_en,
+            org_name_ch: data.org_name_ch,
+            org_name_en: data.org_name_en,
+            ranking: [0, 0, 0, 0, 0, 0, 0, 0],
+          }
         }
       }
       scheduleList.value[index].ranking[data.r4_ranking - 1] = data.count;
@@ -204,10 +219,10 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
                 </td>
                 <td>{{ lanePhaseToString(item.round, String(locale)) }}</td>
                 <td>
-                  <div class="flex gap-2 items-center" v-if="item.status > 3">
-                    <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/general/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list') }}</router-link>
-                    <router-link v-if="item.division_id != null && item.event_code != null && (item.remarks == 'ts' || item.remarks == 'tr' || item.remarks == 'rr')" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/heat/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list-heat') }}</router-link>
-                    <router-link v-if="item.division_id != null && item.event_code != null && (item.remarks == 'ft' || item.remarks == 'fj')" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/distance/${item.division_id}/${item.event_code}/${item.round}`">{{ t('list-more') }}</router-link>
+                  <div class="flex gap-2 items-center" v-if="item.status > 2">
+                    <router-link v-if="item.division_id != null && item.event_code != null" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/general/${item.division_id}/${item.event_code}/${item.round}?status=${item.status}`">{{ t('list') }}</router-link>
+                    <router-link v-if="item.division_id != null && item.event_code != null && (item.remarks == 'ts' || item.remarks == 'tr' || item.remarks == 'rr')" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/heat/${item.division_id}/${item.event_code}/${item.round}?status=${item.status}`">{{ t('list-heat') }}</router-link>
+                    <router-link v-if="item.division_id != null && item.event_code != null && (item.remarks == 'ft' || item.remarks == 'fj')" class="hyperlink blue" :to="`/${adminOrgId}/game/${gameId}/result/distance/${item.division_id}/${item.event_code}/${item.round}?status=${item.status}`">{{ t('list-more') }}</router-link>
                   </div>
                   <div v-else>{{ t('not-available') }}</div>
                 </td>
