@@ -75,7 +75,7 @@ for(const item of orginalData.value) {
             <td style="width: 5%">{{ item[`r${[round]}_lane`] }}</td>
             <td style="width: 20%">
               <div class="ch-content">{{ item.org_name_ch }}</div>
-              <div v-if="gameStore.data.options.regUnit < 2" class="font9">{{ item.dept_name_ch }}</div>
+              <div v-if="gameStore.data.options.regUnit < 2">{{ item.dept_name_ch }}</div>
               <div class="en-content">{{ item.org_name_en }}</div>
               <div v-if="gameStore.data.options.regUnit < 2" class="font7">{{ item.dept_name_en }}</div>
             </td>
