@@ -138,7 +138,7 @@ function getTargetPhase(current: number, params: any) {
             <div class="ch-content">場次</div>
             <div class="en-content">Session</div>
           </div>
-          <div></div>
+          <div>{{ eventData.schedule_id.toString().padStart(3, '0') }}</div>
         </div>
         <div class="content-box col-span-2">
           <div class="title">
@@ -155,7 +155,7 @@ function getTargetPhase(current: number, params: any) {
             <div class="ch-content">全國紀錄</div>
             <div class="en-content">NR</div>
           </div>
-          <div></div>
+          <div>N/A</div>
         </div>
       </div>
       <div class="height1"></div>
