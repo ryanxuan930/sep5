@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
   
-  const props = defineProps(['inputData', 'phaseNum', 'trackData', 'isMultiple']);
+  const props = defineProps(['inputData', 'phaseNum', 'trackData', 'isMultiple', 'targetPhase']);
   const dataList: any = ref([]);
   const noData = ref(false);
   const displayData: any = ref([]);
@@ -63,11 +63,14 @@
                 <div>{{ lane.last_name_ch }}{{ lane.first_name_ch }}</div>
                 <div class="text-sm">{{ lane.org_name_ch }}</div>
                 <div class="text-xs w-16 m-auto">{{ lane.dept_name_ch }} <span v-if="lane.num_in_dept > 0">{{ lane.num_in_dept.toString().padStart(2, '0') }}</span></div>
+                <div class="text-xs w-16 m-auto">({{ lane[`${props.targetPhase}_result`] }})</div>
               </td>
               <td v-else>
                 <div>{{ lane.team_name }}</div>
                 <div class="text-sm">{{ lane.org_name_ch }}</div>
                 <div class="text-xs w-16 m-auto">{{ lane.dept_name_ch }}</div>
+                <div class="text-xs w-16 m-auto">{{ lane.dept_name_ch }}</div>
+                <div class="text-xs w-16 m-auto">({{ lane[`${props.targetPhase}_result`] }})</div>
               </td>
             </template>
             <td v-else></td>

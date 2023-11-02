@@ -119,7 +119,6 @@
       return;
     }
     // set phase
-    console.log(dataList.value);
     const targetPhaseIndex = getTargetPhase(selectedTab.value, params.value[selectedIndex.value]);
     const targetPhasePrefix = phaseArray[targetPhaseIndex];
     const currentPhasePrefix = phaseArray[selectedTab.value];
@@ -344,8 +343,8 @@
           <span class="block hidden-span"></span>
         </div>
         <div class="overflow-hidden flex-grow h-full">
-          <LaneLayout :input-data="dataList" :phase-num="selectedTab" :track-data="laneList" :is-multiple="paramsList[selectedIndex].multiple" v-if="paramsList[selectedIndex].remarks == 'ts' || paramsList[selectedIndex].remarks == 'tr' || paramsList[selectedIndex].remarks == 'rr'"></LaneLayout>
-          <OrderLayout :input-data="dataList" :phase-num="selectedTab" v-else></OrderLayout>
+          <LaneLayout :input-data="dataList" :phase-num="selectedTab" :track-data="laneList" :is-multiple="paramsList[selectedIndex].multiple" :target-phase="phaseArray[getTargetPhase(selectedTab, params[selectedIndex])]" v-if="paramsList[selectedIndex].remarks == 'ts' || paramsList[selectedIndex].remarks == 'tr' || paramsList[selectedIndex].remarks == 'rr'"></LaneLayout>
+          <OrderLayout :input-data="dataList" :phase-num="selectedTab" :target-phase="phaseArray[getTargetPhase(selectedTab, params[selectedIndex])]" v-else></OrderLayout>
         </div>
       </div>
     </div>
