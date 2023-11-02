@@ -178,12 +178,8 @@
         }
       }
     }
-    if (currentParamsFull.remarks == 'tn') {
-      participants.sort((a: any, b: any) => a.temp - b.temp);
-    } else {
-      participants.sort((a: any, b: any) => b.temp - a.temp);
-    }
     if (currentParamsFull.remarks == 'ts' || currentParamsFull.remarks == 'tr' || currentParamsFull.remarks == 'rr') {
+      participants.sort((a: any, b: any) => b.temp - a.temp);
       const heat = Math.ceil(participants.length / trackArray.length);
       const heatArray = new Array(heat).fill(0);
       let pointer = 0;
@@ -210,6 +206,7 @@
         }
       }
     } else {
+      participants.sort((a: any, b: any) => a.temp - b.temp);
       const heat = groupNum.value;
       const heatArray = new Array(heat).fill(0);
       let pointer = 0;
