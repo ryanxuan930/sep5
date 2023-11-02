@@ -61,7 +61,8 @@ async function searchName() {
   }
 }
 async function searchBib() {
-  await vr.Get(`game/${props.sportCode}/${props.gameId}/common/athlete/bib/${bib.value}`, searchResult, true, true);
+  const res = await vr.Get(`game/${props.sportCode}/${props.gameId}/common/athlete/bib/${bib.value}`, null, true, true);
+  searchResult.value = [res];
 }
 
 function selectHandler(item: any) {
@@ -159,7 +160,7 @@ async function deleteItem(id: number) {
         <div class="flex-grow"></div>
         <div class="search-box">
           <div>號碼布</div>
-          <input type="text" v-model="bib">
+          <input type="text" v-model="bib" @keyup.enter="searchBib">
         </div>
         <button class="general-button blue" @click="searchBib">搜尋</button>
       </div>
