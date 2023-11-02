@@ -178,7 +178,11 @@
         }
       }
     }
-    participants.sort((a: any, b: any) => b.temp - a.temp);
+    if (currentParamsFull.remarks == 'tn') {
+      participants.sort((a: any, b: any) => a.temp - b.temp);
+    } else {
+      participants.sort((a: any, b: any) => b.temp - a.temp);
+    }
     if (currentParamsFull.remarks == 'ts' || currentParamsFull.remarks == 'tr' || currentParamsFull.remarks == 'rr') {
       const heat = Math.ceil(participants.length / trackArray.length);
       const heatArray = new Array(heat).fill(0);
