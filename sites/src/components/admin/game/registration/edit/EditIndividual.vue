@@ -110,16 +110,16 @@ async function submitAll(input: any) {
       return;
     }
   }
-  for (const data of props.regList) {
-    if (data.division_id == input.division_id && data.event_code == input.event_code && data.u_id == input.u_id) {
-      alert('此選手已報名此項目 This athlete has already registerd for this event');
-      return;
-    }
-  }
   if (data.ref_result == '') {
     data.ref_result = '0';
   }
   if (props.inputData == null) {
+    for (const data of props.regList) {
+      if (data.division_id == input.division_id && data.event_code == input.event_code && data.u_id == input.u_id) {
+        alert('此選手已報名此項目 This athlete has already registerd for this event');
+        return;
+      }
+    }
     const response = await vr.Post(`game/${props.sportCode}/${props.gameId}/common/individual`, data, null, true, true);
     if (response.status == 'A01') {
       alert('已新增');
