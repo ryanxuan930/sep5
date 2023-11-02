@@ -20,19 +20,19 @@
   }
   async function downloadIndividual() {
     const temp = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/individual`, null, true, true);
-    const header = ['組別', '項目','組織單位/學校', '分部/系所/班級', '姓名', '性別', '選手代碼', '學號/教職員編號', '座號'];
+    const header = ['組別', '項目','組織單位/學校', '分部/系所/班級', '姓名', '性別', '選手代碼', '學號/教職員編號', '座號', '參考成績', '第一輪組別', '第一輪道次', '預賽組別', '預賽道次', '準決賽組別', '準決賽道次', '決賽組別', '決賽道次'];
     const data: any = [];
     for (const t of temp) {
-      data.push([t.division_ch, t.event_ch, t.org_name_full_ch, t.dept_name_ch, t.last_name_ch+t.first_name_ch, t.sex == 1 ? '男':'女', t.athlete_id, t.student_id, t.num_in_dept])
+      data.push([t.division_ch, t.event_ch, t.org_name_full_ch, t.dept_name_ch, t.last_name_ch+t.first_name_ch, t.sex == 1 ? '男':'女', t.athlete_id, t.student_id, t.num_in_dept, String(t.ref_result), t['r1_heat'], t['r1_lane'], t['r2_heat'], t['r2_lane'], t['r3_heat'], t['r3_lane'], t['r4_heat'], t['r4_lane']])
     }
     exportCsv(data, `${props.inputData.game_name_ch}_個人項目列表`, header);
   }
   async function downloadGroup() {
     const temp = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/group`, null, true, true);
-    const header = ['組別', '項目','組織單位/學校', '分部/系所/班級', '隊名'];
+    const header = ['組別', '項目','組織單位/學校', '分部/系所/班級', '隊名', '參考成績', '第一輪組別', '第一輪道次', '預賽組別', '預賽道次', '準決賽組別', '準決賽道次', '決賽組別', '決賽道次'];
     const data: any = [];
     for (const t of temp) {
-      data.push([t.division_ch, t.event_ch, t.org_name_full_ch, t.dept_name_ch, t.team_name])
+      data.push([t.division_ch, t.event_ch, t.org_name_full_ch, t.dept_name_ch, t.team_name, String(t.ref_result), t['r1_heat'], t['r1_lane'], t['r2_heat'], t['r2_lane'], t['r3_heat'], t['r3_lane'], t['r4_heat'], t['r4_lane']])
     }
     exportCsv(data, `${props.inputData.game_name_ch}_團體項目列表`, header);
   }
