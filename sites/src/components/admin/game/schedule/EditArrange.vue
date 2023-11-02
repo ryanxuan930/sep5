@@ -191,6 +191,7 @@
             pointer++;
         }
       }
+      heatArray.reverse();
       if (allShffule.value) {
         shuffle(participants);
       }
