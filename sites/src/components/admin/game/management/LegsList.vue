@@ -53,7 +53,8 @@ async function searchName() {
   }
 }
 async function searchBib() {
-  await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/athlete/bib/${bib.value}`, searchResult, true, true);
+  const res = await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/athlete/bib/${bib.value}`, null, true, true);
+  searchResult.value = [res];
 }
 const emit = defineEmits<{(e: 'returnData', value: string): void, (e: 'closeModal'): void, (e: 'returnList', value: any): void}>();
 async function submitAll() {
