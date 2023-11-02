@@ -8,7 +8,6 @@
   const noData = ref(false);
   const displayData: any = ref([]);
   const targetPhase = getTargetPhase(props.phaseNum, props.paramData);
-  console.log(phaseList[targetPhase]);
 
   function getData() {
     dataList.value = [];
