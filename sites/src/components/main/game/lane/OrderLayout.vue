@@ -82,7 +82,7 @@
 
 <style scoped lang="scss">
 table {
-  @apply w-[640px] sm:w-full overflow-auto;
+  @apply min-w-[320px] w-full overflow-auto;
   td {
     @apply p-2 text-left border-[1px];
   }
