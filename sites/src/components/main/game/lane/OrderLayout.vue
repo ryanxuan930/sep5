@@ -68,7 +68,7 @@
                   <div>
                     <div>{{ heat.last_name_ch }}{{ heat.first_name_ch }}</div>
                     <div class=text-sm>{{ heat.org_name_ch }}<span v-if="heat.dept_name_ch == ''">-{{ heat.dept_name_ch }}</span> <span v-if="heat.num_in_dept > 0">{{ heat.num_in_dept.toString().padStart(2, '0') }}</span></div>
-                    <div class="text-sm">({{ lane[`${phaseList[targetPhase]}_result`] }})</div>
+                    <div class="text-sm">({{ heat[`${phaseList[targetPhase]}_result`] }})</div>
                   </div>
               </td>
             </template>
