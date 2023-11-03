@@ -60,6 +60,7 @@
             <template v-if="lane != null">
               <td v-if="indexA == 0 || indexB == 0">{{ lane }}</td>
               <td v-else-if="props.isMultiple == 0">
+                <div class="text-sm w-16 m-auto" v-if="lane.bib != null">[{{ lane.bib }}]</div>
                 <div>{{ lane.last_name_ch }}{{ lane.first_name_ch }}</div>
                 <div class="text-sm">{{ lane.org_name_ch }}</div>
                 <div class="text-xs w-16 m-auto">{{ lane.dept_name_ch }} <span v-if="lane.num_in_dept > 0">{{ lane.num_in_dept.toString().padStart(2, '0') }}</span></div>
@@ -68,7 +69,6 @@
               <td v-else>
                 <div>{{ lane.team_name }}</div>
                 <div class="text-sm">{{ lane.org_name_ch }}</div>
-                <div class="text-xs w-16 m-auto">{{ lane.dept_name_ch }}</div>
                 <div class="text-xs w-16 m-auto">{{ lane.dept_name_ch }}</div>
                 <div class="text-xs w-16 m-auto">({{ lane[`${props.targetPhase}_result`] }})</div>
               </td>

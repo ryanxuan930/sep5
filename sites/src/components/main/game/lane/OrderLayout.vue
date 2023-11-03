@@ -27,13 +27,13 @@
         for (let j = 0; j <= maxHeat; j++) {
           if (i == 0) {
             if (j > 0) {
-              heatArray[i][j] = `第 ${ j } 組<br>Group ${ j }`;
+              heatArray[i][j] = `第 ${ j } 組　Group ${ j }`;
             } else {
-              heatArray[i][j] = '序號｜組別<br>No.｜Group';
+              heatArray[i][j] = '組別 Group \\ 序號 No. ';
             }
           } else {
             if (j == 0) {
-              heatArray[i][j] = `${ i }`;
+              heatArray[i][j] = `<div class="text-xl">${ i }</div>`;
             } else {
               const temp = dataList.value.find((item: any) => item[`r${[props.phaseNum]}_lane`] == i && item[`r${[props.phaseNum]}_heat`] == j);
               if (temp) {
@@ -66,7 +66,10 @@
               <td v-if="indexA == 0 || indexB == 0" v-html="heat"></td>
               <td v-else>
                   <div>
-                    <div>{{ heat.last_name_ch }}{{ heat.first_name_ch }}</div>
+                    <div class="flex items-center gap-2">
+                      <div v-if="heat.bib != null">[{{ heat.bib }}]</div>
+                      <div>{{ heat.last_name_ch }}{{ heat.first_name_ch }}</div>
+                    </div>
                     <div class=text-sm>{{ heat.org_name_ch }}<span v-if="heat.dept_name_ch == ''">-{{ heat.dept_name_ch }}</span> <span v-if="heat.num_in_dept > 0">{{ heat.num_in_dept.toString().padStart(2, '0') }}</span></div>
                     <div class="text-sm">({{ heat[`${phaseList[targetPhase]}_result`] }})</div>
                   </div>
@@ -92,7 +95,7 @@ table {
     }
   }
   td:first-child {
-    @apply bg-blue-50;
+    @apply bg-blue-50 w-44 text-center;
   }
 }
 </style>

@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n'
 import { lanePhaseToString } from '@/components/library/functions';
 import LaneLayout from '@/components/main/game/lane/LaneLayout.vue';
 import OrderLayout from '@/components/main/game/lane/OrderLayout.vue';
+import SmallLoader from '@/components/SmallLoader.vue';
 
 const route = useRoute();
 const vr = new VueRequest();
@@ -55,6 +56,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
     <LaneLayout v-if="params.remarks == 'ts' || params.remarks == 'tr' || params.remarks == 'rr'" :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></LaneLayout>
     <OrderLayout v-else :input-data="dataList" :phase-num="$route.params.round" :track-data="laneList" :is-multiple="params.multiple" :param-data="params"></OrderLayout>
   </div>
+  <SmallLoader v-else></SmallLoader>
 </template>
 
 <style scoped lang="scss">

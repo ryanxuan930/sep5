@@ -4,6 +4,7 @@ import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n'
 import { lanePhaseToString } from '@/components/library/functions';
+import SmallLoader from '@/components/SmallLoader.vue';
 
 const route = useRoute();
 const vr = new VueRequest();
@@ -13,13 +14,16 @@ const pageData: any = inject('pageData');
 const gameData: any = inject('gameData');
 const scheduleList: any = ref([]);
 const counter = ref(0);
+const isLoading = ref(false);
 async function getData() {
+  isLoading.value = true;
   await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/schedule/full`, scheduleList);
   scheduleList.value.sort((a: any, b: any) => {
     const t1 = new Date(a.timestamp);
     const t2 = new Date(b.timestamp);
     return t1.getTime() - t2.getTime();
   });
+  isLoading.value = false;
 };
 setInterval(() => {
   if (counter.value == 0){
@@ -77,6 +81,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
         </tr>
       </template>
     </table>
+    <SmallLoader v-if="isLoading"></SmallLoader>
   </div>
 </template>
 
