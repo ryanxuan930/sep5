@@ -70,7 +70,7 @@
         </th>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
-        <tr v-if="item[`r${[props.phaseNum]}_heat`] > 0 && item[`r${[props.phaseNum]}_lane`] > 0">
+        <tr v-if="item[`r${[props.phaseNum]}_heat`] > 0 && item[`r${[props.phaseNum]}_lane`] > 0" :class="{'bg-sky-50': item[`r${[props.phaseNum]}_options`].qualified != undefined && (item[`r${[props.phaseNum]}_options`].qualified =='q' || item[`r${[props.phaseNum]}_options`].qualified == 'Q')}">
           <td>
             <div v-if="item[`r${[props.phaseNum]}_ranking`] > 0">{{ item[`r${[props.phaseNum]}_ranking`] }}</div>
           </td>
