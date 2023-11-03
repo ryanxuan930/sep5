@@ -34,7 +34,7 @@
     }
     tempResult = dataList.value[i].temp;
   }*/
-  dataList.value.sort((a: any, b: any) => a[`r${[props.phaseNum]}_heat`]- b[`r${[props.phaseNum]}_heat`] || a.temp - b.temp);
+  dataList.value.sort((a: any, b: any) => a[`r${[props.phaseNum]}_heat`]- b[`r${[props.phaseNum]}_heat`] || a[`r${[props.phaseNum]}_lane`]- b[`r${[props.phaseNum]}_lane`]);
 </script>
 
 <template>
