@@ -17,23 +17,6 @@
       dataList.value.push(element);
     }
   });
-  /*
-  let temp = 0;
-  let tempResult = -1;
-  let place = 1;
-  for(let i = 0; i < dataList.value.length; i++) {
-    if (temp != dataList.value[i][`r${[props.phaseNum]}_heat`]) {
-      temp = dataList.value[i][`r${[props.phaseNum]}_heat`];
-      place = 1;
-    }
-    if (tempResult == dataList.value[i].temp) {
-      dataList.value[i].pih = dataList.value[i-1].pih;
-    } else {
-      dataList.value[i].pih = place;
-      place++;
-    }
-    tempResult = dataList.value[i].temp;
-  }*/
   dataList.value.sort((a: any, b: any) => a[`r${[props.phaseNum]}_heat`]- b[`r${[props.phaseNum]}_heat`] || a[`r${[props.phaseNum]}_lane`]- b[`r${[props.phaseNum]}_lane`]);
 </script>
 
@@ -41,12 +24,6 @@
   <div class="w-full h-full overflow-auto">
     <table>
       <tr>
-        <!--
-        <th>
-          <div>分組排名</div>
-          <div class="text-xs">Pla. in heat</div>
-        </th>
-        -->
         <th>
           <div>組別</div>
           <div class="text-sm">Heat</div>
@@ -91,10 +68,7 @@
         </th>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
-        <tr>
-          <!--
-          <td>{{ item.pih }}</td>
-          -->
+        <tr :class="{'bg-sky-50': item[`r${[props.phaseNum]}_options`].qualified != undefined && (item[`r${[props.phaseNum]}_options`].qualified =='q' || item[`r${[props.phaseNum]}_options`].qualified == 'Q')}">
           <td>{{ item[`r${[props.phaseNum]}_heat`] }}</td>
           <td>{{ item[`r${[props.phaseNum]}_lane`] }}</td>
           <td v-if="!Config.deptAsClass">
