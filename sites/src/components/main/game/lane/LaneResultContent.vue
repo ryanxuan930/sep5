@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import VueRequest from '@/vue-request';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n'
@@ -18,7 +18,7 @@ const isLoading = ref(false);
 const dataList: any = ref([]);
 const laneList: any = ref([]);
 const params: any = ref({});
-(async () => {
+async function getData() {
   isLoading.value = true;
   await vr.Get(`game/${gameData.value.sport_code}/${gameId}/main/params/${divisionId}/${eventCode}`, params);
   await vr.Get(`game/${gameData.value.sport_code}/${gameId}/main/lane`, laneList);
@@ -28,7 +28,22 @@ const params: any = ref({});
     await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/group/by/event/${divisionId}/${eventCode}`, dataList);
   }
   isLoading.value = false;
-})();
+};
+getData();
+
+let interval: number;
+
+onMounted(() => {
+  if (route.query.status == undefined || route.query.status != '4') {
+    interval = setInterval(() => {
+      getData();
+    }, 10000);
+  }
+});
+
+onBeforeUnmount(() => {
+  clearInterval(interval);
+});
 
 const { t, locale } = useI18n({
   inheritLocale: true,

@@ -462,6 +462,7 @@ function resultContentHandler(val: any) {
       }
     });
   }
+  tempSave();
 }
 </script>
 

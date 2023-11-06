@@ -82,8 +82,13 @@ function autoFormatter(input: any, index: string|number) {
 
 function tempRank(num: number) {
   const temps:any = [];
+  let flag = false;
   items.value.map((item: any) => {
     const tempList = item[`r${props.inputData.round}_options`].performance.attempt.slice(0,num);
+    // if tempList has '' then return
+    if (tempList.includes('')) {
+      flag = true;
+    }
     tempList.sort((a: string, b: string) => {
       const aNum = Number(a);
       const bNum = Number(b);
@@ -102,19 +107,23 @@ function tempRank(num: number) {
       attempt: tempList,
     });
   });
+  if (flag) {
+    alert('請確認是否都填入成績');
+    return;
+  }
   temps.sort((a: any, b: any) => {
     for (let i = 0; i < num; i++) {
-        const aNum = Number(a.attempt[i]);
-        const bNum = Number(b.attempt[i]);
-        if (isNaN(aNum) && isNaN(bNum)) {
-            continue;
-        } else if (isNaN(aNum)) {
-            return 1;
-        } else if (isNaN(bNum)) {
-            return -1;
-        } else if (aNum !== bNum) {
-            return bNum - aNum;
-        }
+      const aNum = Number(a.attempt[i]);
+      const bNum = Number(b.attempt[i]);
+      if (isNaN(aNum) && isNaN(bNum)) {
+          continue;
+      } else if (isNaN(aNum)) {
+          return 1;
+      } else if (isNaN(bNum)) {
+          return -1;
+      } else if (aNum !== bNum) {
+          return bNum - aNum;
+      }
     }
     const aX = a.filter((item: string) => item === 'X').length;
     const bX = b.filter((item: string) => item === 'X').length;
@@ -147,7 +156,6 @@ const emit = defineEmits<{(e: 'returnData', value: any): any, (e: 'closeModal'):
 
 function save() {
   emit('returnData', items.value);
-  emit('closeModal');
 }
 </script>
 

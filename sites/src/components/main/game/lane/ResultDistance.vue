@@ -1,21 +1,32 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import Config from '@/assets/config.json'
+  import { useRoute } from 'vue-router';
+  import type { RouteLocationNormalizedLoaded } from 'vue-router';
   
   const props = defineProps(['inputData', 'phaseNum', 'isMultiple', 'gameData']);
+  const route: RouteLocationNormalizedLoaded = useRoute();
   const dataList: any = ref([]);
   const temp1: any = [];
   const temp2: any = [];
-  props.inputData.forEach((element: any) => {
-    element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
-    if (element[`r${[props.phaseNum]}_ranking`] > 0) {
-      temp1.push(element);
-    } else {
-      temp2.push(element);
-    }
-  });
-  temp1.sort((a: any, b: any) => a[`r${[props.phaseNum]}_ranking`]- b[`r${[props.phaseNum]}_ranking`]);
-  dataList.value = temp1.concat(temp2);
+  if (route.query.status != undefined || route.query.status == '4') {
+    props.inputData.forEach((element: any) => {
+      element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
+      if (element[`r${[props.phaseNum]}_ranking`] > 0) {
+        temp1.push(element);
+      } else {
+        temp2.push(element);
+      }
+    });
+    temp1.sort((a: any, b: any) => a[`r${[props.phaseNum]}_ranking`]- b[`r${[props.phaseNum]}_ranking`]);
+    dataList.value = temp1.concat(temp2);
+  } else {
+    props.inputData.forEach((element: any) => {
+      element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
+      dataList.value.push(element);
+    });
+    dataList.value.sort((a: any, b: any) => a[`r${[props.phaseNum]}_heat`]- b[`r${[props.phaseNum]}_heat`] || a[`r${[props.phaseNum]}_lane`]- b[`r${[props.phaseNum]}_lane`]);
+  }
 </script>
 
 <template>
