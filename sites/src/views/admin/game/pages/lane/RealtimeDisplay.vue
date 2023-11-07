@@ -227,7 +227,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
       </div>
       <div class="pb-1">
         <div class="text-2xl">大會紀錄 CR：{{ gamerecords.result }}</div>
-        <div class="text-2xl">全國紀錄 NR：不適用</div>
+        <div class="text-2xl">全國紀錄 NR：——</div>
       </div>
     </div>
     <table class="result-table">
@@ -301,8 +301,8 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
             <td>
               <div class="content-text" v-show="realtimeData.displayMode == 1 && (item[`r${realtimeData.event.round}_result`] == 'DQ' || item[`r${realtimeData.event.round}_result`] == 'DNS')">{{ item[`r${realtimeData.event.round}_result`] }}</div>
               <div v-if="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">
-                <span v-if="item[`r${realtimeData.event.round}_options`].qualified != undefined" class="px-1 py-0.5">{{ item[`r${realtimeData.event.round}_options`].qualified }}</span>
                 <span v-if="item[`r${realtimeData.event.round}_options`].break != null" class="px-1 py-0.5 bg-blue-600">{{ item[`r${realtimeData.event.round}_options`].break }}</span>
+                <span v-if="item[`r${realtimeData.event.round}_options`].qualified != undefined" :class="{'px-1 py-0.5': true, 'text-yellow-300': item[`r${realtimeData.event.round}_options`].qualified == 'Q' || item[`r${realtimeData.event.round}_options`].qualified == 'q' }">{{ item[`r${realtimeData.event.round}_options`].qualified }}</span>
               </div>
             </td>
           </template>
@@ -339,10 +339,10 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
     @apply flex items-end gap-2 border-0;
   }
   th {
-    @apply border-b-2 p-2;
+    @apply border-b-2 py-2 px-px;
   }
   td {
-    @apply border-b-[1px] border-white text-2xl 3xl:text-3xl px-px pt-px;
+    @apply border-b-[1px] border-white text-2xl 3xl:text-3xl pb-0 px-0 pt-[1px];
   }
   tr:nth-child(even) {
     @apply bg-blue-950;
@@ -354,7 +354,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
     @apply p-1 2xl:p-2 3xl:p-3;
   }
   .lane-box {
-    @apply p-1 2xl:p-2 3xl:p-3 bg-white text-indigo-950 w-20 text-center relative mt-px rounded-tl-lg;
+    @apply p-1 2xl:p-2 3xl:p-3 border-0 bg-white text-indigo-950 w-20 text-center relative mt-px rounded-tl-lg;
   }
   .lane-box:after {
     @apply absolute bottom-0 left-3 h-full w-full bg-white rounded-tr-lg;
