@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
 import VueRequest from '@/vue-request';
 import { useUserStore } from '@/stores/user';
 import { useGameStore } from '@/stores/game';
@@ -10,6 +11,7 @@ import Config from '@/assets/config.json';
 const store = useUserStore();
 const gameStore: any = useGameStore();
 const vr = new VueRequest(store.token);
+const route = useRoute();
 
 const currentTime: any = ref(new Date());
 const timerStatus = ref(false);
@@ -36,7 +38,6 @@ let currentEvent = '';
 let currentMode = 0;
 let params: any = {};
 let prePhase = 0;
-let refreshFlag = false;
 let multiplePage = 0;
 let pageTemp: any = [];
 const reMount = ref(false);
@@ -57,11 +58,10 @@ async function getStatusData() {
     alert('請先建立即時成績資訊');
     return;
   }
-  if (realtimeData.value.hardRefresh) {
-    refreshFlag = true;
-  }
-  if (refreshFlag === true && realtimeData.value.hardRefresh === false) {
-    window.location.reload();
+  
+  if (realtimeData.value.hardRefresh + 20000 > Date.now() && route.query.timestamp != realtimeData.value.hardRefresh) {
+    route.query.timestamp = realtimeData.value.hardRefresh;
+    location.href = location.href.split('?')[0] + `?timestamp=${realtimeData.value.hardRefresh}`;
   }
   if (currentDivision != realtimeData.value.event.division_id || currentEvent != realtimeData.value.event.event_code || realtimeData.value.displayMode != currentMode) {
     reMount.value = false;

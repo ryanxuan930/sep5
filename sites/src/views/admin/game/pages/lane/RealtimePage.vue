@@ -44,7 +44,6 @@
   const heatNum = ref(0);
   const selectedHeat = ref(1);
   const displayMode = ref(0);
-  const hardRefresh = ref(false);
   
   async function openEvent(input: any) {
     selectedEvent.value = input;
@@ -69,7 +68,7 @@
       selectedHeat: selectedHeat.value,
       displayMode: displayMode.value,
       athleteNum: displayMode.value == 3 ? eventData.value.length : eventData.value.reduce((acc: any, cur: any) => { return acc + (cur[`r${selectedEvent.value.round}_heat`] == selectedHeat.value ? 1 : 0) }, 0),
-      hardRefresh: hardRefresh.value,
+      hardRefresh: Date.now(),
     });
     const temp = await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/temp/realtimeDisplay`);
     let res: any = null;
@@ -135,30 +134,17 @@
           <div class="flex-grow flex flex-col h-full overflow-hidden" v-if="selectedEvent !== null">
             <div class="text-lg py-1">{{ selectedEvent.division_ch }} {{ selectedEvent.event_ch }} [{{ lanePhaseToString(selectedEvent.round, 'zh-TW') }}]</div>
             <div class="flex items-center gap-3 p-2">
-              <label class="mode-selector">
-                <input type="radio" value="0" v-model="displayMode">
-                <div>計時頁面</div>
-              </label>
-              <label class="mode-selector">
-                <input type="radio" value="1" v-model="displayMode">
-                <div>組別道次</div>
-              </label>
-              <label class="mode-selector">
-                <input type="radio" value="2" v-model="displayMode">
-                <div>單組成績</div>
-              </label>
-              <label class="mode-selector">
-                <input type="radio" value="3" v-model="displayMode">
-                <div>輪播成績</div>
-              </label>
-              <label>
-                重整
-                <input type="checkbox" v-model="hardRefresh">
-              </label>
+              <div>顯示方式：</div>
+              <select v-model="displayMode" class="flex-grow border rounded">
+                <option value="0">計時頁面</option>
+                <option value="1">組別道次</option>
+                <option value="2">單組成績</option>
+                <option value="3">輪播成績</option>
+              </select>
               <button class="general-button blue" @click="submitDisplay">發送</button>
             </div>
             <div class="flex">
-              <div @click="selectedHeat = item" class="py-1 px-5 bg-blue-400 text-white rounded-t cursor-pointer" v-for="(item, index) in heatNum" :key="index">第{{ item }}組</div>
+              <div @click="selectedHeat = item" :class="{'py-1 px-5 bg-blue-300 text-white rounded-t cursor-pointer': true,'bg-blue-400': selectedHeat == item}" v-for="(item, index) in heatNum" :key="index">第{{ item }}組</div>
             </div>
             <div class="overflow-auto">
               <table class="result-table">

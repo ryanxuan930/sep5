@@ -101,6 +101,7 @@ async function tempSave() {
   }
 
   // record handler
+  /*
   let flag = false;
   for(let i = 0; i < dataList.value.length; i++){
     if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
@@ -133,7 +134,7 @@ async function tempSave() {
         }
       }
     }
-  }
+  }*/
 
   if (props.inputData.multiple == 0){
     dataList.value.forEach((item: any) => {
@@ -230,6 +231,15 @@ async function submitAll(rank = true) {
     dataList.value.sort((a: any, b: any) => a.temp - b.temp);
   } else {
     dataList.value.sort((a: any, b: any) => b.temp - a.temp);
+  }
+  // field events
+  if (rank == false) {
+    dataList.value.forEach((item: any) => {
+      if (item[`r${props.inputData.round}_options`].performance != undefined && item[`r${props.inputData.round}_options`].performance.final_rank != undefined) {
+        item[`r${props.inputData.round}_ranking`] = item[`r${props.inputData.round}_options`].performance.final_rank;
+      }
+    });
+    dataList.value.sort((a: any, b: any) => a[`r${props.inputData.round}_ranking`] - b[`r${props.inputData.round}_ranking`]);
   }
   
   // record handler

@@ -82,13 +82,8 @@ function autoFormatter(input: any, index: string|number) {
 
 function tempRank(num: number) {
   const temps:any = [];
-  let flag = false;
   items.value.map((item: any) => {
     const tempList = item[`r${props.inputData.round}_options`].performance.attempt.slice(0,num);
-    // if tempList has '' then return
-    if (tempList.includes('')) {
-      flag = true;
-    }
     tempList.sort((a: string, b: string) => {
       const aNum = Number(a);
       const bNum = Number(b);
@@ -107,10 +102,6 @@ function tempRank(num: number) {
       attempt: tempList,
     });
   });
-  if (flag) {
-    alert('請確認是否都填入成績');
-    return;
-  }
   temps.sort((a: any, b: any) => {
     for (let i = 0; i < num; i++) {
       const aNum = Number(a.attempt[i]);
@@ -125,8 +116,9 @@ function tempRank(num: number) {
           return bNum - aNum;
       }
     }
-    const aX = a.filter((item: string) => item === 'X').length;
-    const bX = b.filter((item: string) => item === 'X').length;
+    console.log(a, b);
+    const aX = a.filter((item: string) => item == 'X').length;
+    const bX = b.filter((item: string) => item == 'X').length;
     return aX - bX;
   });
   /* set performance.first_rank from temps by u_id */
@@ -142,6 +134,7 @@ function tempRank(num: number) {
       athlete[`r${props.inputData.round}_options`].performance.final_wind = athlete[`r${props.inputData.round}_options`].performance.winds[item.attempt.indexOf(topHandler(item.attempt))] == '' ? 'NWI' : athlete[`r${props.inputData.round}_options`].performance.winds[item.attempt.indexOf(topHandler(item.attempt))];
     }
   });
+  alert('排序完成');
 }
 
 // watch items and save data to sessionStorage

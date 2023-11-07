@@ -9,7 +9,7 @@
   const dataList: any = ref([]);
   const temp1: any = [];
   const temp2: any = [];
-  if (route.query.status != undefined || route.query.status == '4') {
+  if (route.query.status != undefined && route.query.status == '4') {
     props.inputData.forEach((element: any) => {
       element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
       if (element[`r${[props.phaseNum]}_ranking`] > 0) {
