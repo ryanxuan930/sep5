@@ -299,7 +299,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
               <div class="content-text" v-show="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">{{ item[`r${realtimeData.event.round}_result`] }}</div>
             </td>
             <td>
-              <div class="content-text" v-show="realtimeData.displayMode == 1 && (item[`${roundList[prePhase]}_result`] == 'DQ' || item[`${roundList[prePhase]}_result`] == 'DNS')">{{ item[`${roundList[prePhase]}_result`] }}</div>
+              <div class="content-text" v-show="realtimeData.displayMode == 1 && (item[`r${realtimeData.event.round}_result`] == 'DQ' || item[`r${realtimeData.event.round}_result`] == 'DNS')">{{ item[`r${realtimeData.event.round}_result`] }}</div>
               <div v-if="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">
                 <span v-if="item[`r${realtimeData.event.round}_options`].qualified != undefined" class="px-1 py-0.5">{{ item[`r${realtimeData.event.round}_options`].qualified }}</span>
                 <span v-if="item[`r${realtimeData.event.round}_options`].break != null" class="px-1 py-0.5 bg-blue-600">{{ item[`r${realtimeData.event.round}_options`].break }}</span>
