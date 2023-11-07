@@ -342,7 +342,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
     @apply border-b-2 p-2;
   }
   td {
-    @apply border-b-[1px] border-white text-2xl 3xl:text-3xl p-px;
+    @apply border-y-[0.5px] border-white text-2xl 3xl:text-3xl p-px;
   }
   tr:nth-child(even) {
     @apply bg-blue-950;
