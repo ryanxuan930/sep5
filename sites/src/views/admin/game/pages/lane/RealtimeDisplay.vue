@@ -261,7 +261,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
           </div>
           <div v-if="realtimeData.displayMode == 1">
             <div class="th-ch">晉級成績</div>
-            <div class="th-en">P. Result</div>
+            <div class="th-en">Adv. Result</div>
           </div>
           <div v-if="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">
             <div class="th-ch">成績</div>
