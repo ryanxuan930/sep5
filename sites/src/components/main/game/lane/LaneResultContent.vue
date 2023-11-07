@@ -37,7 +37,7 @@ onMounted(() => {
   if (route.query.status == undefined || route.query.status != '4') {
     interval = setInterval(() => {
       getData();
-    }, 10000);
+    }, 30000);
   }
 });
 

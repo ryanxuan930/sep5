@@ -12,7 +12,6 @@ const qualified: Ref<number> = ref(8);
 let hasData = true;
 items.value.forEach((item:any ) => {
   if (item[`r${props.inputData.round}_options`].performance.format == undefined || item[`r${props.inputData.round}_options`].performance.format != 'distance') {
-    console.log(1);
     item[`r${props.inputData.round}_options`].performance = {
       format: 'distance',
       attempt: ['', '', '', '', '', ''],
@@ -25,6 +24,19 @@ items.value.forEach((item:any ) => {
       final_wind: '',
     };
     hasData = false;
+  }
+  if (item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ') {
+    item[`r${props.inputData.round}_options`].performance = {
+      format: 'distance',
+      attempt: ['', '', '', '', '', ''],
+      winds: ['', '', '', '', '', ''],
+      first_result: 'NM',
+      first_rank: 0,
+      final_order: 0,
+      final_result: item[`r${props.inputData.round}_result`],
+      final_rank: 0,
+      final_wind: '',
+    };
   }
 });
 
@@ -65,8 +77,12 @@ function autoFormatter(input: any, index: string|number) {
       input[index] = 'DQ';
     } else if (val.toUpperCase() == 'M') {
       input[index] = 'NM';
-    }else if (val.toUpperCase() == 'X') {
+    } else if (val.toUpperCase() == 'X') {
       input[index] = 'X';
+    } else if (val.toUpperCase() == 'O') {
+      input[index] = 'O';
+    } else if (val.toUpperCase() == 'R') {
+      input[index] = 'r';
     } else {
       if (val.length == 3) {
         input[index] = val.substring(0, 1) + '.' + val.substring(1, 3);
@@ -116,7 +132,6 @@ function tempRank(num: number) {
           return bNum - aNum;
       }
     }
-    console.log(a, b);
     const aX = a.filter((item: string) => item == 'X').length;
     const bX = b.filter((item: string) => item == 'X').length;
     return aX - bX;
@@ -130,10 +145,21 @@ function tempRank(num: number) {
     } else {
       const athlete = items.value.find((athlete: any) => athlete.u_id == item.id);
       athlete[`r${props.inputData.round}_options`].performance.final_rank = Number(topHandler(item.attempt)) == 0 ? 0 : index + 1;
-      athlete[`r${props.inputData.round}_options`].performance.final_result = Number(topHandler(item.attempt)) == 0 ? 'NM' : topHandler(item.attempt);
+      if (athlete[`r${props.inputData.round}_result`] != 'DNS' && athlete[`r${props.inputData.round}_result`] != 'DQ') {
+        athlete[`r${props.inputData.round}_options`].performance.final_result = Number(topHandler(item.attempt)) == 0 ? 'NM' : topHandler(item.attempt);
+      }
       athlete[`r${props.inputData.round}_options`].performance.final_wind = athlete[`r${props.inputData.round}_options`].performance.winds[item.attempt.indexOf(topHandler(item.attempt))] == '' ? 'NWI' : athlete[`r${props.inputData.round}_options`].performance.winds[item.attempt.indexOf(topHandler(item.attempt))];
     }
   });
+  if (num == 3) {
+    // find the largest first_rank
+    const largest = Math.max(...items.value.map((item: any) => item[`r${props.inputData.round}_options`].performance.first_rank));
+    items.value.forEach((item: any) => {
+      if (item[`r${props.inputData.round}_options`].performance.first_rank > 0) {
+        item[`r${props.inputData.round}_options`].performance.final_order = largest - item[`r${props.inputData.round}_options`].performance.first_rank + 1;
+      }
+    });
+  }
   alert('排序完成');
 }
 
@@ -195,31 +221,31 @@ function save() {
           <td>{{ item[`r${props.inputData.round}_heat`] }}</td>
           <td>{{ item[`r${props.inputData.round}_lane`] }}</td>
           <td>
-            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 0)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[0]">
-            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[0]">
+            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 0)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[0]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
+            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[0]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
           <td>
-            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 1)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[1]">
-            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[1]">
+            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 1)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[1]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
+            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[1]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
           <td>
-            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 2)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[2]">
-            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[2]">
+            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 2)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[2]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
+            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[2]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
           <td>{{ top3Handler(item[`r${props.inputData.round}_options`].performance.attempt) }}</td>
           <td>{{ item[`r${props.inputData.round}_options`].performance.first_rank }}</td>
           <td>{{ item[`r${props.inputData.round}_options`].performance.final_order }}</td>
           <td>
-            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 3)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[3]">
-            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[3]">
+            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 3)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[3]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
+            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[3]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
           <td>
-            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 4)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[4]">
-            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[4]">
+            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 4)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[4]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
+            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[4]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
           <td>
-            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 5)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[5]">
-            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[5]">
+            <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 5)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[5]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
+            <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[5]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
           <td>{{ item[`r${props.inputData.round}_options`].performance.final_result }}</td>
           <td>{{ item[`r${props.inputData.round}_options`].performance.final_rank }}</td>

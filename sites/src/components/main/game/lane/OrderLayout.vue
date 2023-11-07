@@ -48,7 +48,6 @@
   }
   getData();
   watch(props.phaseNum, () => {
-    console.log(1);
     displayData.value = [];
     getData();
   });
