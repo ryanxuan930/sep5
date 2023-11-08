@@ -176,10 +176,10 @@ setInterval(() => {
   } else {
     counter --;
   }
-  if (counter % 10 === 0) {
+  if (counter % 6 === 0) {
     getStatusData();
   }
-  if (counter % 15 === 0) {
+  if (counter % 10 === 0) {
     getRealtimeFieldData();
   }
   if (counter % 10 === 0) {
