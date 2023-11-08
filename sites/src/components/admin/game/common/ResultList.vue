@@ -81,7 +81,7 @@ async function tempSave() {
   const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined, ''];
   // result to temp (milliseconds or centimeters)
   for (let i = 0; i < dataList.value.length; i++){
-    if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
+    if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`]) && dataList.value[i][`r${props.inputData.round}_heat`] > 0 && dataList.value[i][`r${props.inputData.round}_lane`] > 0) {
       if (timeEvents.includes(props.inputData.remarks)) {
         dataList.value[i].temp = stringToMilliseconds(dataList.value[i][`r${props.inputData.round}_result`]);
       } else {
@@ -180,11 +180,11 @@ async function submitAll(rank = true) {
   let res: any = null;
   const dataset: any = [];
   const timeEvents = ['ts', 'tr', 'tn', 'rr'];
-  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined, ''];
+  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined, '', ' '];
   // result to temp (milliseconds or centimeters)
   for (let i = 0; i < dataList.value.length; i++){
     dataList.value[i][`r${props.inputData.round}_options`].sameResult = undefined;
-    if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`])) {
+    if (!notAcceptResult.includes(dataList.value[i][`r${props.inputData.round}_result`]) && dataList.value[i][`r${props.inputData.round}_heat`] > 0 && dataList.value[i][`r${props.inputData.round}_lane`] > 0) {
       if (timeEvents.includes(props.inputData.remarks)) {
         dataList.value[i].temp = stringToMilliseconds(dataList.value[i][`r${props.inputData.round}_result`]);
         if (dataList.value[i].temp % 10 !== 0) {
@@ -201,6 +201,9 @@ async function submitAll(rank = true) {
       }
     } else {
       dataList.value[i].temp = 0;
+    }
+    if (isNaN(dataList.value[i].temp)) {
+      
     }
     dataList.value[i][`r${props.inputData.round}_options`].qualified = '*';
     dataList.value[i][`r${props.inputData.round}_options`].break = null;
@@ -286,7 +289,7 @@ async function submitAll(rank = true) {
       dataList.value[i][`r${props.inputData.round}_options`].qualified = 'q';
       counter++;
     }
-    if (rank) {
+    if (rank == true) {
       if (dataList.value[i].temp == 0) {
         dataList.value[i][`r${props.inputData.round}_ranking`] = 0;
       } else {
@@ -483,11 +486,11 @@ function resultContentHandler(val: any) {
       <span v-if="gameData.module == 'ln'"> [{{ lanePhaseToString(props.inputData.round, 'zh-TW') }}]</span>
     </div>
     <div class="py-3 flex gap-3 items-center">
-      <label class="general-button blue">
+      <label class="general-button blue" v-if="!['fj', 'ft'].includes(props.inputData.remarks)">
         電計成績匯入
         <input type="file" class="hidden" ref="uploadEntity" accept=".csv" @change="uploadFile">
       </label>
-      <button class="general-button blue" @click="displayModal = 2">詳細紀錄</button>
+      <button class="general-button blue" v-if="['fj', 'ft'].includes(props.inputData.remarks)" @click="displayModal = 2">詳細紀錄</button>
       <button class="general-button blue" @click="displayModal = 4">成績聯合處理</button>
       <button class="general-button blue" @click="tempSave">暫存成績</button>
       <div class="flex-grow"></div>

@@ -42,6 +42,28 @@ let multiplePage = 0;
 let pageTemp: any = [];
 const reMount = ref(false);
 
+const realtimeFieldData: any = ref({
+  last_name_ch: '',
+  first_name_ch: '',
+  org_name_ch: '',
+  attempt: '',
+  wind: '',
+});
+
+async function getRealtimeFieldData() {
+  const temp = await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/temp/realtimeFieldData`);
+  if (temp.temp_id != undefined) {
+    const data = JSON.parse(temp.temp_data);
+    realtimeFieldData.value.last_name_ch = data.last_name_ch;
+    realtimeFieldData.value.first_name_ch = data.first_name_ch;
+    realtimeFieldData.value.org_name_ch = data.org_name_ch;
+    realtimeFieldData.value.attempt = data.attempt;
+    realtimeFieldData.value.wind = data.wind;
+    realtimeFieldData.value.order = data.order;
+    realtimeFieldData.value.index = data.index;
+  }
+}
+
 function formatTime(milliseconds: number): string {
     let totalSeconds: number = Math.floor(milliseconds / 1000);
     let minutes: string = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
@@ -58,7 +80,9 @@ async function getStatusData() {
     alert('請先建立即時成績資訊');
     return;
   }
-  
+  if (realtimeData.value.displayMode == 6) {
+    getRealtimeFieldData();
+  }
   if (realtimeData.value.hardRefresh + 20000 > Date.now() && route.query.timestamp != realtimeData.value.hardRefresh) {
     route.query.timestamp = realtimeData.value.hardRefresh;
     location.href = location.href.split('?')[0] + `?timestamp=${realtimeData.value.hardRefresh}`;
@@ -85,7 +109,7 @@ async function getStatusData() {
     });
     let tempList: any = [];
     athleteList.value.sort((a: any, b: any) => { return a[`r${realtimeData.value.event.round}_heat`] - b[`r${realtimeData.value.event.round}_heat`] ||  a[`r${realtimeData.value.event.round}_lane`] - b[`r${realtimeData.value.event.round}_lane`] });
-    if (realtimeData.value.displayMode == 3) {
+    if (realtimeData.value.displayMode == 3 || realtimeData.value.displayMode == 4) {
       tempList = JSON.parse(JSON.stringify(athleteList.value));
       tempList.sort((a: any, b: any) => {
         if (a[`r${realtimeData.value.event.round}_ranking`] === 0 && b[`r${realtimeData.value.event.round}_ranking`] === 0) {
@@ -108,18 +132,18 @@ async function getStatusData() {
         return a[`r${realtimeData.value.event.round}_heat`] - b[`r${realtimeData.value.event.round}_heat`] ||  a[`r${realtimeData.value.event.round}_lane`] - b[`r${realtimeData.value.event.round}_lane`];
       });
     }
-    if (realtimeData.value.athleteNum > 10) {
-      multiplePage = Math.ceil(realtimeData.value.athleteNum / 10);
+    const pageLimit = 10;
+    if (realtimeData.value.athleteNum > pageLimit) {
+      multiplePage = Math.ceil(realtimeData.value.athleteNum / pageLimit);
       pageTemp = [];
       for (let i = 0; i < multiplePage; i++) {
-        pageTemp.push(tempList.slice(i * 10, (i + 1) * 10));
+        pageTemp.push(tempList.slice(i * pageLimit, (i + 1) * pageLimit));
       }
       displayList.value = pageTemp[0];
     } else {
       displayList.value = tempList;
     }
     setTimeout(() => {
-      console.log(displayList.value)
       reMount.value = true;
     }, 1000);
   }
@@ -152,8 +176,11 @@ setInterval(() => {
   } else {
     counter --;
   }
-  if (counter % 6 === 0) {
+  if (counter % 10 === 0) {
     getStatusData();
+  }
+  if (counter % 15 === 0) {
+    getRealtimeFieldData();
   }
   if (counter % 10 === 0) {
     if (multiplePage > 1) {
@@ -212,7 +239,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         <div class="text-lg">大會時間 Official Time</div>
       </div>
       <div class="flex-grow"></div>
-      <div class="flex items-end gap-3 bg-white text-indigo-950 px-5 pb-1" v-if="realtimeData.displayMode != 3">
+      <div class="flex items-end gap-3 bg-white text-indigo-950 px-5 pb-1" v-if="realtimeData.displayMode != 3 && realtimeData.displayMode != 4">
         <div>
           <div class="text-3xl">組別</div>
           <div class="text-xl">Heat</div>
@@ -230,8 +257,37 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         <div class="text-2xl">全國紀錄 NR：——</div>
       </div>
     </div>
-    <table class="result-table">
-      <tr>
+    <table class="result-table" v-if="realtimeData.displayMode != 6">
+      <thead v-if="realtimeData.displayMode == 4">
+        <tr>
+          <th rowspan="2">
+            <div class="th-ch">名次</div>
+            <div class="th-en">Place</div>
+          </th>
+          <th rowspan="2">
+            <div class="th-ch">所屬單位</div>
+            <div class="th-en">Affiliation</div>
+          </th>
+          <th rowspan="2">
+            <div class="th-ch">姓名</div>
+            <div class="th-en">Name</div>
+          </th>
+          <th colspan="6" class="th-en" style="border: 0;">詳細記錄 Attempts</th>
+          <th rowspan="2">
+            <div class="th-ch">成績</div>
+            <div class="th-en">Result</div>
+          </th>
+        </tr>
+        <tr class="th-ch">
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+        </tr>
+      </thead>
+      <tr v-else>
         <th class="w-1/6">
           <div v-if="realtimeData.displayMode == 3">
             <div class="th-ch">名次</div>
@@ -256,12 +312,12 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         </th>
         <th class="w-1/6">
           <div v-if="realtimeData.displayMode == 0">
-            <div class="th-ch">參考成績</div>
+            <div class="th-ch">即時成績</div>
             <div class="th-en">Live Result</div>
           </div>
           <div v-if="realtimeData.displayMode == 1">
-            <div class="th-ch">晉級成績</div>
-            <div class="th-en">Adv. Result</div>
+            <div class="th-ch">參考成績</div>
+            <div class="th-en">Prev. Result</div>
           </div>
           <div v-if="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">
             <div class="th-ch">成績</div>
@@ -280,7 +336,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
           <template v-if="item != null">
             <td>
               <div class="lane-box">
-                <div class="lane-box-text" v-if="realtimeData.displayMode != 3">{{ item[`r${realtimeData.event.round}_lane`] }}</div>
+                <div class="lane-box-text" v-if="realtimeData.displayMode != 3 && realtimeData.displayMode != 4">{{ item[`r${realtimeData.event.round}_lane`] }}</div>
                 <div class="lane-box-text" v-else>{{ item[`r${realtimeData.event.round}_ranking`] > 0 ? item[`r${realtimeData.event.round}_ranking`] : '-' }}</div>
               </div>
             </td>
@@ -294,11 +350,16 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
             <td>
               <div class="content-text">{{ item.last_name_ch }}{{ item.first_name_ch }}</div>
             </td>
+            <template v-if="realtimeData.displayMode == 4 && item[`r${realtimeData.event.round}_options`].performance != undefined">
+              <td v-for="i in 6" :key="i">
+                <div class="content-text" v-if="item[`r${realtimeData.event.round}_options`].performance.attempt[i-1] != undefined">{{ item[`r${realtimeData.event.round}_options`].performance.attempt[i-1] }}</div>
+              </td>
+            </template>
             <td>
               <div class="content-text" v-show="realtimeData.displayMode == 1">{{ item[`${roundList[prePhase]}_result`] }}</div>
-              <div class="content-text" v-show="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">{{ item[`r${realtimeData.event.round}_result`] }}</div>
+              <div class="content-text" v-show="realtimeData.displayMode == 2 || realtimeData.displayMode == 3 || realtimeData.displayMode == 4">{{ item[`r${realtimeData.event.round}_result`] }}</div>
             </td>
-            <td>
+            <td v-if="realtimeData.displayMode != 4">
               <div class="content-text" v-show="realtimeData.displayMode == 1 && (item[`r${realtimeData.event.round}_result`] == 'DQ' || item[`r${realtimeData.event.round}_result`] == 'DNS')">{{ item[`r${realtimeData.event.round}_result`] }}</div>
               <div v-if="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">
                 <span v-if="item[`r${realtimeData.event.round}_options`].break != null" class="px-1 py-0.5 bg-blue-600">{{ item[`r${realtimeData.event.round}_options`].break }}</span>
@@ -309,6 +370,57 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         </tr>
       </template>
     </table>
+    <div v-if="realtimeData.displayMode == 6" class="flex items-stretch gap-10 h-full p-5">
+      <div class="basis-1/2 flex flex-col justify-between">
+        <div class="field-box">
+          <div class="title">
+            <div class="text-ch">所屬單位</div>
+            <div class="text-en">Affiliation</div>
+          </div>
+          <div class="content">{{ realtimeFieldData.org_name_ch }}</div>
+        </div>
+        <div class="field-box">
+          <div class="title">
+            <div class="text-ch">姓名</div>
+            <div class="text-en">Name</div>
+          </div>
+          <div class="content">{{ realtimeFieldData.last_name_ch }}{{ realtimeFieldData.first_name_ch }}</div>
+        </div>
+        <div class="field-box">
+          <div class="title">
+            <div class="text-ch">組別</div>
+            <div class="text-en">Heat</div>
+          </div>
+          <div class="content">{{ realtimeData.selectedHeat }}</div>
+        </div>
+        <div class="field-box">
+          <div class="title">
+            <div class="text-ch">號碼</div>
+            <div class="text-en">No.</div>
+          </div>
+          <div class="content">{{ realtimeFieldData.order }}</div>
+        </div>
+        <div class="field-box">
+          <div class="title">
+            <div class="text-ch">輪次</div>
+            <div class="text-en">Attempt</div>
+          </div>
+          <div class="content">{{ realtimeFieldData.index }}</div>
+        </div>
+      </div>
+      <div class="basis-1/2">
+        <div class="border-2 rounded-xl flex flex-col h-full">
+          <div class="rounded-t-lg bg-white text-indigo-950 text-3xl py-4 px-5">成績 Result</div>
+          <div class="flex-grow"></div>
+          <div class="px-5 text-center" v-if="realtimeFieldData.attempt == 'X'">
+            <div style="font-size: 12rem">╳</div>
+          </div>
+          <div style="font-size: 12rem" class="px-5 text-center animate-pulse" v-else>{{ realtimeFieldData.attempt }}</div>
+          <div class="flex-grow"></div>
+          <div class="py-4 px-5 text-5xl text-right animate-pulse" v-if="realtimeFieldData.wind != '' && realtimeFieldData.wind != 'NWI'">風速 Wind：{{ realtimeFieldData.wind }}</div>
+        </div>
+      </div>
+    </div>
     <div class="flex items-center" v-show="realtimeData.displayMode == 0">
       <div>
         <div class="py-2 px-10 rounded-xl bg-blue-600 text-center shadow">
@@ -344,7 +456,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
   td {
     @apply border-b-[1px] border-white text-2xl 3xl:text-3xl pb-0 px-0 pt-[1px];
   }
-  tr:nth-child(even) {
+  tr:nth-child(even) > td {
     @apply bg-blue-950;
   }
   tr:last-child > td {
@@ -382,5 +494,20 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
 .list-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+.field-box {
+  @apply border-2 rounded-xl flex items-center;
+  .title {
+    @apply rounded-l-lg basis-1/3 bg-white text-indigo-950 text-2xl py-1.5 px-5;
+  }
+  .content {
+    @apply basis-2/3 text-3xl py-1.5 px-5
+  }
+  .text-ch {
+    @apply text-2xl;
+  }
+  .text-en {
+    @apply text-xl;
+  }
 }
 </style>

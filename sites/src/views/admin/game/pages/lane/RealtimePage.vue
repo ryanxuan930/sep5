@@ -58,6 +58,7 @@
       if (event[`r${input.round}_heat`] > heatNum.value) {
         heatNum.value = event[`r${input.round}_heat`];
       }
+      event[`r${input.round}_options`] = JSON.parse(event[`r${input.round}_options`]); 
     });
   }
 
@@ -109,6 +110,12 @@
     <div class="text-2xl font-medium item flex items-center">
       <div>競賽即時資訊管理系統</div>
       <div class="flex-grow"></div>
+      <div>現在時間：
+        <span class="font-semibold">
+          {{ currentTime.getFullYear() }} / {{ (currentTime.getMonth() + 1).toString().padStart(2,'0')  }} / {{ currentTime.getDate().toString().padStart(2,'0')  }} {{ currentTime.getHours().toString().padStart(2,'0')  }} : {{ currentTime.getMinutes().toString().padStart(2,'0')  }} : {{ currentTime.getSeconds().toString().padStart(2,'0') }}
+        </span>
+      </div>
+      <div class="flex-grow"></div>
       <div class="flex items-center gap-2">
         <button class="general-button blue text-base" @click="playStart">開始比賽</button>
         <button class="general-button blue text-base" @click="playUp">廣播開始</button>
@@ -118,21 +125,9 @@
     </div>
     <div class="grid grid-cols-2 gap-5 flex-grow overflow-hidden">
       <div class="flex flex-col gap-5 h-full overflow-hidden">
-        <div class="grid grid-cols-2 gap-5">
-          <div class="item">
-            <div class="title">現在時間</div>
-            <div>{{ currentTime.getFullYear() }} / {{ (currentTime.getMonth() + 1).toString().padStart(2,'0')  }} / {{ currentTime.getDate().toString().padStart(2,'0')  }}</div>
-            <div class="text-2xl md:text-2xl lg:text-3xl xl:lg:text-4xl font-semibold">{{ currentTime.getHours().toString().padStart(2,'0')  }} : {{ currentTime.getMinutes().toString().padStart(2,'0')  }} : {{ currentTime.getSeconds().toString().padStart(2,'0') }}</div>
-          </div>
-          <div class="item">
-            <div class="title">即時氣象資訊</div>
-            <hr class="my-1">
-          </div>
-        </div>
         <div class="item flex-grow flex flex-col h-full overflow-hidden">
-          <div class="title">場次顯示設定</div>
           <div class="flex-grow flex flex-col h-full overflow-hidden" v-if="selectedEvent !== null">
-            <div class="text-lg py-1">{{ selectedEvent.division_ch }} {{ selectedEvent.event_ch }} [{{ lanePhaseToString(selectedEvent.round, 'zh-TW') }}]</div>
+            <div class="text-lg py-1 title">{{ selectedEvent.division_ch }} {{ selectedEvent.event_ch }} [{{ lanePhaseToString(selectedEvent.round, 'zh-TW') }}]</div>
             <div class="flex items-center gap-3 p-2">
               <div>顯示方式：</div>
               <select v-model="displayMode" class="flex-grow border rounded">
@@ -140,28 +135,46 @@
                 <option value="1">組別道次</option>
                 <option value="2">單組成績</option>
                 <option value="3">輪播成績</option>
+                <option value="4">田賽遠度詳細記錄</option>
+                <option value="5">田賽高度詳細記錄</option>
+                <option value="6">田賽即時成績</option>
               </select>
               <button class="general-button blue" @click="submitDisplay">發送</button>
             </div>
-            <div class="flex">
-              <div @click="selectedHeat = item" :class="{'py-1 px-5 bg-blue-300 text-white rounded-t cursor-pointer': true,'bg-blue-400': selectedHeat == item}" v-for="(item, index) in heatNum" :key="index">第{{ item }}組</div>
+            <div class="flex cursor-pointer">
+              <button @click="selectedHeat = item" :class="{'py-1 px-5 bg-blue-300 text-white rounded-t cursor-pointer': true,'bg-blue-400': selectedHeat == item}" v-for="(item, index) in heatNum" :key="index">第{{ item }}組</button>
+              <button @click="selectedHeat = 0" :class="{'py-1 px-5 bg-blue-300 text-white rounded-t cursor-pointer': true,'bg-blue-400': selectedHeat == 0}">全部</button>
             </div>
             <div class="overflow-auto">
               <table class="result-table">
                 <tr>
+                  <th v-if="selectedHeat == 0">組別</th>
                   <th>道次</th>
                   <th>單位</th>
                   <th>姓名/隊名</th>
                   <th>成績</th>
+                  <th v-if="selectedHeat == 0">排名</th>
                 </tr>
                 <template v-for="(item, index) in eventData" :key="index">
-                  <tr v-if="selectedHeat == item[`r${selectedEvent.round}_heat`]">
+                  <tr v-if="(selectedHeat == item[`r${selectedEvent.round}_heat`] || selectedHeat == 0) && item[`r${selectedEvent.round}_heat`] > 0 && item[`r${selectedEvent.round}_lane`] > 0">
+                    <td v-if="selectedHeat == 0">{{ item[`r${selectedEvent.round}_heat`] }}</td>
                     <td>{{ item[`r${selectedEvent.round}_lane`] }}</td>
                     <td v-if="!Config.deptAsClass">{{ item.org_name_ch }} {{ item.dept_name_ch }}</td>
                     <td v-else>{{ item.dept_name_ch }}</td>
                     <td v-if="selectedEvent.multiple == 1">{{ item.team_name }}</td>
                     <td v-else>{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
                     <td v-if="item[`r${selectedEvent.round}_result`]!='OK'">{{ item[`r${selectedEvent.round}_result`] }}</td>
+                    <td v-if="selectedHeat == 0">{{ item[`r${selectedEvent.round}_ranking`] }}</td>
+                  </tr>
+                  <tr v-if="selectedEvent.remarks == 'fj' || selectedEvent.remarks == 'ft'">
+                    <td :colspan="selectedHeat == 0 ? 6 : 4" class="bg-blue-50 text-xs text-gray-600 border-b text-center">
+                      <div v-if="item[`r${selectedEvent.round}_options`].performance != undefined && item[`r${selectedEvent.round}_options`].performance.format != undefined && item[`r${selectedEvent.round}_options`].performance.format == 'distance'" class="grid grid-cols-7">
+                        <div>試跳(擲)</div>
+                        <div v-for="i in 6">{{ i }}</div>
+                        <div>成績</div>
+                        <div v-for="(attempt, indexB) in item[`r${selectedEvent.round}_options`].performance.attempt" :key="indexB">{{ attempt }}</div>
+                      </div>
+                    </td>
                   </tr>
                 </template>
               </table>

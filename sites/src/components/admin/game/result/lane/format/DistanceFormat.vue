@@ -2,8 +2,10 @@
 import { ref, inject, watch } from 'vue';
 import type { Ref } from 'vue';
 import { useUserStore } from '@/stores/user';
+import VueRequest from '@/vue-request';
 
 const store = useUserStore();
+const vr = new VueRequest(store.token);
 const gameData: any = inject('gameData');
 const props: any = defineProps(['inputData', 'athleteData', 'paramList']);
 const items: any = ref(props.athleteData);
@@ -173,8 +175,35 @@ watch(qualified, () => {
 
 const emit = defineEmits<{(e: 'returnData', value: any): any, (e: 'closeModal'): void}>();
 
-function save() {
+const selectedPos: Ref<number[]> = ref([0, 0]);
+function currentPos(row: number, col: number) {
+  selectedPos.value = [row, col];
+}
+
+async function save() {
   emit('returnData', items.value);
+  const currentData = {
+    last_name_ch: items.value[selectedPos.value[0]].last_name_ch,
+    last_name_en: items.value[selectedPos.value[0]].last_name_en,
+    first_name_ch: items.value[selectedPos.value[0]].first_name_ch,
+    first_name_en: items.value[selectedPos.value[0]].first_name_en,
+    org_name_ch: items.value[selectedPos.value[0]].org_name_ch,
+    org_name_en: items.value[selectedPos.value[0]].org_name_en,
+    order: items.value[selectedPos.value[0]][`r${props.inputData.round}_lane`],
+    attempt: items.value[selectedPos.value[0]][`r${props.inputData.round}_options`].performance.attempt[selectedPos.value[1]],
+    wind: items.value[selectedPos.value[0]][`r${props.inputData.round}_options`].performance.winds[selectedPos.value[1]],
+    index: selectedPos.value[1] + 1,
+  }
+  const temp = await vr.Get(`game/${gameData.value.sport_code}/${gameData.value.game_id}/common/temp/realtimeFieldData`);
+  let res: any = null;
+  if (temp.temp_id == undefined) {
+    res = await vr.Post(`game/${gameData.value.sport_code}/${gameData.value.game_id}/common/temp`, {temp_key: 'realtimeFieldData', temp_data: JSON.stringify(currentData)}, null, true, true);
+  } else {
+    res = await vr.Patch(`game/${gameData.value.sport_code}/${gameData.value.game_id}/common/temp/realtimeFieldData`, { temp_data: JSON.stringify(currentData)}, null, true, true);
+  }
+  if (res.status != 'A01') {
+      alert('即時資訊發送失敗');
+    }
 }
 </script>
 
@@ -220,30 +249,30 @@ function save() {
           </td>
           <td>{{ item[`r${props.inputData.round}_heat`] }}</td>
           <td>{{ item[`r${props.inputData.round}_lane`] }}</td>
-          <td>
+          <td @click="currentPos(index, 0)" :class="{'bg-blue-200': index == selectedPos[0] && selectedPos[1] == 0}">
             <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 0)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[0]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
             <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[0]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
-          <td>
+          <td @click="currentPos(index, 1)" :class="{'bg-blue-200': index == selectedPos[0] && selectedPos[1] == 1}">
             <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 1)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[1]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
             <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[1]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
-          <td>
+          <td @click="currentPos(index, 2)" :class="{'bg-blue-200': index == selectedPos[0] && selectedPos[1] == 2}">
             <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 2)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[2]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
             <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[2]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
           <td>{{ top3Handler(item[`r${props.inputData.round}_options`].performance.attempt) }}</td>
           <td>{{ item[`r${props.inputData.round}_options`].performance.first_rank }}</td>
           <td>{{ item[`r${props.inputData.round}_options`].performance.final_order }}</td>
-          <td>
+          <td @click="currentPos(index, 3)" :class="{'bg-blue-200': index == selectedPos[0] && selectedPos[1] == 3}">
             <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 3)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[3]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
             <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[3]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
-          <td>
+          <td @click="currentPos(index, 4)" :class="{'bg-blue-200': index == selectedPos[0] && selectedPos[1] == 4}">
             <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 4)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[4]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
             <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[4]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
-          <td>
+          <td @click="currentPos(index, 5)" :class="{'bg-blue-200': index == selectedPos[0] && selectedPos[1] == 5}">
             <input type="text" class="input-blank" @keyup.enter="autoFormatter(item[`r${props.inputData.round}_options`].performance.attempt, 5)" placeholder="成績" v-model="item[`r${props.inputData.round}_options`].performance.attempt[5]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
             <input type="text" class="input-blank" placeholder="風速" v-model="item[`r${props.inputData.round}_options`].performance.winds[5]" :disabled="item[`r${props.inputData.round}_result`] == 'DNS' || item[`r${props.inputData.round}_result`] == 'DQ'">
           </td>
