@@ -83,7 +83,7 @@ for(const item of orginalData.value) {
               <div v-if="item[`r${[round]}_result`] == 'NM'">{{ item[`r${[round]}_result`] }}</div>
             </td>
             <td style="width: 4%">{{ item[`r${[round]}_lane`] }}</td>
-            <td style="width: 10%">
+            <td style="width: 9%">
               <div class="ch-content">{{ item.org_name_ch }}</div>
               <div v-if="gameStore.data.options.regUnit < 2" class="font9">{{ item.dept_name_ch }}</div>
               <!--
@@ -91,14 +91,14 @@ for(const item of orginalData.value) {
               <div v-if="gameStore.data.options.regUnit < 2" class="font7">{{ item.dept_name_en }}</div>
               -->
             </td>
-            <td style="width: 9%">
+            <td style="width: 12%">
               <div class="ch-content">
                 <span v-if="item.bib != undefined && item.bib != null">{{ item.bib }} </span>
                 {{ item.last_name_ch }}{{ item.first_name_ch }}
               </div>
               <div class="en-content" v-if="item.last_name_ch != item.last_name_en && item.first_name_ch != item.first_name_en && item.last_name_en != '' && item.first_name_en != ''"></div>
             </td>
-            <td style="width: 8%">{{ item[`${props.lastRound}_result`] }}</td>
+            <td style="width: 6%">{{ item[`${props.lastRound}_result`] }}</td>
             <td style="width: 7%"></td>
             <td style="width: 7%"></td>
             <td style="width: 7%"></td>
