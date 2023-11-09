@@ -131,12 +131,13 @@
             <div class="flex items-center gap-3 p-2">
               <div>顯示方式：</div>
               <select v-model="displayMode" class="flex-grow border rounded">
+                <!--<option value="7">公告顯示</option>-->
                 <option value="0">計時頁面</option>
                 <option value="1">組別道次</option>
                 <option value="2">單組成績</option>
                 <option value="3">輪播成績</option>
                 <option value="4">田賽遠度詳細記錄</option>
-                <option value="5">田賽高度詳細記錄</option>
+                <!--<option value="5">田賽高度詳細記錄</option>-->
                 <option value="6">田賽即時成績</option>
               </select>
               <button class="general-button blue" @click="submitDisplay">發送</button>
@@ -182,23 +183,31 @@
           </div>
         </div>
       </div>
-      <div class="item flex flex-col h-full overflow-hidden">
-        <div class="title">目前賽程</div>
-        <div class="overflow-auto">
-          <table class="config-table h-full">
-            <tr>
-              <th>時間</th>
-              <th>賽程</th>
-              <th>狀態</th>
-            </tr>
-            <template v-for="(item, index) in scheduleList" :key="index">
-              <tr @click="openEvent(item)" v-id="item.round > 0" :class="{'cursor-pointer hover:bg-blue-50 duration-150': true, 'active': item.status == 1 || item.status == 2}">
-                <td>{{ item.timestamp.substring(5,7) }}/{{ item.timestamp.substring(8,10) }} {{ item.timestamp.substring(11,16) }}</td>
-                <td>{{ item.division_ch }}{{ item.event_ch }}[{{ lanePhaseToString(item.round, 'zh-TW') }}]</td>
-                <td>{{ statusCh[item.status] }}</td>
+      <div class="flex flex-col h-full overflow-hidden gap-5">
+        <!--
+        <div class="item">
+          <div class="title">公告內容</div>
+          <textarea rows="2" class="w-full bg-gray-50 border p-1"></textarea>
+        </div>
+        -->
+        <div class="item flex-grow flex flex-col overflow-hidden h-full">
+          <div class="title">目前賽程</div>
+          <div class="overflow-auto">
+            <table class="config-table h-full">
+              <tr>
+                <th>時間</th>
+                <th>賽程</th>
+                <th>狀態</th>
               </tr>
-            </template>
-          </table>
+              <template v-for="(item, index) in scheduleList" :key="index">
+                <tr @click="openEvent(item)" v-id="item.round > 0" :class="{'cursor-pointer hover:bg-blue-50 duration-150': true, 'active': item.status == 1 || item.status == 2}">
+                  <td>{{ item.timestamp.substring(5,7) }}/{{ item.timestamp.substring(8,10) }} {{ item.timestamp.substring(11,16) }}</td>
+                  <td>{{ item.division_ch }}{{ item.event_ch }}[{{ lanePhaseToString(item.round, 'zh-TW') }}]</td>
+                  <td>{{ statusCh[item.status] }}</td>
+                </tr>
+              </template>
+            </table>
+          </div>
         </div>
       </div>
     </div>
