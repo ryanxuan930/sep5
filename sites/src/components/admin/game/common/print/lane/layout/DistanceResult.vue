@@ -51,7 +51,7 @@ dataList.value = temp1.concat(temp2);
           <div class="en-content">Attempts</div>
         </th>
         <th rowspan="2">
-          <div class="ch-content">最終成績</div>
+          <div class="ch-content">最佳成績</div>
           <div class="en-content">Result</div>
         </th>
         <th rowspan="2">
