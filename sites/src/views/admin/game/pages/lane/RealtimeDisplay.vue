@@ -260,7 +260,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         <div class="flex gap-1 items-center">
           <div class="text-2xl">大會紀錄 CR：</div>
           <div>
-            <div class="text-sm">{{ gamerecords.unit_name_ch }} {{ gamerecords.last_name_ch }}{{ gamerecords.last_name_en }}</div>
+            <div class="text-sm">{{ gamerecords.unit_name_ch }} {{ gamerecords.last_name_ch }}{{ gamerecords.first_name_ch }}</div>
             <div class="text-3xl">{{ gamerecords.result }}</div>
           </div>
         </div>
