@@ -203,7 +203,7 @@ async function submitAll(rank = true) {
       dataList.value[i].temp = 0;
     }
     if (isNaN(dataList.value[i].temp)) {
-      
+
     }
     dataList.value[i][`r${props.inputData.round}_options`].qualified = '*';
     dataList.value[i][`r${props.inputData.round}_options`].break = null;
@@ -520,7 +520,10 @@ function resultContentHandler(val: any) {
         <tr v-show="item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0">
           <td>{{ item.org_name_full_ch }}</td>
           <td>{{ item.dept_name_ch }}</td>
-          <td v-if="props.inputData.multiple == 0">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
+          <td v-if="props.inputData.multiple == 0">
+            <span v-if="item.bib != undefined && item.bib != null">{{ item.bib }} </span>
+            {{ item.last_name_ch }}{{ item.first_name_ch }}
+          </td>
           <td v-else>{{ item.team_name }}</td>
           <template v-if="gameData.module == 'ln'">
             <td>{{ item[`r${props.inputData.round}_heat`] }}</td>

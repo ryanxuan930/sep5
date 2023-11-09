@@ -92,7 +92,10 @@ for(const item of orginalData.value) {
               -->
             </td>
             <td style="width: 9%">
-              <div class="ch-content">{{ item.last_name_ch }}{{ item.first_name_ch }}</div>
+              <div class="ch-content">
+                <span v-if="item.bib != undefined && item.bib != null">{{ item.bib }} </span>
+                {{ item.last_name_ch }}{{ item.first_name_ch }}
+              </div>
               <div class="en-content" v-if="item.last_name_ch != item.last_name_en && item.first_name_ch != item.first_name_en && item.last_name_en != '' && item.first_name_en != ''"></div>
             </td>
             <td style="width: 8%">{{ item[`${props.lastRound}_result`] }}</td>

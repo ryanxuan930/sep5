@@ -156,7 +156,10 @@ function setLegs(input: any) {
         <tr v-if="item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`]">
           <td>{{ item.org_name_full_ch }}</td>
           <td>{{ item.dept_name_ch }}</td>
-          <td v-if="props.inputData.multiple == 0">{{ item.last_name_ch }}{{ item.first_name_ch }}</td>
+          <td v-if="props.inputData.multiple == 0">
+            <span v-if="item.bib != undefined && item.bib != null">{{ item.bib }} </span>
+            {{ item.last_name_ch }}{{ item.first_name_ch }}
+          </td>
           <td v-else>{{ item.team_name }}</td>
           <template v-if="gameData.module == 'ln'">
             <td>{{ item[`r${props.inputData.round}_heat`] }}</td>
