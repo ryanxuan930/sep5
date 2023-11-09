@@ -49,7 +49,7 @@ for(const item of orginalData.value) {
           </th>
           <th rowspan="2">
             <div class="font10">參考成績</div>
-            <div class="font8">Season Best</div>
+            <div class="font8">Prev. Result</div>
           </th>
           <th colspan="36" class="font9 text-center w-[46%]">高度 Height</th>
           <th rowspan="2">

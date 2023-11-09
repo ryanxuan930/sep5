@@ -49,7 +49,7 @@ for(const item of orginalData.value) {
           </th>
           <th>
             <div class="font10">參考成績</div>
-            <div class="font8">Season Best</div>
+            <div class="font8">Prev. Result</div>
           </th>
           <th class="text-center">1</th>
           <th class="text-center">2</th>

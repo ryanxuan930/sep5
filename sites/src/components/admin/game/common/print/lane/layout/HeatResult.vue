@@ -54,7 +54,7 @@ for(const item of orginalData.value) {
           </th>
           <th>
             <div class="ch-content">參考成績</div>
-            <div class="en-content">Season Best</div>
+            <div class="en-content">Prev. Result</div>
           </th>
           <th>
             <div class="ch-content">比賽成績</div>
