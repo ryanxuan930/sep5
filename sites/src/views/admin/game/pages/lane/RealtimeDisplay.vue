@@ -168,6 +168,9 @@ setInterval(() => {
   }
 }, 1);
 
+const emojiList = ['😂', '🤣', '🥲', '😝', '🤨', '🧐', '😖', '😭', '😣', '😵‍💫', '😤']
+const randomIndex = ref(0);
+
 let currentPage = 0;
 
 setInterval(() => {
@@ -181,6 +184,7 @@ setInterval(() => {
   }
   if (counter % 10 === 0) {
     getRealtimeFieldData();
+    randomIndex.value = Math.floor(Math.random() * emojiList.length);
   }
   if (counter % 10 === 0) {
     if (multiplePage > 1) {
@@ -253,8 +257,14 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         <div class="text-xl">Official Result</div>
       </div>
       <div class="pb-1">
-        <div class="text-2xl">大會紀錄 CR：{{ gamerecords.result }}</div>
-        <div class="text-2xl">全國紀錄 NR：——</div>
+        <div class="flex gap-1 items-center">
+          <div class="text-2xl">大會紀錄 CR：</div>
+          <div>
+            <div class="text-sm">{{ gamerecords.unit_name_ch }} {{ gamerecords.last_name_ch }}{{ gamerecords.last_name_en }}</div>
+            <div class="text-3xl">{{ gamerecords.result }}</div>
+          </div>
+        </div>
+        <!--<div class="text-2xl">全國紀錄 NR：——</div>-->
       </div>
     </div>
     <table class="result-table" v-if="realtimeData.displayMode != 6">
@@ -413,7 +423,10 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
           <div class="rounded-t-lg bg-white text-indigo-950 text-3xl py-4 px-5">成績 Result</div>
           <div class="flex-grow"></div>
           <div class="px-5 text-center" v-if="realtimeFieldData.attempt == 'X'">
-            <div style="font-size: 12rem">╳</div>
+            <div class="flex items-center justify-center gap-3" style="font-size: 12rem">
+              <div>╳</div>
+              <div class="animate-spin">{{ emojiList[randomIndex] }}</div>
+            </div>
           </div>
           <div style="font-size: 12rem" class="px-5 text-center animate-pulse" v-else>{{ realtimeFieldData.attempt }}</div>
           <div class="flex-grow"></div>
