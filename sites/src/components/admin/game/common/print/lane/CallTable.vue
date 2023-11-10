@@ -128,12 +128,12 @@ function getTargetPhase(current: number, params: any) {
         </div>
         <div class="content-box">
           <div class="title">
-            <div class="ch-content">大會紀錄</div>
-            <div class="en-content">CR</div>
+            <div class="ch-content whitespace-nowrap">大會紀錄</div>
+            <div class="en-content whitespace-nowrap">CR</div>
           </div>
           <div>
             <div class="font7">{{ recordList.unit_name_ch }}</div>
-            <div class="font10">{{ recordList.last_name_ch }}{{ recordList.first_name_ch }} {{ recordList.result }}</div>
+            <div class="font10 whitespace-break-spaces">{{ recordList.last_name_ch }}{{ recordList.first_name_ch }} {{ recordList.result }}</div>
             <div class="font7">{{ recordList.set_date }}</div>
           </div>
         </div>
