@@ -13,7 +13,7 @@
   const gameId = route.params.gameId;
   const onDrag = ref(false);
   const isLoading = ref(false);
-  const phaseList = ['其他', '預賽', '第二輪', '準決賽', '決賽'];
+  const phaseList = ['其他', '第一輪', '預賽', '準決賽', '決賽'];
   const fixedList = [
     {
       time: '00:00',
