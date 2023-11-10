@@ -67,7 +67,7 @@ async function exportData(input: any) {
       if (res[j][`r${[input.round]}_heat`] == i + 1) {
         if (res[j][`r${[input.round]}_result`] != 'DNS' && res[j][`r${[input.round]}_result`] != 'DNF' && res[j][`r${[input.round]}_result`] != 'NM' && res[j][`r${[input.round]}_result`] != 'DQ') {
           if (input.multiple == 0) {
-            data.push([res[j].bib == null ? res[j].u_id : res[j].bib, res[j][`r${[input.round]}_lane`], res[j].first_name_ch, res[j].last_name_ch, res[j].org_name_ch]);
+            data.push([res[j].bib == null ? res[j].u_id : String(res[j].bib), res[j][`r${[input.round]}_lane`], res[j].first_name_ch, res[j].last_name_ch, res[j].org_name_ch]);
           } else {
             data.push([res[j].team_id, res[j][`r${[input.round]}_lane`], res[j].team_name, '', res[j].org_name_ch]);
           }
