@@ -424,7 +424,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
           <div class="rounded-t-lg bg-white text-indigo-950 text-3xl py-4 px-5">成績 Result</div>
           <div class="flex-grow"></div>
           <div class="px-5 text-center" v-if="realtimeFieldData.attempt == 'X'">
-            <div class="flex items-center justify-center gap-3" style="font-size: 12rem">
+            <div class="flex items-center justify-center gap-3" style="font-size: 30vh">
               <div>╳</div>
               <div class="animate-spin">{{ emojiList[randomIndex] }}</div>
             </div>
