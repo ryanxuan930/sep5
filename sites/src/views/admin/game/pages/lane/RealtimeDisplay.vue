@@ -429,7 +429,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
               <div class="animate-spin">{{ emojiList[randomIndex] }}</div>
             </div>
           </div>
-          <div style="font-size: 12rem" class="px-5 text-center animate-pulse" v-else>{{ realtimeFieldData.attempt }}</div>
+          <div style="font-size: 30vh" class="px-5 text-center animate-pulse" v-else>{{ realtimeFieldData.attempt }}</div>
           <div class="flex-grow"></div>
           <div class="py-4 px-5 text-5xl text-right animate-pulse" v-if="realtimeFieldData.wind != '' && realtimeFieldData.wind != 'NWI'">風速 Wind：{{ realtimeFieldData.wind }}</div>
         </div>
