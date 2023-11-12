@@ -134,8 +134,9 @@ function tempRank(num: number) {
           return bNum - aNum;
       }
     }
-    const aX = a.filter((item: string) => item == 'X').length;
-    const bX = b.filter((item: string) => item == 'X').length;
+    console.log(a, b);
+    const aX = a.attempt.filter((item: string) => item == 'X').length;
+    const bX = b.attempt.filter((item: string) => item == 'X').length;
     return aX - bX;
   });
   /* set performance.first_rank from temps by u_id */
