@@ -104,7 +104,7 @@
             <div v-if="item[`r${[props.phaseNum]}_options`].windspeed != undefined && item[`r${[props.phaseNum]}_options`].windspeed != 'NWI'">WS：{{ item[`r${[props.phaseNum]}_options`].windspeed }}</div>
             <div v-if="item[`r${[props.phaseNum]}_options`].rt != undefined && item[`r${[props.phaseNum]}_options`].rt != 0">RT：{{ item[`r${[props.phaseNum]}_options`].rt }}</div>
             <div v-if="item[`r${props.phaseNum}_options`].sameResult != undefined">({{ item[`r${props.phaseNum}_options`].sameResult }})</div>
-            <div v-if="item[`r${props.phaseNum}_options`].remark != undefined">{{ item[`r${props.phaseNum}_options`].remark }}</div>
+            <div class="italic" v-if="item[`r${props.phaseNum}_options`].remark != undefined">{{ item[`r${props.phaseNum}_options`].remark }}</div>
             <template v-if="item[`r${props.phaseNum}_options`].break != undefined">
               <div v-if="item[`r${props.phaseNum}_options`].break != null">{{ item[`r${props.phaseNum}_options`].break }}</div>
             </template>
