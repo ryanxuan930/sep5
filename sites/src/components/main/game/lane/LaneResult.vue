@@ -316,10 +316,11 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
                           <div v-if="locale == 'en-US' && (athlete.dept_name_en != null || athlete.dept_name_en != '')">{{ athlete.dept_name_en }}</div>
                           <div v-else>{{ athlete.dept_name_ch }}</div>
                         </div>
-                        <div>
+                        <div v-if="athlete.team_name == undefined">
                           <div v-if="locale == 'en-US' && (athlete.last_name_en != null || athlete.last_name_en != '')">{{ athlete.first_name_en }} {{ athlete.last_name_en }}</div>
                           <div v-else>{{ athlete.last_name_ch }}{{ athlete.first_name_ch }}</div>
                         </div>
+                        <div v-else>{{ athlete.team_name }}</div>
                         <div>{{ athlete.r4_result }}</div>
                         <div class="flex gap-3 justify-center">
                           <template v-if="athlete.r4_options.cr != undefined">
