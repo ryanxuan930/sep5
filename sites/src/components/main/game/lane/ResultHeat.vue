@@ -5,9 +5,9 @@
   
   const props = defineProps(['inputData', 'phaseNum', 'isMultiple', 'gameData']);
   const dataList: any = ref([]);
-  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined];
+  const notAcceptResult = [null, 'null', 'DQ', 'DNS', 'DNF', 'NM', undefined, '', ' '];
   props.inputData.forEach((element: any) => {
-    if (element[`r${[props.phaseNum]}_heat`] > 0 && element[`r${[props.phaseNum]}_result`] > 0) {
+    if (element[`r${[props.phaseNum]}_heat`] > 0 && element[`r${[props.phaseNum]}_lane`] > 0) {
       element[`r${[props.phaseNum]}_options`] = JSON.parse(element[`r${[props.phaseNum]}_options`]);
       if (!notAcceptResult.includes(element[`r${props.inputData.round}_result`])) {
         element.temp = stringToMilliseconds(element[`r${props.inputData.round}_result`]);
@@ -99,6 +99,7 @@
             <div v-if="item[`r${[props.phaseNum]}_options`].windspeed != undefined">WS：{{ item[`r${[props.phaseNum]}_options`].windspeed }}</div>
             <div v-if="item[`r${[props.phaseNum]}_options`].rt != undefined">RT：{{ item[`r${[props.phaseNum]}_options`].rt }}</div>
             <div v-if="item[`r${props.phaseNum}_options`].sameResult != undefined">({{ item[`r${props.phaseNum}_options`].sameResult }})</div>
+            <div class="italic" v-if="item[`r${props.phaseNum}_options`].remark != undefined">{{ item[`r${props.phaseNum}_options`].remark }}</div>
             <template v-if="item[`r${props.phaseNum}_options`].break != undefined">
               <div v-if="item[`r${props.phaseNum}_options`].break != null">{{ item[`r${props.phaseNum}_options`].break }}</div>
             </template>
