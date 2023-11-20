@@ -33,7 +33,7 @@
       <button class="round-full-button blue" @click="displayModal = 1">報名系統設定</button>
       <button class="round-full-button blue" @click="displayModal = 2">依項目別統計</button>
       <button class="round-full-button blue" @click="displayModal = 3">個人報名資訊</button>
-      <button class="round-full-button blue" @click="displayModal = 4">團體報名資訊</button>
+      <button class="round-full-button blue" v-if="gameData.module != 'rd'" @click="displayModal = 4">團體報名資訊</button>
       <button class="round-full-button blue" @click="displayModal = 5">參賽選手名單</button>
       <button class="round-full-button blue" @click="displayModal = 6">報名資料下載</button>
       <button class="round-full-button blue" @click="displayModal = 7">紙本報名管理</button>

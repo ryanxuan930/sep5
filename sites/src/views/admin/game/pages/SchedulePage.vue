@@ -21,7 +21,7 @@
     <div class="section-box grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-4">
       <div class="md:col-span-2 lg:col-span-4 text-2xl">選手編配</div>
       <hr class="md:col-span-2 lg:col-span-4">
-      <button class="round-full-button blue" @click="displayModal = 1">賽別賽制設定</button>
+      <button class="round-full-button blue" v-if="gameData.module == 'ln'" @click="displayModal = 1">賽別賽制設定</button>
       <button v-if="gameData.module == 'ln' || gameData.module == 'rd'" class="round-full-button blue" @click="displayModal = 2">名次取數設定</button>
       <button v-if="gameData.module == 'ln'" class="round-full-button blue" @click="displayModal = 3">組別道次管理</button>
       <button v-if="gameData.module == 'ln' || gameData.module == 'rd'" class="round-full-button blue" @click="displayModal = 6">號碼布管理</button>

@@ -4,6 +4,7 @@
   import { useUserStore } from '@/stores/user';
   import { useRoute } from 'vue-router';
   import LaneMode from '@/components/admin/game/schedule/qualify/LaneMode.vue';
+  import RoadMode from '@/components/admin/game/schedule/qualify/RoadMode.vue';
 
   const store = useUserStore();
   const vr = new VueRequest(store.token);
@@ -17,6 +18,7 @@
 <template>
   <div>
     <LaneMode v-if="gameData.module == 'ln'"></LaneMode>
+    <RoadMode v-if="gameData.module == 'rd'"></RoadMode>
   </div>
 </template>
 
