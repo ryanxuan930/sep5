@@ -219,6 +219,7 @@ Route::group([
             Route::get('/by/count', [$ControllerClass, 'indexByCountFull']);
             Route::patch('/update/heat-lane', [$ControllerClass, 'updateHeatLane']);
             Route::patch('/update/result', [$ControllerClass, 'updateResult']);
+            Route::patch('/update/road-result', [$ControllerClass, 'updateRoadResult']);
         });
         Route::apiResource('group', GameGroupController::class);
         Route::group([
