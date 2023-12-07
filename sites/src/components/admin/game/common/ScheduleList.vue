@@ -8,6 +8,7 @@ import FullModal from '@/components/FullModal.vue';
 import SmallModal from '@/components/SmallModal.vue';
 import AthleteList from '@/components/admin/game/common/AthleteList.vue';
 import ResultList from '@/components/admin/game/common/ResultList.vue';
+import RoadResultList from '@/components/admin/game/common/road/ResultList.vue';
 import { exportCsv, lanePhaseToString } from '@/components/library/functions';
 
 const store = useUserStore();
@@ -172,7 +173,8 @@ async function setRealtimeResult() {
       <div class="overflow-auto h-full">
         <AthleteList v-if="displayModal == 1" :input-data="selectedEvent" display-mode="view"></AthleteList>
         <AthleteList v-if="displayModal == 2" :input-data="selectedEvent" display-mode="call" @close-modal="displayModal = 0" @refresh-page="getData()"></AthleteList>
-        <ResultList v-if="displayModal == 3" :input-data="selectedEvent" display-mode="input" @close-modal="displayModal = 0" @refresh-page="getData()"></ResultList>
+        <ResultList v-if="displayModal == 3 && gameData.module == 'ln'" :input-data="selectedEvent" display-mode="input" @close-modal="displayModal = 0" @refresh-page="getData()"></ResultList>
+        <RoadResultList v-if="displayModal == 3 && gameData.module == 'rd'" :input-data="selectedEvent" display-mode="input" @close-modal="displayModal = 0" @refresh-page="getData()"></RoadResultList>
       </div>
     </template>
   </FullModal>

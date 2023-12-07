@@ -177,7 +177,7 @@ class GameMaker {
             $table->string('ref_result',12)->default(0);
             $table->string('result',12)->default(0);
             $table->smallInteger('ranking')->default(0);
-            $table->json('options')->nullable();
+            $table->json('options')->nullable('{}');
         });
         Schema::create($header.'params', function(Blueprint $table){
             $table->id('param_id');

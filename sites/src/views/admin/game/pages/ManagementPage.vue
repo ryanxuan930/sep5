@@ -31,7 +31,7 @@
       <div class="col-span-4 text-2xl">賽程列表</div>
       <hr class="col-span-4">
       <div class="flex-grow h-full overflow-hidden">
-        <ScheduleList v-if="gameData.module == 'ln'" :displayMode="'call'"></ScheduleList>
+        <ScheduleList v-if="gameData.module == 'ln' || gameData.module == 'rd'" :displayMode="'call'"></ScheduleList>
       </div>
     </div>
   </div>

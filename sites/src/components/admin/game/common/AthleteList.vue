@@ -28,6 +28,8 @@ const isLoading = ref(false);
     for (let i = 0; i < dataList.value.length; i++) {
       dataList.value[i][`r${[props.inputData.round]}_options`] = JSON.parse(dataList.value[i][`r${[props.inputData.round]}_options`]);
     }
+  } else if (gameData.value.module == 'rd') {
+    dataList.value.sort((a: any, b: any) => a.bib - b.bib);
   }
   isLoading.value = false;
 })();
@@ -127,6 +129,7 @@ function setLegs(input: any) {
           <option value="field">跳遠</option>
           <option value="height">跳高</option>
           <option value="field">投擲</option>
+          <option value="road">路跑</option>
         </select>
       </div>
       <router-link class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/record/${printMode}`" target="_blank">成績記錄表</router-link>
@@ -153,7 +156,7 @@ function setLegs(input: any) {
         </template>
       </tr>
       <template v-for="(item, index) in dataList" :key="index">
-        <tr v-if="item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`]">
+        <tr v-if="(gameData.module == 'ln' && item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`]) || gameData.module == 'rd'">
           <td>{{ item.org_name_full_ch }}</td>
           <td>{{ item.dept_name_ch }}</td>
           <td v-if="props.inputData.multiple == 0">
@@ -184,7 +187,7 @@ function setLegs(input: any) {
           <td v-if="gameData.module == 'ln' && props.inputData.multiple == 1 && props.displayMode == 'call'">
             <button class="general-button blue" @click="setLegs(item)">設定</button>
           </td>
-          <template v-if="(gameData.module == 'ln' || gameData.module == 'rd') && props.displayMode == 'view'">
+          <template v-if="gameData.module == 'ln' && props.displayMode == 'view'">
             <td>
               <div v-if="item[`r${props.inputData.round}_result`] == '0'">尚未處理</div>
               <div v-else-if="item[`r${props.inputData.round}_result`] == 'OK'">完成檢錄</div>
@@ -198,7 +201,19 @@ function setLegs(input: any) {
               <div v-if="item[`r${props.inputData.round}_options`].sameResult != undefined">({{ item[`r${props.inputData.round}_options`].sameResult }})</div>
               <div v-if="item[`r${props.inputData.round}_options`].break != undefined">{{ item[`r${props.inputData.round}_options`].break == null? '':item[`r${props.inputData.round}_options`].break }}</div>
               <div v-if="item[`r${props.inputData.round}_options`].cr != undefined">{{ item[`r${props.inputData.round}_options`].cr ? 'CR':'' }}</div>
-              <div v-if="item[`r${props.inputData.round}_options`].cr != undefined" class="italic">{{ item[`r${props.inputData.round}_options`].remark }}</div>
+              <div v-if="item[`r${props.inputData.round}_options`].remark != undefined" class="italic">{{ item[`r${props.inputData.round}_options`].remark }}</div>
+            </td>
+          </template>
+          <template v-if="gameData.module == 'rd' && props.displayMode == 'view'">
+            <td>
+              <div v-if="item.result == '0'">尚未處理</div>
+              <div v-else>{{ item.result }}</div>
+            </td>
+            <td>{{ item.ranking }}</td>
+            <td>
+              <div v-if="item.options.qualified != undefined">{{ item.options.qualified }}</div>
+              <div v-if="item.options.break != undefined">{{ item.options.break == null? '':item.options.break }}</div>
+              <div v-if="item.options.remark != undefined" class="italic">{{ item.options.remark }}</div>
             </td>
           </template>
         </tr>
