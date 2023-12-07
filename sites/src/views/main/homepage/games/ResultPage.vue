@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject } from 'vue';
 import LaneResult from '@/components/main/game/lane/LaneResult.vue';
+import RoadResult from '@/components/main/game/road/RoadResult.vue';
 import { useI18n } from 'vue-i18n'
 
 const gameData: any = inject('gameData');
@@ -13,6 +14,7 @@ const { t, locale } = useI18n({
 <template>
   <div>
     <LaneResult v-if="gameData.module == 'ln'"></LaneResult>
+    <RoadResult v-if="gameData.module == 'rd'"></RoadResult>
   </div>
   <div class="p-2 text-sm">{{ t('live-result-reference-only') }}</div>
 </template>

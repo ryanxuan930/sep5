@@ -118,7 +118,7 @@ function setLegs(input: any) {
     </div>
     <div class="flex gap-2 pb-3 items-center">
       <div>報表列印：</div>
-      <div>
+      <div v-if="gameData.module == 'ln'">
         <select class="border-2 rounded px-1 py-0.5" v-model="printMode">
           <option value="heat">徑賽分組</option>
           <option value="800m">800M</option>
@@ -129,11 +129,11 @@ function setLegs(input: any) {
           <option value="field">跳遠</option>
           <option value="height">跳高</option>
           <option value="field">投擲</option>
-          <option value="road">路跑</option>
         </select>
       </div>
-      <router-link class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/record/${printMode}`" target="_blank">成績記錄表</router-link>
-      <router-link class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result/general`" target="_blank">成績總表</router-link>
+      <router-link v-if="gameData.module == 'ln'" class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/record/${printMode}`" target="_blank">成績記錄表</router-link>
+      <router-link v-if="gameData.module == 'ln'" class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result/general`" target="_blank">成績總表</router-link>
+      <router-link v-if="gameData.module == 'rd'" class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/road/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/result`" target="_blank">成績總表</router-link>
       <router-link v-if="['ts', 'tr', 'rr'].includes(props.inputData.remarks)" class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result/heat`" target="_blank">分組成績</router-link>
       <router-link v-if="['fj', 'ft'].includes(props.inputData.remarks)" class="general-button blue cursor-pointer" :to="`/admin/game/${route.params.sportCode}/${route.params.gameId}/print/lane/${props.inputData.schedule_id}/${props.inputData.division_id}/${props.inputData.event_code}/${props.inputData.multiple}/${props.inputData.round}/result/distance`" target="_blank">詳細成績</router-link>
     </div>

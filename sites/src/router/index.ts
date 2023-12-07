@@ -203,6 +203,12 @@ const router = createRouter({
               name: 'adminGameLaneResultPage',
               component: () => import('../components/admin/game/common/print/lane/ResultTable.vue'),
             },
+            // road
+            {
+              path: 'road/:scheduleId/:divisionId/:eventCode/result',
+              name: 'adminGameRoadResultPage',
+              component: () => import('../components/admin/game/common/print/road/ResultTable.vue'),
+            },
             // award
             {
               path: 'lane/:scheduleId/:divisionId/:eventCode/:multiple/:round/award/:printFormat',

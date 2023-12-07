@@ -70,8 +70,8 @@ async function submitAll(rank = true) {
     } else {
       dataList.value[i].temp = 0;
     }
-    dataList.value[i][`r${props.inputData.round}_options`].qualified = '*';
-    dataList.value[i][`r${props.inputData.round}_options`].break = null;
+    dataList.value[i].options.qualified = '*';
+    dataList.value[i].options.break = null;
   }
   // sort by heat and temp
   dataList.value.sort((a: any, b: any) => a.temp - b.temp);
@@ -110,10 +110,9 @@ async function submitAll(rank = true) {
       u_id: item.u_id,
       division_id: item.division_id,
       event_code: item.event_code,
-      phase: `r${props.inputData.round}`,
-      result: item[`r${props.inputData.round}_result`],
-      ranking: item[`r${props.inputData.round}_ranking`],
-      options: JSON.stringify(item[`r${props.inputData.round}_options`]),
+      result: item.result,
+      ranking: item.ranking,
+      options: JSON.stringify(item.options),
     });
   });
   res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/update/road-result`, dataset, null, true, true);
@@ -132,37 +131,30 @@ async function submitAll(rank = true) {
 
 const uploadEntity: any = ref(null);
 const fileName = ref('');
-const uploadData: any = ref([]);
+
+function importHandler(input: any) {
+  for(let i = 0; i < input.length; i++) {
+    for(let j = 0; j < dataList.value.length; j++) {
+      if (Number(dataList.value[j].bib) == Number(input[i][1])) {
+        dataList.value[j].result = input[i][2];
+      }
+    }
+  }
+  alert(`完成匯入${fileName.value}`);
+  fileName.value = '';
+  uploadEntity.value = null;
+}
+
 function uploadFile(event: any) {
   isLoading.value = true;
   fileName.value = event.target.files[0].name;
   const reader = new FileReader();
   reader.onload = function (e: any) {
-    uploadData.value = JSON.parse(JSON.stringify(csvToArrayTable(e.target.result, ',', 2)));
-    displayModal.value = 1;
+    importHandler(csvToArrayTable(e.target.result, ',', 1));
     isLoading.value = false;
     return;
   };
   reader.readAsText(event.target.files[0]);
-}
-function importHandler(input: any) {
-  for(let i = 0; i < input.length; i++) {
-    for(let j = 0; j < dataList.value.length; j++) {
-      if (props.inputData.multiple == 1) {
-        if (Number(dataList.value[j].team_id) == Number(input[i][1])) {
-          dataList.value[j][`r${props.inputData.round}_result`] = input[i][5];
-        }
-      } else {
-        if (Number(dataList.value[j].u_id) == Number(input[i][1])) {
-          dataList.value[j][`r${props.inputData.round}_result`] = input[i][5];
-        }
-      }
-    }
-  }
-  alert(`完成匯入${fileName.value}}`);
-  fileName.value = '';
-  uploadData.value = [];
-  uploadEntity.value = null;
 }
 const resultRef: any = ref([]);
 const remarkRef: any = ref([]);
