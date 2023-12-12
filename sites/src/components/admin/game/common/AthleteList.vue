@@ -29,6 +29,9 @@ const isLoading = ref(false);
       dataList.value[i][`r${[props.inputData.round]}_options`] = JSON.parse(dataList.value[i][`r${[props.inputData.round]}_options`]);
     }
   } else if (gameData.value.module == 'rd') {
+    dataList.value.forEach((item: any) => {
+      item.options = JSON.parse(item.options);
+    });
     dataList.value.sort((a: any, b: any) => a.bib - b.bib);
   }
   isLoading.value = false;
