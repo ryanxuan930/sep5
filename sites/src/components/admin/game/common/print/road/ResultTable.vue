@@ -24,7 +24,17 @@ const isLoading = ref(false);
   vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/main/params/${divisionId}/${eventCode}`, paramList);
   vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/schedule/${scheduleId}`, eventData);
   await vr.Get(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/by/event/${divisionId}/${eventCode}`, dataList);
-  dataList.value.sort((a: any, b: any) => a.ranking - b.ranking);
+  const temp1: any = [];
+  const temp2: any = [];
+  dataList.value.forEach((element: any) => {
+    if (element.ranking > 0) {
+      temp1.push(element);
+    } else {
+      temp2.push(element);
+    }
+  });
+  temp1.sort((a: any, b: any) => a.ranking- b.ranking);
+  dataList.value = temp1.concat(temp2);
   document.title = gameStore.data.game_name_ch + '_' + eventData.value.division_ch + '_' + eventData.value.event_ch + '_' + '成績公告單';
   isLoading.value = false;
   setTimeout(() => {
