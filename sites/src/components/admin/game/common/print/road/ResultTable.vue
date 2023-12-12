@@ -27,6 +27,7 @@ const isLoading = ref(false);
   const temp1: any = [];
   const temp2: any = [];
   dataList.value.forEach((element: any) => {
+    element.options = JSON.parse(element.options);
     if (element.ranking > 0) {
       temp1.push(element);
     } else {
