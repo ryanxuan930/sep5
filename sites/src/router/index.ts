@@ -215,6 +215,16 @@ const router = createRouter({
               name: 'adminGameLaneAwardPage',
               component: () => import('../components/admin/game/award/lane/PrintAward.vue'),
             },
+            {
+              path: 'road/:scheduleId/:divisionId/:eventCode/award/:printFormat',
+              name: 'adminGameRoadAwardPage',
+              component: () => import('../components/admin/game/award/road/PrintAward.vue'),
+            },
+            {
+              path: 'road/:scheduleId/:divisionId/:eventCode/complete/:printFormat',
+              name: 'adminGameRoadCompletePage',
+              component: () => import('../components/admin/game/award/road/PrintComplete.vue'),
+            },
           ]
         },
         {

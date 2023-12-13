@@ -153,7 +153,7 @@ async function setRealtimeResult() {
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 1 && item.status < 4 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="openEvent(item, 3)">成績</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status == 3 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="sendResult(item.schedule_id)">送出</button>
               <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status == 4 && (props.displayMode == 'result' || props.displayMode == 'input')" class="general-button blue" @click="retriveResult(item.schedule_id)">撤回</button>
-              <button v-if="(gameData.module == 'ln' || gameData.module == 'rd') && item.status > 3 && (props.displayMode == 'print' || props.displayMode == 'award') && item.round == 4" class="general-button blue" @click="openEvent(item, 4)">獎狀列印</button>
+              <button v-if="((gameData.module == 'ln' &&item.round == 4) || gameData.module == 'rd') && item.status > 3 && (props.displayMode == 'print' || props.displayMode == 'award')" class="general-button blue" @click="openEvent(item, 4)">獎狀列印</button>
             </div>
           </td>
         </tr>
@@ -197,7 +197,9 @@ async function setRealtimeResult() {
               <option v-if="awardFormat.length == 0" value="NaN" disabled>尚未建立格式</option>
             </select>
           </label>
-          <router-link class="round-full-button blue block text-center" :to="`/admin/game/${sportCode}/${gameId}/print/lane/${selectedEvent.schedule_id}/${selectedEvent.division_id}/${selectedEvent.event_code}/${selectedEvent.multiple}/${selectedEvent.round}/award/${printFormat}`" target="_blank">列印</router-link>
+          <router-link v-if="gameData.module == 'ln'" class="round-full-button blue block text-center" :to="`/admin/game/${sportCode}/${gameId}/print/lane/${selectedEvent.schedule_id}/${selectedEvent.division_id}/${selectedEvent.event_code}/${selectedEvent.multiple}/${selectedEvent.round}/award/${printFormat}`" target="_blank">列印</router-link>
+          <router-link v-if="gameData.module == 'rd'" class="round-full-button blue block text-center" :to="`/admin/game/${sportCode}/${gameId}/print/road/${selectedEvent.schedule_id}/${selectedEvent.division_id}/${selectedEvent.event_code}/award/${printFormat}`" target="_blank">列印(僅得名者)</router-link>
+          <router-link v-if="gameData.module == 'rd'" class="round-full-button blue block text-center" :to="`/admin/game/${sportCode}/${gameId}/print/road/${selectedEvent.schedule_id}/${selectedEvent.division_id}/${selectedEvent.event_code}/complete/${printFormat}`" target="_blank">列印(全部人)</router-link>
         </div>
       </div>
       <div v-if="displayModal == 5">
