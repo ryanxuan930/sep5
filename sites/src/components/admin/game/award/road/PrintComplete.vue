@@ -30,7 +30,7 @@
         dataList.value.push(temp[i]);
       }
     }
-    dataList.value.sort((a: any, b: any) => a.ranking - b.ranking);
+    dataList.value.sort((a: any, b: any) => a.dept_id - b.dept_id || a.bib - b.bib);
     await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/temp/awardFormat`, awardFormat);
     awardFormat.value = JSON.parse(awardFormat.value.temp_data);
     document.title = gameStore.data.game_name_ch + '獎狀';
