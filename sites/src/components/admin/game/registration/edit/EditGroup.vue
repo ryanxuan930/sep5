@@ -69,7 +69,7 @@ async function submitAll(input: any) {
   for (let i = 0; i < paramList.value.length; i++) {
     if (paramList.value[i].event_code == input.event_code) {
       let preDefine = false;
-      if (props.regConfig.options.event[input.event_code]?.pre_define_member != undefined) {
+      if (props.regConfig.options.event[input.event_code]?.pre_define_member) {
         preDefine = props.regConfig.options.event[input.event_code].pre_define_member;
       }
       if (input.member_list.length < paramList.value[i].player_num && preDefine == true) {
