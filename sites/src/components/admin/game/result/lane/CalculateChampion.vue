@@ -196,7 +196,7 @@
       <div class="text-2xl">編輯總錦標資料</div>
     </template>
     <template v-slot:content>
-      <div class="overflow-auto">
+      <div class="overflow-auto h-full">
         <div class="w-[1024px] lg:w-full">
           <table class="config-table" v-if="championData != null">
             <tr>
