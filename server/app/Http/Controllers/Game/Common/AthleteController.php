@@ -22,8 +22,10 @@ class AthleteController extends Controller
         }
         if ($sportCode != 'mrth') {
             $tempGroup = DB::table($sportCode.'_'.$gameId.'_groups')->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_groups'.'.team_id')->select($sportCode.'_'.$gameId.'_teams.team_id', $sportCode.'_'.$gameId.'_teams.member_list')->get();
-            foreach ($tempGroup as $row) {
-                $userArray = array_merge($userArray, json_decode($row->member_list, true));
+            if ($tempGroup->count() > 0) {
+                foreach ($tempGroup as $row) {
+                    $userArray = array_merge($userArray, json_decode($row->member_list, true));
+                }
             }
         }
         $userArray = array_unique($userArray, SORT_NUMERIC);
