@@ -24,7 +24,9 @@ class AthleteController extends Controller
             $tempGroup = DB::table($sportCode.'_'.$gameId.'_groups')->leftJoin($sportCode.'_'.$gameId.'_teams', $sportCode.'_'.$gameId.'_teams.team_id', '=', $sportCode.'_'.$gameId.'_groups'.'.team_id')->select($sportCode.'_'.$gameId.'_teams.team_id', $sportCode.'_'.$gameId.'_teams.member_list')->get();
             if ($tempGroup->count() > 0) {
                 foreach ($tempGroup as $row) {
-                    $userArray = array_merge($userArray, json_decode($row->member_list, true));
+                    if ($row->member_list != null) {
+                        $userArray = array_merge($userArray, json_decode($row->member_list, true));
+                    }
                 }
             }
         }
