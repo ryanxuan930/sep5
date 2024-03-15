@@ -168,7 +168,9 @@ class GroupController extends Controller
         $memberArray = array();
         foreach($memberList as $member) {
             $temp = User::where('u_id', $member)->select('u_id', 'first_name_ch', 'last_name_ch', 'first_name_en', 'last_name_en', 'org_code', 'dept_id', 'num_in_dept')->first();
-            array_push($memberArray, $temp);
+            if ($temp) {
+                array_push($memberArray, $temp);
+            }
         }
         return response()->json($memberArray);
     }
