@@ -39,12 +39,8 @@ const isLoading = ref(false);
 async function submitAll() {
   let res: any = null;
   const dataset: any = [];
-  let flag = false;
   if (props.inputData.multiple == 0){
     dataList.value.forEach((item: any) => {
-      if (item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0 && item[`r${props.inputData.round}_result`] == 0) {
-        flag = true;
-      }
       dataset.push({
         u_id: item.u_id,
         division_id: item.division_id,
@@ -55,16 +51,9 @@ async function submitAll() {
         options: JSON.stringify({}),
       });
     });
-    if (flag) {
-      alert('所有選手皆需選擇出賽狀況');
-      return;
-    }
     res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/individual/update/result`, dataset, null, true, true);
   } else {
     dataList.value.forEach((item: any) => {
-      if (item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0 && item[`r${props.inputData.round}_result`] == 0) {
-        flag = true;
-      }
       dataset.push({
         team_id: item.team_id,
         division_id: item.division_id,
@@ -75,10 +64,6 @@ async function submitAll() {
         options: JSON.stringify({}),
       });
     });
-    if (flag) {
-      alert('所有選手皆需選擇出賽狀況');
-      return;
-    }
     res = await vr.Patch(`game/${route.params.sportCode}/${route.params.gameId}/common/group/update/result`, dataset, null, true, true);
   }
   if (res.status == 'A01') {
@@ -98,6 +83,28 @@ const close = () => {
   emit('closeModal');
 }
 async function sendNext() {
+  let flag = false;
+  if (props.inputData.multiple == 0){
+    dataList.value.forEach((item: any) => {
+      if (item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0 && item[`r${props.inputData.round}_result`] == 0) {
+        flag = true;
+      }
+    });
+    if (flag) {
+      alert('所有選手皆需選擇出賽狀況');
+      return;
+    }
+  } else {
+    dataList.value.forEach((item: any) => {
+      if (item[`r${props.inputData.round}_heat`] > 0 && item[`r${props.inputData.round}_lane`] > 0 && item[`r${props.inputData.round}_result`] == 0) {
+        flag = true;
+      }
+    });
+    if (flag) {
+      alert('所有隊伍皆需選擇出賽狀況');
+      return;
+    }
+  }
   const r: any = await vr.Post(`game/${route.params.sportCode}/${route.params.gameId}/common/schedule/update/${props.inputData.schedule_id}`, {status: 2}, null, true, true);
   if (r.status == 'A01') {
     alert('已送出');

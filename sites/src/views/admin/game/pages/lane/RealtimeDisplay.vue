@@ -230,8 +230,8 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
 </script>
 
 <template>
-  <div class="h-screen bg-indigo-950 text-white font-medium px-5 py-1 flex flex-col gap-5" v-if="realtimeData !== null && isLoaded == true">
-    <div class="p-6"></div>
+  <div class="h-screen bg-indigo-950 text-white font-medium px-5 py-1 flex flex-col" v-if="realtimeData !== null && isLoaded == true">
+    <div class="p-2"></div>
     <div class="flex items-end gap-5">
       <div>
         <div class="text-4xl font-bold">{{ realtimeData.event.division_ch }} {{ realtimeData.event.event_ch }} [{{ lanePhaseToString(realtimeData.event.round, 'zh-TW') }}]</div>
@@ -239,26 +239,26 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
       </div>
       <div class="flex-grow"></div>
       <div class="py-1.5 px-5 bg-white text-center shadow text-indigo-950" v-if="realtimeData.displayMode > 0">
-        <div class="text-4xl font-semibold" style="font-family: Digital;">{{ currentTime.getHours().toString().padStart(2,'0')  }} : {{ currentTime.getMinutes().toString().padStart(2,'0')  }} : {{ currentTime.getSeconds().toString().padStart(2,'0') }}</div>
+        <div class="text-3xl xl:text-4xl font-semibold" style="font-family: Digital;">{{ currentTime.getHours().toString().padStart(2,'0')  }} : {{ currentTime.getMinutes().toString().padStart(2,'0')  }} : {{ currentTime.getSeconds().toString().padStart(2,'0') }}</div>
         <div class="text-lg">大會時間 Official Time</div>
       </div>
       <div class="flex-grow"></div>
       <div class="flex items-end gap-3 bg-white text-indigo-950 px-5 pb-1" v-if="realtimeData.displayMode != 3 && realtimeData.displayMode != 4">
         <div>
-          <div class="text-3xl">組別</div>
-          <div class="text-xl">Heat</div>
+          <div class="text-2xl xl:text-3xl">組別</div>
+          <div class="text-lg xl:text-xl">Heat</div>
         </div>
         <div class="text-7xl">
           {{ realtimeData.selectedHeat }}
         </div>
       </div>
       <div v-else class="bg-white text-indigo-950 px-5 py-2">
-        <div class="text-3xl">正式成績</div>
-        <div class="text-xl">Official Result</div>
+        <div class="text-2xl xl:text-3xl">正式成績</div>
+        <div class="text-lg xl:text-xl">Official Result</div>
       </div>
       <div class="pb-1">
         <div class="flex gap-1 items-center">
-          <div class="text-2xl">大會紀錄 CR：</div>
+          <div class="text-xl xl:text-2xl">大會紀錄 CR：</div>
           <div>
             <div class="text-xs whitespace-nowrap">{{ gamerecords.unit_name_ch }}</div>
             <div class="text-xs whitespace-nowrap">{{ gamerecords.last_name_ch }}{{ gamerecords.first_name_ch }}</div>
@@ -267,6 +267,10 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
         </div>
         <!--<div class="text-2xl">全國紀錄 NR：——</div>-->
       </div>
+    </div>
+    <div class="my-2 py-1 px-2 border-2 rounded">
+      <span>即時訊息 Latest：</span>
+      <span v-html="realtimeData.text"></span>
     </div>
     <table class="result-table" v-if="realtimeData.displayMode != 6">
       <thead v-if="realtimeData.displayMode == 4">
@@ -328,7 +332,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
           </div>
           <div v-if="realtimeData.displayMode == 1">
             <div class="th-ch">參考成績</div>
-            <div class="th-en">Prev. Result</div>
+            <div class="th-en">Previous</div>
           </div>
           <div v-if="realtimeData.displayMode == 2 || realtimeData.displayMode == 3">
             <div class="th-ch">成績</div>
@@ -388,7 +392,11 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
             <div class="text-ch">所屬單位</div>
             <div class="text-en">Affiliation</div>
           </div>
-          <div class="content">{{ realtimeFieldData.org_name_ch }}</div>
+          <div class="content">
+            <span v-if="Config.deptAsClass">{{ realtimeFieldData.dept_name_ch }}</span>
+            <span v-else-if="Config.deptAsClass == false && gameStore.data.options.regUnit == 1">{{ realtimeFieldData.org_name_ch }} {{ realtimeFieldData.dept_name_ch }}</span>
+            <span v-else>{{ realtimeFieldData.org_name_ch }}</span>
+          </div>
         </div>
         <div class="field-box">
           <div class="title">
@@ -456,10 +464,10 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
 .result-table {
   @apply w-full text-left;
   .th-ch {
-    @apply text-2xl 2xl:text-3xl;
+    @apply text-xl xl:text-2xl 2xl:text-3xl;
   }
   .th-en {
-    @apply text-xl 2xl:text-2xl;
+    @apply text-lg xl:text-xl 2xl:text-2xl;
   }
   th > div {
     @apply flex items-end gap-2 border-0;
@@ -468,7 +476,7 @@ const roundList = ['ref', 'r1', 'r2', 'r3', 'r4'];
     @apply border-b-2 py-2 px-px;
   }
   td {
-    @apply border-b-[1px] border-white text-2xl 3xl:text-3xl pb-0 px-0 pt-[1px];
+    @apply border-b-[1px] border-white text-lg xl:text-2xl 3xl:text-3xl pb-0 px-0 pt-[1px];
   }
   tr:nth-child(even) > td {
     @apply bg-blue-950;

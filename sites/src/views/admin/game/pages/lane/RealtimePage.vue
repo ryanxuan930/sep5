@@ -18,6 +18,12 @@
 
   const scheduleList: any = ref([]);
   vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/schedule/full`, scheduleList, true, true);
+vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/temp/realtimeDisplay`).then((res: any) =>{
+  if (res.temp_id != undefined) {
+    const data = JSON.parse(res.temp_data);
+    textArea.value = data.text;
+  }
+});
 
   let counter = 60;
   setInterval(() => {
@@ -62,6 +68,8 @@
     });
   }
 
+  const textArea = ref('');
+
   async function submitDisplay() {
     const data = JSON.stringify({
       event: selectedEvent.value,
@@ -70,6 +78,7 @@
       displayMode: displayMode.value,
       athleteNum: displayMode.value == 3 ? eventData.value.length : eventData.value.reduce((acc: any, cur: any) => { return acc + (cur[`r${selectedEvent.value.round}_heat`] == selectedHeat.value ? 1 : 0) }, 0),
       hardRefresh: Date.now(),
+      text: textArea.value,
     });
     const temp = await vr.Get(`game/${gameStore.data.sport_code}/${gameStore.data.game_id}/common/temp/realtimeDisplay`);
     let res: any = null;
@@ -103,6 +112,7 @@
     const bell = new Audio(BellSound);
     bell.play();
   }
+
 </script>
 
 <template>
@@ -131,7 +141,6 @@
             <div class="flex items-center gap-3 p-2">
               <div>顯示方式：</div>
               <select v-model="displayMode" class="flex-grow border rounded">
-                <!--<option value="7">公告顯示</option>-->
                 <option value="0">計時頁面</option>
                 <option value="1">組別道次</option>
                 <option value="2">單組成績</option>
@@ -139,6 +148,7 @@
                 <option value="4">田賽遠度詳細記錄</option>
                 <!--<option value="5">田賽高度詳細記錄</option>-->
                 <option value="6">田賽即時成績</option>
+                <option value="7">公告顯示</option>
               </select>
               <button class="general-button blue" @click="submitDisplay">發送</button>
             </div>
@@ -184,14 +194,12 @@
         </div>
       </div>
       <div class="flex flex-col h-full overflow-hidden gap-5">
-        <!--
         <div class="item">
           <div class="title">公告內容</div>
-          <textarea rows="2" class="w-full bg-gray-50 border p-1"></textarea>
+          <textarea rows="2" class="w-full bg-gray-50 border p-1" v-model="textArea"></textarea>
         </div>
-        -->
         <div class="item flex-grow flex flex-col overflow-hidden h-full">
-          <div class="title">目前賽程</div>
+          <div class="title flex-grow">目前賽程</div>
           <div class="overflow-auto">
             <table class="config-table h-full">
               <tr>
