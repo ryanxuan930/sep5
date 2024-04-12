@@ -34,11 +34,6 @@ class ResultController extends Controller
                 'event_en' => $tempIndividual[$i]['event_en'],
                 'event_code' => $tempIndividual[$i]['event_code'],
                 'event_id' => $tempIndividual[$i]['event_id'],
-                'last_name_ch' => $tempIndividual[$i]['last_name_ch'],
-                'first_name_ch' => $tempIndividual[$i]['first_name_ch'],
-                'last_name_en' => $tempIndividual[$i]['last_name_en'],
-                'first_name_en' => $tempIndividual[$i]['first_name_en'],
-                'r4_result' => $tempIndividual[$i]['r4_result'],
                 'r4_ranking' => $tempIndividual[$i]['r4_ranking'],
                 'count' => $tempIndividual[$i]['count'],
             ]);
@@ -60,8 +55,6 @@ class ResultController extends Controller
                 'event_en' => $tempGroup[$i]['event_en'],
                 'event_code' => $tempGroup[$i]['event_code'],
                 'event_id' => $tempGroup[$i]['event_id'],
-                'team_name' => $tempGroup[$i]['team_name'],
-                'r4_result' => $tempGroup[$i]['r4_result'],
                 'r4_ranking' => $tempGroup[$i]['r4_ranking'],
                 'count' => $tempGroup[$i]['count'],
             ]);
@@ -109,12 +102,6 @@ class ResultController extends Controller
                     'event_en' => $tempArray[$i]['event_en'],
                     'event_code' => $tempArray[$i]['event_code'],
                     'event_id' => $tempArray[$i]['event_id'],
-                    'last_name_ch' => $tempArray[$i]['last_name_ch'],
-                    'first_name_ch' => $tempArray[$i]['first_name_ch'],
-                    'last_name_en' => $tempArray[$i]['last_name_en'],
-                    'first_name_en' => $tempArray[$i]['first_name_en'],
-                    'team_name' => $tempArray[$i]['team_name'],
-                    'r4_result' => $tempArray[$i]['r4_result'],
                     'r4_ranking' => $j + 1,
                     'count' => $count,
                 ]);
