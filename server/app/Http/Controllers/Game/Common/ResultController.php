@@ -109,6 +109,12 @@ class ResultController extends Controller
                     'event_en' => $tempArray[$i]['event_en'],
                     'event_code' => $tempArray[$i]['event_code'],
                     'event_id' => $tempArray[$i]['event_id'],
+                    'last_name_ch' => $tempArray[$i]['last_name_ch'],
+                    'first_name_ch' => $tempArray[$i]['first_name_ch'],
+                    'last_name_en' => $tempArray[$i]['last_name_en'],
+                    'first_name_en' => $tempArray[$i]['first_name_en'],
+                    'team_name' => $tempArray[$i]['team_name'],
+                    'r4_result' => $tempArray[$i]['r4_result'],
                     'r4_ranking' => $j + 1,
                     'count' => $count,
                 ]);
