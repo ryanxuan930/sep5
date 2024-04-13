@@ -243,6 +243,7 @@ Route::group([
         Route::get('result/ranking/{num?}', [GameResultController::class, 'ranking']);
         Route::post('result/champion/{num?}', [GameResultController::class, 'champion']);
         Route::get('result/all', [GameResultController::class, 'result']);
+        Route::get('result/medal/{orgCode}/{deptId}/{place}', [GameResultController::class, 'resultByRanking']);
         Route::group([
             'prefix' => 'schedule'
         ], function () {
