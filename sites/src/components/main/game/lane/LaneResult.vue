@@ -191,6 +191,7 @@ function openMadelList(item: any, place: number) {
   displayModal.value = 1;
   selectedPlace.value = place;
   selectedData.value = item;
+  resultList.value = [];
   vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/result/medal/${item.org_code}/${gameData.value.options.regUnit == 2 ? 0 : item.dept_id}/${place}`, resultList);
 }
 const statusCh = ['尚未開始', '檢錄中', '進行中', '已完賽', '成績公告', '頒獎', '取消'];
