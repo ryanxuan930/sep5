@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n'
 import { lanePhaseToString } from '@/components/library/functions';
 import Config from '@/assets/config.json';
 import SmallLoader from '@/components/SmallLoader.vue';
+import SmallModal from '@/components/SmallModal.vue';
 
 const route = useRoute();
 const vr = new VueRequest();
@@ -19,6 +20,8 @@ const selectedTab = ref(0);
 const counter = ref(0);
 const championData: any = ref(null);
 const isLoading = ref(false);
+const displayModal = ref(0);
+const resultList: any = ref([]);
 
 (async () => {
   const temp = await vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/temp/gameChampion`);
@@ -180,6 +183,18 @@ const { t, locale } = useI18n({
   inheritLocale: true,
   useScope: 'local'
 });
+
+const selectedData: any = ref([]);
+const selectedPlace = ref(0);
+
+function openMadelList(orgCode: string, deptId: number, place: number) {
+  displayModal.value = 1;
+  selectedPlace.value = place;
+  if (gameData.value.options.regUnit == 2) {
+    deptId = 0;
+  }
+  vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/result/medal/${orgCode}/${deptId}/${place}`, resultList);
+}
 const statusCh = ['尚未開始', '檢錄中', '進行中', '已完賽', '成績公告', '頒獎', '取消'];
 const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result Announced', 'Awarding', 'Cancelled'];
 </script>
@@ -266,7 +281,8 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
               </td>
               <template v-for="(place, index) in item.ranking" :key="index">
                 <td class="text-center">
-                  <template v-if="place > 0">{{ place }}</template>
+                  <span class="text-blue-500 font-medium cursor-pointer" @click="openMadelList(item.org_code, item.dept_id, place)" v-if="place > 0">{{ place }}</span>
+                  <span class="text-gray-300" v-else>{{ place }}</span>
                 </td>
               </template>
             </tr>
@@ -408,7 +424,35 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
     </div>
     <SmallLoader v-show="isLoading"></SmallLoader>
   </div>
-
+  <SmallModal v-show="displayModal > 0" @closeModal="displayModal = 0">
+    <template v-slot:title>
+      <div class="text-2xl">{{ t('medal-list') }}</div>
+    </template>
+    <template v-slot:content>
+      <div class="overflow-auto h-full">
+        <div class="w-full">
+          <table class="config-table" v-if="championData != null">
+            <tr>
+              <th>{{ t('place') }}</th>
+              <th>{{ t('division') }}</th>
+              <th>{{ t('event') }}</th>
+              <th>{{ t('athlete') }}</th>
+              <th>{{ t('result') }}</th>
+            </tr>
+            <template v-for="(item, index) in resultList" :key="index">
+              <tr>
+                <td>{{ item.r4_ranking }}</td>
+                <td>{{ item.division_ch }}</td>
+                <td>{{ item.event_ch }}</td>
+                <td v-if="item.team_name">{{ item.team_name }}</td>
+                <td>{{ item.r4_result }}</td>
+              </tr>
+            </template>
+          </table>
+        </div>
+      </div>
+    </template>
+  </SmallModal>
 </template>
 
 <style scoped lang="scss">
@@ -456,6 +500,7 @@ table {
     division: 'Division'
     event: 'Event'
     round: 'Round'
+    result: 'Result'
     result-title: 'Results'
     update-in-second: 'Updated in {second} sec.'
     not-available: 'Not Available'
@@ -469,6 +514,9 @@ table {
     points: 'Points'
     realtime-result: 'Realtime Result, Reference Only'
     official-result: 'Official Result'
+    medal-list: 'Medal List'
+    place: 'Place'
+    athlete: 'Athlete'
   zh-TW:
     list: '成績總表'
     list-heat: '分組成績'
@@ -477,6 +525,7 @@ table {
     division: '組別'
     event: '項目'
     round: '賽別'
+    result: '成績'
     result-title: '成績公告'
     update-in-second: '{second} 秒後更新'
     not-available: '尚未公告'
@@ -490,4 +539,7 @@ table {
     points: '積分'
     realtime-result: '即時成績僅供參考'
     official-result: '正式成績'
+    medal-list: '獎牌明細'
+    place: '名次'
+    athlete: '選手'
   </i18n>
