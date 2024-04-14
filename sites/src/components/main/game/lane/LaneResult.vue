@@ -429,12 +429,12 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
     <template v-slot:content>
       <div class="text-xl py-2" v-if="locale == 'zh-TW'">
         <span v-if="!Config.deptAsClass">{{ selectedData.org_name_ch }}</span>
-        <span v-if="gameData.options.regUnit == 1">-{{ selectedData.dept_name_ch }}</span>
+        <span v-if="gameData.options.regUnit == 1">{{ selectedData.dept_name_ch }}</span>
         <span class="ml-2">第{{ selectedPlace }}名列表</span>
       </div>
       <div class="text-xl py-2" v-else>
         <span v-if="!Config.deptAsClass">{{ selectedData.org_name_en }}</span>
-        <span v-if="gameData.options.regUnit == 1">-{{ selectedData.dept_name_en }}</span>
+        <span v-if="gameData.options.regUnit == 1">{{ selectedData.dept_name_en }}</span>
         <span class="ml-2">Place: {{ selectedPlace }}</span>
       </div>
       <div class="overflow-auto h-full">
