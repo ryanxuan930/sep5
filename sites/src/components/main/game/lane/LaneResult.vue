@@ -499,7 +499,7 @@ table {
   }
 }
 .bookmark {
-  @apply flex gap-[1px] items-stretch;
+  @apply flex gap-[1px] items-stretch overflow-auto;
   .item {
     @apply bg-gray-100 text-lg py-2 px-4 font-medium rounded-t hover:bg-gray-400 hover:text-white duration-150;
     &.active {
