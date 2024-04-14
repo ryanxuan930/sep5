@@ -230,8 +230,7 @@ class ResultController extends Controller
         $userArray = array();
         $queryIndividual = DB::table($sportCode.'_'.$gameId.'_individuals')->leftJoin('users', 'users.u_id', '=', $sportCode.'_'.$gameId.'_individuals.u_id')->leftJoin($sportCode.'_'.$gameId.'_divisions', $sportCode.'_'.$gameId.'_individuals.division_id', '=', $sportCode.'_'.$gameId.'_divisions.division_id')->leftJoin('events', $sportCode.'_'.$gameId.'_individuals.event_code', '=', 'events.event_code')->leftJoin('organizations', 'organizations.org_code', '=', 'users.org_code')->leftJoin('departments', 'departments.dept_id', '=', 'users.dept_id')->select('users.org_code', 'users.dept_id', 'organizations.org_name_full_ch', 'organizations.org_name_ch', 'organizations.org_name_full_en', 'organizations.org_name_en', 'departments.dept_name_ch', 'departments.dept_name_en', $sportCode.'_'.$gameId.'_individuals.r4_result', $sportCode.'_'.$gameId.'_individuals.r4_ranking', $sportCode.'_'.$gameId.'_individuals.r4_options', 'users.last_name_ch', 'users.first_name_ch', 'users.last_name_en', 'users.first_name_en', 'users.num_in_dept', $sportCode.'_'.$gameId.'_divisions.division_id', $sportCode.'_'.$gameId.'_divisions.division_ch', $sportCode.'_'.$gameId.'_divisions.division_en', 'events.event_ch', 'events.event_en', 'events.event_code', 'events.event_id')->where('users.org_code', $orgCode)->where($sportCode.'_'.$gameId.'_individuals.r4_ranking', $ranking);
         if ($divisionId != 0) {
-            // $tempIndividual = $queryIndividual->where('users.dept_id', $divisionId)->get();
-            $tempIndividual = $queryIndividual->get();
+            $tempIndividual = $queryIndividual->where('users.dept_id', $divisionId)->get();
         } else {
             $tempIndividual = $queryIndividual->get();
         }
