@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { ref, inject, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { onClickOutside } from '@vueuse/core'
 import { openWindow } from '@/components/library/functions';
@@ -15,6 +15,12 @@ onClickOutside(target, (event) => mobileNav.value = false);
 function openWindow(url: string) {
   window.open(url);
 }
+
+// watch locale change
+watch(locale, () => {
+  localStorage.setItem('locale', locale.value);
+});
+
 const pageData: any = inject('pageData');
 const gameData: any = inject('gameData');
 const navHoverColor = ref(gameData.value.options.navHoverColor);

@@ -9,16 +9,15 @@ import router from './router';
 import './assets/main.scss';
 
 let defaultLocale = 'zh-TW'
-/*
 if (localStorage.locale) {
   defaultLocale = localStorage.locale;
 } else {
   localStorage.locale = window.navigator.language == 'zh-TW' ? 'zh-TW' : 'en-US';
   defaultLocale = localStorage.locale;
-}*/
+}
 
 const datetimeFormats: any = {
-'en-US': {
+  'en-US': {
     short: {
       year: 'numeric', month: 'short', day: 'numeric'
     },

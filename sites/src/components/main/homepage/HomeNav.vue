@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { ref, inject, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { onClickOutside } from '@vueuse/core'
 import type { IPageData } from '@/components/library/interfaces';
@@ -16,6 +16,11 @@ function openWindow(url: string) {
   window.open(url);
 }
 const pageData: IPageData = inject('pageData');
+
+// watch locale change
+watch(locale, () => {
+  localStorage.setItem('locale', locale.value);
+});
 </script>
 
 <template>

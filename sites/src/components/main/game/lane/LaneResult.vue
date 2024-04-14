@@ -173,7 +173,7 @@ watch(championIndex, (val) => {
 setInterval(() => {
   if (counter.value == 0){
     getData();
-    counter.value = 60;
+    counter.value = 90;
   } else {
     counter.value--;
   }
@@ -187,13 +187,11 @@ const { t, locale } = useI18n({
 const selectedData: any = ref([]);
 const selectedPlace = ref(0);
 
-function openMadelList(orgCode: string, deptId: number, place: number) {
+function openMadelList(item: any, place: number) {
   displayModal.value = 1;
   selectedPlace.value = place;
-  if (gameData.value.options.regUnit == 2) {
-    deptId = 0;
-  }
-  vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/result/medal/${orgCode}/${deptId}/${place}`, resultList);
+  selectedData.value = item;
+  vr.Get(`game/${gameData.value.sport_code}/${gameId}/common/result/medal/${item.org_code}/${gameData.value.options.regUnit == 2 ? 0 : item.dept_id}/${place}`, resultList);
 }
 const statusCh = ['尚未開始', '檢錄中', '進行中', '已完賽', '成績公告', '頒獎', '取消'];
 const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result Announced', 'Awarding', 'Cancelled'];
@@ -272,8 +270,8 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
           <template v-for="(item, index) in scheduleList" :key="index">
             <tr>
               <td v-if="!Config.deptAsClass">
-                <div v-if="locale == 'en-US' && (item.org_name_full_en != null || item.org_name_full_en != '')">{{ item.org_name_full_en }}</div>
-                <div v-else>{{ item.org_name_full_ch }}</div>
+                <div v-if="locale == 'en-US' && (item.org_name_en != null || item.org_name_en != '')">{{ item.org_name_en }}</div>
+                <div v-else>{{ item.org_name_ch }}</div>
               </td>
               <td v-if="gameData.options.regUnit == 1">
                 <div v-if="locale == 'en-US' && (item.dept_name_en != null || item.dept_name_en != '')">{{ item.dept_name_en }}</div>
@@ -281,7 +279,7 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
               </td>
               <template v-for="(place, index) in item.ranking" :key="index">
                 <td class="text-center">
-                  <span class="text-blue-500 font-medium cursor-pointer" @click="openMadelList(item.org_code, item.dept_id, place)" v-if="place > 0">{{ place }}</span>
+                  <span class="text-blue-500 font-medium cursor-pointer" @click="openMadelList(item, index + 1)" v-if="place > 0">{{ place }}</span>
                   <span class="text-gray-300" v-else>{{ place }}</span>
                 </td>
               </template>
@@ -376,8 +374,8 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
           <template v-for="(item, index) in championData.content[championIndex].payload" :key="index">
             <tr>
               <td v-if="!Config.deptAsClass">
-                <div v-if="locale == 'en-US' && (item.org_name_full_en != null || item.org_name_full_en != '')">{{ item.org_name_full_en }}</div>
-                <div v-else>{{ item.org_name_full_ch }}</div>
+                <div v-if="locale == 'en-US' && (item.org_name_en != null || item.org_name_en != '')">{{ item.org_name_en }}</div>
+                <div v-else>{{ item.org_name_ch }}</div>
               </td>
               <td v-if="gameData.options.regUnit == 1">
                 <div v-if="locale == 'en-US' && (item.dept_name_en != null || item.dept_name_en != '')">{{ item.dept_name_en }}</div>
@@ -404,8 +402,8 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
           <template v-for="(item, index) in scheduleList" :key="index">
             <tr>
               <td v-if="!Config.deptAsClass">
-                <div v-if="locale == 'en-US' && (item.org_name_full_en != null || item.org_name_full_en != '')">{{ item.org_name_full_en }}</div>
-                <div v-else>{{ item.org_name_full_ch }}</div>
+                <div v-if="locale == 'en-US' && (item.org_name_en != null || item.org_name_en != '')">{{ item.org_name_en }}</div>
+                <div v-else>{{ item.org_name_ch }}</div>
               </td>
               <td v-if="gameData.options.regUnit == 1">
                 <div v-if="locale == 'en-US' && (item.dept_name_en != null || item.dept_name_en != '')">{{ item.dept_name_en }}</div>
@@ -429,22 +427,42 @@ const statusEn = ['Not Started', 'Check In', 'In Progress', 'Finished', 'Result 
       <div class="text-2xl">{{ t('medal-list') }}</div>
     </template>
     <template v-slot:content>
+      <div class="text-xl py-2" v-if="locale == 'zh-TW'">
+        <span v-if="!Config.deptAsClass">{{ selectedData.org_name_ch }}</span>
+        <span v-if="gameData.options.regUnit == 1">-{{ selectedData.dept_name_ch }}</span>
+        <span class="ml-2">第{{ selectedPlace }}名列表</span>
+      </div>
+      <div class="text-xl py-2" v-else>
+        <span v-if="!Config.deptAsClass">{{ selectedData.org_name_en }}</span>
+        <span v-if="gameData.options.regUnit == 1">-{{ selectedData.dept_name_en }}</span>
+        <span class="ml-2">Place: {{ selectedPlace }}</span>
+      </div>
       <div class="overflow-auto h-full">
         <div class="w-full">
           <table class="config-table" v-if="championData != null">
             <tr>
-              <th>{{ t('place') }}</th>
-              <th>{{ t('division') }}</th>
-              <th>{{ t('event') }}</th>
-              <th>{{ t('athlete') }}</th>
-              <th>{{ t('result') }}</th>
+              <th class="w-1/12">{{ t('place') }}</th>
+              <th class="w-1/4">{{ t('division') }}</th>
+              <th class="w-1/4">{{ t('event') }}</th>
+              <th class="w-1/4">{{ t('athlete') }}</th>
+              <th class="w-1/6">{{ t('result') }}</th>
             </tr>
             <template v-for="(item, index) in resultList" :key="index">
               <tr>
                 <td>{{ item.r4_ranking }}</td>
-                <td>{{ item.division_ch }}</td>
-                <td>{{ item.event_ch }}</td>
+                <template v-if="locale == 'zh-TW'">
+                  <td>{{ item.division_ch }}</td>
+                  <td>{{ item.event_ch }}</td>
+                </template>
+                <template v-else>
+                  <td>{{ item.division_en }}</td>
+                  <td>{{ item.event_en }}</td>
+                </template>
                 <td v-if="item.team_name">{{ item.team_name }}</td>
+                <td v-else>
+                  <template v-if="locale == 'en' && (item.last_name_en != null || item.last_name_en != '')">{{ item.first_name_en }} {{ item.last_name_en }}</template>
+                  <template v-else>{{ item.last_name_ch }}{{ item.first_name_ch }}</template>
+                </td>
                 <td>{{ item.r4_result }}</td>
               </tr>
             </template>
@@ -481,7 +499,7 @@ table {
   }
 }
 .bookmark {
-  @apply flex gap-[1px] items-center;
+  @apply flex gap-[1px] items-stretch;
   .item {
     @apply bg-gray-100 text-lg py-2 px-4 font-medium rounded-t hover:bg-gray-400 hover:text-white duration-150;
     &.active {
