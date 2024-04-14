@@ -240,7 +240,6 @@ class ResultController extends Controller
         } else {
             $tempGroup = $queryGroup->get();
         }
-        return $tempIndividual;
         $userArray = array_merge(json_decode(json_encode($tempIndividual), true), json_decode(json_encode($tempGroup), true));
         $col1 = array_column($userArray, 'division_id');
         $col2 = array_column($userArray, 'event_id');
