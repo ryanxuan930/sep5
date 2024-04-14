@@ -23,7 +23,7 @@ provide('pageData', pageData);
 </script>
 
 <template>
-  <div class="h-full md:h-screen flex flex-col bg-white" v-if="pageData != null">
+  <div class="h-screen-phone sm:h-screen flex flex-col bg-white" v-if="pageData != null">
     <HomeNav></HomeNav>
     <div class="flex-grow overflow-auto flex flex-col">
       <VueHorizontal snap="center" ref="horizontal" class="horizontal" :button-between="false">
