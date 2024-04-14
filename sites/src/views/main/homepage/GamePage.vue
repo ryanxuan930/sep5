@@ -25,7 +25,7 @@ provide('gameData', gameData);
 </script>
 
 <template>
-  <div class="h-screen flex flex-col bg-white" v-if="isLoading == false">
+  <div class="h-screen-phone sm:h-screen flex flex-col bg-white" v-if="isLoading == false">
     <GameNav></GameNav>
     <div class="flex-grow overflow-auto flex flex-col">
       <div>
