@@ -82,7 +82,7 @@ dataList.value = temp1.concat(temp2);
               <div v-if="gameStore.data.options.regUnit < 2">{{ item.dept_name_en }}</div>
             </div>
           </td>
-          <td v-if="multiple == 0" style="width: 10%">
+          <td v-if="multiple == 0" style="width: 13%">
             <div class="ch-content">
               <span v-if="item.bib != undefined && item.bib != null">[{{ item.bib }}] </span>
               {{ item.last_name_ch }}{{ item.first_name_ch }}
@@ -94,8 +94,8 @@ dataList.value = temp1.concat(temp2);
             <div>{{ attempt }}</div>
             <div class="text-xs">{{ item[`r${round}_options`].performance.winds[indexB] }}</div>
           </td>
-          <td style="width: 10%">{{ item[`r${round}_result`] }}</td>
-          <td style="width: 15%">
+          <td style="width: 9%">{{ item[`r${round}_result`] }}</td>
+          <td style="width: 13%">
             <div class="flex items-center gap-3">
               <template v-if="item[`r${round}_options`].cr != undefined">
                 <div class="px-2 py-0.5 bg-gray-500 text-white inline-block" v-if="item[`r${round}_options`].cr">CR</div>
