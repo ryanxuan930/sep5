@@ -135,6 +135,7 @@ Route::get('/user-partial', [UserController::class, 'indexByUser']);
 Route::get('/user/athlete/{id}', [UserController::class, 'showByAthleteId']);
 Route::get('/user/name/{firstName}/{lastName}', [UserController::class, 'showByName']);
 Route::post('/user-upload', [UserController::class, 'storeByBatch']);
+Route::post('/user-upload-csv', [UserController::class, 'storeByCSV']);
 Route::post('/user-search', [UserController::class, 'search']);
 Route::post('/user-search-unit', [UserController::class, 'searchByUnit']);
 Route::post('/user-from-list', [UserController::class, 'getUserFromList']);

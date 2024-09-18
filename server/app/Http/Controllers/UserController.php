@@ -113,6 +113,57 @@ class UserController extends Controller
         return response()->json(['status'=>'A01']);
     }
 
+    public function storeByCsv(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'csv' => 'required|file|mimes:csv,txt',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status'=>'E01', 'message' => $validator->errors()]);
+        }
+        $file = $request->file('csv');
+        $path = $file->store('csv');
+        $file = fopen(storage_path('app/'.$path), 'r');
+        $loginTime = date("Y-m-d H:i:s");
+        $temp = array();
+        while (($data = fgetcsv($file, 1000, ',')) !== FALSE) {
+            $temp[] = array(
+                'account' => $data[0],
+                'password' => password_hash($data[1], PASSWORD_DEFAULT),
+                'first_name_ch' => $data[2],
+                'last_name_ch' => $data[3],
+                'first_name_en' => $data[4],
+                'last_name_en' => $data[5],
+                'org_code' => $data[6],
+                'is_student' => $data[7],
+                'student_id' => $data[8],
+                'dept_id' => $data[9],
+                'grade' => $data[10],
+                'unified_id' => $data[11],
+                'birthday' => $data[12],
+                'nationality' => $data[13],
+                'sex' => $data[14],
+                'height' => $data[15],
+                'weight' => $data[16],
+                'blood_type' => $data[17],
+                'cellphone' => $data[18],
+                'telephone' => $data[19],
+                'household_city_code' => $data[20],
+                'address' => $data[21],
+                'emergency_contact' => $data[22],
+                'emergency_phone' => $data[23],
+                'options' => $data[24],
+                'avatar' => $data[25],
+                'permission' => $data[26],
+                'num_in_dept' => $data[27],
+                'sport_list' => $data[28]
+            );
+        }
+        fclose($file);
+        User::insert($temp);
+        return response()->json(['status'=>'A01']);
+    }
+
     public function storeByBatch(Request $request)
     {
         if (is_null($user = auth('user')->user()) && is_null($admin = auth('admin')->user())) {
