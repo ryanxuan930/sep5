@@ -213,7 +213,7 @@ class UserController extends Controller
             $temp[$i]['password'] = password_hash($temp[$i]['password'], PASSWORD_DEFAULT);
             $temp[$i]['athlete_id'] = strtoupper(str_pad(base_convert(floor(microtime(true)*100), 10, 36), 8, '0', STR_PAD_LEFT));
         }
-        User::insert($temp);
+        User::create($temp);
         return response()->json(['status'=>'A01']);
     }
 
