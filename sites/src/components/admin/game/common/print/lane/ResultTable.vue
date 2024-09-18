@@ -21,6 +21,12 @@ const round = Number(route.params.round);
 const printMode = route.params.printMode;
 const phaseArray = ['ref', 'r1', 'r2', 'r3', 'r4'];
 
+if (printMode == 'distance') {
+  import('@/components/admin/game/common/print/lane/pageLand.scss');
+} else {
+  import('@/components/admin/game/common/print/lane/page.scss');
+}
+
 const dataList: any = ref([]);
 const paramList: any = ref([]);
 const eventData: any = ref({});
